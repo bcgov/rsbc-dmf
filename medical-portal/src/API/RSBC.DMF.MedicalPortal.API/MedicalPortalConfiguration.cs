@@ -2,11 +2,20 @@
 
 namespace RSBC.DMF.MedicalPortal.API;
 
+// public version that is a subset of MedicalPortalConfiguration and shared with frontend
+public class PublicConfiguration
+{
+    public string Environment { get; set; }
+    public KeycloakConfiguration Keycloak { get; set; } = new();
+    public Guid ChefsFormId { get; set; }
+}
+
 public class MedicalPortalConfiguration
 {
     public SettingsConfiguration Settings { get; set; } = new();
     public KeycloakConfiguration Keycloak { get; set; } = new();
     public bool FeatureSimpleAuth { get; set; }
+    public Guid ChefsFormId { get; set; }
 
     public class SettingsConfiguration
     {
@@ -17,6 +26,7 @@ public class MedicalPortalConfiguration
     {
         public string AllowedOrigins { get; set; }
     }
+}
 
     public class KeycloakConfiguration
     {
@@ -27,7 +37,8 @@ public class MedicalPortalConfiguration
         public KeycloakConfig Config { get; set; }
         public KeycloakInitOptions InitOptions { get; set; }
 
-        public class KeycloakConfig {
+    public class KeycloakConfig
+    {
             public string Url { get; set; }
             public string Realm { get; set; }
             public string ClientId { get; set; }
@@ -42,7 +53,6 @@ public class MedicalPortalConfiguration
             public string PkceMethod { get; set; }
         }
     }
-}
 
 public static class KeycloakUrls
 {

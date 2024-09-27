@@ -10,6 +10,7 @@ import { ApplicationVersionInfo } from './shared/api/models';
 import { firstValueFrom } from 'rxjs';
 import { NgIf } from '@angular/common';
 import { NgxSpinnerComponent } from 'ngx-spinner';
+import { ConfigurationService } from './shared/services/configuration.service';
 
 @Component({
   selector: 'app-root',
@@ -36,11 +37,14 @@ export class AppComponent {
 
   constructor(
     private authService: AuthService,
+    private configService: ConfigurationService,
     @Optional() private versionInfoDataService: ApplicationVersionInfoService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
     try {
+      this.configService.load();
+
       console.info('AppComponent initializing...');
       //attempt to log in
       this.authService.isLoggedIn().subscribe((isLoggedIn) => {

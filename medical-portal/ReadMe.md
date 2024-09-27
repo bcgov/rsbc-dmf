@@ -83,7 +83,9 @@ To enrol the user in DMFT, click on the access link on top menu, click on "Get A
 ### Contacts
 Mailhot, Nicholas <Nick.Mailhot@nttdata.com> - Scrum Master
 Sekhon, Khushwinder <Khushwinder.Sekhon@gov.bc.ca> - For updating the dmfw0000X users, which were suppose to be persisted for our testing
-Morgan Wayling morgan.wayling@gov.bc.ca - Project manager? No response from Morgan either. In theory, would triage to contact Nick Mailhot
+Morgan Wayling morgan.wayling@gov.bc.ca - Project manager
+Duchesne, Mark HLTH:EX <Mark.Duchesne@gov.bc.ca> - Product Owner
+OneHealth is not always responsive when it comes to support. Normally the order of contacts will be Mark, Morgan while Mark is awaym and then Carter. You can also try contacting Nick directly. If you do not get a response, try escalating with Shiv.
 
 ## TROUBLE SHOOTING
 - If you find that gRPC client is not updating the models, delete the gRPC client and service bin and obj folders (bonus points for adding a project xml script to delete these folders on clean)
@@ -93,12 +95,17 @@ Morgan Wayling morgan.wayling@gov.bc.ca - Project manager? No response from Morg
 ### How to claim a DMER
 1. Login in as a practitioner
 2. Search for a DMER case id e.g. "H8B2S1"
-3. 
+3. If the case has no DMER to claim, follow the steps in the next section
+4. Click on the "Claim" button
+5. Select yourself or someone in your network to assign the DMER to
+6. Click the "Assign"/"Claim" button
 
-### Chefs IFrame origin
-Currently, the IFrame origin only allows `var cors_origin = "https://dev.roadsafetybc.gov.bc.ca";`, see top code section of assets/chefs/initChefsForm.js.
-If you want to test chefs form locally, edit the cors_origin to be `var cors_origin = "https://localhost:4020";`
-In the future, we could consider replacing the iframe or doing something like this [StackOverflow](https://stackoverflow.com/questions/52002608/javascript-window-opener-postmessage-cross-origin-with-multiple-sub-domains)
+### How to create a DMER
+1. Login to Dynamics
+2. Search the case Guid, DMER case id, or DL
+3. Click on the "Documents" tab
+4. Click on the "Create Requirement" button on the top of the document table
+5. Enter "DMER" in the "Document Type" field and then hit "Save and Close" button
 
 ### How to update chefs form scripts
 Contact Shiv for admin access to chefs (MacFarlane, Shiv PSSG:EX)[<Shiv.MacFarlane@gov.bc.ca>]
@@ -107,6 +114,21 @@ Contact Shiv for admin access to chefs (MacFarlane, Shiv PSSG:EX)[<Shiv.MacFarla
 3. Near the top of the form, there is a transparent control called "initChefsForm", edit the control
 4. Click on the "Data" tab and expand the "Calculated Value" panel
 5. Edit the "Javascript" textarea. You can copy the initChefsForm.js script and paste here.
+
+### Chefs IFrame origin
+1. Login to chefs, and select the eDMER form
+2. On the top of the form, there is a field labelled "CORS Configured Origin"
+3. Update the origin to match the domain of the received of the iframe events e.g. "https://dev.roadsafetybc.gov.bc.ca" or "https://localhost:4200"
+4. This will update the variable used in the "Calculated Value" panel above on line 20 `var cors_origin = data.corsConfiguredOrigin ...`
+In the future, we could consider replacing the iframe or doing something like this [StackOverflow](https://stackoverflow.com/questions/52002608/javascript-window-opener-postmessage-cross-origin-with-multiple-sub-domains)
+
+### How to get chefs form Guid for development
+You need to reference the chefs form Guid, so that each different environment knows how to get the chefs form for the respective environment form e.g. "DEV - eDMER Integration Testing Form"
+1. Login to chefs
+2. Click on "My Forms" at the top of the page
+3. Click on "Manage" beside the chefs form for the environment you want. There should be one for local, dev, and test. Only Shiv has access to Prod. If you don't see the forms, request access from Shiv
+4. On the top right, click on the "Share Form" button
+5. Copy the guid from the "URL" text field
 
 ### How to add a field to chefs form
 1. Create a new version of the chefs form by clicking on the "+" button

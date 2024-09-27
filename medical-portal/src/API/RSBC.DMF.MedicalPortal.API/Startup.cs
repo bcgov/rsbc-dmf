@@ -127,6 +127,7 @@ namespace RSBC.DMF.MedicalPortal.API
             // TODO remove this and replace configuration keys with all capital underscore snake convention that is compatible with OpenShift
             this.configuration.Bind(config);
             config.FeatureSimpleAuth = this.configuration["FEATURES_SIMPLE_AUTH"] == "true";
+            config.ChefsFormId = new Guid(this.configuration["CHEFS_FORM_ID"]);
             services.AddSingleton(config);
 
             Log.Logger.Information("### App Version:{0} ###", Assembly.GetExecutingAssembly().GetName().Version);

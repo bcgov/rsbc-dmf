@@ -17,7 +17,8 @@ util	An alias for "utils".
 var GET_CHEFS_SUBMISSION = "GET_CHEFS_SUBMISSION";
 var GET_CHEFS_BUNDLE = "GET_CHEFS_BUNDLE";
 var PUT_CHEFS_SUBMISSION = "PUT_CHEFS_SUBMISSION";
-var cors_origin = "https://dev.roadsafetybc.gov.bc.ca";
+// data.corsConfiguredOrigin value comes form "CORS Configured Origin" text field on chefs form
+var cors_origin = data.corsConfiguredOrigin || "https://dev.roadsafetybc.gov.bc.ca";
 
 window.isSubmitted = window.isSubmitted || false;
 
@@ -143,11 +144,9 @@ function loadChefsBundleData(fetchedBundleData) {
       const flattenedComponents = getFlattenedComponents();
       values[key].forEach((medicalCondition) => {
         const { formId } = medicalCondition;
-        const matchingMedicalConditionComponent = Object.values(
-          flattenedComponents,
-        ).find(
-          (comp) => comp?.originalComponent?.properties?.kmcformid === formId,
-        );
+        const matchingMedicalConditionComponent = Object
+          .values(flattenedComponents)
+          .find((comp) => comp?.originalComponent?.properties?.kmcformid === formId);
         if (!matchingMedicalConditionComponent) {
           console.warn(`[IFRAME] loadChefsBundleData: could not find matching component for formId: ${formId}`);
           return;
