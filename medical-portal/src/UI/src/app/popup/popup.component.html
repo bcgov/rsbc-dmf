@@ -1,20 +1,16 @@
+<!-- styles copied from the iframe inline styles to match chefs header -->
+<div class="right" style="background-color: rgb(0, 51, 102); color: rgb(255, 255, 255); caret-color: rgb(255, 255, 255);">
+    <button class="close-button" mat-icon-button aria-label="Close" mat-dialog-close (click)="closePopup()">
+      <mat-icon>close</mat-icon>
+    </button>
+</div>
+
 <div mat-dialog-content>
-  <iframe
-    #iframe
-    [src]="getSourceURL()"
-    height="800"
-    width="100%"
-    title="Demographic Info in CHEFS"
-    (load)="iframeLoaded()"
-  >
-  </iframe>
+  <iframe #iframe title="Demographic Info in CHEFS" [src]="getSourceURL()" height="800" width="100%" (load)="iframeLoaded()" [frameBorder]="0"></iframe>
 </div>
 
 <ng-template #warningDialog>
   <div matDialogContent style="margin:40px">
     <b>Warning:</b> only a licenced practitioner can submit the form for final submission, saved the form as a draft.
   </div>
-  <!--mat-dialog-actions align="end">
-    <button mat-flat-button matDialogClose class="primaryButton">Dismiss</button>
-  </mat-dialog-actions-->
 </ng-template>
