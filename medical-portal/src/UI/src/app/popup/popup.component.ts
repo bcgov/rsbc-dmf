@@ -6,6 +6,7 @@ import { ChefsService } from '../shared/api/services';
 import { v4 as uuidv4 } from 'uuid';
 import { SubmissionStatus } from '@app/features/chefs/enums/chefs-status.enum';
 import { MatIcon } from '@angular/material/icon';
+import { ConfigurationService } from '@app/shared/services/configuration.service';
 
 @Component({
   selector: 'app-popup',
