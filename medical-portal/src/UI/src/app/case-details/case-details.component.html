@@ -50,29 +50,41 @@
                   <b>{{ caseDetails?.dmerStatus }}</b>
                 </div>
               </div>
+             
               <div>
+                @if(caseDetails?.dmerStatus !== DMERStatusEnum.NotRequested ){
                 <label>Submission Date</label>
                 <div>
                   <b>{{
                     caseDetails?.latestComplianceDate | date: "longDate"
                   }}</b>
                 </div>
+              }
               </div>
+            
               <div>
                 <label>Medical Practitioner on record</label>
                 <div>
                   <b></b>
                 </div>
               </div>
-
-              <app-dmer-buttons [searchedCase]="this.caseDetails"></app-dmer-buttons>
-
+             
               <div class="caseDetailsRow">
-                This needs to be submitted by :
-                <b>{{
-                  caseDetails?.latestComplianceDate | date: "longDate"
-                }}</b>
+                @if(caseDetails?.dmerStatus !== DMERStatusEnum.NotRequested ){
+                  <div >
+                    This needs to be submitted by :
+                    <b>{{
+                      caseDetails?.latestComplianceDate | date: "longDate"
+                    }}</b>
+                  </div>
+                  <div>
+                    <app-dmer-buttons [searchedCase]="this.caseDetails"></app-dmer-buttons>
+                  </div>
+                  
+                }
               </div>
+            
+              
             </div>
           </div>
         </div>
