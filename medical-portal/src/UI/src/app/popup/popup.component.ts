@@ -6,6 +6,7 @@ import { ChefsService } from '../shared/api/services';
 import { v4 as uuidv4 } from 'uuid';
 import { SubmissionStatus } from '@app/features/chefs/enums/chefs-status.enum';
 import { MatIcon } from '@angular/material/icon';
+import { ConfigurationService } from '@app/shared/services/configuration.service';
 
 @Component({
   selector: 'app-popup',
@@ -27,6 +28,7 @@ export class PopupComponent {
     private popupService: PopupService,
     private chefsService: ChefsService,
     private sanitizer: DomSanitizer,
+    private configService: ConfigurationService,
     @Inject(MAT_DIALOG_DATA) public data: { caseId: string, documentId: string },
     private dialog: MatDialog
   ) {
@@ -40,7 +42,7 @@ export class PopupComponent {
 
   ngOnInit() {
     this.instanceId = uuidv4();
-    this.iframeUrl = `https://submit.digital.gov.bc.ca/app/form/submit?f=5383fc89-b219-49a2-924c-251cd1557eb8&instanceId=${this.instanceId}`;
+    this.iframeUrl = `https://submit.digital.gov.bc.ca/app/form/submit?f=${this.configService.config.chefsFormId}&instanceId=${this.instanceId}`;
     this.sanitizedSource = this.sanitizer.bypassSecurityTrustResourceUrl(
       this.iframeUrl,
     );

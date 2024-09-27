@@ -34,16 +34,15 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<object> Get()
+        public ActionResult<PublicConfiguration> Get()
         {
-            var config = new
-            {
-                Environment = env.EnvironmentName,
-                configuration.Keycloak
-            };
-
+            var config = new PublicConfiguration();
+            config.Environment = env.EnvironmentName;
+            config.Keycloak = configuration.Keycloak;
+            config.ChefsFormId = configuration.ChefsFormId;
             return Ok(config);
         }
+
         public class EFormsOptions
         {
             public string FormServerUrl { get; set; }
