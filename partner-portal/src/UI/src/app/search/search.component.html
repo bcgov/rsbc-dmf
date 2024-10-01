@@ -59,7 +59,7 @@
           </form>
           @if(noResults){
             <div class="noResults">
-              RoadSafetyBC (RSBC) does not have a driver medical fitness record of any active or historical cases assigned to this driver. Check if there is a case at <a style="color:#D23C42 ;">Remedial.</a>
+              RoadSafetyBC (RSBC) does not have a driver medical fitness record of any active or historical cases assigned to this driver. Check if there is a case at <a style="color:#D23C42 ;" href="https://justice.gov.bc.ca/dfweb/" target="_blank">Remedial.</a>
             </div>
           }
         </mat-card-content>
@@ -70,9 +70,7 @@
       <mat-card>
         <mat-card-content>
           <p>Direct to Remedial website to Remedial</p>
-          <button mat-flat-button class="remedialButton">
-            Go to Remedial Website
-          </button>
+          <a mat-raised-button class="remedialButton" href="https://justice.gov.bc.ca/dfweb/" target="_blank"> Go to Remedial Website</a>
         </mat-card-content>
       </mat-card>
     </div>
