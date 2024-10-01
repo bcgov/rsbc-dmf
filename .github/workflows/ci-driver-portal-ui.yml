@@ -28,7 +28,7 @@ jobs:
         id: extract_branch
       - uses: actions/setup-node@v4
         with:
-          node-version: "18.17"
+          node-version: "18.19"
       - run: npm install && npm ci
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
       - run: npm i
