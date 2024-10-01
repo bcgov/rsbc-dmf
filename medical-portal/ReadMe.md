@@ -115,7 +115,7 @@ Contact Shiv for admin access to chefs (MacFarlane, Shiv PSSG:EX)[<Shiv.MacFarla
 4. Click on the "Data" tab and expand the "Calculated Value" panel
 5. Edit the "Javascript" textarea. You can copy the initChefsForm.js script and paste here.
 
-### Chefs IFrame origin
+### How to update the chefs origin for each environment
 1. Login to chefs, and select the eDMER form
 2. On the top of the form, there is a field labelled "CORS Configured Origin"
 3. Update the origin to match the domain of the received of the iframe events e.g. "https://dev.roadsafetybc.gov.bc.ca" or "https://localhost:4200"
