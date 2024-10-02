@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^18.2.7",
     "@angular/router": "^18.2.7",
     "@auth0/angular-jwt": "^5.0.2",
+    "@shared/core-ui": "file:../../../shared-portal-ui/dist/core-ui",
     "keycloak-angular": "^16.0.1",
     "keycloak-js": "^24.0.4",
     "ng-openapi-gen": "^0.51.0",
