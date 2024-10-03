@@ -158,6 +158,7 @@ You need to reference the chefs form Guid, so that each different environment kn
 
 
 ### How to install shared libraries
+ Refer to https://angular.dev/tools/libraries/creating-libraries for angular libraries.
 1. Build the shared libraries first before we run any any portal 
     - npm run watch
 2. To install shared library in the portal
