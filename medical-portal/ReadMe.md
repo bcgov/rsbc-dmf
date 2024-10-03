@@ -155,3 +155,7 @@ You need to reference the chefs form Guid, so that each different environment kn
   };
 ```
 6. Save and publish the chefs form
+
+
+### How to install shared libraries
+run  npm install "C:\Users\ShruthiR.QSL\Documents\Development\rsbc-dmf\shared-portal-ui\dist\core-ui" to install shared project as a library
