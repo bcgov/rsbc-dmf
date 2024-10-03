@@ -16,6 +16,7 @@ async function handle(req: HttpRequest<any>, next: HttpHandlerFn) {
   } catch (error) {
     // if keycloak is not initialized, getToken will error
     return next(req);
+    return lastValueFrom(next(req));
   }
 
   if (!req.headers.has('Authorization')) {

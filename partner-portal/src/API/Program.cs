@@ -147,10 +147,7 @@ try
     app.UseEndpoints(endpoints =>
     {
         endpoints.MapControllers()
-            //.RequireAuthorization(
-            //Policies.MedicalPractitioner, 
-            //Policies.Enrolled, Policies.Oidc)
-            ;
+            .RequireAuthorization(Policies.Oidc);
     });
     app.MapSwagger();
     app.UseHealthChecks("/hc/ready", new HealthCheckOptions

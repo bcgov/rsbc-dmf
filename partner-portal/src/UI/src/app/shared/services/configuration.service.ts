@@ -10,15 +10,18 @@ import { AppConfiguration, KeycloakConfiguration } from '../api/models';
 })
 export class ConfigurationService {
   //public onLoaded: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private config?: AppConfiguration;
 
   constructor(
-    @Inject(APP_BASE_HREF) public baseHref: string,
     private configurationService: ConfigService
   ) {}
 
   public load(): Observable<KeycloakConfiguration> {
     return this.configurationService.apiConfigGet$Json().pipe(
-      map((appConfiguration: AppConfiguration) => { return appConfiguration.keycloak as KeycloakConfiguration; })
+      map((appConfiguration: AppConfiguration) => {
+        this.config = appConfiguration;
+        return appConfiguration.keycloak as KeycloakConfiguration;
+      })
     );
   }
 

@@ -21,7 +21,8 @@ public class AppConfiguration
                 OnLoad = "check-sso",
                 Flow = "standard",
                 ResponseMode = "fragment",
-                PkceMethod = "S256"
+                PkceMethod = "S256",
+                CheckLoginIframe = false
             }
         };
     }
@@ -46,6 +47,7 @@ public class AppConfiguration
             public string Flow { get; set; }
             public string ResponseMode { get; set; }
             public string PkceMethod { get; set; }
+            public bool CheckLoginIframe { get; set; }
         }
     }
 }

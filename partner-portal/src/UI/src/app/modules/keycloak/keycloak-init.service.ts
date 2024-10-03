@@ -4,6 +4,7 @@ import { KeycloakOptions, KeycloakService } from 'keycloak-angular';
 import { ConfigurationService } from '../../shared/services/configuration.service';
 // TODO get keycloakOptions from api/Config
 import { environment } from 'src/environments/environment.prod';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -17,9 +18,10 @@ export class KeycloakInitService {
 
   public async load(): Promise<void> {
     console.info('Keycloak initializing...');
-    const authenticated = await this.keycloakService.init(
-      this.getKeycloakOptions()
-    );
+    this.configService.load().subscribe(async (keycloakConfiguration) => {
+      const keycloakOptions = keycloakConfiguration as KeycloakOptions;
+      console.info('Keycloak options:', keycloakOptions);
+      const authenticated = await this.keycloakService.init(keycloakOptions);
     console.info('Keycloak authenticated:', authenticated);
 
     this.keycloakService.getKeycloakInstance().onTokenExpired = (): void => {
@@ -36,9 +38,16 @@ export class KeycloakInitService {
     if (authenticated) {
       // Force refresh to begin expiry timer
       await this.keycloakService.updateToken(-1);
+      } else {
+        await this.keycloakService.login({
+          idpHint: IdentityProvider.BCSC,
+          // TODO add medical-portal scope and move this to api/Config
+          scope: 'openid profile email',
+        })
     }
 
     console.info('Keycloak initialization completed.');
+    });
   }
 
   private getKeycloakOptions(): KeycloakOptions {
