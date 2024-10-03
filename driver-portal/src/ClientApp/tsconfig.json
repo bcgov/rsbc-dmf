@@ -9,13 +9,7 @@
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
     "paths": {
-      "@shared/core-ui": [
-        "../../../shared-portal-ui/projects/core-ui/src/public-api",
-      ],
       "@app/*": ["./src/app/*"],
-      "@angular/*": [
-        "./node_modules/@angular/*"
-     ],
     }, 
     "declaration": false,
     "downlevelIteration": true,
