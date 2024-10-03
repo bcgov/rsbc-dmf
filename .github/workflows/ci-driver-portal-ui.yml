@@ -28,12 +28,17 @@ jobs:
         id: extract_branch
       - uses: actions/setup-node@v4
         with:
-          node-version: "18.19"
+          node-version: "20"
+
+      - run: npm install 
+        working-directory: "shared-portal-ui"
+
+      - run: npm run build 
+        working-directory: "shared-portal-ui"
+
       - run: npm install && npm ci
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
-      - run: npm i
-        working-directory: "shared-portal-ui/projects/core-ui/src"
-
+     
       - run: npm run lint
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
