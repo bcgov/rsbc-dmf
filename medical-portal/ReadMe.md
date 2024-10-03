@@ -158,4 +158,9 @@ You need to reference the chefs form Guid, so that each different environment kn
 
 
 ### How to install shared libraries
-run  npm install "C:\Users\ShruthiR.QSL\Documents\Development\rsbc-dmf\shared-portal-ui\dist\core-ui" to install shared project as a library
+1. Build the shared libraries first before we run any any portal 
+    - npm run watch
+2. To install shared library in the portal
+    - npm install "C:\Users\ShruthiR.QSL\Documents\Development\rsbc-dmf\shared-portal-ui\dist\core-ui" (this is your dist folder of shared-portal-uI/dist shared libraries- copy your local path)
+3. Update the CI pipleine to build the shared libraries first and then the portals(Refer to  any portal-UI CI pipleline)
+
