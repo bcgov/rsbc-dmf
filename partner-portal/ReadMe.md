@@ -53,3 +53,12 @@ To login, use your own IDIR account e.g. john.smith@gov.bc.ca
 [OpenShift Silver](https://oauth-openshift.apps.silver.devops.gov.bc.ca/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole.apps.silver.devops.gov.bc.ca%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=bd57c0b6)
 [Keycloak](https://test.healthprovideridentityportal.gov.bc.ca/)
 AWS S3
+
+
+### How to install shared libraries
+ Refer to https://angular.dev/tools/libraries/creating-libraries for angular libraries.
+1. Build the shared libraries first before we run any any portal 
+    - npm run watch
+2. To install shared library in the portal
+    - npm install "C:\Users\ShruthiR.QSL\Documents\Development\rsbc-dmf\shared-portal-ui\dist\core-ui" (this is your dist folder of shared-portal-uI/dist shared libraries- copy your local path)
+3. Update the CI pipleine to build the shared libraries first and then the portals(Refer to  any portal-UI CI pipleline)
