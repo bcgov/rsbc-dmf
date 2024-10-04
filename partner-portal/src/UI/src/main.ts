@@ -1,12 +1,7 @@
-import { importProvidersFrom } from '@angular/core';
+import { APP_INITIALIZER, importProvidersFrom } from '@angular/core';
 import { AppComponent } from './app/app.component';
-import {
-  withInterceptorsFromDi,
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { KeycloakModule } from './app/modules/keycloak/keycloak.module';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,18 +9,30 @@ import { routes } from './app/app.routes';
 import { ApiModule } from '@app/shared/api/api.module';
 import { environment } from './environments/environment';
 import { BearerTokenInterceptor } from '@app/features/auth/interceptors/bearer-token.interceptor';
+import { KeycloakInitService } from '@app/modules/keycloak/keycloak-init.service';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { ConfigurationService } from '@app/shared/services/configuration.service';
+
+export function keycloakFactory(keycloakInitService: KeycloakInitService)
+{
+  return () => keycloakInitService.load();
+}
 
 bootstrapApplication(AppComponent, {
   providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: keycloakFactory,
+      multi: true,
+      deps: [KeycloakInitService, KeycloakService, ConfigurationService],
+    },
     provideRouter(routes, withComponentInputBinding()),
-
     importProvidersFrom(
       BrowserModule,
-      KeycloakModule,
+      KeycloakAngularModule,
       BrowserAnimationsModule,
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
     ),
-
     provideHttpClient(withInterceptors([BearerTokenInterceptor])),
     {
       provide: APP_BASE_HREF,

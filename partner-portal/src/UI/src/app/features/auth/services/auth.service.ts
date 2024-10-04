@@ -6,7 +6,6 @@ import { Role } from '../enums/identity-provider.enum';
 
 export interface IAuthService {
   login(options?: KeycloakLoginOptions): Observable<void>;
-  isLoggedIn(): Observable<boolean>;
   logout(redirectUri: string): Observable<void>;
 }
 
@@ -26,10 +25,6 @@ export class AuthService implements IAuthService {
       return idTokenParsed['preferred_username'];
     }
     return undefined;
-  }
-
-  public isLoggedIn(): Observable<boolean> {
-    return of(this.keycloakService.isLoggedIn());
   }
 
   public hasAccess(): boolean {
