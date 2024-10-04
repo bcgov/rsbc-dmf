@@ -8,7 +8,7 @@ import { AppConfiguration, KeycloakConfiguration } from '../api/models';
   providedIn: 'root',
 })
 export class ConfigurationService {
-  public config: AppConfiguration = { keycloak: { } };
+  public config: AppConfiguration = { };
 
   constructor(
     private configurationService: ConfigService
