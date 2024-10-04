@@ -10,8 +10,8 @@ import { ApiModule } from '@app/shared/api/api.module';
 import { environment } from './environments/environment';
 import { BearerTokenInterceptor } from '@app/features/auth/interceptors/bearer-token.interceptor';
 import { KeycloakInitService } from '@app/modules/keycloak/keycloak-init.service';
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
-import { ConfigurationService } from '@app/shared/services/configuration.service';
+import { KeycloakAngularModule } from 'keycloak-angular';
+import { provideKeycloak } from './app/modules/keycloak/keycloak.provider';
 
 export function keycloakFactory(keycloakInitService: KeycloakInitService)
 {
@@ -20,12 +20,7 @@ export function keycloakFactory(keycloakInitService: KeycloakInitService)
 
 bootstrapApplication(AppComponent, {
   providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: keycloakFactory,
-      multi: true,
-      deps: [KeycloakInitService, KeycloakService, ConfigurationService],
-    },
+    provideKeycloak(),
     provideRouter(routes, withComponentInputBinding()),
     importProvidersFrom(
       BrowserModule,
