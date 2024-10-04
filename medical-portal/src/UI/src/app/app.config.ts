@@ -14,22 +14,11 @@ import { AuthService } from './features/auth/services/auth.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
-import { KeycloakInitService } from './modules/keycloak/keycloak-init.service';
-import { ConfigurationService } from './shared/services/configuration.service';
-
-export function keycloakFactory(keycloakInitService: KeycloakInitService)
-{
-  return () => keycloakInitService.load();
-}
+import { provideKeycloak } from './modules/keycloak/keycloak.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: keycloakFactory,
-      multi: true,
-      deps: [KeycloakInitService, KeycloakService, ConfigurationService],
-    },
+    provideKeycloak(),
     provideRouter(routes, withComponentInputBinding()),
     provideAnimationsAsync(),
     provideHttpClient(
