@@ -14,7 +14,8 @@ public class AppConfiguration
                 Url = configuration["KEYCLOAK_AUTH_URL"],
                 Audience = configuration["KEYCLOAK_AUDIENCE"],
                 Realm = configuration["KEYCLOAK_REALM"],
-                ClientId = configuration["KEYCLOAK_CLIENT_ID"]
+                ClientId = configuration["KEYCLOAK_CLIENT_ID"],
+                Scope = "openid profile email"
             },
             InitOptions = new KeycloakConfiguration.KeycloakInitOptions
             {
@@ -39,6 +40,7 @@ public class AppConfiguration
             public string Audience { get; set; }
             public string Realm { get; set; }
             public string ClientId { get; set; }
+            public string Scope { get; set; }
         }
 
         public class KeycloakInitOptions

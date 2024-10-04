@@ -1,4 +1,3 @@
-import { APP_BASE_HREF } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
