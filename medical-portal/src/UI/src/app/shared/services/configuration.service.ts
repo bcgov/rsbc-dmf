@@ -17,9 +17,6 @@ export class ConfigurationService {
   ) {}
 
   public load(): Observable<PublicConfiguration> {
-     if (this.config != null) {
-       return of(this.config);
-     }
     return this.configurationService.apiConfigGet$Json().pipe(
       tap((c: any) => {
         this.config = { ...c };
