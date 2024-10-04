@@ -120,4 +120,9 @@ export class CommentsComponent implements OnInit {
 
     this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, pageSize);
   }
+  
+  toggleIsExpandable(id?: string | null) {
+    if (id) this.isExpanded[id] = !this.isExpanded[id];
+  }
+
 }

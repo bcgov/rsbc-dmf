@@ -33,15 +33,26 @@
   <mat-card *ngFor = "let comments of filteredComments" style="margin-bottom: 12px;">
     <mat-card-content>
       <div class="comments">  
-        @if(comments.origin === "User"){
-          <mat-icon style="width:75px"> account_circle</mat-icon>
-        }
-        @if(comments.origin === "System"){
-          <mat-icon style="width:136px">devices</mat-icon>
-        }
-        <div>
+        <div style="display: flex; flex-direction: column;">
+          @if(comments.origin === "User"){
+            <mat-icon style="width:75px"> account_circle</mat-icon>
+          }
+          @if(comments.origin === "System"){
+            <mat-icon style="width:136px">devices</mat-icon>
+          }
+          @if(comments.commentText != null && comments.commentText.length >= 100)
+          {
+            
+              <div >
+                <mat-icon mat-button (click)="toggleIsExpandable(comments.commentId)" class="expandedIcon">expand_circle_down</mat-icon>
+              </div>
+           
+          }
+        </div>
+       
+      <div>
        <div>
-        {{comments.commentText}}
+        {{ comments.commentId && isExpanded[comments.commentId] ? comments.commentText: comments.commentText?.substring(0, 100)}}
        </div>
         <div>{{comments.origin}} - {{comments.commentDate | date : "longDate"}}</div>
         </div>

@@ -104,7 +104,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 UserId = request.UserId,
                 Driver = driver,
                 CommentDate = commentDate,
-                CommentId = request.CommentId
+                CommentId = request.CommentId,
+                SignatureName = request.SignatureName,
             };
 
             var result = await _commentManager.AddCaseComment(newComment);
