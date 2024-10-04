@@ -16,10 +16,10 @@ export class KeycloakInitService {
     private keycloakService: KeycloakService
   ) {}
 
-  public async load(): Promise<void> {
+  public load() {
     console.info('Keycloak initializing...');
-    this.configService.load().subscribe(async (keycloakConfiguration) => {
-      const keycloakOptions = keycloakConfiguration as KeycloakOptions;
+    return this.configService.load().pipe(switchMap<any, any>(async (appConfiguration) => {
+      const keycloakOptions = appConfiguration.keycloak as KeycloakOptions;
       console.info('Keycloak options:', keycloakOptions);
       const authenticated = await this.keycloakService.init(keycloakOptions);
     console.info('Keycloak authenticated:', authenticated);
@@ -40,14 +40,14 @@ export class KeycloakInitService {
       await this.keycloakService.updateToken(-1);
       } else {
         await this.keycloakService.login({
-          idpHint: IdentityProvider.BCSC,
+          idpHint: IdentityProvider.IDIR,
           // TODO add medical-portal scope and move this to api/Config
           scope: 'openid profile email',
         })
     }
 
     console.info('Keycloak initialization completed.');
-    });
+    }));
   }
 
   private getKeycloakOptions(): KeycloakOptions {

@@ -4,8 +4,8 @@ import { KeycloakInitService } from './keycloak-init.service';
 
 export function keycloakFactory(
   keycloakInitService: KeycloakInitService
-): () => Promise<void> {
-  return (): Promise<void> => keycloakInitService.load();
+) {
+  return () => keycloakInitService.load();
 }
 
 export const keycloakProvider: Provider = {
