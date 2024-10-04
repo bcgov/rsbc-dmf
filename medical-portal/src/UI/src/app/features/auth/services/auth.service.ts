@@ -7,7 +7,6 @@ import { ProfileManagementService } from '@app/shared/services/profile.service';
 import { SESSION_STORAGE_KEYS } from '@app/app.model';
 
 export interface IAuthService {
-  login(options?: KeycloakLoginOptions): Observable<void>;
   isLoggedIn(): Observable<boolean>;
   logout(redirectUri: string): Observable<void>;
 }
@@ -20,10 +19,6 @@ export class AuthService implements IAuthService {
     private keycloakService: KeycloakService,
     private profileManagementService: ProfileManagementService
   ) {}
-
-  public login(options?: KeycloakLoginOptions): Observable<void> {
-    return from(this.keycloakService.login(options));
-  }
 
   public getHpdid(): string | undefined {
     const idTokenParsed = this.keycloakService.getKeycloakInstance().idTokenParsed;

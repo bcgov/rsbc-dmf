@@ -1,4 +1,4 @@
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -6,7 +6,6 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApiModule } from './shared/api/api.module';
 import { environment } from '../environments/environment';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
-import { KeycloakModule } from './modules/keycloak/keycloak.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { BearerTokenInterceptor } from './features/auth/interceptors/bearer-token.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -14,9 +13,23 @@ import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.inter
 import { AuthService } from './features/auth/services/auth.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { KeycloakInitService } from './modules/keycloak/keycloak-init.service';
+import { ConfigurationService } from './shared/services/configuration.service';
+
+export function keycloakFactory(keycloakInitService: KeycloakInitService)
+{
+  return () => keycloakInitService.load();
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: keycloakFactory,
+      multi: true,
+      deps: [KeycloakInitService, KeycloakService, ConfigurationService],
+    },
     provideRouter(routes, withComponentInputBinding()),
     provideAnimationsAsync(),
     provideHttpClient(
@@ -25,7 +38,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       BrowserModule,
       BrowserAnimationsModule,
-      KeycloakModule,
+      KeycloakAngularModule,
       PermissionsModule.forRoot(),
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
       NgxSpinnerModule,

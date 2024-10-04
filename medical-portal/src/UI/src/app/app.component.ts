@@ -42,31 +42,9 @@ export class AppComponent {
   ) {}
 
   public async ngOnInit(): Promise<void> {
-    try {
-      this.configService.load();
+    this.isLoading = false;
 
-      console.info('AppComponent initializing...');
-      //attempt to log in
-      this.authService.isLoggedIn().subscribe((isLoggedIn) => {
-        console.info('Are you logged in?', isLoggedIn);
-        if (!isLoggedIn) {
-          console.info('Redirect to login page');
-          this.authService.login({
-            idpHint: IdentityProvider.BCSC,
-            // TODO add medical-portal scope and move this to api/Config
-            scope: 'openid profile email',
-          });
-        } else {
-          // for spinner status, this will likely change when the keycloak auth lifecycle events are refactored
-          this.isLoading = false;
-        }
-      });
-    } catch (e) {
-      console.error(e);
-      throw e;
-    } finally {
-      console.info('AppComponent initialization completed.');
-    }
+    console.info('AppComponent initialization completed.');
   }
 
   //  Logout
