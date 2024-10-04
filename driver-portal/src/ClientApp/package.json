@@ -28,6 +28,7 @@
     "@angular/platform-browser-dynamic": "^18.2.6",
     "@angular/platform-server": "^18.2.6",
     "@angular/router": "^18.2.6",
+    "@shared/core-ui": "file:../../../shared-portal-ui/dist/core-ui",
     "angular-oauth2-oidc": "^15.0.1",
     "axios": "1.7",
     "bootstrap": "^5.2.3",
