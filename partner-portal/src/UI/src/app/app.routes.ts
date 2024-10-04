@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-
 import { DriverSearchComponent } from './driver-search/driver-search.component';
 import { SearchComponent } from './search/search.component';
 import { RemedialComponent } from './remedial/remedial.component';
@@ -8,13 +7,13 @@ import { CaseSearchComponent } from './case-search/case-search.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
 import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.component';
 import { GetHelpComponent } from './get-help/get-help.component';
+import { AuthGuard } from './modules/keycloak/keycloak.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'search', pathMatch: 'full' },
-
   {
     path: '',
-
+    canActivate: [AuthGuard],
     children: [
       { path: 'search', component: SearchComponent },
       { path: 'remedial', component: RemedialComponent },

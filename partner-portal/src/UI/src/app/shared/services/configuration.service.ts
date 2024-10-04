@@ -9,7 +9,6 @@ import { AppConfiguration, KeycloakConfiguration } from '../api/models';
   providedIn: 'root',
 })
 export class ConfigurationService {
-  //public onLoaded: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public config: AppConfiguration = { keycloak: { } };
 
   constructor(
@@ -25,12 +24,4 @@ export class ConfigurationService {
       })
     );
   }
-
-  // public isConfigured(): boolean {
-  //   return this.config !== null;
-  // }
-
-  // public getKeycloakOptions(): KeycloakOptions {
-  //   return this.config?.keycloakOptions || {};
-  // }
 }

@@ -2,9 +2,6 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { KeycloakOptions, KeycloakService } from 'keycloak-angular';
 import { ConfigurationService } from '../../shared/services/configuration.service';
-// TODO get keycloakOptions from api/Config
-import { environment } from 'src/environments/environment.prod';
-import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +11,7 @@ export class KeycloakInitService {
     private configService: ConfigurationService,
     private router: Router,
     private keycloakService: KeycloakService
-  ) {}
+  ) { }
 
   public load() {
     console.info('Keycloak initializing...');
@@ -30,8 +27,6 @@ export class KeycloakInitService {
         .updateToken()
         .catch((reason) => {
           console.error('Keycloak failed to update token', reason);
-          // TODO
-          this.router.navigateByUrl('')
         });
     };
 
@@ -48,11 +43,5 @@ export class KeycloakInitService {
 
     console.info('Keycloak initialization completed.');
     }));
-  }
-
-  private getKeycloakOptions(): KeycloakOptions {
-    //console.info('getKeycloakOptions', this.configService.getKeycloakOptions());
-    //return this.configService.getKeycloakOptions();
-    return environment.keycloakOptions as KeycloakOptions;
   }
 }
