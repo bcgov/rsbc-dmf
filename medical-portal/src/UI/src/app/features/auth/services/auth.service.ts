@@ -7,7 +7,6 @@ import { ProfileManagementService } from '@app/shared/services/profile.service';
 import { SESSION_STORAGE_KEYS } from '@app/app.model';
 
 export interface IAuthService {
-  isLoggedIn(): Observable<boolean>;
   logout(redirectUri: string): Observable<void>;
 }
 
@@ -17,7 +16,6 @@ export interface IAuthService {
 export class AuthService implements IAuthService {
   public constructor(
     private keycloakService: KeycloakService,
-    private profileManagementService: ProfileManagementService
   ) {}
 
   public getHpdid(): string | undefined {
@@ -26,19 +24,6 @@ export class AuthService implements IAuthService {
       return idTokenParsed['preferred_username'];
     }
     return undefined;
-  }
-
-  public isLoggedIn(): Observable<boolean> {
-    return of(this.keycloakService.isLoggedIn());
-  }
-
-  // NOTE everyone that can login has access to all pages e.g. Practitioner, MOA/MOM
-  // MOA/MOM will have restricted access on each page with feature level permissions
-  public hasAccess(): boolean {
-    //console.info('getUserRoles', this.keycloakService.getUserRoles());
-    //return this.keycloakService.isLoggedIn() && this.keycloakService.isUserInRole(Role.Enrolled);
-    //return !!this.profileManagementService.getCachedProfile().roles?.includes(Role.Enrolled);
-    return true;
   }
 
   public getRoles(): Role[] {

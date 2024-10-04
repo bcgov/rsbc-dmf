@@ -4,7 +4,6 @@ import { CaseDetailsComponent } from './case-details/case-details.component';
 import { AccountComponent } from './account/account.component';
 import { GetHelpComponent } from './get-help/get-help.component';
 import { CaseSubmissionsComponent } from './case-submissions/case-submissions.component';
-import { AuthenticationGuard } from './features/auth/guards/authentication.guard';
 import { DeniedComponent } from './denied/denied.component';
 import { AuthGuard } from './modules/keycloak/keycloak.guard';
 

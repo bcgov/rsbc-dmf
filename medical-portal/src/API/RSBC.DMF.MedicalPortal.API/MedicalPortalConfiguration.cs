@@ -55,6 +55,7 @@ public class KeycloakConfiguration
         public string Flow { get; set; }
         public string ResponseMode { get; set; }
         public string PkceMethod { get; set; }
+        public bool CheckLoginIframe { get; set; } = true;
     }
 }
 

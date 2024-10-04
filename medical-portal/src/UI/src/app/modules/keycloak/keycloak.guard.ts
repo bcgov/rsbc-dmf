@@ -21,7 +21,6 @@ export class AuthGuard extends KeycloakAuthGuard {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean | UrlTree>
   {
-    console.log('AuthGuard#isAccessAllowed called', this.authenticated);
     if (!this.authenticated) {
       const scope = this.configService.config.keycloak?.config?.scope || "openid profile email";
       await this.keycloakService.login({
