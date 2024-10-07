@@ -83,15 +83,17 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             comment.CommentText = commentRequest.CommentText ?? string.Empty;
             comment.CommentDate = DateTime.UtcNow.ToTimestamp();
             comment.CaseId = mostRecentCaseReply.Item.CaseId;
-            comment.CommentTypeCode = "I";
+            comment.CommentTypeCode = "W";
             comment.Origin = "User";
             comment.UserId = profile.DriverId;
-           
+            
             comment.Driver = new CaseManagement.Service.Driver();
+
             comment.Driver.DriverLicenseNumber = profile.DriverLicenseNumber;
             comment.Driver.Surname = profile.LastName?? string.Empty;
+            comment.SignatureName = profile.FirstName;
 
-            
+
 
             // create Comment
             var reply = _commentManagerClient.AddCaseComment(comment);

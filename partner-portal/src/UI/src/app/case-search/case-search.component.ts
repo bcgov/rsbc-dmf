@@ -12,7 +12,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { LettersToDriverComponent } from '@app/letters-to-driver/letters-to-driver.component';
 import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.component';
 import { CommentsComponent } from '@app/comments/comments.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -70,8 +70,10 @@ export class CaseSearchComponent implements OnInit{
     });
   }
 
-  openCommentsDialog() {
-    const dialogRef = this.dialog.open(CommentsComponent, {
+  dialogRef? : MatDialogRef<CommentsComponent, any>
+
+  openCommentsDialog(width?:string) {
+   this.dialogRef = this.dialog.open(CommentsComponent, {
       height: '730px',
       width: '400px',
       position: {
@@ -80,9 +82,10 @@ export class CaseSearchComponent implements OnInit{
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    this.dialogRef.afterClosed().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
     });
   }
+
 
 }

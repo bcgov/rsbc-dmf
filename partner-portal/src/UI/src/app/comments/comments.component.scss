@@ -23,7 +23,25 @@
     letter-spacing: 1px;
   }
 
+  .expandedIcon {
+    //transform: scale(1.5);
+    color: #003366;
+   // width: 50px;
+  }
+
   .comments{
     display: flex;
     //justify-content: space-around;
+  }
+
+  .largeIcon{
+   transform: scale(1.5); 
+  }
+
+  .mediumIcon{
+    transform:scale(1);
+  }
+
+  .smallIcon{
+    transform: scale(0.5);
   }
