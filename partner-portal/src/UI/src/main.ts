@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, importProvidersFrom } from '@angular/core';
+import { importProvidersFrom } from '@angular/core';
 import { AppComponent } from './app/app.component';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
@@ -9,14 +9,8 @@ import { routes } from './app/app.routes';
 import { ApiModule } from '@app/shared/api/api.module';
 import { environment } from './environments/environment';
 import { BearerTokenInterceptor } from '@app/features/auth/interceptors/bearer-token.interceptor';
-import { KeycloakInitService } from '@app/modules/keycloak/keycloak-init.service';
 import { KeycloakAngularModule } from 'keycloak-angular';
 import { provideKeycloak } from './app/modules/keycloak/keycloak.provider';
-
-export function keycloakFactory(keycloakInitService: KeycloakInitService)
-{
-  return () => keycloakInitService.load();
-}
 
 bootstrapApplication(AppComponent, {
   providers: [
