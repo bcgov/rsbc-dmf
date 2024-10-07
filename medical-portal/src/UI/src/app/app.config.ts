@@ -6,7 +6,6 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApiModule } from './shared/api/api.module';
 import { environment } from '../environments/environment';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
-import { KeycloakModule } from './modules/keycloak/keycloak.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { BearerTokenInterceptor } from './features/auth/interceptors/bearer-token.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -14,9 +13,11 @@ import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.inter
 import { AuthService } from './features/auth/services/auth.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideKeycloak } from './modules/keycloak/keycloak.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideKeycloak(),
     provideRouter(routes, withComponentInputBinding()),
     provideAnimationsAsync(),
     provideHttpClient(
@@ -25,7 +26,6 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       BrowserModule,
       BrowserAnimationsModule,
-      KeycloakModule,
       PermissionsModule.forRoot(),
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
       NgxSpinnerModule,

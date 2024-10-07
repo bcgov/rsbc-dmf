@@ -46,6 +46,7 @@ public class KeycloakConfiguration
         public string Realm { get; set; }
         public string ClientId { get; set; }
         public string Audience { get; set; }
+        public string Scope { get; set; } = "openid profile email";
     }
 
     public class KeycloakInitOptions
@@ -54,6 +55,7 @@ public class KeycloakConfiguration
         public string Flow { get; set; }
         public string ResponseMode { get; set; }
         public string PkceMethod { get; set; }
+        public bool CheckLoginIframe { get; set; } = true;
     }
 }
 

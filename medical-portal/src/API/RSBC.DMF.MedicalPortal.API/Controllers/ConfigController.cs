@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Text.Json;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
@@ -28,10 +23,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             this.configuration = configuration;
         }
 
-        /// <summary>
-        /// Get the client configuration for this environment
-        /// </summary>
-        /// <returns></returns>
+        // get the client configuration for this environment
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<PublicConfiguration> Get()

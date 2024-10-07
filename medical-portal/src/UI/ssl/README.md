@@ -1,3 +1,5 @@
+NOTE!!! Try using aspnet dev certificate instead and delete this ssl folder. The apsnet dev certificate will already be signed and is a better candidate since I'm not able to sign my own certificate on Windows 11
+
 # Generate SSL Certificate
 
 Run the following command in the ssl folder:
