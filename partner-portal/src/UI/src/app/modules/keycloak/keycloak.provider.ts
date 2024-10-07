@@ -1,6 +1,6 @@
-import { APP_INITIALIZER, Provider } from "@angular/core";
+import { APP_INITIALIZER, importProvidersFrom, Provider } from "@angular/core";
 import { KeycloakInitService } from "./keycloak-init.service";
-import { KeycloakService } from "keycloak-angular";
+import { KeycloakAngularModule, KeycloakService } from "keycloak-angular";
 import { ConfigurationService } from "@app/shared/services/configuration.service";
 
 export function keycloakFactory(keycloakInitService: KeycloakInitService)
@@ -15,5 +15,6 @@ export function provideKeycloak(): Provider
     useFactory: keycloakFactory,
     multi: true,
     deps: [KeycloakInitService, KeycloakService, ConfigurationService],
-  }]
+  },
+  importProvidersFrom(KeycloakAngularModule)]
 }

@@ -9,7 +9,6 @@ import { routes } from './app/app.routes';
 import { ApiModule } from '@app/shared/api/api.module';
 import { environment } from './environments/environment';
 import { BearerTokenInterceptor } from '@app/features/auth/interceptors/bearer-token.interceptor';
-import { KeycloakAngularModule } from 'keycloak-angular';
 import { provideKeycloak } from './app/modules/keycloak/keycloak.provider';
 
 bootstrapApplication(AppComponent, {
@@ -18,7 +17,6 @@ bootstrapApplication(AppComponent, {
     provideRouter(routes, withComponentInputBinding()),
     importProvidersFrom(
       BrowserModule,
-      KeycloakAngularModule,
       BrowserAnimationsModule,
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
     ),
