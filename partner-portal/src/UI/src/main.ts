@@ -1,12 +1,7 @@
 import { importProvidersFrom } from '@angular/core';
 import { AppComponent } from './app/app.component';
-import {
-  withInterceptorsFromDi,
-  provideHttpClient,
-  withInterceptors,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
-import { KeycloakModule } from './app/modules/keycloak/keycloak.module';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,18 +9,17 @@ import { routes } from './app/app.routes';
 import { ApiModule } from '@app/shared/api/api.module';
 import { environment } from './environments/environment';
 import { BearerTokenInterceptor } from '@app/features/auth/interceptors/bearer-token.interceptor';
+import { provideKeycloak } from './app/modules/keycloak/keycloak.provider';
 
 bootstrapApplication(AppComponent, {
   providers: [
+    provideKeycloak(),
     provideRouter(routes, withComponentInputBinding()),
-
     importProvidersFrom(
       BrowserModule,
-      KeycloakModule,
       BrowserAnimationsModule,
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
     ),
-
     provideHttpClient(withInterceptors([BearerTokenInterceptor])),
     {
       provide: APP_BASE_HREF,

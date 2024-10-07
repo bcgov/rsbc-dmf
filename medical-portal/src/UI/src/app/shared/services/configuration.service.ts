@@ -1,4 +1,3 @@
-import { APP_BASE_HREF } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -14,14 +13,10 @@ export class ConfigurationService {
   public config!: PublicConfiguration;
 
   constructor(
-    @Inject(APP_BASE_HREF) public baseHref: string,
     private configurationService: ConfigService
   ) {}
 
   public load(): Observable<PublicConfiguration> {
-    if (this.config != null) {
-      return of(this.config);
-    }
     return this.configurationService.apiConfigGet$Json().pipe(
       tap((c: any) => {
         this.config = { ...c };
