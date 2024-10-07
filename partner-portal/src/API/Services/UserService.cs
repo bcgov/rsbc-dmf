@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
-using Rsbc.Dmf.PartnerPortal.Api.Model;
-using System.ComponentModel;
 using System.Security.Claims;
 
 namespace Rsbc.Dmf.PartnerPortal.Api.Services
@@ -15,25 +13,28 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Services
         Task<UserContext> GetUserContext(ClaimsPrincipal user);
         Task<ClaimsPrincipal> Login(ClaimsPrincipal user);
         void SetDriverInfo(ViewModels.Driver driver);
-        UserContext GetDriverInfo();
+        SearchContext GetDriverInfo();
     }
 
     public record UserContext
     {
-        public string BirthDate { get; set; }
+        //public string BirthDate { get; set; }
+        //public string DriverId { get; set; }
+        //public string Email { get; set; }
+        //public string FirstName { get; set; }
+        public string UserId { get; set; }
+        //public string LastName { get; set; }
+        //public string ExternalUserName { get; set; }
+        public string DisplayName { get; set; }
+    }
+
+    public record SearchContext
+    {
         public string DriverId { get; set; }
+        public string DriverLicenseNumber { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
-
-        [Description("UserId")]
-        public string Id { get; set; }
-
         public string LastName { get; set; }
-
-        public string ExternalUserName { get; set; }
-
-        public string DisplayName { get; set; }
-        public string DriverLicenseNumber { get; set; }
     }
 
     public class UserService : IUserService
@@ -59,78 +60,25 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Services
 
             return await Task.FromResult(new UserContext
             {
-                Id = user.FindFirstValue(ClaimTypes.Sid),
-                BirthDate = user.FindFirstValue(UserClaimTypes.BirthDate),
-                DriverId = user.FindFirstValue(UserClaimTypes.DriverId),
-                FirstName = user.FindFirstValue(UserClaimTypes.GivenName),
-                LastName = user.FindFirstValue(UserClaimTypes.FamilyName),
-                Email = user.FindFirstValue(ClaimTypes.Email),
-                ExternalUserName = user.FindFirstValue(ClaimTypes.Upn),
+                UserId = user.FindFirstValue(UserClaimTypes.UserId),
                 DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName),
-                DriverLicenseNumber = user.FindFirstValue(UserClaimTypes.DriverLicenseNumber)
-
             });
         }
-
-        public async Task<ClaimsPrincipal> Login(ClaimsPrincipal user)
-        {
-            logger.LogDebug("Processing login {0}", user.Identity.Name);
-            logger.LogDebug(" claims:\n{0}", string.Join(",\n", user.Claims.Select(c => $"{c.Type}: {c.Value}")));
-
-            //var loginRequest = new UserLoginRequest
-            //{
-            //    UserType = UserType.DriverUserType,
-            //    ExternalSystem = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
-            //    ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
-            //    FirstName = user.FindFirstValue(UserClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
-            //    LastName = user.FindFirstValue(UserClaimTypes.FamilyName) ?? user.FindFirstValue("last_name") ?? string.Empty,
-            //    UserProfiles = { new UserProfile() }
-            //};
-            //var loginResponse = await userManager.LoginAsync(loginRequest);
-            //if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
-
-            //var searchResults = await userManager.SearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId, UserType = UserType.DriverUserType });
-            //if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
-
-            //var userProfile = searchResults.User.SingleOrDefault();
-            //if (userProfile == null) throw new Exception($"User {loginResponse.UserId} not found");
-
-            //var claims = new List<Claim>();
-            //claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
-            //claims.Add(new Claim(ClaimTypes.Email, loginResponse.UserEmail));
-            //claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
-            //claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
-            //claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
-            //claims.Add(new Claim(UserClaimTypes.DisplayName, user.Claims.Single(u => u.Type == UserClaimTypes.DisplayName).Value));
-
-            //if (!string.IsNullOrEmpty(loginResponse.DriverId))
-            //{
-            //    claims.Add(new Claim(UserClaimTypes.DriverId, loginResponse.DriverId));
-            //    claims.Add(new Claim(UserClaimTypes.DriverLicenseNumber, loginResponse.DriverLicenseNumber));
-            //}
-
-            //user.AddIdentity(new ClaimsIdentity(claims));
-            //logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
-
-            return user;
-        }
-
         public void SetDriverInfo(ViewModels.Driver driver)
         {
-            httpContext.HttpContext.Session.SetString(ClaimTypes.GivenName, driver.FirstName);
-            httpContext.HttpContext.Session.SetString(ClaimTypes.Surname, driver.LastName);
-            httpContext.HttpContext.Session.SetString(UserClaimTypes.DriverId, driver.Id);
-            httpContext.HttpContext.Session.SetString(UserClaimTypes.DriverLicenseNumber, driver.LicenseNumber);
+            httpContext.HttpContext.Session.SetString(SearchDriverSession.GivenName, driver.FirstName);
+            httpContext.HttpContext.Session.SetString(SearchDriverSession.Surname, driver.LastName);
+            httpContext.HttpContext.Session.SetString(SearchDriverSession.DriverId, driver.Id);
+            httpContext.HttpContext.Session.SetString(SearchDriverSession.DriverLicenseNumber, driver.LicenseNumber);
         }
 
-        public UserContext GetDriverInfo()
+        public SearchContext GetDriverInfo()
         {
-            var user = new UserContext();
-          
-            user.FirstName = httpContext.HttpContext.Session.GetString(ClaimTypes.GivenName); 
-            user.LastName = httpContext.HttpContext.Session.GetString(ClaimTypes.Surname); 
-            user.DriverId = httpContext.HttpContext.Session.GetString(UserClaimTypes.DriverId); 
-            user.DriverLicenseNumber = httpContext.HttpContext.Session.GetString(UserClaimTypes.DriverLicenseNumber); 
+            var user = new SearchContext();     
+            user.FirstName = httpContext.HttpContext.Session.GetString(SearchDriverSession.GivenName); 
+            user.LastName = httpContext.HttpContext.Session.GetString(SearchDriverSession.Surname); 
+            user.DriverId = httpContext.HttpContext.Session.GetString(SearchDriverSession.DriverId); 
+            user.DriverLicenseNumber = httpContext.HttpContext.Session.GetString(SearchDriverSession.DriverLicenseNumber); 
             return user;
         }
     }

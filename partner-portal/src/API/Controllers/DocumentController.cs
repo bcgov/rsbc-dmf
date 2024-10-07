@@ -42,7 +42,6 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             _logger = loggerFactory.CreateLogger<DocumentController>();
         }
 
-
         /// <summary>
         /// Download Document Content
         /// </summary>
@@ -62,8 +61,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 // check driver is authorized to view document
-                var profile = await _userService.GetCurrentUserContext();
-                if (reply.Document.Driver?.Id != profile.DriverId)
+                var user = _userService.GetDriverInfo();
+                if (reply.Document.Driver?.Id != user.DriverId)
                 {
                     return StatusCode((int)HttpStatusCode.Unauthorized, $"Not authorized - you are not authorized to view document {documentId}");
                 }
@@ -139,6 +138,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                 return StatusCode(500, documentSubTypeGuidReply.ErrorDetail);
             }
 
+            var profile = await _userService.GetCurrentUserContext();
             var user = _userService.GetDriverInfo();
 
             // read file stream into byte array
@@ -174,7 +174,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             var driver = new Driver();
             driver.Id = user.DriverId;
 
-            var document = _documentFactory.Create(driver, user.Id, fileReply.FileName, "Submitted Document", _configuration["DRIVER_DOCUMENT_TYPE_CODE"]);
+            var document = _documentFactory.Create(driver, profile.UserId, fileReply.FileName, "Submitted Document", _configuration["DRIVER_DOCUMENT_TYPE_CODE"]);
             document.DocumentSubTypeId = documentSubTypeGuidReply.Id.ToString();
             var result = _cmsAdapterClient.CreateUnsolicitedDocumentOnDriver(document);
             if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
