@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -13,7 +13,6 @@ import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.inter
 import { AuthService } from './features/auth/services/auth.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { provideKeycloak } from './modules/keycloak/keycloak.provider';
 
 export const appConfig: ApplicationConfig = {
@@ -27,7 +26,6 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(
       BrowserModule,
       BrowserAnimationsModule,
-      KeycloakAngularModule,
       PermissionsModule.forRoot(),
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
       NgxSpinnerModule,
