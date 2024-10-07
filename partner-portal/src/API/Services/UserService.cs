@@ -55,6 +55,7 @@ public class UserService : IUserService
             DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName),
         });
     }
+
     public void SetDriverInfo(ViewModels.Driver driver)
     {
         httpContext.HttpContext.Session.SetString(SearchDriverSession.GivenName, driver.FirstName);
