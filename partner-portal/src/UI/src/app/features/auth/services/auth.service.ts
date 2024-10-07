@@ -27,11 +27,6 @@ export class AuthService implements IAuthService {
     return undefined;
   }
 
-  public hasAccess(): boolean {
-    console.info('getUserRoles', this.keycloakService.getUserRoles());
-    return this.keycloakService.isLoggedIn() && this.keycloakService.isUserInRole(Role.Enrolled);
-  }
-
   public getRoles(): Role[] {
     const roleNames = this.keycloakService
       .getUserRoles()
