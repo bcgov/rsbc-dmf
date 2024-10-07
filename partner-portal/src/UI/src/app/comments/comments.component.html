@@ -4,7 +4,16 @@
   </div>
  <div>
   <button mat-icon-button aria-label="Add Comment" (click)="addComment()">
-    <mat-icon>add</mat-icon> 
+    <mat-icon matTooltip="Add Comment">add</mat-icon> 
+  </button>
+  <button mat-icon-button aria-label="expand-large" (click)="expandLarge()">
+    <mat-icon class="largeIcon">tablet</mat-icon> 
+  </button>
+  <button mat-icon-button aria-label="expand-medium" (click)="expandMedium()">
+    <mat-icon class="mediumIcon">tablet</mat-icon> 
+  </button>
+  <button mat-icon-button aria-label="expand-small" (click)="expandSmall()">
+    <mat-icon class="smallIcon">tablet</mat-icon> 
   </button>
   <button mat-icon-button aria-label="Close" mat-dialog-close>
     <mat-icon>close</mat-icon>
@@ -42,19 +51,26 @@
           }
           @if(comments.commentText != null && comments.commentText.length >= 100)
           {
-            
               <div >
                 <mat-icon mat-button (click)="toggleIsExpandable(comments.commentId)" class="expandedIcon">expand_circle_down</mat-icon>
-              </div>
-           
+              </div>   
           }
         </div>
        
       <div>
-       <div>
+       <div matTooltip={{comments.commentText}}>
         {{ comments.commentId && isExpanded[comments.commentId] ? comments.commentText: comments.commentText?.substring(0, 100)}}
        </div>
-        <div>{{comments.origin}} - {{comments.commentDate | date : "longDate"}}</div>
+       
+        <div>
+         @if(comments.commentTypeCode === "W"){
+            Portal
+         }
+         @else {
+          RSBC
+         }
+          
+          - {{comments.commentDate | date : "longDate"}}</div>
         </div>
         
       </div>

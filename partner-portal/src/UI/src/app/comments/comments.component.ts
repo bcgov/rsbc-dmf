@@ -9,6 +9,7 @@ import { UserService } from '@app/shared/services/user.service';
 import { Comment } from '@app/shared/api/models';
 import { CommentOrigin } from '@app/app.model';
 import { AddCommentsComponent } from './add-comments/add-comments.component';
+import { MatTooltipModule} from '@angular/material/tooltip';
 @Component({
   selector: 'app-comments',
   standalone: true,
@@ -22,7 +23,8 @@ import { AddCommentsComponent } from './add-comments/add-comments.component';
     NgIf, 
     MatDialogClose, 
     DatePipe, 
-    AddCommentsComponent
+    AddCommentsComponent,
+    MatTooltipModule,
   ],
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.scss',
@@ -43,7 +45,7 @@ export class CommentsComponent implements OnInit {
   driverDetails = this.userService.getCachedriver();
  
    constructor(
-    
+    private dialogRef: MatDialogRef<CommentsComponent>,
     private caseManagementService: CaseManagementService,
     private userService: UserService
   ) { }
@@ -93,7 +95,6 @@ export class CommentsComponent implements OnInit {
     this.filterBy = CommentOrigin.System; 
     this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, this.pageSize);
   }
-
   addComment(){
     const dialogRef = this.dialog.open(AddCommentsComponent, {
       height: '300px',
@@ -125,4 +126,15 @@ export class CommentsComponent implements OnInit {
     if (id) this.isExpanded[id] = !this.isExpanded[id];
   }
 
+  expandLarge(){
+    this.dialogRef?.updateSize('1361px','730px' ); 
+  }
+
+  expandMedium(){
+    this.dialogRef?.updateSize('620px','730px'); 
+  }
+
+  expandSmall(){
+    this.dialogRef?.updateSize('400px', '730px'); 
+  }
 }
