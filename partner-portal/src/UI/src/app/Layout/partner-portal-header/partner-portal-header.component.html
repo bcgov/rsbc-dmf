@@ -9,19 +9,15 @@
           />
         </a>
         <div class="title">Partner Portal</div>
-  
+
         <div class="profile">
           <button mat-icon-button [matMenuTriggerFor]="menu">
             <mat-icon class="icon-display">account_circle</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item routerLink="/account" routerLinkActive="active">
-              My Profile
-            </button>
             <button mat-menu-item (click)="logOut()">Sign out</button>
           </mat-menu>
         </div>
       </div>
     </div>
   </header>
-  

@@ -14,14 +14,16 @@ public class AppConfiguration
                 Url = configuration["KEYCLOAK_AUTH_URL"],
                 Audience = configuration["KEYCLOAK_AUDIENCE"],
                 Realm = configuration["KEYCLOAK_REALM"],
-                ClientId = configuration["KEYCLOAK_CLIENT_ID"]
+                ClientId = configuration["KEYCLOAK_CLIENT_ID"],
+                Scope = "openid profile email"
             },
             InitOptions = new KeycloakConfiguration.KeycloakInitOptions
             {
                 OnLoad = "check-sso",
                 Flow = "standard",
                 ResponseMode = "fragment",
-                PkceMethod = "S256"
+                PkceMethod = "S256",
+                CheckLoginIframe = false
             }
         };
     }
@@ -38,6 +40,7 @@ public class AppConfiguration
             public string Audience { get; set; }
             public string Realm { get; set; }
             public string ClientId { get; set; }
+            public string Scope { get; set; }
         }
 
         public class KeycloakInitOptions
@@ -46,6 +49,7 @@ public class AppConfiguration
             public string Flow { get; set; }
             public string ResponseMode { get; set; }
             public string PkceMethod { get; set; }
+            public bool CheckLoginIframe { get; set; }
         }
     }
 }
