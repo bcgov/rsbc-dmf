@@ -9,7 +9,6 @@ using Rsbc.Dmf.IcbcAdapter.Client;
 using Rsbc.Dmf.PartnerPortal.Api.Services;
 using Rsbc.Dmf.PartnerPortal.Api.ViewModels;
 using System.Net;
-using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 
 namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 {
@@ -44,22 +43,19 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             _icbcAdapterClient = icbcAdapterClient;
         }
 
-        /// <summary>
-        /// Get closed documents for a given driver
-        /// </summary>
-        /// <returns></returns>
+        // Get closed documents for a given driver
         [HttpGet("Closed")]
-       //[Authorize(Policy = Policy.Driver)]
+        //[Authorize(Policy = Policy.Driver)]
         [ProducesResponseType(typeof(IEnumerable<ViewModels.CaseDetail>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName("GetClosedCases")]
         public async Task<ActionResult> GetClosedCases()
         {
-            try
+           try
            {
-                var profile = _userService.GetDriverInfo();
-                var caseStatusRequest = new CaseStatusRequest() { DriverId = profile.DriverId, Status = EntityState.Inactive };
+                var user = _userService.GetDriverInfo();
+                var caseStatusRequest = new CaseStatusRequest() { DriverId = user.DriverId, Status = EntityState.Inactive };
                 var reply = _cmsAdapterClient.GetCases(caseStatusRequest);
                 if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                 {
@@ -78,7 +74,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                 }
                 else
                 {
-                    _logger.LogError($"{nameof(GetClosedCases)} failed for driverId: {profile.DriverId}", reply.ErrorDetail);
+                    _logger.LogError($"{nameof(GetClosedCases)} failed for driverId: {user.DriverId}", reply.ErrorDetail);
                     return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
                 }
             }

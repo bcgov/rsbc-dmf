@@ -45,7 +45,7 @@ services.AddKeycloakWebApiAuthentication(
     {
         jwtBearerOptions.Events = new JwtBearerEvents
         {
-            OnTokenValidated = async context => await OnTokenValidatedAsync(context),
+            //OnTokenValidated = async context => await OnTokenValidatedAsync(context),
             OnAuthenticationFailed = context =>
             {
                 Log.Error(context.Exception, "Error validating bearer token");
@@ -173,28 +173,28 @@ finally
     Log.CloseAndFlush();
 }
 
-async Task OnTokenValidatedAsync(TokenValidatedContext context)
-{
-    if (context.Principal?.Identity is ClaimsIdentity identity
-        && identity.IsAuthenticated)
-    {
-        // TODO hardcode for now but add role mapping after keycloak is migrated
-        // Flatten the Resource Access claim
-        //identity.AddClaims(
-        //    identity.GetResourceAccessRoles(Clients.License)
-        //        .Select(role => new Claim(identity.RoleClaimType, role))
-        //);
+//async Task OnTokenValidatedAsync(TokenValidatedContext context)
+//{
+//    if (context.Principal?.Identity is ClaimsIdentity identity
+//        && identity.IsAuthenticated)
+//    {
+//        // TODO hardcode for now but add role mapping after keycloak is migrated
+//        // Flatten the Resource Access claim
+//        //identity.AddClaims(
+//        //    identity.GetResourceAccessRoles(Clients.License)
+//        //        .Select(role => new Claim(identity.RoleClaimType, role))
+//        //);
 
-        //identity.AddClaims(
-        //    identity.GetResourceAccessRoles(Clients.DmftStatus)
-        //        .Select(role => new Claim(identity.RoleClaimType, role))
-        //);
+//        //identity.AddClaims(
+//        //    identity.GetResourceAccessRoles(Clients.DmftStatus)
+//        //        .Select(role => new Claim(identity.RoleClaimType, role))
+//        //);
 
-        // TODO I think this is wrong, we should only need to call this once but this is validating on every request
-        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-        context.Principal = await userService.Login(context.Principal);
-    }
-}
+//        // TODO I think this is wrong, we should only need to call this once but this is validating on every request
+//        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+//        context.Principal = await userService.Login(context.Principal);
+//    }
+//}
 
 // TODO move and change these roles after auth is migrated to different keycloak
 public static class Claims
