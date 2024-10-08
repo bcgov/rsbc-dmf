@@ -67,10 +67,11 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         [ActionName(nameof(CreateComment))]
         public async Task<IActionResult> CreateComment([FromBody] CommentRequest commentRequest)
         {
-            var profile = _userService.GetDriverInfo();
+            var profile = await _userService.GetCurrentUserContext();
 
+            var user = _userService.GetDriverInfo();
             // security check
-            var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
+            var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = user.DriverId });
             if (mostRecentCaseReply.ResultStatus != ResultStatus.Success)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, mostRecentCaseReply.ErrorDetail ?? $"{nameof(CreateComment)} security failed.");
@@ -85,13 +86,13 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             comment.CaseId = mostRecentCaseReply.Item.CaseId;
             comment.CommentTypeCode = "W";
             comment.Origin = "User";
-            comment.UserId = profile.DriverId;
-            
+            comment.UserId = profile.DisplayName;
+
             comment.Driver = new CaseManagement.Service.Driver();
 
-            comment.Driver.DriverLicenseNumber = profile.DriverLicenseNumber;
-            comment.Driver.Surname = profile.LastName?? string.Empty;
-            comment.SignatureName = profile.FirstName;
+            comment.Driver.DriverLicenseNumber = user.DriverLicenseNumber;
+            comment.Driver.Surname = user.LastName?? string.Empty;
+            comment.SignatureName = profile.DisplayName;
 
 
 

@@ -44,10 +44,10 @@
       <div class="comments">  
         <div style="display: flex; flex-direction: column;">
           @if(comments.origin === "User"){
-            <mat-icon style="width:75px"> account_circle</mat-icon>
+            <mat-icon style="width:75px" matTooltip={{comments.userId}}> account_circle</mat-icon>
           }
           @if(comments.origin === "System"){
-            <mat-icon style="width:136px">devices</mat-icon>
+            <mat-icon style="width:136px" matTooltip={{comments.userId}}>devices</mat-icon>
           }
           @if(comments.commentText != null && comments.commentText.length >= 100)
           {
