@@ -24,3 +24,6 @@ export *from './lib/case-definitions/dmer-status/dmer-status.component'
 
 // Upload-Document
 export *from './lib/upload-document/upload-document.component'
+
+// Keycloak
+export * from './lib/modules/keycloak/keycloak-init.service';
