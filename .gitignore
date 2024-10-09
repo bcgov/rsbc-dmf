@@ -33,6 +33,3 @@
 # IntelliJ IDEA
 .idea/
 *.iml
-/medical-practitioner-portal/dist
-/AngularApp1
-/shared-portal-library/dist
