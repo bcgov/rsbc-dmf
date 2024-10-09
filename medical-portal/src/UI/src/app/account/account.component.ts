@@ -4,7 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RoleDescription } from '@app/features/auth/enums/identity-provider.enum';
-import { AuthService } from '@app/features/auth/services/auth.service';
+import { AuthService } from '@shared/core-ui';
 import { Endorsement } from '@app/shared/api/models';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
 

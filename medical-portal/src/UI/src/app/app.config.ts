@@ -10,7 +10,7 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
 import { BearerTokenInterceptor } from './features/auth/interceptors/bearer-token.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.interceptor';
-import { AuthService } from './features/auth/services/auth.service';
+import { AuthService } from '@shared/core-ui';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideKeycloak } from './modules/keycloak/keycloak.provider';

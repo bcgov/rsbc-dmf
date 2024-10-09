@@ -3,7 +3,7 @@ import { RouterOutlet } from '@angular/router';
 import { MedicalHeaderComponent } from './Layout/medical-header/medical-header.component';
 import { MedicalFooterComponent } from './Layout/medical-footer/medical-footer.component';
 import { MedicalNavMenuComponent } from './Layout/medical-nav-menu/medical-nav-menu.component';
-import { AuthService } from './features/auth/services/auth.service';
+import { AuthService } from '@shared/core-ui';
 import { NgIf } from '@angular/common';
 import { NgxSpinnerComponent } from 'ngx-spinner';
 
