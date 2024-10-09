@@ -6,7 +6,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApiModule } from './shared/api/api.module';
 import { environment } from '../environments/environment';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
-import { BearerTokenInterceptor } from './features/auth/interceptors/bearer-token.interceptor';
+import { BearerTokenInterceptor } from '@shared/core-ui';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.interceptor';
 import { AuthService } from '@shared/core-ui';
