@@ -18,7 +18,7 @@ export class AuthService implements IAuthService {
     return from(this.keycloakService.login(options));
   }
 
-  public getHpdid(): string | undefined {
+  public getDisplayName(): string | undefined {
     const idTokenParsed = this.keycloakService.getKeycloakInstance().idTokenParsed;
     if (idTokenParsed !== undefined) {
       return idTokenParsed['preferred_username'];
@@ -26,14 +26,9 @@ export class AuthService implements IAuthService {
     return undefined;
   }
 
-  // public getRoles(): Role[] {
-  //   const roleNames = this.keycloakService
-  //     .getUserRoles()
-  //     .filter((role) => role !== Role.Enrolled);
-  //   return roleNames
-  //     .map((role) => Object.values(Role).find((value) => value === role))
-  //     .filter((role) => role !== undefined) as Role[];
-  // }
+  public getRoles(): string[] {
+    return this.keycloakService.getUserRoles()
+  }
 
   public logout(redirectUri: string): Observable<void> {
     return from(this.keycloakService.logout(redirectUri));

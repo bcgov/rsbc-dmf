@@ -22,3 +22,4 @@ export *from './lib/upload-document/upload-document.component'
 export * from './lib/modules/keycloak/keycloak-init.service';
 export * from './lib/features/auth/services/auth.service';
 export * from './lib/features/auth/enums/identity-provider.enum';
+export * from './lib/features/auth/interceptors/bearer-token.interceptor';
