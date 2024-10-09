@@ -1,10 +1,3 @@
-/*
- * Public API Surface of core-ui
- */
-
-export * from './lib/core-ui.service';
-export * from './lib/core-ui.component';
-
 // Layout
 export *from './lib/layout/header/header.component'
 export *from './lib/layout/footer/footer.component'
@@ -27,3 +20,5 @@ export *from './lib/upload-document/upload-document.component'
 
 // Keycloak
 export * from './lib/modules/keycloak/keycloak-init.service';
+export * from './lib/features/auth/services/auth.service';
+export * from './lib/features/auth/enums/identity-provider.enum';

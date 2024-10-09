@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { Observable, from, of } from 'rxjs';
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakLoginOptions } from 'keycloak-js';
-import { Role } from '../enums/identity-provider.enum';
 
 export interface IAuthService {
   login(options?: KeycloakLoginOptions): Observable<void>;
@@ -27,14 +26,14 @@ export class AuthService implements IAuthService {
     return undefined;
   }
 
-  public getRoles(): Role[] {
-    const roleNames = this.keycloakService
-      .getUserRoles()
-      .filter((role) => role !== Role.Enrolled);
-    return roleNames
-      .map((role) => Object.values(Role).find((value) => value === role))
-      .filter((role) => role !== undefined) as Role[];
-  }
+  // public getRoles(): Role[] {
+  //   const roleNames = this.keycloakService
+  //     .getUserRoles()
+  //     .filter((role) => role !== Role.Enrolled);
+  //   return roleNames
+  //     .map((role) => Object.values(Role).find((value) => value === role))
+  //     .filter((role) => role !== undefined) as Role[];
+  // }
 
   public logout(redirectUri: string): Observable<void> {
     return from(this.keycloakService.logout(redirectUri));
