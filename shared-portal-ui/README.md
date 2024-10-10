@@ -49,3 +49,12 @@ https://stackoverflow.com/questions/64060616/angular-10-cannot-read-property-bin
 
 
 
+### How to use shared libraries
+
+Step 1 : Move the component that need to be shared into shared-portal-ui/projevts/core-ui/src/lib
+Step 2 : Export the component in public-api.ts 
+Step 3: Build the shared-portal-ui 
+         npm run watch
+Step 4 : To use the shared component in the portals need to delete the ANGULAR folder and start the application
+         (NOTE: deleting the angular folder because of the cached files)
+         
