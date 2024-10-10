@@ -9,11 +9,11 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { DocumentService } from '@app/shared/api/services';
-import { Endorsement, PatientCase } from '@app/shared/api/models';
+import { Endorsement } from '@app/shared/api/models';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
-import { Role } from '@app/features/auth/enums/identity-provider.enum';
+import { Role } from '@app/features/auth/enums/role.enum';
 import { LicenceStatusCode } from '@app/app.model';
 
 @Component({

@@ -8,7 +8,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { routes } from './app/app.routes';
 import { ApiModule } from '@app/shared/api/api.module';
 import { environment } from './environments/environment';
-import { BearerTokenInterceptor } from '@app/features/auth/interceptors/bearer-token.interceptor';
+import { BearerTokenInterceptor } from '@shared/core-ui';
 import { provideKeycloak } from './app/modules/keycloak/keycloak.provider';
 
 bootstrapApplication(AppComponent, {

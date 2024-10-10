@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { RoleDescription } from '@app/features/auth/enums/identity-provider.enum';
-import { AuthService } from '@app/features/auth/services/auth.service';
+import { Role, RoleDescription } from '@app/features/auth/enums/role.enum';
+import { RoleService } from '@app/features/auth/services/role.service';
 import { Endorsement } from '@app/shared/api/models';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
 
@@ -22,7 +22,7 @@ export class AccountComponent {
   role: string = "";
   endorsements: Endorsement[] = [];
 
-  public constructor(private authService: AuthService, private profileManagementService: ProfileManagementService)
+  public constructor(private roleService: RoleService, private profileManagementService: ProfileManagementService)
   {
     this.profileManagementService.getProfile().subscribe((profile) => {
       console.info('profile response', profile);
@@ -34,9 +34,9 @@ export class AccountComponent {
         this.endorsements = profile.endorsements;
       }
     });
-    this.role = this.authService
+    this.role = this.roleService
       .getRoles()
-      .map((role) => RoleDescription.get(role))
+      .map((role: Role) => RoleDescription.get(role))
       .join(", ");
   }
 

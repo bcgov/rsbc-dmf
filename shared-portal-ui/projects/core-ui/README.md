@@ -1,24 +1,36 @@
-# CoreUi
+# Shared Library UI
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.0.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.3.4.
 
-## Code scaffolding
+Run the following commands from `/projects/core-ui`
 
-Run `ng generate component component-name --project core-ui` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project core-ui`.
-> Note: Don't forget to add `--project core-ui` or else it will be added to the default project in your `angular.json` file. 
+## BUILD
 
-## Build
+`ng b`
 
-Run `ng build core-ui` to build the project. The build artifacts will be stored in the `dist/` directory.
+### To install in new projects
 
-## Publishing
+npm install "..\..\..\shared-portal-ui\dist\core-ui"
 
-After building your library with `ng build core-ui`, go to the dist folder `cd dist/core-ui` and run `npm publish`.
+### Archived, may or may not be needed
 
-## Running unit tests
+- To use the shared libraries in the main application follow the steps:
 
-Run `ng test core-ui` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1.  In angular.json file add "preserveSymlinks" : true
 
-## Further help
+- "projects.project-name.architect.build.options.preserveSymlinks": true
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+2. In the tsconfig.json file
+   paths: {
+   "@angular/_": [
+   "./node_modules/@angular/_"
+   ],
+   }
+
+3. Reference links for
+   https://github.com/angular/angular/issues/35586#issuecomment-630774572
+   https://stackoverflow.com/questions/64060616/angular-10-cannot-read-property-bindingstartindex-of-null-when-using-library-w
+
+4. Add the necessary shared components in this project and reference the module in the main app.module.ts file
+5. Note: You may have to install node modules in the root of shared library to get the editor support.
+6. Export all the modules, components, services , pipes etc in the public-api.ts file

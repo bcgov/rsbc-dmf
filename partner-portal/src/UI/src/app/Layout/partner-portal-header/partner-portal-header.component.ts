@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { AuthService } from '@app/features/auth/services/auth.service';
+import { AuthService } from '@shared/core-ui';
 
 @Component({
   selector: 'app-partner-portal-header',

@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "peerDependencies": {
     "@angular/common": "~18.2.6",
-    "@angular/core": "~18.2.6"
+    "@angular/core": "~18.2.6",
+    "keycloak-angular": "^16.0.1",
+    "keycloak-js": "^24.0.4"
   },
   "dependencies": {
     "tslib": "^2.3.0"
