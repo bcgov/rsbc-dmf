@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, inject, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbar } from '@angular/material/toolbar';
-import { RecentCaseComponent } from '@app/recent-case/recent-case.component';
+import { RecentCaseComponent, PortalsEnum } from '@shared/core-ui';
 import { SubmissionRequirementsComponent } from '../../app/submission-requirements/submission-requirements.component';
 import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
 import { RouterLink } from '@angular/router';
@@ -46,9 +46,12 @@ export class CaseSearchComponent implements OnInit{
   readonly dialog = inject(MatDialog);
   
   caseDetails: CaseSearch | null = null;
+
+  PortalsEnum = PortalsEnum;
   
   constructor(
-    private caseManagementService: CaseManagementService,
+
+    public caseManagementService: CaseManagementService,
   ) {}
     
   ngOnInit(): void {

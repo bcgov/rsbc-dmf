@@ -10,12 +10,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatToolbar } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
-import { CaseStatusComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-status/case-status.component';
-import { CaseTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-type/case-type.component';
 import { MedicalDmerTypesComponent } from '../../app/definitions/medical-dmer-types/medical-dmer-types.component';
-import { DecisionOutcomeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/decision-outcome/decision-outcome.component';
-import { EligibleLicenseClassComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/eligible-license-class/eligible-license-class.component';
-import { RecentCaseComponent } from '../../app/recent-case/recent-case.component';
+import { RecentCaseComponent, CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, EligibleLicenseClassComponent, PortalsEnum } from '@shared/core-ui';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { CaseDetail } from '@app/shared/api/models';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,6 +24,7 @@ import { LettersToDriverComponent } from '@app/letters-to-driver/letters-to-driv
 import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.component';
 import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
 import { MatButtonModule } from '@angular/material/button';
+
 
 @Component({
   selector: 'app-driver-search',
@@ -65,6 +62,8 @@ export class DriverSearchComponent implements OnInit {
 
   isLoading = true;
 
+  PortalsEnum = PortalsEnum;
+
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
   _closedCaseDetails: CaseDetail[] | null = [];
@@ -88,7 +87,7 @@ export class DriverSearchComponent implements OnInit {
   }
 
   constructor(
-     private caseManagementService: CaseManagementService,
+     public caseManagementService: CaseManagementService,
      private userService: UserService,
      ) {}
 

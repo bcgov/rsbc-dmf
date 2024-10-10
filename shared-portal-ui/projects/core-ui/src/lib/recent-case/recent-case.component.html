@@ -3,6 +3,16 @@
     <mat-card-content class="recentCaseContent">
       <div style="grid-area: A">
         <label>Case ID</label>
+        @if(portal===PortalsEnum.DriverPortal){
+          <div>
+            <b>
+              <a>
+                <h3>{{ caseDetails?.idCode }}</h3>
+              </a>
+            </b>
+          </div>
+        }
+        @if(portal===PortalsEnum.PartnerPortal){
         <div>
           <b>
             <a [routerLink]="['/caseSearch', caseDetails?.idCode]" routerLinkActive="active">
@@ -10,6 +20,8 @@
             </a>
           </b>
         </div>
+        }
+        
       </div>
 
       <div style="grid-area: B">
@@ -51,10 +63,11 @@
     orientation="horizontal"
   >
     <mat-step state="circle">
-      <ng-template matStepLabel>
-        Opened:<br />
-        {{ caseDetails?.openedDate | date: "longDate" }}
-      </ng-template>
+      <ng-template matStepLabel
+        >Opened:<br />{{
+          caseDetails?.openedDate | date : "longDate"
+        }}</ng-template
+      >
     </mat-step>
     <mat-step state="circle">
       <ng-template matStepLabel>Open Pending Submission</ng-template>
