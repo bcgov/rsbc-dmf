@@ -5,11 +5,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { DMERStatusEnum } from '@app/app.model';
 import { ClaimDmerPopupComponent } from '@app/claim-dmer-popup/claim-dmer-popup.component';
-import { Role } from '@app/features/auth/enums/identity-provider.enum';
+import { Role } from '@app/features/auth/enums/role.enum';
 import { PopupService } from '@app/popup/popup.service';
 import { PatientCase } from '@app/shared/api/models';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dmer-buttons',
