@@ -214,12 +214,13 @@
     </p>
     <div class="filter-dmer">
       <div>
-        
+        <label aria-label="search" for="search-filter"></label>
         <mat-form-field class="cases-input" appearance="outline">
-          <mat-label  for="search-filter"></mat-label>
+          <!-- <mat-label aria-label="search" for="search-filter">&nbsp;</mat-label> -->
           <input
             matInput
             type="text"
+            aria-label="search"
             placeholder="Search by Name or Case ID"
             [(ngModel)]="searchCasesInput"
             id="search-filter"
