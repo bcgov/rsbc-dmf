@@ -6,6 +6,7 @@ COPY ./medical-portal/src/UI/ ./medical-portal/src/UI
 WORKDIR /app/shared-portal-ui
 
 RUN npm install
+RUN npm run build
 
 WORKDIR /app/medical-portal/src/UI
 
