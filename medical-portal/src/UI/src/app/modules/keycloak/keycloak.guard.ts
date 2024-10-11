@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
+import { IdentityProvider } from '@shared/core-ui';
 import { ConfigurationService } from '@app/shared/services/configuration.service';
 import { KeycloakAuthGuard, KeycloakService } from 'keycloak-angular';
 

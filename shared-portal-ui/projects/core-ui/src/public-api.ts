@@ -1,11 +1,4 @@
-/*
- * Public API Surface of core-ui
- */
-
-export * from './lib/core-ui.service';
-export * from './lib/core-ui.component';
-
-//Layout
+// Layout
 export *from './lib/layout/header/header.component'
 export *from './lib/layout/footer/footer.component'
 export *from './lib/layout/nav-menu/nav-menu.component'
@@ -22,13 +15,17 @@ export *from './lib/case-definitions/submission-status/submission-status.compone
 export *from './lib/case-definitions/submission-type/submission-type.component'
 export *from './lib/case-definitions/dmer-status/dmer-status.component'
 
-//Upload-Document
+// Upload-Document
 export *from './lib/upload-document/upload-document.component'
 
 //Recent Case
-
-export *from './lib/recent-case/recent-case.component'
-
+export * from './lib/recent-case/recent-case.component'
 
 //Enums
-export *from './lib/app.model'
+export * from './lib/app.model'
+
+// Keycloak
+export * from './lib/modules/keycloak/keycloak-init.service';
+export * from './lib/features/auth/services/auth.service';
+export * from './lib/features/auth/enums/identity-provider.enum';
+export * from './lib/features/auth/interceptors/bearer-token.interceptor';
