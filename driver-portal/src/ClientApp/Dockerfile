@@ -4,9 +4,14 @@ FROM trion/ng-cli-karma:17.0.10 AS ng-builder
 COPY ./shared-portal-ui/ ./shared-portal-ui
 COPY ./driver-portal/src/ClientApp ./driver-portal/src/ClientApp
 
+WORKDIR /app/shared-portal-ui
+
+RUN npm install
+RUN npm run build
+
 WORKDIR /app/driver-portal/src/ClientApp
 
-RUN npm install 
+RUN npm install
 
 #RUN npm run lint
 #RUN npm run test -- --no-watch --no-progress
