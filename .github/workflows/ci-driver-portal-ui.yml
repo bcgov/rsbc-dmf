@@ -36,7 +36,7 @@ jobs:
       - run: npm run build 
         working-directory: "shared-portal-ui"
 
-      - run: npm install && npm ci
+      - run: npm install
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
      
       - run: npm run lint

@@ -3,8 +3,7 @@ import { CaseManagementService } from '../shared/services/case-management/case-m
 import { Router } from '@angular/router';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { ViewportScroller } from '@angular/common';
-import { RecentCaseComponent } from '../recent-case/recent-case.component';
-import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, EligibleLicenseClassComponent, LetterTopicComponent, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
+import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, EligibleLicenseClassComponent, LetterTopicComponent, SubmissionStatusComponent, SubmissionTypeComponent, RecentCaseComponent, PortalsEnum } from '@shared/core-ui';
 
 @Component({
     selector: 'app-dashboard',
@@ -29,9 +28,10 @@ import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerT
 })
 export class DashboardComponent {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
+  PortalsEnum = PortalsEnum;
 
   constructor(
-    private caseManagementService: CaseManagementService,
+    public caseManagementService: CaseManagementService,
     private router: Router,
     private viewportScroller: ViewportScroller
   ) {}

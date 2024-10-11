@@ -6,9 +6,8 @@ import { LoginService } from '../shared/services/login.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
-import { RecentCaseComponent } from '../recent-case/recent-case.component';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
-import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, EligibleLicenseClassComponent } from '@shared/core-ui';
+import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, EligibleLicenseClassComponent, RecentCaseComponent, PortalsEnum } from '@shared/core-ui';
 
 @Component({
     selector: 'app-case',
@@ -44,6 +43,8 @@ export class CaseComponent implements OnInit {
 
   _closedCaseDetails: CaseDetail[] | null = [];
 
+  PortalsEnum = PortalsEnum;
+
   @Input() set closedCaseDetails(caseDetails: CaseDetail[] | null) {
     if (caseDetails !== undefined) {
       this._closedCaseDetails = caseDetails;
@@ -59,7 +60,7 @@ export class CaseComponent implements OnInit {
   }
 
   constructor(
-    private caseManagementService: CaseManagementService,
+    public caseManagementService: CaseManagementService,
     private loginService: LoginService
   ) {}
 

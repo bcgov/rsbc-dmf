@@ -35,6 +35,8 @@
     "chart.js": "^4.3.0",
     "ejs": "^3.1.10",
     "jquery": "^3.6.3",
+    "keycloak-angular": "^16.0.1",
+    "keycloak-js": "^24.0.5",
     "ngx-dropzone": "^3.1.0",
     "oidc-client": "^1.11.5",
     "popper.js": "^1.16.0",
