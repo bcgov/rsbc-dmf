@@ -34,3 +34,12 @@ npm install "..\..\..\shared-portal-ui\dist\core-ui"
 4. Add the necessary shared components in this project and reference the module in the main app.module.ts file
 5. Note: You may have to install node modules in the root of shared library to get the editor support.
 6. Export all the modules, components, services , pipes etc in the public-api.ts file
+
+### How to use shared libraries
+
+Step 1 : Move the component that need to be shared into shared-portal-ui/projevts/core-ui/src/lib
+Step 2 : Export the component in public-api.ts 
+Step 3: Build the shared-portal-ui 
+         npm run watch
+Step 4 : To use the shared component in the portals need to delete the ANGULAR folder and start the application
+         (NOTE: deleting the angular folder because of the cached files)
