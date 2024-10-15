@@ -42,6 +42,7 @@ export class PopupComponent {
 
   ngOnInit() {
     this.instanceId = uuidv4();
+    // TODO this should be configurable
     this.iframeUrl = `https://submit.digital.gov.bc.ca/app/form/submit?f=${this.configService.config.chefsFormId}&instanceId=${this.instanceId}`;
     this.sanitizedSource = this.sanitizer.bypassSecurityTrustResourceUrl(
       this.iframeUrl,
