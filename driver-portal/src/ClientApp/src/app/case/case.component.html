@@ -7,7 +7,7 @@
   </div>
 
   <div>
-    <app-recent-case></app-recent-case>
+    <app-shared-recent-case [caseManagementService]="caseManagementService" [portal]="PortalsEnum.DriverPortal"></app-shared-recent-case>
   </div>
 
   <div class="list">
@@ -18,8 +18,7 @@
         *ngFor="let closedCase of closedCaseDetails"
         [ngClass]="{
           open: closedCase.caseId && isExpanded[closedCase.caseId]
-        }"
-      >
+        }" >
         <mat-card-content class="closedCaseContent">
           <div style="text-align: center">
             <mat-icon

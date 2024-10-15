@@ -13,9 +13,6 @@ WORKDIR /app/driver-portal/src/ClientApp
 
 RUN npm install
 
-#RUN npm run lint
-#RUN npm run test -- --no-watch --no-progress
-
 RUN npm run build -- --base-href /driver-portal/ --deploy-url /driver-portal/ --configuration production
 
 FROM caddy:latest as final
