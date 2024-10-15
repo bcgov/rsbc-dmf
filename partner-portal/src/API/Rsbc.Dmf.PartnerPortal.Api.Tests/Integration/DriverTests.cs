@@ -16,6 +16,6 @@ public class DriverTests : ApiIntegrationTestBase
         var request = new HttpRequestMessage(HttpMethod.Get, $"{DRIVER_API_BASE}/info/{driverLicenceNumber}");
         var clientResult = await HttpClientSendRequest<Document>(request);
 
-        Assert.Equal(driverLicenceNumber, clientResult.Driver.LicenseNumber);
+        Assert.Equal(driverLicenceNumber, clientResult.Driver.DriverLicenseNumber);
     }
 }

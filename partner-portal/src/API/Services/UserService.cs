@@ -61,7 +61,7 @@ public class UserService : IUserService
         httpContext.HttpContext.Session.SetString(SearchDriverSession.GivenName, driver.FirstName);
         httpContext.HttpContext.Session.SetString(SearchDriverSession.Surname, driver.LastName);
         httpContext.HttpContext.Session.SetString(SearchDriverSession.DriverId, driver.Id);
-        httpContext.HttpContext.Session.SetString(SearchDriverSession.DriverLicenseNumber, driver.LicenseNumber);
+        httpContext.HttpContext.Session.SetString(SearchDriverSession.DriverLicenseNumber, driver.DriverLicenseNumber);
     }
 
     public SearchContext GetDriverInfo()

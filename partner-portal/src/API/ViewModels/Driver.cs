@@ -16,7 +16,7 @@
         /// <summary>
         /// License Number
         /// </summary>
-        public string LicenseNumber { get; set; }
+        public string DriverLicenseNumber{ get; set; }
 
         /// <summary>
         /// True if loaded from ICBC
