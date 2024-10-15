@@ -81,7 +81,7 @@ public class DriverController : Controller
             }
 
             var result = _mapper.Map<Rsbc.Dmf.PartnerPortal.Api.ViewModels.Driver>(reply);
-            result.LicenseNumber = driverLicenceNumber;
+            result.DriverLicenseNumber = driverLicenceNumber;
 
             // get the driver id
             var driverLicenceRequest = new DriverLicenseRequest { DriverLicenseNumber = driverLicenceNumber };
