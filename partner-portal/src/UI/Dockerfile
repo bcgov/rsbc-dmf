@@ -6,6 +6,7 @@ COPY ./partner-portal/src/UI/ ./partner-portal/src/UI
 WORKDIR /app/shared-portal-ui
 
 RUN npm install
+RUN npm run build
 
 WORKDIR /app/partner-portal/src/UI
 
