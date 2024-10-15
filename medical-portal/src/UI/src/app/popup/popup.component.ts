@@ -42,6 +42,7 @@ export class PopupComponent {
 
   ngOnInit() {
     this.instanceId = uuidv4();
+    // TODO this should be configurable
     this.iframeUrl = `https://submit.digital.gov.bc.ca/app/form/submit?f=${this.configService.config.chefsFormId}&instanceId=${this.instanceId}`;
     this.sanitizedSource = this.sanitizer.bypassSecurityTrustResourceUrl(
       this.iframeUrl,
@@ -85,7 +86,7 @@ export class PopupComponent {
     };
   }): void {
     // TODO this should be configurable
-    if (event.origin !== 'https://submit.digital.gov.bc.ca') {
+    if (event.origin !== 'https://submit.digital.gov.bc.ca' && event.origin !== 'https://common-logon-test.hlth.gov.bc.ca') {
       console.error(`Event message origin was not expected: ${event.origin}`);
       return; // Ensure message is from expected origin
     }
