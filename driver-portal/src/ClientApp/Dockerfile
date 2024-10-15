@@ -6,7 +6,7 @@ COPY ./driver-portal/src/ClientApp ./driver-portal/src/ClientApp
 
 WORKDIR /app/shared-portal-ui
 
-RUN npm install 
+RUN npm install
 RUN npm run build
 
 WORKDIR /app/driver-portal/src/ClientApp
