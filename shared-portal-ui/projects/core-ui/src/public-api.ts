@@ -21,6 +21,9 @@ export *from './lib/upload-document/upload-document.component'
 //Recent Case
 export * from './lib/recent-case/recent-case.component'
 
+// Letters to Driver
+export * from './lib/letters-to-driver/letters-to-driver.component'
+
 //Enums
 export * from './lib/app.model'
 
@@ -29,3 +32,5 @@ export * from './lib/modules/keycloak/keycloak-init.service';
 export * from './lib/features/auth/services/auth.service';
 export * from './lib/features/auth/enums/identity-provider.enum';
 export * from './lib/features/auth/interceptors/bearer-token.interceptor';
+
+
