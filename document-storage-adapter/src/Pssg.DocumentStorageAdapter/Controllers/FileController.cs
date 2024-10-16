@@ -86,11 +86,38 @@ namespace Pssg.DocumentStorageAdapter.Controllers
             {
                 var _S3 = new S3(_configuration);
                 Dictionary<string, string> metaData = new Dictionary<string, string>();
-                var fileContents = _S3.DownloadFile(fileName, ref metaData);
+
+                byte[] fileContents;
+
+                // if the document swap flag is set, and the filename is .tif, look for a converted PDF
+                if (!String.IsNullOrEmpty(_configuration["SWAP_PDF"]) && fileName.ToLower().Contains(".tif"))
+                {
+                    // see if there is a PDF.
+                    string tempFileName = fileName;
+                    fileName = fileName.Substring(0, fileName.LastIndexOf("."));
+                    fileName = fileName + ".pdf";
+                    fileContents = _S3.DownloadFile(fileName, ref metaData);
+                    if (fileContents == null) // fallback to the original file
+                    {
+                        fileName = tempFileName;
+                        fileContents = _S3.DownloadFile(fileName, ref metaData);
+                    }
+                    else
+                    {
+                        convert = false; // No need to convert, it is a PDF
+                    }
+
+                }
+                else
+                {
+                    fileContents = _S3.DownloadFile(fileName, ref metaData);
+                }
+
                 if (fileContents == null)
                 {
                     return new BadRequestResult();
                 }
+
                 //return new FileContentResult(fileContents, "application/octet-stream");
 
                 string contentType = "application/octet-stream";
