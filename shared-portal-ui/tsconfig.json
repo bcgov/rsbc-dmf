@@ -11,7 +11,10 @@
       "paths": {
         "@shared/core-ui": [
           "./dist/core-ui",
-        ] 
+        ] ,
+        "@shared/api": [
+          "projects/core-ui/src/lib/api",
+        ]   
       },      
       "declaration": false,
       "downlevelIteration": true,
