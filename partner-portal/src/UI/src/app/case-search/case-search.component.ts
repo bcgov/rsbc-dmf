@@ -56,7 +56,6 @@ export class CaseSearchComponent implements OnInit{
     
   ngOnInit(): void {
     this.searchByCaseId();
-    console.log(this.caseDetails, this.caseId())
   }
   
 
