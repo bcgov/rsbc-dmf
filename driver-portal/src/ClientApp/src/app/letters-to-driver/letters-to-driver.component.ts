@@ -1,4 +1,3 @@
-// IMPORTANT keep this file identical to partner-portal letters-to-driver.component
 import { Component } from '@angular/core';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
