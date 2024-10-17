@@ -12,9 +12,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
-import { CaseTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-type/case-type.component';
-import { SubmissionTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-type/submission-type.component';
-import { SubmissionStatusComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-status/submission-status.component';
+import { CaseTypeComponent, SubmissionTypeComponent, SubmissionStatusComponent } from '@shared/core-ui';
 import { SubmittalStatusEnum } from '@app/app.model';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 
