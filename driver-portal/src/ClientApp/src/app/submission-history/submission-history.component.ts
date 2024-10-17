@@ -1,5 +1,3 @@
-// IMPORTANT keep this file identical to partner-portal submissin-history.component
-
 import { Component } from '@angular/core';
 import { SharedSubmissionHistoryComponent } from '@shared/core-ui';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
