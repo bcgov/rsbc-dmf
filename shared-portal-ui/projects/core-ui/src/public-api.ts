@@ -24,6 +24,9 @@ export * from './lib/recent-case/recent-case.component'
 // Letters to Driver
 export * from './lib/letters-to-driver/letters-to-driver.component'
 
+// Submission History
+export * from './lib/submission-history/submission-history.component'
+
 //Enums
 export * from './lib/app.model'
 
