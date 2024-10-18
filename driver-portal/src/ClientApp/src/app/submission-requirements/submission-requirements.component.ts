@@ -1,5 +1,3 @@
-// IMPORTANT keep this file identical to partner-portal submissin-requirements.component
-
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
@@ -19,7 +17,6 @@ import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormsModule 
 import { ApiConfiguration } from '../shared/api/api-configuration';
 import { RouterLink } from '@angular/router';
 import { MatCard, MatCardContent } from '@angular/material/card';
-import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { MatIcon } from '@angular/material/icon';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatOption } from '@angular/material/core';
@@ -27,7 +24,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
-import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
+import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, PortalsEnum, SharedQuickLinksComponent, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
 import { SubmittalStatusEnum } from '@app/app.model';
 
 @Component({
@@ -47,7 +44,6 @@ import { SubmittalStatusEnum } from '@app/app.model';
         MatError,
         NgxDropzoneModule,
         MatIcon,
-        QuickLinksComponent,
         NgFor,
         MatCard,
         MatCardContent,
@@ -63,12 +59,14 @@ import { SubmittalStatusEnum } from '@app/app.model';
         SubmissionTypeComponent,
         SubmissionStatusComponent,
         DatePipe,
+        SharedQuickLinksComponent
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SubmissionRequirementsComponent implements OnInit {
   @Input() submissionRequirementDocuments?: Document[] | null = [];
   @Output() viewLetter = new EventEmitter<string>();
+  PortalsEnum = PortalsEnum;
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;

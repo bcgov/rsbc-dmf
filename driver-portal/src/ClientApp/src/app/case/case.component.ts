@@ -6,8 +6,7 @@ import { LoginService } from '../shared/services/login.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
-import { QuickLinksComponent } from '../quick-links/quick-links.component';
-import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, EligibleLicenseClassComponent, RecentCaseComponent, PortalsEnum } from '@shared/core-ui';
+import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, EligibleLicenseClassComponent, RecentCaseComponent, PortalsEnum, SharedQuickLinksComponent } from '@shared/core-ui';
 
 @Component({
     selector: 'app-case',
@@ -15,7 +14,7 @@ import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerT
     styleUrls: ['./case.component.scss'],
     standalone: true,
     imports: [
-        QuickLinksComponent,
+        SharedQuickLinksComponent,
         RecentCaseComponent,
         NgFor,
         MatCard,

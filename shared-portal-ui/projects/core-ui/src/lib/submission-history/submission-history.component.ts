@@ -1,16 +1,14 @@
-// IMPORTANT keep this file identical to partner-portal submissin-history.component
-
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { Document } from '../api';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
-//import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { CaseTypeComponent } from '../case-definitions/case-type/case-type.component';
 import { SubmissionStatusComponent } from '../case-definitions/submission-status/submission-status.component';
 import { SubmissionTypeComponent } from '../case-definitions/submission-type/submission-type.component';
-import { SubmittalStatusEnum } from '../app.model';
+import { PortalsEnum, SubmittalStatusEnum } from '../app.model';
+import { SharedQuickLinksComponent } from "../quick-links/quick-links.component";
 
 @Component({
     selector: 'app-shared-submission-history',
@@ -18,27 +16,32 @@ import { SubmittalStatusEnum } from '../app.model';
     styleUrls: ['./submission-history.component.scss'],
     standalone: true,
     imports: [
-        //QuickLinksComponent,
-        NgFor,
-        MatCard,
-        NgClass,
-        MatCardContent,
-        MatIcon,
-        NgIf,
-        MatAccordion,
-        MatExpansionPanel,
-        MatExpansionPanelHeader,
-        MatExpansionPanelTitle,
-        CaseTypeComponent,
-        SubmissionTypeComponent,
-        SubmissionStatusComponent,
-        DatePipe,
-    ],
+    NgFor,
+    MatCard,
+    NgClass,
+    MatCardContent,
+    MatIcon,
+    NgIf,
+    MatAccordion,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    CaseTypeComponent,
+    SubmissionTypeComponent,
+    SubmissionStatusComponent,
+    DatePipe,
+    SharedQuickLinksComponent
+],
 })
 export class SharedSubmissionHistoryComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   isExpanded: Record<string, boolean> = {};
 
+  @Input() caseManagementService: any;
+  @Input()  portal!: PortalsEnum;
+
+  PortalsEnum = PortalsEnum;
+  
   pageSize = 10;
 
   isLoading = true;
@@ -63,7 +66,7 @@ export class SharedSubmissionHistoryComponent implements OnInit {
 
   submissionHistoryDocuments: Document[] = [];
 
-  @Input() caseManagementService: any;
+  
 
   ngOnInit(): void {
     this.getAllDocuments();

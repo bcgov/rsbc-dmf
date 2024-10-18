@@ -12,9 +12,24 @@
         how to submit an appeal
       </p>
     </div>
-    <div>
-      <!-- <app-quick-links></app-quick-links> -->
-    </div>
+    @if(portal===PortalsEnum.DriverPortal){
+      <div>
+        <app-shared-quick-links [portal]="PortalsEnum.DriverPortal"></app-shared-quick-links>
+      </div>
+    }
+
+    @if(portal===PortalsEnum.MedicalPortal){
+      <div>
+        <app-shared-quick-links [portal]="PortalsEnum.MedicalPortal"></app-shared-quick-links>
+      </div>
+    }
+
+    @if(portal===PortalsEnum.PartnerPortal){
+      <div>
+        <app-shared-quick-links [portal]="PortalsEnum.PartnerPortal"></app-shared-quick-links>
+      </div>
+    }
+   
   </div>
 
   <div class="list">

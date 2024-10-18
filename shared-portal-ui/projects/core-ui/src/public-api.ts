@@ -27,6 +27,9 @@ export * from './lib/letters-to-driver/letters-to-driver.component'
 // Submission History
 export * from './lib/submission-history/submission-history.component'
 
+//Quick Links
+export * from './lib/quick-links/quick-links.component'
+
 //Enums
 export * from './lib/app.model'
 
