@@ -5,11 +5,11 @@ import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
-//import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { CaseTypeComponent } from '../case-definitions/case-type/case-type.component';
 import {LetterTopicComponent} from '../case-definitions/letter-topic/letter-topic.component'
 import { SubmittalStatusEnum } from '../app.model';
 import { Document } from '../api';
+import { SharedQuickLinksComponent } from '../quick-links/quick-links.component';
 
 @Component({
     selector: 'app-shared-letters-to-driver',
@@ -17,7 +17,6 @@ import { Document } from '../api';
     styleUrls: ['./letters-to-driver.component.scss'],
     standalone: true,
     imports: [
-       // QuickLinksComponent,
         NgFor,
         MatCard,
         NgClass,
@@ -32,6 +31,7 @@ import { Document } from '../api';
         CaseTypeComponent,
         LetterTopicComponent,
         DatePipe,
+        SharedQuickLinksComponent
     ],
 })
 export class SharedLettersToDriverComponent implements OnInit {
