@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { SharedLettersToDriverComponent} from '@shared/core-ui';
 
@@ -10,9 +9,7 @@ import { SharedLettersToDriverComponent} from '@shared/core-ui';
     styleUrls: ['./letters-to-driver.component.scss'],
     standalone: true,
     imports: [
-        QuickLinksComponent,
         SharedLettersToDriverComponent
-      
     ],
 })
 export class LettersToDriverComponent 
