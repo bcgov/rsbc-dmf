@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SharedSubmissionHistoryComponent } from '@shared/core-ui';
+import { PortalsEnum, SharedSubmissionHistoryComponent } from '@shared/core-ui';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 
 @Component({
@@ -13,5 +13,6 @@ import { CaseManagementService } from '../shared/services/case-management/case-m
 })
 export class SubmissionHistoryComponent  {
   
+  PortalsEnum = PortalsEnum;
   constructor(public caseManagementService: CaseManagementService) {}
 }

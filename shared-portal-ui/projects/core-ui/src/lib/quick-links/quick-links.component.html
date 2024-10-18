@@ -5,7 +5,21 @@
       <li>
         <a href="#" (click)="onClick($event, 'definitions')"> Definitions </a>
       </li>
-      <li><a routerLink="/getAssistance">Get Assistance</a></li>
+      
+      @if(portal === PortalsEnum.DriverPortal){
+        <li><a routerLink="/getAssistance">Get Assistance</a></li>
+      }
+    
+      @if(portal === PortalsEnum.MedicalPortal){
+        <li>
+          <a href="#" routerLink="/getHelp"> Contact Information <br />for RSBC and ICBC</a>
+        </li>
+      }
+
+      @if(portal === PortalsEnum.PartnerPortal){
+        <li><a routerLink="/assistDriver">Assist Driver</a></li>
+      }
+     
     </ul>
   </div>
 </div>

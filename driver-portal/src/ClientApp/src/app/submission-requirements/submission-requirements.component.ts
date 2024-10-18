@@ -24,7 +24,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
-import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, SharedQuickLinksComponent, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
+import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, PortalsEnum, SharedQuickLinksComponent, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
 import { SubmittalStatusEnum } from '@app/app.model';
 
 @Component({
@@ -66,6 +66,7 @@ import { SubmittalStatusEnum } from '@app/app.model';
 export class SubmissionRequirementsComponent implements OnInit {
   @Input() submissionRequirementDocuments?: Document[] | null = [];
   @Output() viewLetter = new EventEmitter<string>();
+  PortalsEnum = PortalsEnum;
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;

@@ -7,7 +7,7 @@ import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
 import { CaseTypeComponent } from '../case-definitions/case-type/case-type.component';
 import {LetterTopicComponent} from '../case-definitions/letter-topic/letter-topic.component'
-import { SubmittalStatusEnum } from '../app.model';
+import { PortalsEnum, SubmittalStatusEnum } from '../app.model';
 import { Document } from '../api';
 import { SharedQuickLinksComponent } from '../quick-links/quick-links.component';
 
@@ -37,6 +37,9 @@ import { SharedQuickLinksComponent } from '../quick-links/quick-links.component'
 export class SharedLettersToDriverComponent implements OnInit {
 
   @Input() caseManagementService: any;
+  @Input()  portal!: PortalsEnum;
+
+  PortalsEnum = PortalsEnum;
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   isExpanded: Record<string, boolean> = {};

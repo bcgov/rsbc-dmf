@@ -7,7 +7,7 @@ import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
 import { CaseTypeComponent } from '../case-definitions/case-type/case-type.component';
 import { SubmissionStatusComponent } from '../case-definitions/submission-status/submission-status.component';
 import { SubmissionTypeComponent } from '../case-definitions/submission-type/submission-type.component';
-import { SubmittalStatusEnum } from '../app.model';
+import { PortalsEnum, SubmittalStatusEnum } from '../app.model';
 import { SharedQuickLinksComponent } from "../quick-links/quick-links.component";
 
 @Component({
@@ -37,6 +37,11 @@ export class SharedSubmissionHistoryComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   isExpanded: Record<string, boolean> = {};
 
+  @Input() caseManagementService: any;
+  @Input()  portal!: PortalsEnum;
+
+  PortalsEnum = PortalsEnum;
+  
   pageSize = 10;
 
   isLoading = true;
@@ -61,7 +66,7 @@ export class SharedSubmissionHistoryComponent implements OnInit {
 
   submissionHistoryDocuments: Document[] = [];
 
-  @Input() caseManagementService: any;
+  
 
   ngOnInit(): void {
     this.getAllDocuments();
