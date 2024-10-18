@@ -15,7 +15,6 @@ import {
 import { MatFormField, MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { CaseDocument, DocumentSubTypes } from '@app/shared/api/models';
@@ -27,12 +26,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { DocumentTypeService } from '@app/shared/api/services';
 import { MatIcon } from '@angular/material/icon';
 import { PopupService } from '@app/popup/popup.service';
+import { PortalsEnum, SharedQuickLinksComponent } from '@shared/core-ui';
 
 @Component({
   selector: 'app-submission-requirements',
   standalone: true,
   imports: [
-    QuickLinksComponent,
+    SharedQuickLinksComponent,
     MatButton,
     MatCardModule,
     FormsModule,
@@ -65,6 +65,8 @@ export class SubmissionRequirementsComponent {
   @Input() driverId?: string | null;
   @Output() uploadedDocument = new EventEmitter();
   @Input() isLoading = true;
+
+  PortalsEnum = PortalsEnum;
 
   documentSubTypes?: DocumentSubTypes[];
 

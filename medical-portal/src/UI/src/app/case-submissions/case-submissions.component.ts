@@ -1,5 +1,4 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
-import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
@@ -11,12 +10,13 @@ import {
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
 import { CaseDocument } from '@app/shared/api/models';
+import { PortalsEnum, SharedQuickLinksComponent } from '@shared/core-ui';
 
 @Component({
   selector: 'app-case-submissions',
   standalone: true,
   imports: [
-    QuickLinksComponent,
+    SharedQuickLinksComponent,
     RouterLink,
     RouterLinkActive,
     NgFor,
@@ -43,6 +43,8 @@ export class CaseSubmissionsComponent {
   filteredDocuments: CaseDocument[] = [];
 
   _documents: CaseDocument[] = [];
+
+  PortalsEnum = PortalsEnum;
 
   @Input()
   set documents(docs: CaseDocument[]) {
