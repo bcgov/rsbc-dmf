@@ -28,7 +28,6 @@ import {
 import { ApiConfiguration } from '../shared/api/api-configuration';
 import { RouterLink } from '@angular/router';
 import { MatCard, MatCardContent } from '@angular/material/card';
-import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { MatIcon } from '@angular/material/icon';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatOption } from '@angular/material/core';
@@ -40,12 +39,8 @@ import { DocumentSubType } from '../shared/api/models';
 import { SubmittalStatusEnum } from '@app/app.model';
 import { Document } from '../shared/api/models';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
-import { CaseStatusComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-status/case-status.component';
-import { CaseTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-type/case-type.component';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
-import { DecisionOutcomeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/decision-outcome/decision-outcome.component';
-import { SubmissionTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-type/submission-type.component';
-import { SubmissionStatusComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-status/submission-status.component';
+import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, PortalsEnum, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
 
 @Component({
   selector: 'app-submission-requirements',
@@ -64,7 +59,6 @@ import { SubmissionStatusComponent } from '../../../../../../shared-portal-ui/pr
     MatError,
     NgxDropzoneModule,
     MatIcon,
-    QuickLinksComponent,
     NgFor,
     MatCard,
     MatCardContent,
@@ -88,6 +82,8 @@ export class SubmissionRequirementsComponent implements OnInit {
 
   @Output() viewLetter = new EventEmitter<string>();
 
+  PortalsEnum = PortalsEnum;
+  
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;
   documentSubTypes?: DocumentSubType[];
