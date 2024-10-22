@@ -6,6 +6,8 @@ namespace Rsbc.Dmf.CaseManagement.Dto
     // Dynamics schema name incident
     public class Case
     {
+        public string Id { get; set; }
+
         // ticketnumber 
         // TODO Rename to IDCode
         public string CaseNumber { get; set; }
