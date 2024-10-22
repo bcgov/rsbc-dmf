@@ -32,7 +32,7 @@ export * from './lib/submission-history/submission-history.component'
 //Quick Links
 export * from './lib/quick-links/quick-links.component'
 
-// Submission History
+// Submission Requirements
 export * from './lib/submission-requirements/submission-requirements.component'
 
 //Enums
