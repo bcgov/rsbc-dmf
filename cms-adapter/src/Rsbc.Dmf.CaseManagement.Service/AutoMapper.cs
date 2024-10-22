@@ -51,8 +51,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             CreateMap<Dto.Document, Document>()
                 .ForMember(dest => dest.Provider, opt => opt.MapFrom(src => src.Login))
-                .AddTransform(NullStringConverter); ;
-            CreateMap<Dto.Case, Case>();
+                .AddTransform(NullStringConverter);
+            CreateMap<Dto.Case, Case>()
+                .AddTransform(NullStringConverter);
             CreateMap<Dto.Person, Person>();
             CreateMap<Dto.DocumentType, DocumentType>();
             CreateMap<Dto.Document, DmerCase>()
@@ -79,6 +80,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<CaseManagement.MedicalCondition, Service.MedicalConditionItem>();
         }
 
+        // convert null string to empty string (default) for gRPC
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
 
         FlagTypeOptions ConvertFlagType(FlagTypeOptionSet? value)

@@ -1,5 +1,3 @@
-// IMPORTANT keep this file identical to driver-portal submission-requirements.component
-
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
@@ -9,23 +7,13 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle,
-} from '@angular/material/expansion';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { Document, DocumentSubType } from '../api';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  FormBuilder,
-  FormControl,
-  Validators,
-  ReactiveFormsModule,
-  FormsModule,
-} from '@angular/forms';
-import { ApiConfiguration } from '../shared/api/api-configuration';
+import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ApiConfiguration } from '../api/api-configuration';
 import { RouterLink } from '@angular/router';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
@@ -35,74 +23,78 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
-import { DocumentSubType } from '../shared/api/models';
-import { SubmittalStatusEnum } from '@app/app.model';
-import { Document } from '../shared/api/models';
-import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
-import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
-import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, PortalsEnum, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
+import { CaseStatusComponent } from '../case-definitions/case-status/case-status.component';
+import { CaseTypeComponent } from '../case-definitions/case-type/case-type.component';
+import { DecisionOutcomeComponent } from '../case-definitions/decision-outcome/decision-outcome.component';
+import { DmerTypeComponent } from '../case-definitions/dmer-type/dmer-type.component';
+import {SubmissionStatusComponent} from '../case-definitions/submission-status/submission-status.component';
+import {SubmissionTypeComponent} from '../case-definitions/submission-type/submission-type.component';
+import {SharedQuickLinksComponent} from '../quick-links/quick-links.component'
+import { SubmittalStatusEnum,PortalsEnum } from '../app.model';
 
 @Component({
-  selector: 'app-submission-requirements',
-  templateUrl: './submission-requirements.component.html',
-  styleUrls: ['./submission-requirements.component.scss'],
-  standalone: true,
-  imports: [
-    MatButton,
-    NgIf,
-    ReactiveFormsModule,
-    FormsModule,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
-    MatError,
-    NgxDropzoneModule,
-    MatIcon,
-    NgFor,
-    MatCard,
-    MatCardContent,
-    RouterLink,
-    MatAccordion,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatExpansionPanelTitle,
-    DatePipe,
-    CaseStatusComponent,
-    CaseTypeComponent,
-    MedicalDmerTypesComponent,
-    DecisionOutcomeComponent,
-    SubmissionTypeComponent,
-    SubmissionStatusComponent,
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    selector: 'app-shared-submission-requirements',
+    templateUrl: './submission-requirements.component.html',
+    styleUrls: ['./submission-requirements.component.scss'],
+    standalone: true,
+    imports: [
+        MatButton,
+        NgIf,
+        ReactiveFormsModule,
+        FormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatError,
+        NgxDropzoneModule,
+        MatIcon,
+        NgFor,
+        MatCard,
+        MatCardContent,
+        RouterLink,
+        MatAccordion,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        CaseTypeComponent,
+        CaseStatusComponent,
+        DmerTypeComponent,
+        DecisionOutcomeComponent,
+        SubmissionTypeComponent,
+        SubmissionStatusComponent,
+        DatePipe,
+        SharedQuickLinksComponent
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class SubmissionRequirementsComponent implements OnInit {
-  submissionRequirementDocuments?: Document[] | null = [];
-
+export class SharedSubmissionRequirementsComponent implements OnInit {
+  @Input() submissionRequirementDocuments?: Document[] | null = [];
   @Output() viewLetter = new EventEmitter<string>();
-
   PortalsEnum = PortalsEnum;
-  
+
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;
   documentSubTypes?: DocumentSubType[];
+  //selectedValue = '';
   acceptControl = new FormControl(false);
   @Input() isLoading = true;
 
+  @Input() caseManagementService: any;
+  @Input()  portal!: PortalsEnum;
+
   constructor(
-    private caseManagementService: CaseManagementService,
     private _http: HttpClient,
     private _snackBar: MatSnackBar,
     public dialog: MatDialog,
     private apiConfig: ApiConfiguration,
-    private fb: FormBuilder,
+    private fb: FormBuilder
   ) {}
 
   uploadForm = this.fb.group({
-    documentSubType: ['', Validators.required],
-  });
+    documentSubType : ['', Validators.required],
 
+  })
   ngOnInit() {
     this.getDocumentSubtypes();
 
@@ -110,11 +102,10 @@ export class SubmissionRequirementsComponent implements OnInit {
   }
 
   getDocumentSubtypes() {
-    this.caseManagementService
-      .getDocumentSubTypes()
-      .subscribe((response: DocumentSubType[]) => {
-        this.documentSubTypes = response;
-      });
+    this.caseManagementService.getDocumentSubTypes({})
+    .subscribe((response:any) => {
+    this.documentSubTypes = response;
+    });
   }
   public files: any[] = [];
 
@@ -166,10 +157,7 @@ export class SubmissionRequirementsComponent implements OnInit {
     }
     const formData = new FormData();
     formData.append('file', this.fileToUpload as File);
-    formData.append(
-      'documentSubTypeId',
-      this.uploadForm.controls.documentSubType.value as any,
-    );
+    formData.append('documentSubTypeId', this.uploadForm.controls.documentSubType.value as any);
     this.isFileUploading = true;
     this._http
       .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {

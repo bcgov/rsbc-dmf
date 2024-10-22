@@ -1,4 +1,5 @@
 <div class="container">
+  <div class="list">
   <div class="submissions">
     <div>
       <div>
@@ -54,13 +55,13 @@
                 id="document-type"
               >
                 @for (documentType of documentSubTypes; track documentType) {
-                  <mat-option [value]="documentType.id">{{
-                    documentType.name
-                  }}</mat-option>
+                <mat-option [value]="documentType.id">{{
+                  documentType.name
+                }}</mat-option>
                 }
               </mat-select>
-              @if (uploadForm.controls.documentSubType.getError("required")) {
-                <mat-error>This Field is required</mat-error>
+              @if (uploadForm.controls.documentSubType.getError('required')) {
+              <mat-error>This Field is required</mat-error>
               }
             </mat-form-field>
           </div>
@@ -133,9 +134,23 @@
         </form>
       </div>
     </div>
-    <div>
-      <app-shared-quick-links [portal]="PortalsEnum.PartnerPortal"></app-shared-quick-links>
-    </div>
+    @if(portal===PortalsEnum.DriverPortal){
+      <div>
+        <app-shared-quick-links [portal]="PortalsEnum.DriverPortal"></app-shared-quick-links>
+      </div>
+    }
+
+    @if(portal===PortalsEnum.MedicalPortal){
+      <div>
+        <app-shared-quick-links [portal]="PortalsEnum.MedicalPortal"></app-shared-quick-links>
+      </div>
+    }
+
+    @if(portal===PortalsEnum.PartnerPortal){
+      <div>
+        <app-shared-quick-links [portal]="PortalsEnum.PartnerPortal"></app-shared-quick-links>
+      </div>
+    }
   </div>
   <div>
     <div>
@@ -144,7 +159,7 @@
           <div style="grid-area: A">
             <label>Due Date</label>
             <div>
-              <b>{{ document.dueDate | date: "longDate" }}</b>
+              <b>{{ document.dueDate | date : "longDate" }}</b>
             </div>
           </div>
 
@@ -193,65 +208,75 @@
     Showing {{ submissionRequirementDocuments.length }} of
     {{ submissionRequirementDocuments.length }} records
   </div>
-</div>
 
-<div class="list" id="definitions">
-  <h2>Definitions</h2>
-  <div class="accordion-btn-container">
-    <a class="accordion-btn show-btn" (click)="accordion.openAll()">
-      Expand All
-    </a>
-    <span class="accordion-bar">&nbsp;|&nbsp;</span>
-    <a class="accordion-btn hide-btn" (click)="accordion.closeAll()">
-      Collapse All
-    </a>
+  <div class="list" id="definitions">
+    <h2>Definitions</h2>
+    <div class="accordion-btn-container">
+      <a class="accordion-btn show-btn" (click)="accordion.openAll()"
+        >Expand All</a
+      >
+      <span class="accordion-bar">&nbsp;|&nbsp;</span>
+      <a class="accordion-btn hide-btn" (click)="accordion.closeAll()"
+        >Collapse All</a
+      >
+    </div>
+    <div style="padding-bottom: 30px">
+      <mat-accordion multi>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Case Type
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-case-type></app-case-type>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Case Status
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-case-status></app-case-status>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              DMER Type
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-dmer-type></app-dmer-type>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Decision outcome
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <app-decision-outcome></app-decision-outcome>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Submission Type</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+          <app-submission-type></app-submission-type>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Submission Status</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+          <app-submission-status></app-submission-status>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
   </div>
-  <div>
-    <mat-accordion multi>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header class="panel-header">
-          <mat-panel-title class="accordian-Title">Case type</mat-panel-title>
-        </mat-expansion-panel-header>
-        <app-case-type></app-case-type>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header class="panel-header">
-          <mat-panel-title class="accordian-Title">
-            Case Status
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <app-case-status></app-case-status>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header class="panel-header">
-          <mat-panel-title class="accordian-Title">DMER type</mat-panel-title>
-        </mat-expansion-panel-header>
-        <app-medical-dmer-types></app-medical-dmer-types>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header class="panel-header">
-          <mat-panel-title class="accordian-Title">
-            Decision outcome
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <app-decision-outcome></app-decision-outcome>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header class="panel-header">
-          <mat-panel-title class="accordian-Title">
-            Submission Type
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <app-submission-type></app-submission-type>
-      </mat-expansion-panel>
-      <mat-expansion-panel>
-        <mat-expansion-panel-header class="panel-header">
-          <mat-panel-title class="accordian-Title">
-            Submission Status
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <app-submission-status></app-submission-status>
-      </mat-expansion-panel>
-    </mat-accordion>
-  </div>
+</div>
 </div>

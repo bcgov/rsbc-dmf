@@ -1,3 +1,5 @@
+import { from } from 'rxjs'
+
 // Layout
 export *from './lib/layout/header/header.component'
 export *from './lib/layout/footer/footer.component'
@@ -29,6 +31,9 @@ export * from './lib/submission-history/submission-history.component'
 
 //Quick Links
 export * from './lib/quick-links/quick-links.component'
+
+// Submission Requirements
+export * from './lib/submission-requirements/submission-requirements.component'
 
 //Enums
 export * from './lib/app.model'

@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild, inject, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbar } from '@angular/material/toolbar';
-import { RecentCaseComponent, PortalsEnum } from '@shared/core-ui';
-import { SubmissionRequirementsComponent } from '../../app/submission-requirements/submission-requirements.component';
+import { RecentCaseComponent, PortalsEnum, SharedSubmissionRequirementsComponent } from '@shared/core-ui';
 import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
 import { RouterLink } from '@angular/router';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
@@ -23,7 +22,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatToolbar,
     MatExpansionModule,
     RecentCaseComponent,
-    SubmissionRequirementsComponent,
+    SharedSubmissionRequirementsComponent,
     SubmissionHistoryComponent,
     RouterLink,
     MatTabsModule,
