@@ -271,7 +271,6 @@ namespace Rsbc.Dmf.CaseManagement
 
             foreach (var loginId in loginIds)
             {
-
                 documents.AddRange(dynamicsContext.bcgov_documenturls
                     .Expand(doc => doc.dfp_DocumentTypeID)
                     .Expand(doc => doc.bcgov_CaseId)

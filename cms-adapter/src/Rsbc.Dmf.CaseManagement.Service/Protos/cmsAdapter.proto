@@ -141,6 +141,7 @@ message Case {
     string caseNumber = 1;
     Person person = 2;
     string dmerType = 3;
+    string id = 4;
 }
 
 // clean, use Dynamics display name when adding new fields

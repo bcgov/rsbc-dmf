@@ -52,12 +52,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
 
         }
 
-
-
-            
-
-
-            public async Task<string> AcquireTokenInternal()
+        public async Task<string> AcquireTokenInternal()
         {
             using var httpClient = httpClientFactory.CreateClient("adfs_token");
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
@@ -65,16 +60,16 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             // Construct the body of the request
             var pairs = new List<KeyValuePair<string, string>>
             {
-                    new KeyValuePair<string, string>("resource", options.Adfs.ResourceName),
-                    new KeyValuePair<string, string>("client_id", options.Adfs.ClientId),
-                    new KeyValuePair<string, string>("client_secret", options.Adfs.ClientSecret),
-                    new KeyValuePair<string, string>("username", $"{options.Adfs.ServiceAccountDomain}\\{options.Adfs.ServiceAccountName}"),
-                    new KeyValuePair<string, string>("password", options.Adfs.ServiceAccountPassword),
+                new KeyValuePair<string, string>("resource", options.Adfs.ResourceName),
+                new KeyValuePair<string, string>("client_id", options.Adfs.ClientId),
+                new KeyValuePair<string, string>("client_secret", options.Adfs.ClientSecret),
+                new KeyValuePair<string, string>("username", $"{options.Adfs.ServiceAccountDomain}\\{options.Adfs.ServiceAccountName}"),
+                new KeyValuePair<string, string>("password", options.Adfs.ServiceAccountPassword),
 
-                    new KeyValuePair<string, string>("scope", "openid"),
-                    new KeyValuePair<string, string>("response_mode", "form_post"),
-                    new KeyValuePair<string, string>("grant_type", "password")
-                };
+                new KeyValuePair<string, string>("scope", "openid"),
+                new KeyValuePair<string, string>("response_mode", "form_post"),
+                new KeyValuePair<string, string>("grant_type", "password")
+            };
 
             try
             {

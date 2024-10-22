@@ -15,6 +15,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             CreateMap<incident, Dto.Case>()
                 // TODO rename
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.incidentid))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(src => src.ticketnumber))
                 .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => TranslateDmerType(src.dfp_dmertype)))
                 .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.customerid_contact))
