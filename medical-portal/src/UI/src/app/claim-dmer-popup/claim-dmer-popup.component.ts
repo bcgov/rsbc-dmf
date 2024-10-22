@@ -45,22 +45,22 @@ export class ClaimDmerPopupComponent implements OnInit {
 
   ngOnInit(): void {
     var profile = this.profileManagementService.getCachedProfile();
-    // get current logged in user
-    var loggedInUser: Endorsement = {
-      userId: profile.id,
-      loginId: profile.loginId as string,
-      firstName: profile.firstName,
-      lastName: profile.lastName,
-      email: profile.email,
-      // TODO move this somewhere the logic can be reused
-      role: profile.roles?.some(r => r == Role.Practitioner) ? Role.Practitioner : Role.Moa,
-      licences: []
+    this.practitioners = profile.endorsements?.filter(e => e.role === Role.Practitioner && e.licences?.some(l => l.statusCode === LicenceStatusCode.Active)) as Endorsement[]
+    // check if the current user is a practitioner
+    if (profile.roles?.some(r => r == Role.Practitioner)) {
+      // get current logged in user
+      var loggedInUser: Endorsement = {
+        userId: profile.id,
+        loginId: profile.loginId as string,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        email: profile.email,
+        // TODO move this somewhere the logic can be reused
+        role: profile.roles?.some(r => r == Role.Practitioner) ? Role.Practitioner : Role.Moa,
+        licences: []
+      }
+      this.practitioners.unshift(loggedInUser);
     }
-    // combine with the endorsed practitioners with active licence
-    this.practitioners = [
-      loggedInUser,
-      ...profile .endorsements?.filter(e => e.role === Role.Practitioner && e.licences?.some(l => l.statusCode === LicenceStatusCode.Active)) as Endorsement[]
-    ];
  }
 
  onAssignDmer() {
