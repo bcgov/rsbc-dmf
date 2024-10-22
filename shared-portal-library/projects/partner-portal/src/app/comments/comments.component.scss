@@ -1,0 +1,13 @@
+.title {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    //border-bottom: solid 1px gray;
+  }
+
+  .filter{
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    border-bottom: solid 1px gray;
+  }
