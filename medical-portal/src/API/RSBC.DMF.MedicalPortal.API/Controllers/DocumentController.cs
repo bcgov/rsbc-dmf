@@ -56,6 +56,10 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var profile = await _userService.GetCurrentUserContext();
                 var loginIds = profile.LoginIds;
 
+                // add login ids of users in your network
+                var networkLoginIds = profile.Endorsements.Select(x => x.LoginId.ToString()).ToList();
+                loginIds.AddRange(networkLoginIds);
+
                 var dmerDocumentTypeCode = _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] ?? "001";                
                 var request = new GetDocumentsByTypeForUsersRequest { DocumentTypeCode = dmerDocumentTypeCode, LoginIds = { loginIds } };
                 var reply = _documentManagerClient.GetDocumentsByTypeForUsers(request);
@@ -224,6 +228,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             var user = _userService.GetUser();
             var hasAccess = user.IsInRole(Roles.Practitoner);
+            // user must be a practitioner (above) or be endorsed by a practitioner (below)
             if (!hasAccess)
             {
                 var authorizationResult = await _authorizationService.AuthorizeAsync(user, loginId, Policies.NetworkPractitioner);
