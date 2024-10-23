@@ -1,0 +1,289 @@
+.callBackCard {
+  border: 1px solid gray;
+  box-shadow: none !important;
+  margin: 30px 0 30px 0;
+  padding: 32px;
+  margin-bottom: 24px;
+
+  .mat-mdc-card-header {
+    padding-top: 12px;
+
+    .mat-mdc-card-header-text {
+      width: 100%;
+      vertical-align: middle;
+    }
+  }
+}
+
+.help-topics {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 218px;
+  max-width: 280px;
+  background-color: rgb(255, 255, 255);
+  padding: 6px 0;
+  align-items: flex-start;
+}
+
+.help-topics-item {
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+
+  user-select: none;
+  min-width: 64px;
+  line-height: 36px;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+
+.help-topics-item:hover {
+  background-color: rgb(208, 208, 208);
+}
+
+.help-topics-item:active {
+  background-color: rgb(170, 170, 170);
+}
+
+.padding-top{
+  padding-top: 32px;
+}
+
+
+.help-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  > .mat-mdc-card {
+    border: 2px solid #606060;
+    cursor: pointer;
+  }
+}
+
+.help {
+  display: flex;
+  gap: 32px;
+}
+
+.helpDetails {
+  line-height: 4;
+}
+
+.assistance-page {
+  display: flex;
+  // flex-direction: row;
+  // padding-top: 24px;
+  // gap: 100px;
+}
+.submissionRequirement {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+button {
+  border: 2px solid #003366;
+  color: #003366;
+}
+
+button:hover {
+  color: #fff;
+  background-color: #003366;
+}
+
+.callBackButton {
+  width: 253px;
+  height: 49px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #fff;
+  background-color: #003366;
+  border-radius: 5px;
+}
+
+.closedCaseContent {
+  display: flex;
+  flex-direction: row;
+}
+
+.case-details-border {
+  border-left: 2px solid #808080;
+  height: 45%;
+}
+
+.caseDetailRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  line-height: 32px;
+  padding-bottom: 24px;
+  align-content: flex-start;
+  padding-bottom: 24px;
+}
+
+.createCallBack {
+  padding-left: 256px;
+}
+
+.callback {
+  background: inherit;
+  background-color: rgba(236, 245, 255, 1);
+  border: none;
+  border-radius: 4px;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #81692c;
+  display: flex;
+  gap: 42px;
+  padding: 24px;
+}
+
+.caseDetailRow > div {
+  flex-basis: 220px;
+}
+
+.expandedIcon {
+  transform: scale(1.5);
+  color: #003366;
+  width: 50px;
+}
+
+.open {
+  background-color: #f1f1f3;
+  border: 1px solid #003366;
+  cursor: pointer;
+}
+
+.form-label {
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+}
+
+::ng-deep .mat-mdc-form-field-required-marker { color: red }
+
+label {
+  display: block;
+}
+
+.inputWidth {
+  width: 40%;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.5);
+  margin: 15px;
+}
+
+.submitButtonContainer {
+  display: flex;
+  gap: 24px;
+  padding-top: 24px;
+}
+
+.primaryButton {
+  border-width: 0px;
+  width: 253px;
+  height: 49px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: #f2f2f2;
+  background-color: #003366;
+}
+
+.cancelButton {
+  border-width: 0px;
+  width: 123px;
+  height: 48px;
+  font-family: "BC Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+button.disabledButton {
+  width: 253px;
+  height: 49px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 18px;
+  letter-spacing: 1px;
+  background: rgb(217, 228, 255);
+  color: rgb(0, 0, 0);
+  border-radius: 5px;
+  border: none;
+}
+
+.callBackContent {
+  left: 0px;
+  top: 0px;
+  width: 305px;
+  height: 120px;
+  background: inherit;
+  background-color: rgba(255, 255, 255, 0);
+  box-sizing: border-box;
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgba(252, 186, 25, 1);
+  border-radius: 4px;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  font-family: "BC Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #333333;
+  text-align: left;
+}
+
+.text {
+  position: absolute;
+  align-self: flex-start;
+  padding: 10px 10px 10px 10px;
+  box-sizing: border-box;
+}
+
+@media only screen and (max-width: 896px) {
+  .assistance-page {
+    display: block;
+  }
+
+  .closedCaseContent {
+    flex-direction: column-reverse;
+  }
+
+  .caseDetailRow {
+    gap: 50px;
+  }
+
+  .case-details-border {
+    border-left: none;
+    border-top: 4px solid #808080;
+    height: 8px;
+  }
+
+  .help {
+    display: block;
+  }
+
+  .createCallBack {
+    padding-left: 0px;
+  }
+  .callback {
+    flex-direction: column;
+  }
+  .inputWidth {
+    width: 100%;
+  }
+}

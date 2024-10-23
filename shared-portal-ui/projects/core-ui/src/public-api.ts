@@ -35,6 +35,10 @@ export * from './lib/quick-links/quick-links.component'
 // Submission Requirements
 export * from './lib/submission-requirements/submission-requirements.component'
 
+// Call Backs(Get assistance)
+export * from './lib/get-assistance/get-assistance.component'
+export * from './lib/get-assistance/cancel-callback-dialog/cancel-callback-dialog.component'
+
 //Enums
 export * from './lib/app.model'
 

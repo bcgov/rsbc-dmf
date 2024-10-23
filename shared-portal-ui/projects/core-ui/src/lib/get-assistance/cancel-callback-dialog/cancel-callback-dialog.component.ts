@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogRef,
@@ -10,10 +10,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton, MatButton } from '@angular/material/button';
-import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
+
 
 @Component({
-  selector: 'app-cancel-callback-dialog',
+  selector: 'app-shared-cancel-callback-dialog',
   templateUrl: './cancel-callback-dialog.component.html',
   styleUrls: ['./cancel-callback-dialog.component.scss'],
   standalone: true,
@@ -28,10 +28,11 @@ import { CaseManagementService } from '@app/shared/services/case-management/case
     MatButton,
   ],
 })
-export class CancelCallbackDialogComponent {
+export class SharedCancelCallbackDialogComponent {
+
+
   constructor(
-    private dialogRef: MatDialogRef<CancelCallbackDialogComponent>,
-    private caseManagementService: CaseManagementService,
+    private dialogRef: MatDialogRef<SharedCancelCallbackDialogComponent>,
     private _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA)
     private data: any,
@@ -44,8 +45,8 @@ export class CancelCallbackDialogComponent {
       return;
     }
     this.iscancelCallback = true;
-    this.caseManagementService
-    .cancelCallBackRequest({ body: this.data })
+    this.data.caseManagementService
+      .cancelCallBackRequest({ body: this.data })
       .subscribe(() => {
         this.dialogRef.close();
         this.iscancelCallback = false;
