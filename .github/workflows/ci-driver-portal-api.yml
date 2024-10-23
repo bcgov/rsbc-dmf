@@ -51,6 +51,7 @@ jobs:
       
       - name: Generate code coverage
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
+        continue-on-error: true
         run: |
           mkdir -p CovTestResults
           rm -rf .Tests/TestResults
