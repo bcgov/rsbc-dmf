@@ -59,6 +59,7 @@ jobs:
           head CovTestResults/coverage.opencover.xml      
       
       - name: Codecov
+        continue-on-error: true
         uses: codecov/codecov-action@v2.1.0
         with:
           # User defined upload name. Visible in Codecov UI

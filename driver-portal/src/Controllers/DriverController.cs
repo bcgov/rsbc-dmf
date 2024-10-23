@@ -5,6 +5,7 @@ using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 using Rsbc.Dmf.IcbcAdapter;
+using Rsbc.Dmf.IcbcAdapter.Client;
 using System.Net;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 

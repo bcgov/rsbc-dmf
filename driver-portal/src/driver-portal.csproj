@@ -18,7 +18,6 @@
 		<PackageReference Include="AutoMapper" Version="12.0.1" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 		<PackageReference Include="Enums.NET" Version="5.0.0" />
-		<PackageReference Include="Google.Protobuf" Version="3.25.2" />
 		<PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -33,9 +32,6 @@
 		
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.1" />
-	
-    <PackageReference Include="Grpc.Net.Client" Version="2.60.0" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.60.0" />
 
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="Winista.MimeDetect" Version="1.1.0" />
@@ -53,35 +49,14 @@
 		<None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
 	</ItemGroup>
 
-
 	<ItemGroup>
-	  <Folder Include="Entities\" />
 	  <Folder Include="Services\" />
-    <Folder Include="gRPC Prototypes\" />
 	</ItemGroup>
-
-
-
-
-
-	<ItemGroup>
-	  <None Include="DriverPortalApp\angular.json" />
-	  <None Include="DriverPortalApp\package-lock.json" />
-	  <None Include="DriverPortalApp\package.json" />
-	  <None Include="DriverPortalApp\tsconfig.app.json" />
-	  <None Include="DriverPortalApp\tsconfig.json" />
-	  <None Include="DriverPortalApp\tsconfig.spec.json" />
-	</ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="../../icbc-adapter/src/Pssg.Dmf.IcbcAdapter/Protos/icbcAdapter.proto" GrpcServices="Client">
-      <Link>gRPC Prototypes\icbcAdapter.proto</Link>
-    </Protobuf>
-  </ItemGroup>
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
 	  <ProjectReference Include="..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
+	  <ProjectReference Include="..\..\icbc-adapter\src\Pssg.Dmf.IcbcAdapter.Client\Pssg.Dmf.IcbcAdapter.Client.csproj" />
 	  <ProjectReference Include="..\..\shared-utils\SharedUtils.csproj" />
 	</ItemGroup>
 

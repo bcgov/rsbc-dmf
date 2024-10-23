@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Rsbc.Dmf.DriverPortal.Api;
 using Rsbc.Dmf.DriverPortal.Api.Services;
+using Rsbc.Dmf.IcbcAdapter.Client;
 using System.Net;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
