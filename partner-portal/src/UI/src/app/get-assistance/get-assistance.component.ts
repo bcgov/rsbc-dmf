@@ -1,5 +1,3 @@
-// IMPORTANT keep this file identical to driver-portal get-assistance.component
-
 import { Component } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { UserService } from '../shared/services/user.service';
