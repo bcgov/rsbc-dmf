@@ -7,9 +7,12 @@
 <mat-dialog-content>
     <form>
         <mat-form-field>
-            <textarea matInput maxlength="2000" [formControl]="commentsForm.controls.commentText"></textarea>
+            <textarea matInput [formControl]="commentsForm.controls.commentText"></textarea>
             @if(commentsForm.controls.commentText.getError("required")){
                 <mat-error>This Field is required</mat-error>
+            }
+            @if(commentsForm.controls.commentText.getError("maxlength")){
+                <mat-error>Exceeded maximum length for this field.</mat-error>
             }
         </mat-form-field>
     </form>

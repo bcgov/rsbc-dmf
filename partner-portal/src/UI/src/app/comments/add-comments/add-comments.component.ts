@@ -1,3 +1,4 @@
+import { JsonPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,7 +26,7 @@ export class AddCommentsComponent {
   ) { }
 
   commentsForm = this.fb.group({
-    commentText : ['', Validators.required]
+    commentText : ['', Validators.compose([Validators.required, Validators.maxLength(2000)])]
   })
 
   AddComment(){   
