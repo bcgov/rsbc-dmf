@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
 using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Dynamics;
+using Rsbc.Dmf.CaseManagement.Dynamics.Mapper;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
@@ -384,10 +385,28 @@ namespace Rsbc.Dmf.CaseManagement
             result.Success = true;
             return _mapper.Map<Document>(querydocument);
         }
-       
+
+
+        /// <summary>
+        /// Get Driver Legacy Documents by driver id
+        /// </summary>
+        /// <param name="driverId"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<LegacyDocument>> GetDriverDocumentsById(Guid driverId)
+        {
+            var driverDocuments = dynamicsContext.bcgov_documenturls
+                .Expand(d => d.dfp_DocumentTypeID)
+                .Expand(sd => sd.dfp_DocumentSubType)
+                .Expand(d => d.bcgov_CaseId)
+                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)EntityState.Active && d.dfp_showonportals == true)
+            .ToList();
+
+            return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
+        }
+
     }
 
-  
+
 }
 
 

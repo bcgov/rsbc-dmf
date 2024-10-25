@@ -550,6 +550,9 @@ service DocumentManager {
     rpc UpdateDocument(UpdateDocumentRequest) returns (UpdateDocumentReply);
     rpc UpdateClaimDmer(UpdateClaimRequest) returns (UpdateClaimReply);
     rpc UpdateUnClaimDmer(UpdateClaimRequest) returns (UpdateClaimReply); 
+
+    // Get all documents
+      rpc GetDriverDocumentsById (DriverIdRequest) returns (GetDocumentsReply);
 }
 
 message UpdateDocumentRequest {

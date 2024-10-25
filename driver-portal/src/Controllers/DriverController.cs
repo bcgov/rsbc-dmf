@@ -8,6 +8,7 @@ using Rsbc.Dmf.IcbcAdapter;
 using Rsbc.Dmf.IcbcAdapter.Client;
 using System.Net;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
+using static Rsbc.Dmf.CaseManagement.Service.DocumentManager;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -17,18 +18,20 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     public class DriverController : Controller
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly DocumentManager.DocumentManagerClient _documentManagerClient;
         private readonly ICachedIcbcAdapterClient _icbcAdapterClient;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<DriverController> _logger;
 
-        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, ICachedIcbcAdapterClient icbcAdapterClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory)
+        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, DocumentManager.DocumentManagerClient documentManagerClient, ICachedIcbcAdapterClient icbcAdapterClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory)
         {
             _cmsAdapterClient = cmsAdapterClient;
             _icbcAdapterClient = icbcAdapterClient;
             _userService = userService;
             _mapper = mapper;
             _logger = loggerFactory.CreateLogger<DriverController>();
+            _documentManagerClient = documentManagerClient;
         }
 
        
@@ -46,7 +49,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var profile = await _userService.GetCurrentUserContext();
 
             var driverIdRequest = new DriverIdRequest() { Id = profile.DriverId };
-            var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
+            var reply = _documentManagerClient.GetDriverDocumentsById(driverIdRequest);
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 var replyItemsWithDocuments = reply.Items;

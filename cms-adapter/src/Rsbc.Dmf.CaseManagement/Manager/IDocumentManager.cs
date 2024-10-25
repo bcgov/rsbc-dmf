@@ -18,5 +18,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Document UpdateUnClaimDmer(Guid loginIds, Guid documentId);
 
+        Task<IEnumerable<LegacyDocument>> GetDriverDocumentsById(Guid driverId);
+
     }
 }
