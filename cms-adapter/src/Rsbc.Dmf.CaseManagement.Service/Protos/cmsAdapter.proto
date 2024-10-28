@@ -658,6 +658,8 @@ message LegacyDocument {
 	string CaseType = 29;
 	string DocumentSubTypeId = 30;
     string DocumentSubType = 31;
+    bool ShowOnPortals = 32;
+
 }
 
 message DocumentIdRequest {

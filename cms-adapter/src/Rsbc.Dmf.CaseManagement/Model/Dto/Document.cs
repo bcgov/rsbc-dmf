@@ -35,5 +35,7 @@ namespace Rsbc.Dmf.CaseManagement.Dto
         public string IdCode { get; set; }
 
         public DateTimeOffset? FaxReceivedDate { get; set; }
+
+        public bool showOnPortals {  get; set; }
     }
 }

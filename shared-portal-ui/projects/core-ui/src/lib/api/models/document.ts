@@ -22,4 +22,5 @@ export interface Document {
   sequenceNumber?: number | null;
   submittalStatus?: string | null;
   userId?: string | null;
+  showOnPortals?: boolean | null;
 }

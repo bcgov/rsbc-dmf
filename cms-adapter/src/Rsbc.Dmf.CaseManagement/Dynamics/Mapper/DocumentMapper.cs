@@ -35,6 +35,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_description))
                     .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.createdon.GetValueOrDefault()))
                     .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src.dfp_documentorigin))
+                    .ForMember(dest => dest.showOnPortals, opt => opt.MapFrom(src => src.dfp_showonportals))
                     .AddTransform(NullStringConverter);
 
                 CreateMap<bcgov_documenturl, Document>()
@@ -52,6 +53,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.IdCode, opt => opt.MapFrom(src => src.bcgov_CaseId.ticketnumber))
                     .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.dfp_LoginId))
                     .ForMember(dest => dest.FaxReceivedDate, opt => opt.MapFrom(src => src.dfp_faxreceiveddate.GetValueOrDefault()))
+                    .ForMember(dest => dest.showOnPortals, opt => opt.MapFrom(src => src.dfp_showonportals))
                     .AddTransform(NullStringConverter);
                     
             }
