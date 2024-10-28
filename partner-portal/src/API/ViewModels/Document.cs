@@ -60,5 +60,7 @@
         public string Description { get; set; }
         public string DocumentUrl { get; set; }
         public string SubmittalStatus { get; set; }
+
+        public bool showOnPortals { get; set; }
     }
 }
