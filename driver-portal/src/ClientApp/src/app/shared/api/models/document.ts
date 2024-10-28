@@ -20,6 +20,7 @@ export interface Document {
   idCode?: string | null;
   importDate?: string | null;
   sequenceNumber?: number | null;
+  showOnPortals?: boolean;
   submittalStatus?: string | null;
   userId?: string | null;
 }

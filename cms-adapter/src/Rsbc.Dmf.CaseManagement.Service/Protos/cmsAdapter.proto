@@ -550,6 +550,9 @@ service DocumentManager {
     rpc UpdateDocument(UpdateDocumentRequest) returns (UpdateDocumentReply);
     rpc UpdateClaimDmer(UpdateClaimRequest) returns (UpdateClaimReply);
     rpc UpdateUnClaimDmer(UpdateClaimRequest) returns (UpdateClaimReply); 
+
+    // Get all documents
+      rpc GetDriverDocumentsById (DriverIdRequest) returns (GetDocumentsReply);
 }
 
 message UpdateDocumentRequest {
@@ -655,6 +658,8 @@ message LegacyDocument {
 	string CaseType = 29;
 	string DocumentSubTypeId = 30;
     string DocumentSubType = 31;
+    bool ShowOnPortals = 32;
+
 }
 
 message DocumentIdRequest {

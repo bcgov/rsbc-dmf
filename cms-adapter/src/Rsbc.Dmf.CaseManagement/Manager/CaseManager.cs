@@ -84,6 +84,8 @@ namespace Rsbc.Dmf.CaseManagement
         public string Description { get; set; }
         public string DocumentSubType { get; set; }
         public string DocumentSubTypeId { get; set; }
+
+        public bool showOnPortals { get; set; }
     }
 
     public class CreateStatusReply

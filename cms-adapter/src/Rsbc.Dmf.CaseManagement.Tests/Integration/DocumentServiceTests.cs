@@ -59,5 +59,20 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             
         }
 
+        [Fact(Skip = RequiresDynamics)]
+        public async Task Get_ALL_Driver_Documents()
+        {
+           var driverId = _configuration["ICBC_TEST_DRIVERID"];
+
+           var request = new DriverIdRequest();
+
+           request.Id = driverId;
+
+            var response = _documentService.GetDriverDocumentsById(request, null);
+
+            Assert.NotNull(response);
+
+        }
+
     }
 }
