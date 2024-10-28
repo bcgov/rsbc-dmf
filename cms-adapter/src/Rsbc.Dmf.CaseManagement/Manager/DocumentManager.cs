@@ -398,7 +398,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(d => d.dfp_DocumentTypeID)
                 .Expand(sd => sd.dfp_DocumentSubType)
                 .Expand(d => d.bcgov_CaseId)
-                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)EntityState.Active && d.dfp_showonportals == true )
+                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)EntityState.Active && d.dfp_showonportals !=  false )
             .ToList();
 
             return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
