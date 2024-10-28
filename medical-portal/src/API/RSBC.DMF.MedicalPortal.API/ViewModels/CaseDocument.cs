@@ -24,5 +24,6 @@ namespace RSBC.DMF.MedicalPortal.API.ViewModels
         // This field is Uploaded Date on the document
         public DateTimeOffset? FaxReceivedDate { get; set; }
 
+        public bool showOnPortals { get; set; }
     }
 }
