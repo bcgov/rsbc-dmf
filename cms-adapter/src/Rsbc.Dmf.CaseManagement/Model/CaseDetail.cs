@@ -92,5 +92,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         public string MiddleName { get; set; }
         public IEnumerable<MedicalCondition> MedicalConditions { get; set; }
+
+        public bool showOnPortals { get; set; }
     }
 }

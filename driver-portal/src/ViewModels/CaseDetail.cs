@@ -84,5 +84,7 @@
 
         public int OutstandingDocuments { get; set; }
 
+        public bool showOnPortals { get; set; }
+
     }
 }

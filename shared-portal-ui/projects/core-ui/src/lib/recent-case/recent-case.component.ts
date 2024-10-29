@@ -1,8 +1,5 @@
-// IMPORTANT keep this file identical to partner-portal recent-case.component
-
 import { CUSTOM_ELEMENTS_SCHEMA, Component, Input, OnInit, ViewChild, input } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
-// import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Router, RouterLink } from '@angular/router';
 // import { CaseDetail } from '../shared/api/models';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
@@ -49,6 +46,7 @@ export class RecentCaseComponent implements OnInit {
   @Input() portal!: PortalsEnum;
 
   PortalsEnum = PortalsEnum;
+  hasActiveCase?: boolean;
   
 
   selectedIndex = 0;
@@ -71,9 +69,9 @@ export class RecentCaseComponent implements OnInit {
       .subscribe((result) => {
         if (result.matches) {
           // this.stepper._stepsList.toArray()[this.selectedIndex].expanded = true;
-          this.stepper.orientation = 'vertical';
+          if (this.stepper) this.stepper.orientation = 'vertical';
         } else {
-          this.stepper.orientation = 'horizontal';
+          if (this.stepper) this.stepper.orientation = 'horizontal';
         }
       });
   }
@@ -101,7 +99,12 @@ export class RecentCaseComponent implements OnInit {
         if (recentCase.status === CaseStageEnum.Closed) {
           this.selectedIndex = 5;
         }
-      });
+        this.hasActiveCase = true;
+      },
+      (error: any) => {
+        this.hasActiveCase = false;
+      }
+      );
   }
 
 
@@ -111,10 +114,10 @@ export class RecentCaseComponent implements OnInit {
     .subscribe({
       next: (caseDetails: any) => {
         this.router.navigate(['/caseSearch', this.idCode as string], {state: caseDetails});
+        this.hasActiveCase = true;
       },
       error: (error: any) => {
-      
-        console.error('error', error);
+        this.hasActiveCase = false;
       }
   
     });
