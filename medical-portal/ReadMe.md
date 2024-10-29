@@ -27,14 +27,14 @@ docker build --file ./medical-portal/src/API/Dockerfile . --tag medical-portal-a
 docker run --expose 5000 -p 5000:8080 --rm --name medical-portal-api medical-portal-api \
   -e CHEFS_FORM_ID="6fa5a4df-9f8e-43e4-b89e-0f387d2da300" \
   -e CMS_ADAPTER_URI="https://host.docker.internal:4020" \
-  -e CMS_ADAPTER_JWT_SECRET='RB2~s+B!c}(t[J]:' \
+  -e CMS_ADAPTER_JWT_SECRET='<secret>' \
   -e DOCUMENT_STORAGE_ADAPTER_URI="https://host.docker.internal:50475" \
-  -e DOCUMENT_STORAGE_ADAPTER_JWT_SECRET='RB2~s+B!c}(t[J]:' \
+  -e DOCUMENT_STORAGE_ADAPTER_JWT_SECRET='<secret>' \
   -e DRIVER_DOCUMENT_TYPE_CODE="666" \
   -e PIDP_ADAPTER_URI="https://host.docker.internal:7215" \
-  -e PIDP_ADAPTER_JWT_SECRET='Fh7TP?@bCzjySzKbh7yA5JHt8mDx?5$@' \
+  -e PIDP_ADAPTER_JWT_SECRET='<secret>' \
   -e ICBC_ADAPTER_URI="https://host.docker.internal:50565" \
-  -e ICBC_ADAPTER_JWT_SECRET='easidy?P$LEQNY5M'
+  -e ICBC_ADAPTER_JWT_SECRET='<secret>'
 ```
 
 ## DEVELOP
