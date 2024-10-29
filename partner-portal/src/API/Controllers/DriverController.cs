@@ -15,12 +15,13 @@ public class DriverController : Controller
 {
     private readonly ICachedIcbcAdapterClient _icbcAdapterClient;
     private readonly CaseManagerClient _caseManagerClient;
+    private readonly DocumentManager.DocumentManagerClient _documentManagerClient;
     private readonly IUserService _userService;
     private readonly IMapper _mapper;
     private readonly ILogger _logger;
     private readonly IConfiguration _configuration;
 
-    public DriverController(ICachedIcbcAdapterClient icbcAdapterClient, CaseManagerClient caseManagerClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory, IConfiguration configuration)
+    public DriverController(ICachedIcbcAdapterClient icbcAdapterClient, CaseManagerClient caseManagerClient, DocumentManager.DocumentManagerClient documentManagerClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory, IConfiguration configuration)
     {
         _icbcAdapterClient = icbcAdapterClient;
         _caseManagerClient = caseManagerClient;
@@ -28,6 +29,7 @@ public class DriverController : Controller
         _mapper = mapper;
         _logger = loggerFactory.CreateLogger<DriverController>();
         _configuration = configuration;
+        _documentManagerClient = documentManagerClient;
     }
 
     [HttpGet("AllDocuments")]
@@ -40,10 +42,9 @@ public class DriverController : Controller
         var user = _userService.GetDriverInfo();
 
         var driverIdRequest = new DriverIdRequest() { Id = user.DriverId };
-        var reply = _caseManagerClient.GetDriverDocumentsById(driverIdRequest);
+        var reply = _documentManagerClient.GetDriverDocumentsById(driverIdRequest);
         if (reply != null && reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
         {
-            // This includes all the documents except Open Required, Issued, Sent documents on Submission History Tab
             var replyItemsWithDocuments = reply.Items;
 
             var result = _mapper.Map<List<Rsbc.Dmf.PartnerPortal.Api.ViewModels.Document>>(replyItemsWithDocuments);

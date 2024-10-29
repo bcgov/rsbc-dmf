@@ -102,7 +102,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var profile = await _userService.GetCurrentUserContext();
 
             var driverIdRequest = new DriverIdRequest() { Id = driverId };
-            var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
+            var reply = _documentManagerClient.GetDriverDocumentsById(driverIdRequest);
             if (reply != null && reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
                 // This includes all the documents except Open Required, Issued, Sent documents on Submission History Tab

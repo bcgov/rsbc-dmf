@@ -16,5 +16,6 @@ export interface CaseDocument {
   faxReceivedDate?: string | null;
   fullName?: string | null;
   loginId?: string | null;
+  showOnPortals?: boolean;
   submittalStatus?: string | null;
 }
