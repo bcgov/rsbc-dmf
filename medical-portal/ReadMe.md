@@ -17,6 +17,26 @@
 - For Mac, you can use JetBrains Rider build
 - TODO add docker build steps to run "\Dockerfile" to build the docker image
 
+### DOCKER
+
+change directory to root folder
+run the following commands to run a docker image of the API
+NOTE you will need to also run cms adapter, document storage adapter, pidp adapter, and icbc adapter; no docker-compose file exists yet to orchestrate all of the containers
+```bash
+docker build --file ./medical-portal/src/API/Dockerfile . --tag medical-portal-api
+docker run --expose 5000 -p 5000:8080 --rm --name medical-portal-api medical-portal-api \
+  -e CHEFS_FORM_ID="6fa5a4df-9f8e-43e4-b89e-0f387d2da300" \
+  -e CMS_ADAPTER_URI="https://host.docker.internal:4020" \
+  -e CMS_ADAPTER_JWT_SECRET='RB2~s+B!c}(t[J]:' \
+  -e DOCUMENT_STORAGE_ADAPTER_URI="https://host.docker.internal:50475" \
+  -e DOCUMENT_STORAGE_ADAPTER_JWT_SECRET='RB2~s+B!c}(t[J]:' \
+  -e DRIVER_DOCUMENT_TYPE_CODE="666" \
+  -e PIDP_ADAPTER_URI="https://host.docker.internal:7215" \
+  -e PIDP_ADAPTER_JWT_SECRET='Fh7TP?@bCzjySzKbh7yA5JHt8mDx?5$@' \
+  -e ICBC_ADAPTER_URI="https://host.docker.internal:50565" \
+  -e ICBC_ADAPTER_JWT_SECRET='easidy?P$LEQNY5M'
+```
+
 ## DEVELOP
 - Visual Studio IDE 2022 (not tested with earlier versions)
 - .NET 8.0 SDK
@@ -106,6 +126,13 @@ OneHealth is not always responsive when it comes to support. Normally the order 
 3. Click on the "Documents" tab
 4. Click on the "Create Requirement" button on the top of the document table
 5. Enter "DMER" in the "Document Type" field and then hit "Save and Close" button
+
+### How to reopen a DMER for testing
+1. Submit a DMER on the portal or find a DMER that has already been submitted
+2. Login to Dynamics
+3. Click on the "Cases" menu item on left nav
+4. Click on the "Documents" tab
+5. Click on the "DMER" document, a dropdown appears on the "Active Documents" panel, select a "Open-Required"
 
 ### How to update chefs form scripts
 Contact Shiv for admin access to chefs (MacFarlane, Shiv PSSG:EX)[<Shiv.MacFarlane@gov.bc.ca>]

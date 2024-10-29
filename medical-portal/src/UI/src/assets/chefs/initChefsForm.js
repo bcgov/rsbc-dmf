@@ -1,42 +1,47 @@
 /*
-The following variables are available in all scripts.
-token	The decoded JWT token for the authenticated user.
-user	The currently logged in user
-form	The complete form JSON object
-submission	The complete submission object.
-data	The complete submission data object.
-row	Contextual "row" data, used within DataGrid, EditGrid, and Container components
-component	The current component JSON
-instance	The current component instance.
-value	The current value of the component.
-moment	The moment.js library for date manipulation.
-_	An instance of Lodash.
-utils	An instance of the FormioUtils object.
-util	An alias for "utils".
+The following variables are available in all scripts:
+token	      - The decoded JWT token for the authenticated user.
+user	      - The currently logged in user
+form	      - The complete form JSON object
+submission	- The complete submission object.
+data	      - The complete submission data object.
+row	        - Contextual "row" data, used within DataGrid, EditGrid, and Container components
+component	  - The current component JSON
+instance	  - The current component instance.
+value	      - The current value of the component.
+moment	    - The moment.js library for date manipulation.
+_	          - An instance of Lodash.
+utils	      - An instance of the FormioUtils object.
+util	      - An alias for "utils".
 */
+
 var GET_CHEFS_SUBMISSION = "GET_CHEFS_SUBMISSION";
 var GET_CHEFS_BUNDLE = "GET_CHEFS_BUNDLE";
 var PUT_CHEFS_SUBMISSION = "PUT_CHEFS_SUBMISSION";
-// data.corsConfiguredOrigin value comes form "CORS Configured Origin" text field on chefs form
+// value comes form "CORS Configured Origin" text field on chefs form
 var cors_origin = data.corsConfiguredOrigin || "https://dev.roadsafetybc.gov.bc.ca";
 
 window.isSubmitted = window.isSubmitted || false;
 
 // Early return if form is already submitted
-if (window.isSubmitted) return;
+if (window.isSubmitted) {
+  console.warn("window has been already submitted.");
+  return;
+}
 
 if (!window || !window.parent || !window.parent.postMessage || !data) return;
 
 // Define a flag to track the event listener on the window object
 window.listenerAdded = window.listenerAdded || {};
 
+// return instanceId if already saved, otherwise get the instanceId from querystring and save it to this instance (window object)
 function getInstanceId() {
   if (window.instanceId) return window.instanceId;
   const currentUrl = window.location.href;
   const url = new URL(currentUrl);
   const params = new URLSearchParams(url.search);
   const instanceId = params.get("instanceId");
-  window.instanceId = instanceId;
+  if (instanceId) window.instanceId = instanceId;
   return instanceId;
 }
 
@@ -48,23 +53,24 @@ function addUniqueWindowEventListener(event, listener) {
     window.addEventListener(event, listener);
     window.listenerAdded[event] = true; // Update the flag for this event
   } else {
-    console.info(`[IFRAME] addUniqueWindowEventListener: listener for event: ${event} already added, do nothing.`);
+    console.warn(`[IFRAME] addUniqueWindowEventListener: listener for event: ${event} already added, do nothing.`);
   }
 }
 
-// Add the resize event listener to the window
+// Add message event listener to the window
 addUniqueWindowEventListener("message", (event) => {
-  console.info("[IFRAME] RX (from host): Iframe received message event:");
-  console.info(event);
-
-  if (event.origin !== "https://dev.roadsafetybc.gov.bc.ca" && event.origin !== "https://test.roadsafetybc.gov.bc.ca" && event.origin !== "https://roadsafetybc.gov.bc.ca")
-  {
-    console.warn(`[IFRAME] Ignore event from unrecognized origin: ${event.origin}`);
+  if (!event || !event.data) {
+    console.error("[IFRAME] Failed to parse event data payload");
     return;
   }
 
-  if (!event || !event.data) {
-    console.error("[IFRAME] Failed to parse event data payload");
+  console.info("[IFRAME] RX (from host): Iframe received message event:", event);
+
+  // NOTE comment this out for LOCAL chefs form which is only used for localhost testing
+  // This should be configurable or shared with the origin value
+  if (event.origin !== "https://dev.roadsafetybc.gov.bc.ca" && event.origin !== "https://test.roadsafetybc.gov.bc.ca" && event.origin !== "https://roadsafetybc.gov.bc.ca")
+  {
+    console.warn(`[IFRAME] Ignore event from unrecognized origin: ${event.origin}`);
     return;
   }
 
@@ -89,8 +95,7 @@ addUniqueWindowEventListener("message", (event) => {
       loadChefsBundleData(payload || {});
     }
   } catch (e) {
-    console.error("[IFRAME] Problem parsing event data JSON payload");
-    console.error(e);
+    console.error("[IFRAME] Problem parsing event data JSON payload", e);
     return;
   }
 });
