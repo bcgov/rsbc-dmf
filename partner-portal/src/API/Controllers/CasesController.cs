@@ -98,12 +98,24 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         {
             var result = new ViewModels.CaseDetail();
 
+
             var profile =  _userService.GetDriverInfo();
 
             var c = _cmsAdapterClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 result = _mapper.Map<ViewModels.CaseDetail>(c.Item);
+            }
+            else
+            {
+                if (c.ResultStatus == CaseManagement.Service.ResultStatus.Fail)
+                {
+                    return StatusCode((int)HttpStatusCode.InternalServerError, c.ErrorDetail);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.NotFound, "Most recent case not found.");
+                }
             }
 
             return Json(result);
