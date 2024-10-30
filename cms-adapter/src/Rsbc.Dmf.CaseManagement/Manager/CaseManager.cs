@@ -914,7 +914,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                var fetchedCase = dynamicsContext.incidents.Where(i => i.dfp_DriverId.dfp_driverid == driverId)
+                var fetchedCase = dynamicsContext.incidents.Where(i => i.dfp_DriverId.dfp_driverid == driverId && i.dfp_showonportals == true)
                     .OrderByDescending(x => x.createdon).FirstOrDefault();
 
                 if(fetchedCase != null)

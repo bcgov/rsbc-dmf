@@ -295,6 +295,7 @@ message CaseDetail {
     string middlename = 23;
     google.protobuf.Timestamp latestComplianceDate = 24;
     repeated MedicalConditionItem medicalConditions = 25;
+    bool ShowOnPortals = 26;
 }
 
 message CreateStatusReply {	

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Rsbc.Dmf.CaseManagement.Service;
 using Shouldly;
 using System;
 using System.Collections.Generic;
@@ -786,6 +787,16 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             var IdCode = _configuration["ICBC_TEST_IDCODE"];
             var c = await _caseManager.GetCaseByIdCode(IdCode);
             Assert.NotNull(c);
+        }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task GetMostRecentCase()
+        {
+            string driverId = _configuration["ICBC_TEST_DRIVERID"];
+            var response = _caseManager.GetMostRecentCaseDetail(Guid.Parse(driverId));
+
+            Assert.NotNull(response);
+
         }
     }
 }

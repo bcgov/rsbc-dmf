@@ -20,6 +20,7 @@ export interface CaseDetail {
   latestDecision?: string | null;
   openedDate?: string;
   outstandingDocuments?: number;
+  showOnPortals?: boolean;
   status?: string | null;
   title?: string | null;
 }
