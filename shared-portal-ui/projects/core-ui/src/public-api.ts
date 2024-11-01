@@ -39,6 +39,9 @@ export * from './lib/submission-requirements/submission-requirements.component'
 export * from './lib/get-assistance/get-assistance.component'
 export * from './lib/get-assistance/cancel-callback-dialog/cancel-callback-dialog.component'
 
+// Confirmation Dialog
+export * from './lib/confirmation-dialog/confirmation-dialog.component'
+
 //Enums
 export * from './lib/app.model'
 
