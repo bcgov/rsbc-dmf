@@ -1,0 +1,29 @@
+.title {
+  margin: 0;
+}
+
+.dialog-title{
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  border-bottom: solid 1px gray;
+}
+
+.dialog-content {
+  padding: 24px;
+}
+
+.mat-dialog-content {
+  padding: 24px 50px;
+}
+
+.action-buttons {
+  padding-top: 12px;
+  display: flex;
+  gap:12px;
+}
+
+::ng-deep .mat-dialog-container {
+  padding: 0;
+  overflow: hidden !important;
+}

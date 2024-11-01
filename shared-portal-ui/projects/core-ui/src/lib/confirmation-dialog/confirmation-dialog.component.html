@@ -1,6 +1,10 @@
-<h1 md-dialog-title>{{ title }}</h1>
-<div md-dialog-content>{{ confirmMessage }}</div>
-<div md-dialog-actions>
-  <button md-button (click)="dialogRef.close(true)" mat-flat-button class="primaryButton">Confirm</button>
-  <button md-button (click)="dialogRef.close(false)" class="btn btn-secondary">Cancel</button>
+<div mat-dialog-title class="dialog-title">
+  <h1 class="title">{{ title }}</h1>
+</div>
+<div class="dialog-content">
+  <div md-dialog-content>{{ confirmMessage }}</div>
+  <div class="action-buttons">
+    <button (click)="dialogRef.close(true)" mat-flat-button class="primaryButton">{{ confirmButtonText }}</button>
+    <button (click)="dialogRef.close(false)" mat-flat-button class="btn btn-secondary">{{ cancelButtonText }}</button>
+  </div>
 </div>
