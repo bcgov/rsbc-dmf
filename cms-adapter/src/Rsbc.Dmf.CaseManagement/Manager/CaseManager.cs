@@ -4308,18 +4308,13 @@ namespace Rsbc.Dmf.CaseManagement
         {
             
             // 04/25/2024 Removing the check for dfp_bpfstage is FET as this field is inconsistant and this check is being done on mercury end
+            // 11/04/2024 Updated query logic 
             var currentDate = DateTimeOffset.UtcNow;
 
-            var query = from incident
-                        in dynamicsContext.incidents
-                        where( incident.dfp_caseresolvedate != null
-                        && incident.dfp_caseresolvedate <= currentDate 
-                        && incident.statecode == 0 )
-                        || incident.dfp_immediateclosure == true
+         
+            var resolveCases = dynamicsContext.incidents.Where(x => (x.dfp_caseresolvedate != null && x.statecode == 0 && x.dfp_caseresolvedate <= currentDate) || x.dfp_immediateclosure == true).ToList() ;
 
-                        select incident;
-
-            DataServiceCollection<incident> resolveCases = new DataServiceCollection<incident>(query);
+            //DataServiceCollection<incident> resolveCases = new DataServiceCollection<incident>(query);
 
             List<Guid> ids = new List<Guid>();
             foreach (var item in resolveCases)
@@ -4336,18 +4331,19 @@ namespace Rsbc.Dmf.CaseManagement
                     incidentid = id,
                     dfp_resolvecase = true
                 };
+
                 dynamicsContext.AttachTo("incidents",changedIncident);
                 dynamicsContext.UpdateObject(changedIncident);
-            }
 
-            DataServiceResponse response = null;
-            try
-            {
-                response = dynamicsContext.SaveChanges(SaveChangesOptions.PostOnlySetProperties);                
-            }
-            catch (Exception ex)
-            {
-                Serilog.Log.Error(ex, $"CMS.CaseManager ResolveCaseStatusUpdates  ex.Message");
+                DataServiceResponse response = null;
+                try
+                {
+                    response = dynamicsContext.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Serilog.Log.Error(ex, $"CMS.CaseManager ResolveCaseStatusUpdates  ex.Message");
+                }
             }
             
             dynamicsContext.DetachAll();
