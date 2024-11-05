@@ -241,7 +241,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     else
                     {
 
-                        if (medicalDispositionValue != "P" || driverStatus != "DECEASED"
+                        if (medicalDispositionValue != "P" && driverStatus != "DECEASED"
                            // Add check driver already has a P in the driver history
                            )
                         {
@@ -326,7 +326,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     else
                     {
                         // check driver already has a J in the driver history
-                        if (medicalDispositionValue != "J" || driverStatus != "DECEASED")
+                        if (medicalDispositionValue != "J" && driverStatus != "DECEASED")
                         {
                             var newUpdate = new IcbcMedicalUpdate()
                             {
