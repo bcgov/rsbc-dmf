@@ -251,15 +251,20 @@
                     <input
                       matInput
                       name="phoneNumber"
-                      placeholder="Phone Number"
-                      type="number"
+                      placeholder="xxx-xxx-xxxx" 
+                      type="text"
                       [formControl]="callbackRequestForm.controls.phone"
                       id="phone-number"
+                      pattern="[0-9]"
+                      
                     />
                     @if (
-                      callbackRequestForm.controls.phone.getError("required")
+                      callbackRequestForm.controls.phone.hasError("required")
                     ) {
                       <mat-error>This Field is required</mat-error>
+                    }
+                    @if (callbackRequestForm.controls.phone.hasError("maxlength")) {
+                      <mat-error>Phone number cannot exceed 10 numbers</mat-error>
                     }
                   </mat-form-field>
                 </div>
@@ -366,10 +371,10 @@
                 <div>
                   <label>Call Status</label>
                   <div>
-                    <b>{{CallStatusDescription.get(callback.callStatus)}}</b>
+                    <b>{{callback.callStatus}}</b>
                   </div>
                 </div>
-                <div *ngIf="callback.callStatus === 0">
+                <div *ngIf="callback.callStatus === 'Open'">
                   <div>
                     <button
                       mat-flat-button

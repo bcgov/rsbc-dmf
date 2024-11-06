@@ -87,7 +87,7 @@ export class SharedGetAssistanceComponent implements OnInit {
     caseId: [''],
     description: [''],
     subject: ['', Validators.required],
-    phone: ['', Validators.required],
+    phone: ['', Validators.compose([Validators.required, Validators.maxLength(10),])],
     preferredTime: ['0'],
   });
 
@@ -118,7 +118,7 @@ export class SharedGetAssistanceComponent implements OnInit {
   showCallBack = false;
 
   showOpenCallbackMessagePredicate = (r: Callback) =>
-    r.callStatus === CallStatus.$0;
+    r.callStatus === CallStatus.Open;
 
   selectedValue?: string | undefined | null;
 
@@ -146,7 +146,7 @@ export class SharedGetAssistanceComponent implements OnInit {
           this.pageSize
         );
         this.disableCallBack = !!callBacks.find(
-          (y: any) => CallStatusDescription.get(y.callStatus) == 'Open'
+          (y: any) => y.callStatus == 'Open'
         );
       });
   }
@@ -164,7 +164,7 @@ export class SharedGetAssistanceComponent implements OnInit {
 
     const callback: any = {
       phone: String(this.callbackRequestForm.value.phone),
-      //preferredTime: this.callbackRequestForm.value.preferredTime as PreferredTime,
+      preferredTime: this.callbackRequestForm.value.preferredTime as PreferredTime,
       subject: this.callBackTopics.find(
         (x) => x.value == this.callbackRequestForm.value.subject,
       )?.viewValue,
