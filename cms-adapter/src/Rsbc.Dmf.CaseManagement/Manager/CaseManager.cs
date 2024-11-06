@@ -4312,9 +4312,9 @@ namespace Rsbc.Dmf.CaseManagement
             var currentDate = DateTimeOffset.UtcNow;
 
          
-            var resolveCases = dynamicsContext.incidents.Where(x => (x.dfp_caseresolvedate != null && x.statecode == 0 && x.dfp_caseresolvedate <= currentDate) || x.dfp_immediateclosure == true).ToList() ;
-
-            //DataServiceCollection<incident> resolveCases = new DataServiceCollection<incident>(query);
+            var resolveCases = dynamicsContext.incidents.
+                Where(x => x.statecode == 0  && (x.dfp_caseresolvedate <= currentDate || x.dfp_immediateclosure == true))
+                .ToList() ;
 
             List<Guid> ids = new List<Guid>();
             foreach (var item in resolveCases)
@@ -4329,10 +4329,10 @@ namespace Rsbc.Dmf.CaseManagement
                 var changedIncident = new incident
                 {
                     incidentid = id,
-                    dfp_resolvecase = true
                 };
 
                 dynamicsContext.AttachTo("incidents",changedIncident);
+                changedIncident.dfp_resolvecase = true;
                 dynamicsContext.UpdateObject(changedIncident);
 
                 DataServiceResponse response = null;
