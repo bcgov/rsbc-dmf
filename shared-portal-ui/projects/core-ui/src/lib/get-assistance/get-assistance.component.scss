@@ -153,6 +153,10 @@ button:hover {
   width: 50px;
 }
 
+.open .expandedIcon {
+  transform: rotate(180deg) scale(1.5);
+}
+
 .open {
   background-color: #f1f1f3;
   border: 1px solid #003366;
