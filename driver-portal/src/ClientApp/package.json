@@ -13,7 +13,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "gen:api": "ng-openapi-gen -i http://localhost:8080/swagger/v1/swagger.json -o ./src/app/shared/api --ignoreUnusedModels true"
+    "gen-api": "ng-openapi-gen -i http://localhost:8080/swagger/v1/swagger.json -o ./src/app/shared/api --ignoreUnusedModels true"
   },
   "private": true,
   "dependencies": {
