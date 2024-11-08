@@ -137,7 +137,6 @@ export class DashboardComponent {
   }
 
   clear() {
-    console.log('clear');
     this.searchCasesInput = '';
     this.selectedStatus = 'All Status';
     this.filterCasesData();

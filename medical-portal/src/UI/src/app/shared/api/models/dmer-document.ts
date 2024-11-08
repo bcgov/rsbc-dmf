@@ -10,5 +10,6 @@ export interface DmerDocument {
   dueDate?: string | null;
   fullName?: string | null;
   idCode?: string | null;
+  loggedInUserName?: string | null;
   loginId?: string | null;
 }

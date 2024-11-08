@@ -55,7 +55,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             {
                 var profile = await _userService.GetCurrentUserContext();
                 var loginIds = profile.LoginIds;
-
+                var loggedInUserName = $"{profile.FirstName} {profile.LastName}";
+                
                 // add login ids of users in your network
                 var networkLoginIds = profile.Endorsements.Select(x => x.LoginId.ToString()).ToList();
                 loginIds.AddRange(networkLoginIds);
@@ -66,13 +67,14 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
                 {
                     var caseDocuments = _mapper.Map<IEnumerable<DmerDocument>>(reply.Items);
-
                     // Go through the list and map the DMER status
 
                     foreach( var caseDocument in caseDocuments )
                     {
+                      
                         caseDocument.DmerStatus = DmerUtilities.TranslateDmerStatus(caseDocument.DmerStatus, caseDocument.LoginId);
-
+                        caseDocument.LoggedInUserName = loggedInUserName;
+                      
                     }
                     return Ok(caseDocuments);
                 }
