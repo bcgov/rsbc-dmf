@@ -37,7 +37,10 @@ namespace RSBC.DMF.MedicalPortal.API
                 .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.Status))
                 .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.DocumentId))
                 .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn))
-                .ForMember(dest => dest.LoginId, opt => opt.MapFrom(src => src.Provider.Id));
+                .ForMember(dest => dest.LoginId, opt => opt.MapFrom(src => src.Provider.Id))
+                .ForMember(dest => dest.LoggedInUserName, opt => opt.MapFrom(src => src.Provider.Name));
+
+
 
             CreateMap<Document, ViewModels.DmerDocument>()
                 .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.DocumentId))
@@ -47,7 +50,9 @@ namespace RSBC.DMF.MedicalPortal.API
                 .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.Case.Person.Birthday))
                 .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.ComplianceDate))
                 .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.DmerStatus))
-                .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.Case.DmerType));
+                .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.Case.DmerType))
+                .ForMember(dest => dest.LoggedInUserName, opt => opt.MapFrom(src => src.Provider.Name));
+              
 
             CreateMap<EndorsementDto, Endorsement>();
             CreateMap<PidpAdapter.Licence, ViewModels.Licence>();
