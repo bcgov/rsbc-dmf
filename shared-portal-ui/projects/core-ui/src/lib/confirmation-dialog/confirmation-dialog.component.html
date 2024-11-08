@@ -1,10 +1,13 @@
 <div mat-dialog-title class="dialog-title">
-  <h1 class="title">{{ title }}</h1>
+  <h1>{{ title }}</h1>
+  <!-- <button mat-icon-button aria-label="Close" mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button> -->
 </div>
 <div class="dialog-content">
   <div md-dialog-content>{{ confirmMessage }}</div>
   <div class="action-buttons">
     <button (click)="dialogRef.close(true)" mat-flat-button class="primaryButton">{{ confirmButtonText }}</button>
-    <button (click)="dialogRef.close(false)" mat-flat-button class="btn btn-secondary">{{ cancelButtonText }}</button>
+    <button (click)="dialogRef.close(false)" mat-flat-button class="cancelButton">{{ cancelButtonText }}</button>
   </div>
 </div>

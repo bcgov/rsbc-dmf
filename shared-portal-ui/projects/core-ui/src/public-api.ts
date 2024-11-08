@@ -1,5 +1,3 @@
-import { from } from 'rxjs'
-
 // Layout
 export *from './lib/layout/header/header.component'
 export *from './lib/layout/footer/footer.component'
@@ -41,6 +39,7 @@ export * from './lib/get-assistance/cancel-callback-dialog/cancel-callback-dialo
 
 // Confirmation Dialog
 export * from './lib/confirmation-dialog/confirmation-dialog.component'
+export * from './lib/confirmation-dialog/confirmation-dialog.service'
 
 //Enums
 export * from './lib/app.model'
