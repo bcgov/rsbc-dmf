@@ -15,11 +15,5 @@ export class ConfirmationDialogComponent {
   public confirmButtonText: string = 'Ok';
   public cancelButtonText: string = 'Cancel';
 
-  constructor(
-    //@Inject(MAT_DIALOG_DATA) public data: { caseId: string, documentId: string },
-    public dialogRef: MatDialogRef<ConfirmationDialogComponent>
-  ) {
-      //this.caseId = data.caseId;
-      //this.documentId = data.documentId;
-  }
+  constructor(public dialogRef: MatDialogRef<ConfirmationDialogComponent>) { }
 }
