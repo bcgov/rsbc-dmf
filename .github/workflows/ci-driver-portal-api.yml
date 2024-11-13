@@ -4,12 +4,12 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - 'driver-portal/src/**'
+      - 'driver-portal/src/API/**'
       - '.github/workflows/ci-driver-portal-api.yml'
 
 env:
   working-directory: ./
-  solution-folder: driver-portal/src/  
+  solution-folder: driver-portal/src/API/  
   IMAGE_NAME: driver-portal-api
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
   RUN_NUMBER: ${{ github.run_number }}
@@ -78,4 +78,4 @@ jobs:
         run: |
           echo BUILD_ID=$BUILD_ID
           echo "BUILD VERSION=$BUILD_PREFIX`expr $RUN_NUMBER % 256`"                 
-          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./driver-portal/src/Dockerfile --tag $IMAGE_NAME
+          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./driver-portal/src/API/Dockerfile --tag $IMAGE_NAME

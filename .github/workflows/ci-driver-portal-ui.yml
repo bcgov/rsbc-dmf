@@ -4,13 +4,13 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - "driver-portal/src/ClientApp/**"
+      - "driver-portal/src/UI/**"
       - ".github/workflows/ci-driver-portal-ui.yml"
 
 env:
   IMAGE_NAME: driver-portal-ui
   working-directory: ./
-  solution-folder: driver-portal/src/ClientApp/
+  solution-folder: driver-portal/src/UI/
   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 jobs:

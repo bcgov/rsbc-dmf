@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'driver-portal/src/ClientApp/**'
+      - 'driver-portal/src/UI/**'
       - '.github/workflows/cd-driver-portal-ui.yml'
 env:
   IMAGE_NAME: driver-portal-ui
@@ -32,7 +32,7 @@ jobs:
 
       - name: Build image
         working-directory: ./
-        run: docker build . --file ./driver-portal/src/ClientApp/Dockerfile --tag $IMAGE_NAME 
+        run: docker build . --file ./driver-portal/src/UI/Dockerfile --tag $IMAGE_NAME 
         # --cache-from=$IMAGE_ID
 
       - name: Push image

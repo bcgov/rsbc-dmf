@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'driver-portal/src/**'
+      - 'driver-portal/src/API/**'
       - '.github/workflows/cd-driver-portal-api-artifactory.yml'
 
 env:
@@ -32,7 +32,7 @@ jobs:
         run: |
           echo "BUILD ID=$BUILD_ID"   
           echo "BUILD VERSION=$BUILD_PREFIX`expr $RUN_NUMBER % 256`"     
-          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./driver-portal/src/Dockerfile --cache-from=$IMAGE_ID       
+          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./driver-portal/src/API/Dockerfile --cache-from=$IMAGE_ID       
 
       - name: Push image
         run: |
