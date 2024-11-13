@@ -68,9 +68,9 @@ addUniqueWindowEventListener("message", (event) => {
 
   // NOTE comment this out for LOCAL chefs form which is only used for localhost testing
   // This should be configurable or shared with the origin value
-  if (event.origin !== "https://dev.roadsafetybc.gov.bc.ca" && event.origin !== "https://test.roadsafetybc.gov.bc.ca" && event.origin !== "https://roadsafetybc.gov.bc.ca")
+  if (event.origin !== cors_origin)
   {
-    console.warn(`[IFRAME] Ignore event from unrecognized origin: ${event.origin}`);
+    console.error(`[IFRAME] Ignore event from unrecognized origin: ${event.origin}`);
     return;
   }
 
