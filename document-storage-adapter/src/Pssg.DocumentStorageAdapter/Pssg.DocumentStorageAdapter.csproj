@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.0" />
-    <PackageReference Include="Google.Protobuf" Version="3.25.2" /> 
+    <PackageReference Include="Google.Protobuf" Version="3.27.0" /> 
     <PackageReference Include="Grpc.AspNetCore" Version="2.60.0" /> 
     <PackageReference Include="PdfSharpCore" Version="1.3.63" />
     <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\driver-portal\src\API\driver-portal.csproj" />
     <ProjectReference Include="..\Pssg.Interfaces.S3\S3.csproj" />
   </ItemGroup>
 
