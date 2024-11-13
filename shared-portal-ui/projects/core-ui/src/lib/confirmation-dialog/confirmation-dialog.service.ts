@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Observable, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 
 @Injectable({
@@ -11,7 +11,7 @@ export class ConfirmationDialogService {
 
   constructor(private dialog: MatDialog) {}
 
-  openDialog(width: string = '350px', height: string = '220px', confirmMessage: string = 'Are you sure?', confirmButtonText: string = 'Ok', cancelButtonText: string = 'Cancel'): Observable<any> {
+  openDialog(width: string = '350px', height: string = '220px', confirmMessage: string = 'Are you sure?', confirmButtonText: string = 'Ok', cancelButtonText: string = 'Cancel'): Observable<boolean> {
     this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: width,
       height: height
@@ -20,7 +20,7 @@ export class ConfirmationDialogService {
     this.dialogRef.componentInstance.confirmButtonText = confirmButtonText;
     this.dialogRef.componentInstance.cancelButtonText = cancelButtonText;
 
-    return this.dialogRef.afterClosed();
+    return this.dialogRef.afterClosed().pipe(map((result) => result as boolean));
   }
 
   closePopup() {

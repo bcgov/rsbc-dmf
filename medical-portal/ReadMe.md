@@ -44,6 +44,7 @@ docker run --expose 5000 -p 5000:8080 --rm --name medical-portal-api medical-por
 ## RUN
 Run solution "\medical-portal.sln" to run all projects needed for medical portal or run individual projects as needed
 To run the frontend, cd to folder /medical-portal/src/UI and run `npm run start`
+To login, use a PIDP0000X user. DMFT0000X users will work but are less likely to have valid Dynamics data for testing.
 
 You will need to add the following in VS "Configure Startup Projects...":
 - Rsbc.Dmf.CaseManagement.Service
@@ -135,12 +136,19 @@ OneHealth is not always responsive when it comes to support. Normally the order 
 5. Click on the "DMER" document, a dropdown appears on the "Active Documents" panel, select a "Open-Required"
 
 ### How to update chefs form scripts
-Contact Shiv for admin access to chefs (MacFarlane, Shiv PSSG:EX)[<Shiv.MacFarlane@gov.bc.ca>]
-1. In source control, update the files assets/chefs, to keep track of changes
+### How to update the chefs initChefsForm.js script
+You may need admin access.
+1. In source control, update the files assets/initChefsForm.js, to keep track of changes
 2. Login to chefs, and select the eDMER form
 3. Near the top of the form, there is a transparent control called "initChefsForm", edit the control
 4. Click on the "Data" tab and expand the "Calculated Value" panel
 5. Edit the "Javascript" textarea. You can copy the initChefsForm.js script and paste here.
+### How to update the chefs submitButton.js script
+1. In source control, update the files assets/submitButton.js, to keep track of changes
+2. Login to chefs, and select the eDMER form
+3. At the bottom of the page, put your cursor over the "SUBMIT" button, and click the "Edit" tooltip menu option 
+4. Copy the javascript code from submitButton.js and paste in the textarea
+5. Click on the save button
 
 ### How to update the chefs origin for each environment
 1. Login to chefs, and select the eDMER form
