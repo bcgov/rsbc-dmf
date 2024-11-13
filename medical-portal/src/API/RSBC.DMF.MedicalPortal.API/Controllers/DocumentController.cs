@@ -57,8 +57,11 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var loginIds = profile.LoginIds;
 
                 // add login ids of users in your network
-                var networkLoginIds = profile.Endorsements.Select(x => x.LoginId.ToString()).ToList();
-                loginIds.AddRange(networkLoginIds);
+                if (profile.Endorsements != null && profile.Endorsements.Any())
+                {
+                    var networkLoginIds = profile.Endorsements.Select(x => x.LoginId.ToString()).ToList();
+                    loginIds.AddRange(networkLoginIds);
+                }
 
                 var dmerDocumentTypeCode = _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] ?? "001";                
                 var request = new GetDocumentsByTypeForUsersRequest { DocumentTypeCode = dmerDocumentTypeCode, LoginIds = { loginIds } };
