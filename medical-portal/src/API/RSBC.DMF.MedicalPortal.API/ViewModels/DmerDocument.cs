@@ -19,5 +19,8 @@
         public DateTimeOffset? DueDate { get; set; }
 
         public DateTimeOffset? BirthDate { get; set; }
+
+        public string LoggedInUserName { get; set; }
+       
     }
 }

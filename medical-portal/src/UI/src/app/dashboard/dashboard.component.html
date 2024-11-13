@@ -300,7 +300,11 @@
                   <label>DMER Status</label>
                   <div>
                     @if (dmer && dmer.dmerStatus) {
-                      <b> {{ dmer.dmerStatus }}</b>
+                      <b> {{ dmer.dmerStatus }}  </b>
+                      @if(profile?.loginId === dmer.loginId) {
+                       <b>- {{dmer.loggedInUserName}}</b> 
+                      }
+                        
                     } @else {
                       {{ " " }}
                     }
