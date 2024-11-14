@@ -4,8 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.config.js --port 5200",
+    "start:prod": "ng serve --configuration production --proxy-config proxy.config.js --port 5200",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "build:all": "npm run ng build --prefix ../../../shared-portal-ui && ng build",
     "test": "ng test",
     "prestart": "node aspnetcore-https",
     "gen-api": "ng-openapi-gen -i http://localhost:8080/swagger/v1/swagger.json -o ./src/app/shared/api --ignoreUnusedModels true"
