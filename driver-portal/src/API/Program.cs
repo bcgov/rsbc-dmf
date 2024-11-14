@@ -111,11 +111,6 @@ services.AddAuthorization(options =>
         .RequireAuthenticatedUser()
         .Build();
 
-    //options.AddPolicy(Policy.Driver, new DriverPolicyFactory().Create());
-
-    //options..DefaultScheme = "introspection";
-    //options.DefaultChallengeScheme = "introspection";
-
 });
 
 services.AddCors();
