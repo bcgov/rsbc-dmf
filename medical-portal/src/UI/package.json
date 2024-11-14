@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.js --port 4200",
     "build": "ng build",
+    "build:all": "npm run ng build --prefix ../../../shared-portal-ui && ng build",
     "watch": "ng build --watch --configuration development",
     "build:all": "npm run ng build --prefix ../../../shared-portal-ui && ng build",
     "test": "ng test",

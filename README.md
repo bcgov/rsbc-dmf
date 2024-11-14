@@ -143,4 +143,11 @@ Maintenance
 
 This repository is maintained by [BC Attorney General]( https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/justice-attorney-general ).
 
+Portal Solutions
+----------------
 
+There are solution files for each portal in the root folder. These solutions will run everything needed for the portal to run.
+
+If you encounter an error like the following:
+1>CSC : error CS0006: Metadata file '...\rsbc-dmf\icbc-adapter\src\Pssg.Interfaces.Icbc\obj\Debug\net8.0\ref\IcbcClient.dll' could not be found
+Open the ICBC solution and build the solution. Alternatively, you could add the dependent projects to this solution

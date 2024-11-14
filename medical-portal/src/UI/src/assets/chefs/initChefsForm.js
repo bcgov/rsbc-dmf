@@ -67,8 +67,7 @@ addUniqueWindowEventListener("message", (event) => {
   console.info("[IFRAME] RX (from host): Iframe received message event:", event);
 
   // NOTE comment this out for LOCAL chefs form which is only used for localhost testing
-  // This should be configurable or shared with the origin value
-  if (event.origin !== "https://dev.roadsafetybc.gov.bc.ca" && event.origin !== "https://test.roadsafetybc.gov.bc.ca" && event.origin !== "https://roadsafetybc.gov.bc.ca")
+  if (event.origin !== cors_origin)
   {
     console.warn(`[IFRAME] Ignore event from unrecognized origin: ${event.origin}`);
     return;
@@ -297,6 +296,11 @@ function getCaseFlags() {
 }
 
 function getPriority() {
+  if (window.isSubmitted) {
+    console.warn("window has been already submitted.");
+    return;
+  }
+
   const flattenedComponents = getFlattenedComponents();
 
   // get all components that contain a property called 'flagformid' which is only used by case flags
@@ -328,9 +332,8 @@ function getPriority() {
     selectedPrioritiesComponents.length === 0 ||
     selectedPrioritiesComponents.length > 1
   ) {
-    console.error("[IFRAME] getPriority: Found zero or more than one component with priority attribute, failed to determine correct value");
-    console.error("priorityComponents", priorityComponents);
-    console.error("selectedPrioritiesComponents", selectedPrioritiesComponents);
+    console.error("[IFRAME] getPriority: Found zero or more than one component with priority attribute, failed to determine correct value", priorityComponents);
+    console.error("[IFRAME] selectedPrioritiesComponents", selectedPrioritiesComponents);
     return "";
   }
 
