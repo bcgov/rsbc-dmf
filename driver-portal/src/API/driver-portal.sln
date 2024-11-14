@@ -3,25 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter.Client", "..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj", "{EB3D94BE-AC5D-4316-A604-5D45AFBF22D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter.Client", "..\..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj", "{EB3D94BE-AC5D-4316-A604-5D45AFBF22D2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter.Moq", "..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Moq\Pssg.DocumentStorageAdapter.Moq.csproj", "{2BC79C2F-52EF-4EAA-B166-A09BDFC13513}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter.Moq", "..\..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Moq\Pssg.DocumentStorageAdapter.Moq.csproj", "{2BC79C2F-52EF-4EAA-B166-A09BDFC13513}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{12418AB0-4406-4AEB-9376-0DBCA8970CBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{12418AB0-4406-4AEB-9376-0DBCA8970CBB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Moq", "..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Moq\Rsbc.Dmf.CaseManagement.Moq.csproj", "{77E2FD4A-7762-4A1F-B24E-B052B61350D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Moq", "..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Moq\Rsbc.Dmf.CaseManagement.Moq.csproj", "{77E2FD4A-7762-4A1F-B24E-B052B61350D6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "driver-portal", "driver-portal.csproj", "{48DE0C53-610C-456D-A2C1-6F774B4A7235}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.DriverPortal.Tests", "Tests\Rsbc.Dmf.DriverPortal.Tests.csproj", "{2E6D1328-ABE5-42AE-AFE1-37D09269F831}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0A09E19-A9EB-452F-AF34-3B65784FE118}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\.github\workflows\cd-driver-portal-ui.yml = ..\..\.github\workflows\cd-driver-portal-ui.yml
-		..\ReadMe.md = ..\ReadMe.md
-	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedUtils", "..\..\shared-utils\SharedUtils.csproj", "{EBF21CF9-7758-467A-A2BD-B044E804D106}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedUtils", "..\..\..\shared-utils\SharedUtils.csproj", "{EBF21CF9-7758-467A-A2BD-B044E804D106}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Dmf.IcbcAdapter.Client", "..\..\..\icbc-adapter\src\Pssg.Dmf.IcbcAdapter.Client\Pssg.Dmf.IcbcAdapter.Client.csproj", "{9AA53773-24FA-4595-A101-97903E6471F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,14 +45,14 @@ Global
 		{48DE0C53-610C-456D-A2C1-6F774B4A7235}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48DE0C53-610C-456D-A2C1-6F774B4A7235}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48DE0C53-610C-456D-A2C1-6F774B4A7235}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E6D1328-ABE5-42AE-AFE1-37D09269F831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E6D1328-ABE5-42AE-AFE1-37D09269F831}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E6D1328-ABE5-42AE-AFE1-37D09269F831}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E6D1328-ABE5-42AE-AFE1-37D09269F831}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EBF21CF9-7758-467A-A2BD-B044E804D106}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EBF21CF9-7758-467A-A2BD-B044E804D106}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBF21CF9-7758-467A-A2BD-B044E804D106}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBF21CF9-7758-467A-A2BD-B044E804D106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AA53773-24FA-4595-A101-97903E6471F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AA53773-24FA-4595-A101-97903E6471F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AA53773-24FA-4595-A101-97903E6471F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA53773-24FA-4595-A101-97903E6471F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

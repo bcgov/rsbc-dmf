@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Cli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Moq", "..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Moq\Rsbc.Dmf.CaseManagement.Moq.csproj", "{77E2FD4A-7762-4A1F-B24E-B052B61350D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "driver-portal", "src\driver-portal.csproj", "{48DE0C53-610C-456D-A2C1-6F774B4A7235}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "driver-portal", "src\API\driver-portal.csproj", "{48DE0C53-610C-456D-A2C1-6F774B4A7235}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.DriverPortal.Tests", "src\Tests\Rsbc.Dmf.DriverPortal.Tests.csproj", "{2E6D1328-ABE5-42AE-AFE1-37D09269F831}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.DriverPortal.Tests", "src\API\Rsbc.Dmf.DriverPortal.Api.Tests\Rsbc.Dmf.DriverPortal.Tests.csproj", "{2E6D1328-ABE5-42AE-AFE1-37D09269F831}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0A09E19-A9EB-452F-AF34-3B65784FE118}"
 	ProjectSection(SolutionItems) = preProject

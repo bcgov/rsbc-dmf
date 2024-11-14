@@ -17,7 +17,7 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ## Generate Api Services
 
-Change directory to /driver-portal/src/ClientApp
+Change directory to /driver-portal/src/UI
 Run driver-portal backend on default port 8080
 Run `npm run gen:api`
 
