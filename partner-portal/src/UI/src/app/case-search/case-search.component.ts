@@ -13,6 +13,7 @@ import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.compo
 import { CommentsComponent } from '@app/comments/comments.component';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { ApiConfiguration } from '@app/shared/api/api-configuration';
 
 @Component({
   selector: 'app-case-search',
@@ -51,6 +52,7 @@ export class CaseSearchComponent implements OnInit{
   constructor(
 
     public caseManagementService: CaseManagementService,
+    public apiConfiguration: ApiConfiguration,
   ) {}
     
   ngOnInit(): void {

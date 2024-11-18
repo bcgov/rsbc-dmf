@@ -87,8 +87,8 @@ export class SharedGetAssistanceComponent implements OnInit {
     caseId: [''],
     description: [''],
     subject: ['', Validators.required],
-    phone: ['', Validators.compose([Validators.required, Validators.maxLength(10),])],
-    preferredTime: ['0'],
+    phone: ['', Validators.compose([Validators.required, Validators.maxLength(10)])],
+    preferredTime: [0],
   });
 
   isExpanded: Record<string, boolean> = {};
@@ -164,7 +164,7 @@ export class SharedGetAssistanceComponent implements OnInit {
 
     const callback: any = {
       phone: String(this.callbackRequestForm.value.phone),
-      preferredTime: this.callbackRequestForm.value.preferredTime as PreferredTime,
+      preferredTime: Number(this.callbackRequestForm.value.preferredTime),
       subject: this.callBackTopics.find(
         (x) => x.value == this.callbackRequestForm.value.subject,
       )?.viewValue,
