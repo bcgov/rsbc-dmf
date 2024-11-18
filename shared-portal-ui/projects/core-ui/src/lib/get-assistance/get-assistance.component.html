@@ -272,7 +272,7 @@
                     <input
                       name="callback_request"
                       type="radio"
-                      value="Anytime"
+                      [value]="0"
                       [formControl]="callbackRequestForm.controls.preferredTime"
                     />9:00am - 4:00pm
                   </label>
@@ -280,7 +280,7 @@
                     <input
                       name="callback_request"
                       type="radio"
-                      value="Morning"
+                      [value]="1"
                       [formControl]="callbackRequestForm.controls.preferredTime"
                     />9:00am and 12:00pm
                   </label>
@@ -288,7 +288,7 @@
                     <input
                       name="callback_request"
                       type="radio"
-                      value="Evening"
+                      [value]="2"
                       [formControl]="callbackRequestForm.controls.preferredTime"
                     />12:01pm - 4:00pm
                   </label>
