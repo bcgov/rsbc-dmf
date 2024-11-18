@@ -30,7 +30,7 @@ import { DmerTypeComponent } from '../case-definitions/dmer-type/dmer-type.compo
 import {SubmissionStatusComponent} from '../case-definitions/submission-status/submission-status.component';
 import {SubmissionTypeComponent} from '../case-definitions/submission-type/submission-type.component';
 import {SharedQuickLinksComponent} from '../quick-links/quick-links.component'
-import { SubmittalStatusEnum,PortalsEnum } from '../app.model';
+import { SubmittalStatusEnum,PortalsEnum, PortalUrlEnum } from '../app.model';
 
 @Component({
     selector: 'app-shared-submission-requirements',
@@ -73,13 +73,14 @@ export class SharedSubmissionRequirementsComponent implements OnInit {
   @Output() viewLetter = new EventEmitter<string>();
   PortalsEnum = PortalsEnum;
 
+
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;
   documentSubTypes?: DocumentSubType[];
   //selectedValue = '';
   acceptControl = new FormControl(false);
   @Input() isLoading = true;
-
+  @Input() apiConfig!: ApiConfiguration;
   @Input() caseManagementService: any;
   @Input()  portal!: PortalsEnum;
 
@@ -87,7 +88,6 @@ export class SharedSubmissionRequirementsComponent implements OnInit {
     private _http: HttpClient,
     private _snackBar: MatSnackBar,
     public dialog: MatDialog,
-    private apiConfig: ApiConfiguration,
     private fb: FormBuilder
   ) {}
 
@@ -159,6 +159,7 @@ export class SharedSubmissionRequirementsComponent implements OnInit {
     formData.append('file', this.fileToUpload as File);
     formData.append('documentSubTypeId', this.uploadForm.controls.documentSubType.value as any);
     this.isFileUploading = true;
+
     this._http
       .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {
         headers: {

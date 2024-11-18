@@ -24,3 +24,9 @@ export const CallStatusDescription = new Map<number | undefined, string>([
   [0, 'Open'],
   [1, 'Closed']
 ])
+
+export enum PortalUrlEnum {
+  'DriverPortal' = '/driver-portal',
+  'MedicalPortal' = '/medical-portal',
+  'PartnerPortal' = '/partner-portal'
+}
