@@ -87,7 +87,7 @@ export class SharedGetAssistanceComponent implements OnInit {
     caseId: [''],
     description: [''],
     subject: ['', Validators.required],
-    phone: ['', Validators.compose([Validators.required, Validators.maxLength(10),])],
+    phone: ['', Validators.compose([Validators.required, Validators.maxLength(10)])],
     preferredTime: ['0'],
   });
 

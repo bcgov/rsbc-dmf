@@ -255,8 +255,6 @@
                       type="text"
                       [formControl]="callbackRequestForm.controls.phone"
                       id="phone-number"
-                      pattern="[0-9]"
-                      
                     />
                     @if (
                       callbackRequestForm.controls.phone.hasError("required")
@@ -274,7 +272,7 @@
                     <input
                       name="callback_request"
                       type="radio"
-                      value="0"
+                      value="Anytime"
                       [formControl]="callbackRequestForm.controls.preferredTime"
                     />9:00am - 4:00pm
                   </label>
@@ -282,7 +280,7 @@
                     <input
                       name="callback_request"
                       type="radio"
-                      value="1"
+                      value="Morning"
                       [formControl]="callbackRequestForm.controls.preferredTime"
                     />9:00am and 12:00pm
                   </label>
@@ -290,7 +288,7 @@
                     <input
                       name="callback_request"
                       type="radio"
-                      value="2"
+                      value="Evening"
                       [formControl]="callbackRequestForm.controls.preferredTime"
                     />12:01pm - 4:00pm
                   </label>
