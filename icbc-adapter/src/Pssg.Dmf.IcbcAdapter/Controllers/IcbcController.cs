@@ -272,6 +272,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
                 _logger.LogInformation($"Received Candidate {item.DlNumber}");
 
+                  // Added time delay to allow the dynamics some time to create the cases and workflows
+                  await Task.Delay(2000);
+
             }
 
             });
