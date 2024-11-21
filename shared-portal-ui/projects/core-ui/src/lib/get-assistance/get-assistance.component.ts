@@ -154,6 +154,7 @@ export class SharedGetAssistanceComponent implements OnInit {
   isCreatingCallBack = false;
 
   createCallBack() {
+    console.log("phone",  this.callbackRequestForm.controls.phone.errors);
     if (this.callbackRequestForm.invalid) {
       this.callbackRequestForm.markAllAsTouched();
       return;
@@ -161,8 +162,8 @@ export class SharedGetAssistanceComponent implements OnInit {
     if (this.isCreatingCallBack) {
       return;
     }
-
     const callback: any = {
+
       phone: String(this.callbackRequestForm.value.phone),
       preferredTime: Number(this.callbackRequestForm.value.preferredTime),
       subject: this.callBackTopics.find(
