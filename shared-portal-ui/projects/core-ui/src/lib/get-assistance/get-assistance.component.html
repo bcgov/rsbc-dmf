@@ -35,11 +35,11 @@
       <div class="help">
         <div class="help-topics" cdkMenu>
           <button
-            class="help-topics-item"
+            class="getAssistanceButton"
             (click)="recommendedTopics()"
             cdkMenuItem
           >
-            <b>Recommended topics</b>
+            <b>Get Assistance</b>
           </button>
          
         </div>
@@ -198,10 +198,11 @@
             </button>
             <button
               class="callBackButton"
-              (click)="viewRequest($event, 'callBack')"
+              (click)="viewRequest($event, 'contact')"
             >
               Contact RSBC
             </button>
+           
           </div>
           <div style="padding: 24px" *ngIf="showCallBack">
             <h3>Request Call Back</h3>
@@ -297,18 +298,21 @@
         </div>
       }
     </div>
-    <div style="padding-top: 32px">
-      <h2>Contact RoadSafetyBC</h2>
-      <p>
-        If the topics above don't give you the answer you're looking for, you
-        can call a client service representative at RSBC. <br />
-        <br />
-        <b>Hours of operation</b>: Monday to Friday from 9am to 4pm <br />
-
-        <b>Phone</b>: 1-855-387-7747 <br />
-        <b>Greater Victoria</b> : 250-387-7747
-      </p>
+    <div id="contact">
+      <div style="padding-top: 150px" >
+        <h2>Contact RoadSafetyBC</h2>
+        <p>
+          If the topics above don't give you the answer you're looking for, you
+          can call a client service representative at RSBC. <br />
+          <br />
+          <b>Hours of operation</b>: Monday to Friday from 9am to 4pm <br />
+  
+          <b>Phone</b>: 1-855-387-7747 <br />
+          <b>Greater Victoria</b> : 250-387-7747
+        </p>
+      </div>
     </div>
+   
     <div style="padding-top: 32px" id="callBack">
       <h2>Request Call Back History</h2>
       <p>
