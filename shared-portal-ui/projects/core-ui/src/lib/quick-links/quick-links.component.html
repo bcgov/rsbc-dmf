@@ -2,9 +2,14 @@
   <div class="text">
     Quick Links
     <ul>
+      @if(portal === PortalsEnum.DriverPortal){
+        <li><a routerLink="/definitions">Definitions</a></li>
+      }
+      @if(portal === PortalsEnum.MedicalPortal || portal === PortalsEnum.PartnerPortal){
       <li>
         <a href="#" (click)="onClick($event, 'definitions')"> Definitions </a>
       </li>
+    }
       
       @if(portal === PortalsEnum.DriverPortal){
         <li><a routerLink="/getAssistance">Get Assistance</a></li>

@@ -12,7 +12,6 @@
 
   <div class="list">
     <h2>Closed Cases</h2>
-
     <div>
       <mat-card
         *ngFor="let closedCase of closedCaseDetails"
@@ -105,66 +104,5 @@
   >
     Showing {{ closedCaseDetails.length }} of
     {{ closedCaseDetails.length }} records
-  </div>
-
-  <div class="list" id="definitions">
-    <h2>Definitions</h2>
-    <div class="accordion-btn-container">
-      <a class="accordion-btn show-btn" (click)="accordion.openAll()"
-        >Expand All</a
-      >
-      <span class="accordion-bar">&nbsp;|&nbsp;</span>
-      <a class="accordion-btn hide-btn" (click)="accordion.closeAll()"
-        >Collapse All</a
-      >
-    </div>
-    <div style="padding-bottom: 30px">
-      <mat-accordion multi>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Case Type
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-case-type></app-case-type>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Case Status
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-case-status></app-case-status>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              DMER Type
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-dmer-type></app-dmer-type>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Decision outcome
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-
-          <app-decision-outcome></app-decision-outcome>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Eligible License Class
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-eligible-license-class></app-eligible-license-class>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
   </div>
 </div>

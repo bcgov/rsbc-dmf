@@ -23,14 +23,8 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
-import { CaseStatusComponent } from '../case-definitions/case-status/case-status.component';
-import { CaseTypeComponent } from '../case-definitions/case-type/case-type.component';
-import { DecisionOutcomeComponent } from '../case-definitions/decision-outcome/decision-outcome.component';
-import { DmerTypeComponent } from '../case-definitions/dmer-type/dmer-type.component';
-import {SubmissionStatusComponent} from '../case-definitions/submission-status/submission-status.component';
-import {SubmissionTypeComponent} from '../case-definitions/submission-type/submission-type.component';
 import {SharedQuickLinksComponent} from '../quick-links/quick-links.component'
-import { SubmittalStatusEnum,PortalsEnum, PortalUrlEnum } from '../app.model';
+import { SubmittalStatusEnum,PortalsEnum } from '../app.model';
 
 @Component({
     selector: 'app-shared-submission-requirements',
@@ -57,12 +51,6 @@ import { SubmittalStatusEnum,PortalsEnum, PortalUrlEnum } from '../app.model';
         MatExpansionPanel,
         MatExpansionPanelHeader,
         MatExpansionPanelTitle,
-        CaseTypeComponent,
-        CaseStatusComponent,
-        DmerTypeComponent,
-        DecisionOutcomeComponent,
-        SubmissionTypeComponent,
-        SubmissionStatusComponent,
         DatePipe,
         SharedQuickLinksComponent
     ],
