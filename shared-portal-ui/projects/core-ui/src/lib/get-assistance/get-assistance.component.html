@@ -7,8 +7,7 @@
           To get answers to your questions, you can look through our Help Topics
           below. If you need further help, you can ask for a call back from a
           Client Services representative at RSBC. There is a maximum of 1 open
-          call back request at any time. This is the best way to get support
-          quickly. You can also contact RSBC by phone if you prefer.
+          call back request at any time.You can also contact RSBC by phone if you prefer.
         </p>
       </div>
       <div>
@@ -42,18 +41,7 @@
           >
             <b>Recommended topics</b>
           </button>
-          <button class="help-topics-item" cdkMenuItem>
-            <b> Help with Driver Portal </b>
-          </button>
-          <button class="help-topics-item" cdkMenuItem>
-            <b> About my current case </b>
-          </button>
-          <button class="help-topics-item" cdkMenuItem>
-            <b>Documents </b>
-          </button>
-          <button class="help-topics-item" cdkMenuItem>
-            <b>Letters to Driver</b>
-          </button>
+         
         </div>
         @if (display === 0) {
           <div class="help-cards">
@@ -88,10 +76,10 @@
           <div class="help-cards">
             <mat-card (click)="helpcard(HelpTopics.DOCUMENT_HISTORY)">
               <mat-card-content
-                ><b> Cannot see document in Document History </b>
+                ><b> Cannot see document in Submission History </b>
                 <div>
                   In certain instances you will not immediately see your
-                  document requirement appear in Document History.
+                  document requirement appear in Submission History.
                 </div>
               </mat-card-content>
             </mat-card>
