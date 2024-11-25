@@ -9,6 +9,7 @@ import { UserRegistrationComponent } from './user-registration/user-registration
 import { GetAssistanceComponent } from './get-assistance/get-assistance.component';
 import { SubmissionRequirementsComponent } from './submission-requirements/submission-requirements.component';
 import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.component';
+import { DefinitionsComponent } from './definitions/definitions.component';
 
 
 const routes: Routes = [
@@ -30,7 +31,8 @@ const routes: Routes = [
   { path: 'lettersToDriver', component: LettersToDriverComponent }, 
   { path: 'userRegistration', component: UserRegistrationComponent },
   { path: 'getAssistance', component: GetAssistanceComponent },
-  { path:'submissionRequirement', component:SubmissionRequirementsComponent}
+  { path:'submissionRequirement', component:SubmissionRequirementsComponent},
+  { path:'definitions', component:DefinitionsComponent}
 ];
 
 @NgModule({

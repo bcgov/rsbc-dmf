@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { ViewportScroller } from '@angular/common';
-import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, EligibleLicenseClassComponent, LetterTopicComponent, SubmissionStatusComponent, SubmissionTypeComponent, RecentCaseComponent, PortalsEnum } from '@shared/core-ui';
+import { RecentCaseComponent, PortalsEnum } from '@shared/core-ui';
 
 @Component({
     selector: 'app-dashboard',
@@ -16,14 +16,8 @@ import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerT
         MatExpansionPanel,
         MatExpansionPanelHeader,
         MatExpansionPanelTitle,
-        CaseTypeComponent,
-        CaseStatusComponent,
-        DmerTypeComponent,
-        DecisionOutcomeComponent,
-        EligibleLicenseClassComponent,
-        SubmissionTypeComponent,
-        SubmissionStatusComponent,
-        LetterTopicComponent,
+        RouterLink,
+        RouterLinkActive
     ],
 })
 export class DashboardComponent {

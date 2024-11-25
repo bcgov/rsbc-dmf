@@ -23,6 +23,7 @@
   background-color: rgb(255, 255, 255);
   padding: 6px 0;
   align-items: flex-start;
+  
 }
 
 .help-topics-item {
@@ -213,6 +214,19 @@ input[type="checkbox"] {
   font-style: normal;
   font-size: 18px;
   letter-spacing: 1px;
+}
+
+.getAssistanceButton{
+  border-width: 0px;
+  width: 200px;
+  height: 49px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: #003366;
+  background-color: #96c0e6;
 }
 
 button.disabledButton {

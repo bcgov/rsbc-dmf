@@ -7,8 +7,7 @@
           To get answers to your questions, you can look through our Help Topics
           below. If you need further help, you can ask for a call back from a
           Client Services representative at RSBC. There is a maximum of 1 open
-          call back request at any time. This is the best way to get support
-          quickly. You can also contact RSBC by phone if you prefer.
+          call back request at any time.You can also contact RSBC by phone if you prefer.
         </p>
       </div>
       <div>
@@ -36,24 +35,13 @@
       <div class="help">
         <div class="help-topics" cdkMenu>
           <button
-            class="help-topics-item"
+            class="getAssistanceButton"
             (click)="recommendedTopics()"
             cdkMenuItem
           >
-            <b>Recommended topics</b>
+            <b>Get Assistance</b>
           </button>
-          <button class="help-topics-item" cdkMenuItem>
-            <b> Help with Driver Portal </b>
-          </button>
-          <button class="help-topics-item" cdkMenuItem>
-            <b> About my current case </b>
-          </button>
-          <button class="help-topics-item" cdkMenuItem>
-            <b>Documents </b>
-          </button>
-          <button class="help-topics-item" cdkMenuItem>
-            <b>Letters to Driver</b>
-          </button>
+         
         </div>
         @if (display === 0) {
           <div class="help-cards">
@@ -88,10 +76,10 @@
           <div class="help-cards">
             <mat-card (click)="helpcard(HelpTopics.DOCUMENT_HISTORY)">
               <mat-card-content
-                ><b> Cannot see document in Document History </b>
+                ><b> Cannot see document in Submission History </b>
                 <div>
                   In certain instances you will not immediately see your
-                  document requirement appear in Document History.
+                  document requirement appear in Submission History.
                 </div>
               </mat-card-content>
             </mat-card>
@@ -210,10 +198,11 @@
             </button>
             <button
               class="callBackButton"
-              (click)="viewRequest($event, 'callBack')"
+              (click)="viewRequest($event, 'contact')"
             >
               Contact RSBC
             </button>
+           
           </div>
           <div style="padding: 24px" *ngIf="showCallBack">
             <h3>Request Call Back</h3>
@@ -309,18 +298,21 @@
         </div>
       }
     </div>
-    <div style="padding-top: 32px">
-      <h2>Contact RoadSafetyBC</h2>
-      <p>
-        If the topics above don't give you the answer you're looking for, you
-        can call a client service representative at RSBC. <br />
-        <br />
-        <b>Hours of operation</b>: Monday to Friday from 9am to 4pm <br />
-
-        <b>Phone</b>: 1-855-387-7747 <br />
-        <b>Greater Victoria</b> : 250-387-7747
-      </p>
+    <div id="contact">
+      <div style="padding-top: 150px" >
+        <h2>Contact RoadSafetyBC</h2>
+        <p>
+          If the topics above don't give you the answer you're looking for, you
+          can call a client service representative at RSBC. <br />
+          <br />
+          <b>Hours of operation</b>: Monday to Friday from 9am to 4pm <br />
+  
+          <b>Phone</b>: 1-855-387-7747 <br />
+          <b>Greater Victoria</b> : 250-387-7747
+        </p>
+      </div>
     </div>
+   
     <div style="padding-top: 32px" id="callBack">
       <h2>Request Call Back History</h2>
       <p>
