@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
-import { CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, EligibleLicenseClassComponent, LetterTopicComponent, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
+import { CaseStatusComponent, DecisionOutcomeComponent, DmerTypeComponent, EligibleLicenseClassComponent, LetterTopicComponent, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
 
 @Component({
   selector: 'app-definitions',
@@ -10,7 +10,7 @@ import { CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, Eligibl
     MatExpansionPanel,
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
-    CaseTypeComponent,
+    CaseStatusComponent,
     DmerTypeComponent,
     DecisionOutcomeComponent,
     EligibleLicenseClassComponent,

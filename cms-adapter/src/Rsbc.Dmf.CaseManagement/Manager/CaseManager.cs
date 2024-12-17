@@ -3907,14 +3907,12 @@ namespace Rsbc.Dmf.CaseManagement
             var caseQuery = (DataServiceQuery<incident>)dynamicsContext.incidents
                 .Where(i => i.statecode == 0 // Active
                         && i.dfp_datesenttoicbc == null
-                        && i.dfp_bpfstage == 100000003
+                        && i.dfp_bpfstage == 100000003 // Case should be in File End Tasks (FET)
                         && i._dfp_driverid_value != null
-                        ); // Case should be in File End Tasks (FET)
+                        ).Take(500); 
 
 
             var response = caseQuery.Execute() as QueryOperationResponse<incident>;
-
-            Log.Information($"Response : {response != null}");
 
             do
             {
@@ -4019,7 +4017,7 @@ namespace Rsbc.Dmf.CaseManagement
                         && i.dfp_datesenttoicbc == null
                         && i.dfp_bpfstage == 100000002
                         && i._dfp_driverid_value != null
-                        ); // case is in under review);
+                        ).Take(500); ; // case is in under review);
 
             // Get the document of type DMER from documents entity and not in Rejected, Clean Pass, or Manual Pass(Query document entity)
             // Add condition to check document is in review (Document entity)
