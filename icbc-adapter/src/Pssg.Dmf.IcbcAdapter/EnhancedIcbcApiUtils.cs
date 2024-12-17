@@ -9,6 +9,7 @@ using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 using System;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.IcbcAdapter
@@ -16,10 +17,10 @@ namespace Rsbc.Dmf.IcbcAdapter
     public class EnhancedIcbcApiUtils
     {
 
-        private IConfiguration _configuration { get; }
+        private IConfiguration _configuration;
         private readonly CaseManager.CaseManagerClient _caseManagerClient;
         private readonly IIcbcClient _icbcClient;
-
+       
         public EnhancedIcbcApiUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IIcbcClient icbcClient)
         {
             _configuration = configuration;
@@ -42,43 +43,45 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
                 foreach (var unsentItem in unsentItems.Items)
                 {
-                    Log.Logger.Information($"Checking Pass Item {unsentItem.Driver.DriverLicenseNumber}");
+                   // Log.Logger.Information($"Checking Pass Item {unsentItem.Driver.DriverLicenseNumber}");
                     var item = GetMedicalUpdateDataforPass(unsentItem);
 
                     if (item != null)
                     {
-                        string responseContent = _icbcClient.SendMedicalUpdate(item);
+                       
+                            string responseContent = _icbcClient.SendMedicalUpdate(item);
 
-                        // 24-03-27 only try once to send an update.
-                        MarkMedicalUpdateSent(unsentItem.CaseId);
+                            // 24-03-27 only try once to send an update.
+                            MarkMedicalUpdateSent(unsentItem.CaseId);
 
-                        if (!responseContent.Contains("SUCCESS"))
-                        {
-                            var bringForwardRequest = new BringForwardRequest
+                            if (!responseContent.Contains("SUCCESS"))
                             {
-                                CaseId = unsentItem.CaseId,
-                                Subject = "ICBC Error",
-                                Description = responseContent,
-                                Assignee = string.Empty,
-                                Priority = CallbackPriority.Normal
+                                var bringForwardRequest = new BringForwardRequest
+                                {
+                                    CaseId = unsentItem.CaseId,
+                                    Subject = "ICBC Error",
+                                    Description = responseContent,
+                                    Assignee = string.Empty,
+                                    Priority = CallbackPriority.Normal
 
-                            };
+                                };
 
-                            // 24-03-27 disable bring forwards
-                            //_caseManagerClient.CreateBringForward(bringForwardRequest);
+                                // 24-03-27 disable bring forwards
+                                //_caseManagerClient.CreateBringForward(bringForwardRequest);
 
-                            // Mark ICBC error 
+                                // Mark ICBC error 
 
-                            var icbcError = new IcbcErrorRequest
-                            {
-                                ErrorMessage = "ICBC Error"
-                            };
+                                var icbcError = new IcbcErrorRequest
+                                {
+                                    ErrorMessage = "ICBC Error"
+                                };
 
-                            _caseManagerClient.MarkMedicalUpdateError(icbcError);
+                                _caseManagerClient.MarkMedicalUpdateError(icbcError);
 
-                            Log.Logger.Error($"ICBC Error");
+                                Log.Logger.Error($"ICBC Error");
+                            }
                         }
-                    }
+                       
                     else
                     {
                         Log.Logger.Error($"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
@@ -181,7 +184,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             if (unsentItemsAdjudication.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                Log.Logger.Information($"{unsentItemsAdjudication.Items.Count} Items Received");
+                //Log.Logger.Information($"{unsentItemsAdjudication.Items.Count} Items Received");
                 foreach (var unsentItemAdjudication in unsentItemsAdjudication.Items)
                 {
 
