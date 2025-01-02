@@ -164,11 +164,9 @@ export class SharedGetAssistanceComponent implements OnInit {
     }
     const callback: any = {
       description : this.callbackRequestForm.value.description,
-      //phone: String(this.callbackRequestForm.value.phone),
       preferredTime: Number(this.callbackRequestForm.value.preferredTime),
-      // subject: this.callBackTopics.find(
-      //   (x) => x.value == this.callbackRequestForm.value.subject,
-      // )?.viewValue,
+      subject : "Request Call Back",
+     
     };
     this.isCreatingCallBack = true;
     this.caseManagementService

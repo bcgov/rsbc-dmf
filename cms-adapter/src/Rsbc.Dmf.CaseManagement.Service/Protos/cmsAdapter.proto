@@ -891,7 +891,7 @@ message Callback {
     string id = 1;
     string caseId = 2;
     string assignee = 3; 
-    //string subject = 4;
+    string subject = 4;
     string description = 5;	
     CallbackPriority priority = 6;
     google.protobuf.Timestamp requestCallback = 7;

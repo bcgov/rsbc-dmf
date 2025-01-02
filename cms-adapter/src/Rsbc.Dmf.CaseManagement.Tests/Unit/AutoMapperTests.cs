@@ -146,6 +146,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             callback.Subject = "Subject";
             callback.CallStatus = CallbackCallStatus.Open;
             callback.Closed = new DateTimeOffset();
+            callback.Description = "Description";
 
             var mappedCallback = _mapper.Map<Service.Callback>(callback);
 

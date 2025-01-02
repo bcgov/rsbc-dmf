@@ -48,11 +48,12 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var callback = new Callback();
             //callback.Phone = callbackRequest.Phone;
             callback.PreferredTime = (Callback.Types.PreferredTime)callbackRequest.PreferredTime;
-            //callback.Subject = "‘Request Call Back";
+            callback.Subject = "Request Call Back";
             callback.CaseId = mostRecentCaseReply.Item.CaseId;
             callback.Origin = (int)UserCode.Portal;
             callback.Priority = CallbackPriority.Normal;
             callback.RequestCallback = DateTime.UtcNow.ToTimestamp();
+            callback.Description = callbackRequest.Description;
 
             // create callback
             var reply = _callbackManagerClient.Create(callback);
@@ -82,6 +83,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             if (driverCallbacks?.ResultStatus == ResultStatus.Success)
             {
                 result = _mapper.Map<List<ViewModels.Callback>>(driverCallbacks.Items);
+                
             }
             else
             {

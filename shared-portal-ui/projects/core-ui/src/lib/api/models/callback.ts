@@ -6,8 +6,8 @@ export interface Callback {
   callStatus?: CallStatus;
   closed?: string;
   id?: string;
-  phone?: string | null;
   preferredTime?: PreferredTime;
   requestCallback?: string;
-  topic?: string | null;
+  subject?: string | null;
+  description?: string | null;
 }

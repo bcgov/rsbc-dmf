@@ -34,7 +34,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                     .ForMember(dest => dest.statecode, opt => opt.MapFrom(src => src.CallStatus))
                     .ForMember(dest => dest.actualend, opt => opt.MapFrom(src => src.Closed))
                     .ForMember(dest => dest.subject, opt => opt.MapFrom(src => src.Subject))
-                    .ForMember(dest => dest.description, opt => opt.MapFrom(src => SerializeValues(src.Phone, src.PreferredTime)))
+                    .ForMember(dest => dest.description, opt => opt.MapFrom(src => src.Description))
                     .ForMember(dest => dest.dfp_origin, opt => opt.MapFrom(src => src.Origin))
                     .ForMember(dest => dest.prioritycode, opt => opt.MapFrom(src => src.Priority));
             }
