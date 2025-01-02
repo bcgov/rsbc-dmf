@@ -43,7 +43,7 @@
           </button>
          
         </div>
-        @if (display === 0) {
+        @if (display === HelpTopics.ALL_TOPICS) {
           <div class="help-cards">
             <mat-card (click)="helpcard(HelpTopics.UPLOAD_EXTRA_DOCUMENT)">
               <mat-card-content
@@ -310,7 +310,7 @@
                   mat-flat-button
                   (click)="createCallBack()"
                 >
-                  Submit
+                  Save
                 </button>
                 <button class="cancelButton" (click)="back()">Back</button>
               </div>

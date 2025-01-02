@@ -10,6 +10,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton, MatButton } from '@angular/material/button';
+import { Callback } from '@shared/api';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -26,21 +28,21 @@ import { MatIconButton, MatButton } from '@angular/material/button';
     MatCardContent,
     MatDialogActions,
     MatButton,
+    DatePipe,
   ],
 })
 export class SharedCancelCallbackDialogComponent {
-
-
   constructor(
     private dialogRef: MatDialogRef<SharedCancelCallbackDialogComponent>,
     private _snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA)
-    private data: any,
+    public data: any,
   ) {}
 
   iscancelCallback = false;
 
   cancelRequestCallback() {
+    
     if (this.iscancelCallback) {
       return;
     }

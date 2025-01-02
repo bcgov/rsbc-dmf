@@ -182,16 +182,20 @@ export class SharedGetAssistanceComponent implements OnInit {
           duration: 5000,
         });
         this.isCreatingCallBack = false;
+        this.display = HelpTopics.ALL_TOPICS;
+        this.showCallBackCreate = false;
       });
   }
 
   openCancelCallbackDialog(callback: any) {
+    console.log(callback);
     this.dialog
       .open(SharedCancelCallbackDialogComponent, {
         height: '650px',
         width: '820px',
         data: {
           callbackId: callback.id,
+          callback : callback,
           caseManagementService: this.caseManagementService
         },
       })
