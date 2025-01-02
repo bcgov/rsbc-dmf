@@ -6,10 +6,11 @@ public class Callback
 {
     public Guid Id { get; set; }
     public DateTimeOffset RequestCallback { get; set; }
-    public string Topic { get; set; }
+    //public string Topic { get; set; }
     // TODO should not be using proto enum in view models
     public CallbackCallStatus CallStatus { get; set; }
     public DateTimeOffset Closed { get; set; }
-    public string Phone { get; set; }
+
+    //public string Phone { get; set; }
     public Api.PreferredTime PreferredTime { get; set; }
 }

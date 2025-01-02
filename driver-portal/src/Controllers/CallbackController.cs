@@ -46,9 +46,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
 
             var callback = new Callback();
-            callback.Phone = callbackRequest.Phone;
+            //callback.Phone = callbackRequest.Phone;
             callback.PreferredTime = (Callback.Types.PreferredTime)callbackRequest.PreferredTime;
-            callback.Subject = callbackRequest.Subject;
+            //callback.Subject = "‘Request Call Back";
             callback.CaseId = mostRecentCaseReply.Item.CaseId;
             callback.Origin = (int)UserCode.Portal;
             callback.Priority = CallbackPriority.Normal;

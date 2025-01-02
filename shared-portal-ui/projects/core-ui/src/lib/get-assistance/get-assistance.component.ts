@@ -40,6 +40,7 @@ enum HelpTopics {
   DOCUMENT_HISTORY = 4,
   REPLACEMENT_DOCUMENT = 5,
   REQUEST_EXTENSION = 6,
+  REQUEST_CALLBACK = 7,
 }
 
 @Component({
@@ -85,9 +86,9 @@ export class SharedGetAssistanceComponent implements OnInit {
 
   callbackRequestForm = this.fb.group({
     caseId: [''],
-    description: [''],
-    subject: ['', Validators.required],
-    phone: ['', Validators.compose([Validators.required, Validators.maxLength(10)])],
+    description: ['', Validators.compose([Validators.required, Validators.maxLength(300)])],
+    // subject: ['', Validators.required],
+    // phone: ['', Validators.compose([Validators.required, Validators.maxLength(10)])],
     preferredTime: [0],
   });
 
@@ -154,7 +155,6 @@ export class SharedGetAssistanceComponent implements OnInit {
   isCreatingCallBack = false;
 
   createCallBack() {
-    console.log("phone",  this.callbackRequestForm.controls.phone.errors);
     if (this.callbackRequestForm.invalid) {
       this.callbackRequestForm.markAllAsTouched();
       return;
@@ -163,12 +163,12 @@ export class SharedGetAssistanceComponent implements OnInit {
       return;
     }
     const callback: any = {
-
-      phone: String(this.callbackRequestForm.value.phone),
+      description : this.callbackRequestForm.value.description,
+      //phone: String(this.callbackRequestForm.value.phone),
       preferredTime: Number(this.callbackRequestForm.value.preferredTime),
-      subject: this.callBackTopics.find(
-        (x) => x.value == this.callbackRequestForm.value.subject,
-      )?.viewValue,
+      // subject: this.callBackTopics.find(
+      //   (x) => x.value == this.callbackRequestForm.value.subject,
+      // )?.viewValue,
     };
     this.isCreatingCallBack = true;
     this.caseManagementService
@@ -208,7 +208,11 @@ export class SharedGetAssistanceComponent implements OnInit {
 
   helpcard(helpTopic: HelpTopics) {
     this.display = helpTopic;
-    this.showCallBackCreate = true;
+    if(this.HelpTopics.REQUEST_CALLBACK == helpTopic){
+      this.showCallBackCreate = true;
+
+    }
+    
   }
 
   recommendedTopics() {

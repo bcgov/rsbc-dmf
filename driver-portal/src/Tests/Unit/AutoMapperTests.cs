@@ -99,7 +99,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             var callback = new Callback();
             callback.Id = Guid.NewGuid().ToString();
             callback.RequestCallback = new Timestamp();
-            callback.Subject = "Subject";
+            // callback.Subject = "Subject";
             callback.CallStatus = Callback.Types.CallbackCallStatus.Open;
             callback.ClosedDate = new Timestamp();
 

@@ -22,7 +22,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                     .ForMember(dest => dest.CallStatus, opt => opt.MapFrom(src => src.statecode))
                     .ForMember(dest => dest.Closed, opt => opt.MapFrom(src => src.actualend.GetValueOrDefault()))
                     .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.subject))
-                    .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => ParseSeparatedValue(SeparatedValueIndex.Phone, src.description, string.Empty)))
+                    //.ForMember(dest => dest.Phone, opt => opt.MapFrom(src => ParseSeparatedValue(SeparatedValueIndex.Phone, src.description, string.Empty)))
                     .ForMember(dest => dest.PreferredTime, opt => opt.MapFrom(src => ParseSeparatedValue(SeparatedValueIndex.PreferredTime, src.description, string.Empty)))
                     .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src.dfp_origin))
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.description))
