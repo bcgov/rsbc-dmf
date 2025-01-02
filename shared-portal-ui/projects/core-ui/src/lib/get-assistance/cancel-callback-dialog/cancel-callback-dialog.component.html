@@ -13,20 +13,20 @@
         <div style="grid-area: A">
           <label>Request Callback Date</label>
           <div>
-            <b>April 28, 2023</b>
+            <b>{{data.callback.requestCallback | date: "longDate"}}</b>
           </div>
         </div>
 
         <div style="grid-area: B">
           <label>Topic</label>
           <div>
-            <b>Upload Extra Document</b>
+            <b>{{data.callback.subject}}</b>
           </div>
         </div>
         <div style="grid-area: C">
           <label>Status</label>
           <div>
-            <b>Open</b>
+            <b>{{data.callback.callStatus}}</b>
           </div>
         </div>
       </mat-card-content>

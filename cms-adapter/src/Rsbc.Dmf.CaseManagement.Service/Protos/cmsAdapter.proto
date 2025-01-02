@@ -900,7 +900,7 @@ message Callback {
         closed = 1;
     }
     CallbackCallStatus callStatus = 8;
-    string phone = 9;
+   // string phone = 9;
     enum PreferredTime {
         Anytime = 0;
         Morning = 1;

@@ -71,6 +71,19 @@
   line-height: 4;
 }
 
+.callbackDescription{
+  width: 550px;
+  padding: 24px;
+}
+.call-back-card{
+  display: flex;
+  margin-top: 24px;
+  justify-content: space-around;
+  > .mat-mdc-card {
+    border: 2px solid #606060;
+    cursor: pointer;
+  }
+}
 .assistance-page {
   display: flex;
   // flex-direction: row;

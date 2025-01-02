@@ -21,10 +21,9 @@ namespace Rsbc.Dmf.CaseManagement
         public string CaseId { get; set; }
         public string Assignee { get; set; }
 
-        [Description("Topic")]
         public string Subject { get; set; }
 
-        public string Description { get; }
+        public string Description { get; set; }
         public CallbackPriority? Priority { get; set; }
         public int? Origin { get; set; }
     }

@@ -25,10 +25,10 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 
             var callback = new Callback();
             callback.RequestCallback = new DateTime(2000, 1, 1).ToUniversalTime().ToTimestamp();
-            callback.Subject = "Driver Portal Integration Test";
+            //callback.Subject = "Driver Portal Integration Test";
             callback.CallStatus = CallbackCallStatus.Open;
             callback.Origin = (int)UserCode.Portal;
-            callback.Phone = "1112223333";
+           // callback.Phone = "1112223333";
             callback.Priority = CallbackPriority.Low;
             callback.PreferredTime = PreferredTime.Morning;
             var request = new HttpRequestMessage(HttpMethod.Post, $"{CALLBACK_API_BASE}/create");

@@ -29,7 +29,7 @@ namespace Rsbc.Dmf.DriverPortal.Api
                 .AddTransform(NullStringConverter);
             CreateMap<DocumentSubType, ViewModels.DocumentSubType>();
             CreateMap<Callback, ViewModels.Callback>()
-                .ForMember(dest => dest.Topic, opt => opt.MapFrom(src => src.Subject));
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description));
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

@@ -22,7 +22,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                     .ForMember(dest => dest.CallStatus, opt => opt.MapFrom(src => src.statecode))
                     .ForMember(dest => dest.Closed, opt => opt.MapFrom(src => src.actualend.GetValueOrDefault()))
                     .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.subject))
-                    .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => ParseSeparatedValue(SeparatedValueIndex.Phone, src.description, string.Empty)))
+                    //.ForMember(dest => dest.Phone, opt => opt.MapFrom(src => ParseSeparatedValue(SeparatedValueIndex.Phone, src.description, string.Empty)))
                     .ForMember(dest => dest.PreferredTime, opt => opt.MapFrom(src => ParseSeparatedValue(SeparatedValueIndex.PreferredTime, src.description, string.Empty)))
                     .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src.dfp_origin))
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.description))
@@ -34,7 +34,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                     .ForMember(dest => dest.statecode, opt => opt.MapFrom(src => src.CallStatus))
                     .ForMember(dest => dest.actualend, opt => opt.MapFrom(src => src.Closed))
                     .ForMember(dest => dest.subject, opt => opt.MapFrom(src => src.Subject))
-                    .ForMember(dest => dest.description, opt => opt.MapFrom(src => SerializeValues(src.Phone, src.PreferredTime)))
+                    .ForMember(dest => dest.description, opt => opt.MapFrom(src => src.Description))
                     .ForMember(dest => dest.dfp_origin, opt => opt.MapFrom(src => src.Origin))
                     .ForMember(dest => dest.prioritycode, opt => opt.MapFrom(src => src.Priority));
             }
