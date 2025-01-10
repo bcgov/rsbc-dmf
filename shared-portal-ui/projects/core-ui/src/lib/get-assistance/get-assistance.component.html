@@ -4,31 +4,10 @@
     <div class="assistance-page">
       <div>
         <p>
-          To get answers to your questions, you can look through our Help Topics
-          below. If you need further help, you can ask for a call back from a
-          Client Services representative at RSBC. There is a maximum of 1 open
-          call back request at any time.You can also contact RSBC by phone if you prefer.
+          To get answers to your questions, you can look through our Help Topics below. You can also contact RSBC by phone if you prefer.
         </p>
       </div>
-      <div>
-        <div class="callBackContent">
-          @if (_allCallBackRequests?.some(showOpenCallbackMessagePredicate)) {
-            <div class="text">
-              You have 1 open Request Call Back *
-              <ul>
-                <li>
-                  <a href="#" (click)="viewRequest($event, 'callBack')">
-                    View Request
-                  </a>
-                </li>
-              </ul>
-              <span>* Maximum of 1 open call back request</span>
-            </div>
-          } @else {
-            <div class="text">You have no call back requests</div>
-          }
-        </div>
-      </div>
+    
     </div>
     <div style="padding-top: 32px">
       <h2>Help Topics</h2>
@@ -72,14 +51,7 @@
                 </div>
               </mat-card-content>
             </mat-card>
-            <mat-card (click)="helpcard(HelpTopics.REQUEST_CALLBACK)">
-              <mat-card-content
-                ><b> Request a Call Back </b>
-                <div>
-                  You can request a call back from a RoadSaftyBC Client Services representative.
-                </div>
-              </mat-card-content>
-            </mat-card>
+            
           </div>
           <div class="help-cards">
             <mat-card (click)="helpcard(HelpTopics.DOCUMENT_HISTORY)">
@@ -193,14 +165,7 @@
             </p>
           </div>
         }
-        @else if (display === HelpTopics.REQUEST_CALLBACK) {
-          <div class="helpDetails">
-            <b style="padding: 12px">Request a Call Back</b>
-            <p>
-              You can request a call back from a RoadSaftyBC Client Services representative.
-            </p>
-          </div>
-        }
+       
       </div>
 
       <!-- <div class="call-back-card">
@@ -332,114 +297,6 @@
           <b>Greater Victoria</b> : 250-387-7747
         </p>
       </div>
-    </div>
-   
-    <div style="padding-top: 32px" id="callBack">
-      <h2>Request Call Back History</h2>
-      <p>
-        Once you've asked for a call back, you will find a record of your
-        request in this table. You can check the status of your request and see
-        any notes added by RSBC customer service representatives. If you no
-        longer need assistance, you have the option to cancel your open request
-        whenever you want.
-      </p>
-      <div style="padding-bottom: 32px" class="list">
-        <mat-card
-          class="callBackCard"
-          *ngFor="let callback of allCallBacks"
-          [ngClass]="{
-            open: callback.id && isExpanded[callback.id],
-          }"
-        >
-          <mat-card-content class="closedCaseContent">
-            <div style="text-align: center">
-              <mat-icon
-                (click)="toggleIsExpandable(callback.id)"
-                class="expandedIcon"
-              >
-                expand_circle_down
-              </mat-icon>
-            </div>
-            <div style="display: flex; flex-direction: column">
-              <div class="case-details-border">&nbsp;</div>
-              <div>&nbsp;</div>
-            </div>
-            <div style="flex: 1">
-              <div class="caseDetailRow">
-                <div>
-                  <label>Request call back date </label>
-                  <div>
-                    <b>{{ callback.requestCallback | date: "longDate" }}</b>
-                  </div>
-                </div>
-
-                <div>
-                  <label>Topic</label>
-                  <div>
-                    <b>{{ callback.subject }}</b>
-                  </div>
-                </div>
-                <div>
-                  <label>Call Status</label>
-                  <div>
-                    <b>{{callback.callStatus}}</b>
-                  </div>
-                </div>
-                <div *ngIf="callback.callStatus === 'Open'">
-                  <div>
-                    <button
-                      mat-flat-button
-                      (click)="openCancelCallbackDialog(callback)">
-                      Cancel Callback
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div
-                class="caseDetailRow expandedDetails"
-                *ngIf="callback.id && isExpanded?.[callback.id]"
-                style="
-                  border-top: 2px solid gray;
-                  padding-top: 20px;
-                  padding-bottom: 20px;
-                ">
-                <div>
-                  <label>Description</label>
-                  <div>
-                    <b>{{callback.description}}</b>
-                  </div>
-                </div>
-
-                <div></div>
-                <div></div>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-    </div>
-
-    <div
-      class="numberOfItems"
-      style="margin-bottom: 32px"
-      *ngIf="
-        allCallBacks &&
-        allCallBacks.length > 0 &&
-        filteredCallbacks &&
-        filteredCallbacks.length > 0
-      "
-    >
-      Showing {{ filteredCallbacks.length }} of
-      {{ allCallBacks.length }} records
-      <br />
-      <a
-        *ngIf="filteredCallbacks.length < allCallBacks.length"
-        (click)="viewMore()"
-        class="viewMore"
-        ><b style="color: #003366">View more records</b>
-        <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a
-      >
     </div>
   </div>
 </div>
