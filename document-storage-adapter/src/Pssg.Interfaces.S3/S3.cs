@@ -41,24 +41,12 @@ namespace Pssg.Interfaces
         private const int MaxUrlLength = 260; // default maximum URL length.
         private readonly string Bucket;
         private readonly IConfiguration Configuration;
-        private HttpClient _Client;
-        private CookieContainer _CookieContainer;
-        private HttpClientHandler _HttpClientHandler;
-
-        private AuthenticationResult authenticationResult;
-        private string Digest;
+        
         private readonly AmazonS3Client S3Client;
 
         public S3(IConfiguration configuration)
         {
-            // create the HttpClient that is used for our direct REST calls.
-            /*
-            _CookieContainer = new CookieContainer();
-            _HttpClientHandler = new HttpClientHandler() { UseCookies = true, AllowAutoRedirect = false, CookieContainer = _CookieContainer };
-            _Client = new HttpClient(_HttpClientHandler);
-
-            _Client.DefaultRequestHeaders.Add("Accept", "application/json;odata=verbose");
-            */
+            
             Configuration = configuration;
 
             // check that we have the right settings.
