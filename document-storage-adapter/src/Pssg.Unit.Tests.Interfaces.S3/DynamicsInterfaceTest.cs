@@ -11,7 +11,6 @@ using System.Text;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter.ViewModels;
-using Pssg.DocumentStorageAdapter;
 using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
