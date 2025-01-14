@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - 'driver-portal/src/ClientApp/**'
+      - 'shared-portal-ui/**'
       - '.github/workflows/cd-driver-portal-ui.yml'
 env:
   IMAGE_NAME: driver-portal-ui
