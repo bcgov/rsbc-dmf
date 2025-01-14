@@ -261,11 +261,22 @@
     }
 
     .site-header__buttons {
-      margin-top: 24px;
+      margin: 24px;  
     }
 
     .site-logo {
       margin-top: 10px;
+    }
+
+    .login_button{
+    border-width: 0px;
+    border-radius: 3px;
+    width: 100px;
+    height: 40px;
+    font-size: 12px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    color: #003366;
     }
 
     /*--Hero----------------*/
@@ -287,7 +298,7 @@
       max-width: 600px;
       background-color: rgba(0, 51, 102, 0.7);
       border-radius: 10px;
-      padding: 10px;
+      padding: 12px;
     }
 
     .hero__content p {
@@ -370,7 +381,6 @@
 
     .assistance__contacts {
       display: flex;
-      width: 400px;
       justify-content: space-between;
     }
 
@@ -499,7 +509,16 @@
       <div>
         <a href="/"><img class="site-logo" src="img/british-columbia-logo.svg" alt="British Columbia Logo" /></a>
       </div>
+      <div>
+        <div class="site-header__buttons">
+          <a  href="/driver-portal">
+            <button  type="button" class="login_button">Driver Portal <br> Log In</button>
+        </a>      
+        </div>
+      </div>
+      
     </div>
+   
   </header>
 
   <main>
@@ -605,8 +624,7 @@
               <strong>Contact <a
                   href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/contact"
                   target="_blank">RoadSafetyBC</a></strong>
-              <br />Hours of operation:
-              Monday to Friday from 9am to 4pm
+              <br />Hours of operation: Monday to Friday from 9am to 4pm
             </p>
 
             <div class="assistance__contacts">
