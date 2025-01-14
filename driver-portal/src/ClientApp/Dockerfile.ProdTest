@@ -13,7 +13,7 @@ WORKDIR /app/driver-portal/src/ClientApp
 
 RUN npm install
 
-RUN npm run build -- --base-href /driver-portal/ --deploy-url /driver-portal/ --configuration production
+RUN npm run build -- --base-href /roadsafetybc/driver-portal/ --deploy-url /roadsafetybc/driver-portal/ --configuration jagprod
 
 FROM caddy:latest as final
 COPY ./driver-portal/src/ClientApp/Caddyfile /etc/caddy/Caddyfile
