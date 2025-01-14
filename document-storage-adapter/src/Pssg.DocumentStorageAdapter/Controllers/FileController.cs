@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Pssg.DocumentStorageAdapter.ViewModels;
+using Serilog;
 
 
 namespace Pssg.DocumentStorageAdapter.Controllers
@@ -61,7 +62,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
         [HttpPost("preview")]
         public async Task<ActionResult> Preview([FromBody] ViewModels.Download download)
         {
-            return await DownloadInternal(download, true);
+            return DownloadInternal(download, true);
         }
 
         /// <summary>
@@ -71,10 +72,28 @@ namespace Pssg.DocumentStorageAdapter.Controllers
         [HttpPost("download")]
         public async Task<ActionResult> Download([FromBody] ViewModels.Download download)
         {
-            return await DownloadInternal(download, false);
+            return DownloadInternal(download, false);
         }
 
-        public async Task<ActionResult> DownloadInternal( ViewModels.Download download, bool convert)
+        /// <summary>
+        /// Changes the extension to .pdf
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private string SetExtensionToPdf(string data)
+        {
+            string filename = data;
+            int dotPosition = filename.LastIndexOf(".");
+            if (dotPosition != -1)
+            {
+                filename = filename.Substring(0, filename.LastIndexOf("."));
+                filename = filename + ".pdf";
+            }
+
+            return filename;
+        }
+        
+        private ActionResult DownloadInternal( ViewModels.Download download, bool convert)
         {
             string fileName = download.FileUrl;
             if (fileName.StartsWith("https://"))
@@ -90,19 +109,18 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 byte[] fileContents = null;
 
                 // if the document swap flag is set, and the filename is .tif, look for a converted PDF
-                if (!String.IsNullOrEmpty(_configuration["SWAP_PDF"]) && fileName.ToLower().Contains(".tif"))
+                if (!string.IsNullOrEmpty(_configuration["SWAP_PDF"]) && fileName.ToLower().Contains(".tif"))
                 {
                     // see if there is a PDF.
                     string tempFileName = fileName;
-                    fileName = fileName.Substring(0, fileName.LastIndexOf("."));
-                    fileName = fileName + ".pdf";
-                    
+                    fileName = SetExtensionToPdf(fileName);
                     try
                     {
                         fileContents = _S3.DownloadFile(fileName, ref metaData);
+                        convert = false; // No need to convert, it is a PDF
                         success = true;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         success = false;
                     }
@@ -118,6 +136,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                         catch (Exception ex)
                         {
                             success = false;
+                            Log.Logger.Error(ex,"Error retrieving file from S3 for download");
                         }
                     }
                     else
@@ -128,7 +147,16 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 }
                 else
                 {
-                    fileContents = _S3.DownloadFile(fileName, ref metaData);
+                    try
+                    {
+                        fileContents = _S3.DownloadFile(fileName, ref metaData);
+                        success = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        success = false;
+                        Log.Logger.Error(ex, "Error retrieving file from S3 for download");
+                    }
                 }
 
                 if (!success)
@@ -137,8 +165,6 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 }
                 else
                 {
-                    //return new FileContentResult(fileContents, "application/octet-stream");
-
                     string contentType = "application/octet-stream";
                     string body = fileContents.Length > 0 ? Convert.ToBase64String(fileContents) : String.Empty;
                     string entityName =
@@ -180,11 +206,12 @@ namespace Pssg.DocumentStorageAdapter.Controllers
 
                                 body = Convert.ToBase64String(pdfBytes);
                             }
-                            catch (Exception e)
+                            catch (Exception)
                             {
                                 body = Convert.ToBase64String(fileContents);
                             }
-                            fileName = fileName.Substring('.')[0] + ".pdf";
+
+                            fileName = SetExtensionToPdf(fileName);
                             contentType = "application/pdf";
                         }
 
@@ -208,7 +235,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error during file download for file.");
+                _logger.LogError(e, $"Error during file download");
                 throw e;
             }
 
