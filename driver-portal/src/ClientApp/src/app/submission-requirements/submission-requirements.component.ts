@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { PortalsEnum, SharedSubmissionRequirementsComponent } from '@shared/core-ui';
+import { ApiConfiguration } from '@app/shared/api/api-configuration';
 
 @Component({
     selector: 'app-submission-requirements',
@@ -19,7 +20,10 @@ export class SubmissionRequirementsComponent{
  
   PortalsEnum = PortalsEnum;
     
-  constructor(public caseManagementService: CaseManagementService) 
+  constructor(
+    public caseManagementService: CaseManagementService,
+    public apiConfiguration: ApiConfiguration,
+  ) 
     {}
 
 }

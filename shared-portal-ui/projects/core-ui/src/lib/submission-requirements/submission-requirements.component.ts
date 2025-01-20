@@ -147,9 +147,11 @@ export class SharedSubmissionRequirementsComponent implements OnInit {
     formData.append('file', this.fileToUpload as File);
     formData.append('documentSubTypeId', this.uploadForm.controls.documentSubType.value as any);
     this.isFileUploading = true;
+      
 
     this._http
       .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {
+      
         headers: {
           enctype: 'multipart/form-data',
         },
