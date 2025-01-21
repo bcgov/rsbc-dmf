@@ -103,6 +103,13 @@ namespace Pssg.DocumentStorageAdapter
             app.UseAuthentication();
             app.UseAuthorization();
 
+
+            string pathBase = Configuration["BASE_PATH"];
+            if (!string.IsNullOrEmpty(pathBase))
+            {
+                app.UsePathBase(pathBase);
+            }
+
             app.UseHealthChecks("/hc/ready", new HealthCheckOptions
             {
                 Predicate = _ => true,
