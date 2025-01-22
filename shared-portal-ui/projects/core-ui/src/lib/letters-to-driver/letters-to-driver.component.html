@@ -11,6 +11,11 @@
         Find out more about how to report if a letter is not addressed to you or
         how to submit an appeal.
       </p>
+      @if(portal===PortalsEnum.DriverPortal){
+        <p>
+          See <a href="/getAssistance">Get Assistance</a>.
+        </p>
+      }
     </div>
     @if(portal===PortalsEnum.DriverPortal){
       <div>
