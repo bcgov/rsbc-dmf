@@ -9,6 +9,7 @@ import { SubmissionStatusComponent } from '../case-definitions/submission-status
 import { SubmissionTypeComponent } from '../case-definitions/submission-type/submission-type.component';
 import { PortalsEnum, SubmittalStatusEnum } from '../app.model';
 import { SharedQuickLinksComponent } from "../quick-links/quick-links.component";
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-shared-submission-history',
@@ -30,7 +31,8 @@ import { SharedQuickLinksComponent } from "../quick-links/quick-links.component"
     SubmissionTypeComponent,
     SubmissionStatusComponent,
     DatePipe,
-    SharedQuickLinksComponent
+    SharedQuickLinksComponent,
+    RouterLink
 ],
 })
 export class SharedSubmissionHistoryComponent implements OnInit {
