@@ -97,11 +97,18 @@ namespace Pssg.DocumentStorageAdapter
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseForwardedHeaders();
-
+            string pathBase = Configuration["BASE_PATH"];
+            if (!string.IsNullOrEmpty(pathBase))
+            {
+                app.UsePathBase(pathBase);
+            }
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+
+           
 
             app.UseHealthChecks("/hc/ready", new HealthCheckOptions
             {
