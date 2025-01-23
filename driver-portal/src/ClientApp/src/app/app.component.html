@@ -1,3 +1,13 @@
+<ngx-spinner
+  name="apiLoadingSpinner"
+  type="ball-spin"
+  [fullScreen]="true"
+  bdColor="rgba(0,0,0,0.8)"
+  color="#fff"
+>
+  <p style="color: #fff">Loading...</p>
+</ngx-spinner>
+
 <ng-container *ngIf="!isLoading">
   <header style="position: fixed; width: 100%; z-index: 2">
     <app-header [profileName]="profileName" (logout)="onLogout()"></app-header>

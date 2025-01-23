@@ -10,6 +10,7 @@ import { AppRoutingModule } from './app/app-routing.module';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { BrowserModule, bootstrapApplication } from '@angular/platform-browser';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 export function getBaseUrl() {
   return document.getElementsByTagName('base')[0].href;
@@ -31,7 +32,7 @@ bootstrapApplication(AppComponent, {
                 customUrlValidation: (url) => url.toLowerCase().includes('/api/') &&
                     !url.toLowerCase().endsWith('/config'),
             },
-        }), AppRoutingModule, ApiModule.forRoot({ rootUrl: environment.apiRootUrl })),
+        }), AppRoutingModule, NgxSpinnerModule, ApiModule.forRoot({ rootUrl: environment.apiRootUrl })),
         {
             provide: APP_BASE_HREF,
             useFactory: (s: PlatformLocation) => {

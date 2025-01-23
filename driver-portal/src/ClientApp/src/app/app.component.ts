@@ -8,6 +8,7 @@ import { firstValueFrom } from 'rxjs';
 import { FooterComponent, HeaderComponent, NavMenuComponent } from '@shared/core-ui'
 import { ApplicationVersionInfoService } from './shared/api/services';
 import { ApplicationVersionInfo } from './shared/api/models';
+import { NgxSpinnerComponent } from 'ngx-spinner';
 
 
 @Component({
@@ -20,7 +21,8 @@ import { ApplicationVersionInfo } from './shared/api/models';
         RouterOutlet,
         HeaderComponent,
         FooterComponent,
-        NavMenuComponent
+        NavMenuComponent,
+        NgxSpinnerComponent
     ],
     schemas:[CUSTOM_ELEMENTS_SCHEMA]
 })
