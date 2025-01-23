@@ -16,6 +16,11 @@
         <p>
           Find out more about how to resubmit a document or how to request a copy of a document you have submitted.
         </p>
+        @if(portal===PortalsEnum.DriverPortal){
+          <p>
+            See <a href="/getAssistance">Get Assistance</a>.
+          </p>
+        }
       </div>
       @if(portal===PortalsEnum.DriverPortal){
         <div>
