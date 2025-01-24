@@ -174,6 +174,7 @@ export class SharedSubmissionRequirementsComponent implements OnInit {
 
         },
         error: (error) => {
+          this.spinner.hide("apiLoadingSpinner");
           this._snackBar.open('Upload Unsuccessful', 'Close', {
             horizontalPosition: 'center',
             verticalPosition: 'top',
