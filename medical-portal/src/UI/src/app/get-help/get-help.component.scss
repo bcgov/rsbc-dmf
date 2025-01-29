@@ -7,7 +7,11 @@
 
 .help-cards{
     display: flex;
-    gap : 32px;
+    gap: 32px;
+
+    @media (max-width: 768px) {
+      margin-bottom: 16px;
+    }
 }
 
 .mat-mdc-card {
