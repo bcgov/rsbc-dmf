@@ -159,124 +159,13 @@
   </div>
 
   <div style="padding-bottom: 50px">
-    <h2 class="title">Notification Preferences</h2>
-    <b>Select one or more ways to receive RSBC notifications (required)</b>
-
     <div>
-      <label class="notification">
-        <input
-          type="checkbox"
-          [formControl]="accountForm.controls.notifyByEmail"
-        />
-        Email (as seen above)
-      </label>
-
-      <label class="notification">
-        <input
-          type="checkbox"
-          [formControl]="accountForm.controls.notifyByMail"
-        />
-        Mail <br />
-        <p>
-          Be environmentally friendly. Leaving the Mail option unchecked means
-          you are opting out of receiving notification by mail. <br />
-          Certain decision documents will still be mailed to you for your
-          records.
-        </p>
-      </label>
-
-      <div *ngIf="isEditView">
-        <p>
-          <b>Where do you want RSBC to send you mail regarding your cases?</b>
-          <br />
-          The address below is from your BC Services Card record.
-        </p>
-
-        <form>
-          <div>
-            <label class="form-label">Street Address</label>
-            <mat-form-field
-              appearance="outline"
-              class="inputWidth"
-              class="disabledInput"
-            >
-              <input
-                matInput
-                name="streetAddress"
-                placeholder="Street Address"
-                [formControl]="accountForm.controls.addressLine1"
-              />
-            </mat-form-field>
-          </div>
-          <div style="display: flex; gap: 48px">
-            <div>
-              <label class="form-label">City or Locality</label>
-              <mat-form-field appearance="outline" class="disabledInput">
-                <input
-                  matInput
-                  name="city"
-                  placeholder="City or Locality"
-                  [formControl]="accountForm.controls.city"
-                />
-              </mat-form-field>
-            </div>
-            <div>
-              <label class="form-label">State or Province</label>
-              <mat-form-field appearance="outline" class="disabledInput">
-                <input
-                  matInput
-                  name="state"
-                  placeholder="State or Province"
-                  [formControl]="accountForm.controls.province"
-                />
-              </mat-form-field>
-            </div>
-          </div>
-          <div style="display: flex; gap: 48px">
-            <div>
-              <label class="form-label">Postal Code</label>
-              <mat-form-field appearance="outline" class="disabledInput">
-                <input
-                  matInput
-                  name="postalCode"
-                  placeholder="Postal Code"
-                  [formControl]="accountForm.controls.postal"
-                />
-              </mat-form-field>
-            </div>
-            <div>
-              <label class="form-label">Country</label>
-              <mat-form-field appearance="outline" class="disabledInput">
-                <input
-                  matInput
-                  name="country"
-                  placeholder="Country"
-                  [formControl]="accountForm.controls.country"
-                />
-              </mat-form-field>
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <div style="padding-top: 12px">
-        <label>
-          <input type="checkbox" #confirmed [formControl]="acceptControl" />
-          I acknowledge my selected notification preferences. I give consent to
-          receive communications from RSBC in this manner. <br />
-
-          Note: You can update your notification settings at any time in the
-          Driver Portal under Account Management.
-        </label>
-      </div>
-
       <div class="submitButtonContainer" *ngIf="onEditProfile">
         <button
           *ngIf="!isCreateProfile"
           mat-flat-button
           class="primaryButton"
           (click)="onUpdate()"
-          [disabled]="!confirmed.checked"
         >
           Update
         </button>
@@ -285,7 +174,6 @@
           mat-flat-button
           class="primaryButton"
           (click)="onRegister()"
-          [disabled]="!confirmed.checked"
         >
           Submit
         </button>
