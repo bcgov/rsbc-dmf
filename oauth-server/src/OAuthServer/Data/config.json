@@ -107,7 +107,8 @@
         "http://localhost:3020",
         "https://roadsafetybc.gov.bc.ca/rsbc-dfp-medical-portal",
         "https://dev.roadsafetybc.gov.bc.ca/driver-portal",
-        "https://test.roadsafetybc.gov.bc.ca/driver-portal"
+        "https://test.roadsafetybc.gov.bc.ca/driver-portal",
+        "https://roadsafetybc.gov.bc.ca/driver-portal"
       ]
     },
     {
@@ -152,7 +153,8 @@
         "http://localhost:3020",
         "https://roadsafetybc.gov.bc.ca/rsbc-dfp-medical-portal",
         "https://dev.roadsafetybc.gov.bc.ca/rsbc-dfp-medical-portal",
-        "https://test.roadsafetybc.gov.bc.ca/rsbc-dfp-medical-portal"
+        "https://test.roadsafetybc.gov.bc.ca/rsbc-dfp-medical-portal",
+        "https://roadsafetybc.gov.bc.ca/driver-portal"
       ]
     }
   ]

@@ -10,6 +10,7 @@ import {LetterTopicComponent} from '../case-definitions/letter-topic/letter-topi
 import { PortalsEnum, SubmittalStatusEnum } from '../app.model';
 import { Document } from '../api';
 import { SharedQuickLinksComponent } from '../quick-links/quick-links.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-shared-letters-to-driver',
@@ -31,7 +32,8 @@ import { SharedQuickLinksComponent } from '../quick-links/quick-links.component'
         CaseTypeComponent,
         LetterTopicComponent,
         DatePipe,
-        SharedQuickLinksComponent
+        SharedQuickLinksComponent,
+        RouterLink
     ],
 })
 export class SharedLettersToDriverComponent implements OnInit {

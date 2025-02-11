@@ -25,6 +25,7 @@ import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import {SharedQuickLinksComponent} from '../quick-links/quick-links.component'
 import { SubmittalStatusEnum,PortalsEnum } from '../app.model';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
     selector: 'app-shared-submission-requirements',
@@ -76,7 +77,8 @@ export class SharedSubmissionRequirementsComponent implements OnInit {
     private _http: HttpClient,
     private _snackBar: MatSnackBar,
     public dialog: MatDialog,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private spinner: NgxSpinnerService
   ) {}
 
   uploadForm = this.fb.group({
@@ -148,23 +150,43 @@ export class SharedSubmissionRequirementsComponent implements OnInit {
     formData.append('documentSubTypeId', this.uploadForm.controls.documentSubType.value as any);
     this.isFileUploading = true;
 
+    // show the spinner
+    this.spinner.show( "apiLoadingSpinner");
+
     this._http
       .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {
+      
         headers: {
           enctype: 'multipart/form-data',
         },
       })
-      .subscribe(() => {
-        this.fileToUpload = null;
-        this.uploadForm.controls.documentSubType.setValue('');
-        this.acceptControl.reset();
-        this._snackBar.open('Successfully uploaded!', 'Close', {
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          duration: 5000,
-        });
-        this.showUpload = false;
-        this.isFileUploading = false;
+      .subscribe({next: () => {
+          this.fileToUpload = null;
+          this.uploadForm.controls.documentSubType.setValue('');
+          this.acceptControl.reset();
+          this._snackBar.open('Upload Successful', 'Close', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 5000,
+          });
+          this.showUpload = false;
+          this.isFileUploading = false;
+
+        },
+        error: (error) => {
+          this.spinner.hide("apiLoadingSpinner");
+          this._snackBar.open('Upload Unsuccessful', 'Close', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 5000,
+          });
+          this.isFileUploading = false;
+        },
+        
+        complete: () => {
+          // hide the spinner
+          this.spinner.hide("apiLoadingSpinner");
+        }
       });
   }
 

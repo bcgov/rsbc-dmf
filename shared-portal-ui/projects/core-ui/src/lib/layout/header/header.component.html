@@ -70,6 +70,12 @@
               >Cases</a
             >
             <a
+            routerLinkActive="active"
+            [routerLink]="'/submissionRequirement'"
+            (click)="showMobileMenu = false"
+            >Submission Requirements</a
+            >
+            <a
               routerLinkActive="active"
               [routerLink]="'/lettersToDriver'"
               (click)="showMobileMenu = false"
@@ -80,6 +86,12 @@
               [routerLink]="'/submissionHistory'"
               (click)="showMobileMenu = false"
               >Submission History</a
+            >
+            <a
+            routerLinkActive="active"
+            [routerLink]="'/definitions'"
+            (click)="showMobileMenu = false"
+            >Definitions</a
             >
             <a
               routerLinkActive="active"

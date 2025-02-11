@@ -60,6 +60,9 @@
     border: 2px solid #606060;
     cursor: pointer;
   }
+  @media (max-width: 768px) {
+    margin-bottom: 16px;
+  }
 }
 
 .help {
