@@ -35,10 +35,17 @@ namespace RSBC.DMF.MedicalPortal.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
+                .SetMinimumLevel(LogLevel.Trace)
+                .AddConsole());
+            var logger = loggerFactory.CreateLogger<Startup>();
+            logger.LogInformation("Medical Portal API starting up...");
+
             // TODO change this later, this is not standard configuration, used driver-portal as a reference
             var config = this.InitializeConfiguration(services);
 
             services.AddAuth(config);
+            logger.LogInformation("Keycloak Auth configured.");
 
             services.AddControllers(options => { options.Filters.Add(new HttpResponseExceptionFilter()); })
                 .AddNewtonsoftJson(opts =>
@@ -52,11 +59,13 @@ namespace RSBC.DMF.MedicalPortal.API
                     // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
                     opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
+            logger.LogInformation("Controllers configured.");
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC.DMF.MedicalPortal.API", Version = "v1" });
             });
+            logger.LogInformation("Swagger configured.");
 
             var dpBuilder = services.AddDataProtection();
             var keyRingPath = configuration.GetValue("DATAPROTECTION__PATH", string.Empty);
@@ -65,6 +74,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 //configure data protection folder for key sharing
                 dpBuilder.PersistKeysToFileSystem(new DirectoryInfo(keyRingPath));
             }
+            logger.LogInformation("Data Protection configured.");
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -73,18 +83,21 @@ namespace RSBC.DMF.MedicalPortal.API
                 var configvalue = configuration.GetValue("app:knownNetwork", string.Empty)?.Split('/');
                 if (configvalue.Length == 2)
                 {
-                    var knownNetwork = new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse(configvalue[0]),
-                        int.Parse(configvalue[1]));
+                    var knownNetwork = new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse(configvalue[0]), int.Parse(configvalue[1]));
                     options.KnownNetworks.Add(knownNetwork);
                 }
             });
-            services.AddCors(setupAction => setupAction.AddPolicy(Constants.CorsPolicy,
-                corsPolicyBuilder => corsPolicyBuilder.WithOrigins(config.Settings.Cors.AllowedOrigins)));
+            logger.LogInformation("Forwarded Headers configured.");
+
+            services.AddCors(
+                setupAction => setupAction.AddPolicy(Constants.CorsPolicy, corsPolicyBuilder => corsPolicyBuilder.WithOrigins(config.Settings.Cors.AllowedOrigins)));
             services.AddDistributedMemoryCache();
             services.AddMemoryCache();
             services.AddResponseCompression();
-            services.AddHealthChecks().AddCheck("Medical Portal API", () => HealthCheckResult.Healthy("OK"),
-                new[] { HealthCheckReadyTag });
+            services
+                .AddHealthChecks()
+                .AddCheck("Medical Portal API", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
+            // TODO why is this configured twice? Consolidate with above
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.All;
@@ -93,32 +106,33 @@ namespace RSBC.DMF.MedicalPortal.API
             });
 
             services.AddHttpContextAccessor();
+            logger.LogInformation("Cors, caching, and health checks configured.");
 
             // Add Case Management Service
 
             // TODO use Rsbc.Dmf.CaseManagement.Client ServiceCollectionExtensions AddCaseManagementAdapterClient instead
             // Add Case Management System (CMS) Adapter 
             services.AddCaseManagementAdapterClient(configuration);
+            logger.LogInformation("Case Management Adapter configured.");
 
             // Add Document Storage Adapter
             // TODO use Pssg.DocumentStorageAdapter.Client ServiceCollectionExtensions AddDocumentStorageClient instead
             services.AddDocumentStorageClient(configuration);
-
-            // NOTE temporary logger code, replace after adding logger e.g. Serilog/Splunk
-            // TODO # "remove loggerFactory.Create and get the loggerFactory from ".AddSerilogBootstrapLogger"
-            using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
-                .SetMinimumLevel(LogLevel.Trace)
-                .AddConsole());
+            logger.LogInformation("Document Storage Adapter configured.");
 
             // Add ICBC Adapter
             services.AddIcbcAdapterClient(configuration, loggerFactory);
             services.AddSingleton<ICachedIcbcAdapterClient, CachedIcbcAdapterClient>();
+            logger.LogInformation("ICBC Adapter configured.");
 
             services.AddPidpAdapterClient(configuration);
+            logger.LogInformation("PIDP Adapter configured.");
+
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<DocumentFactory>();
             services.AddAutoMapperSingleton();
             services.AddPdfService();
+            logger.LogInformation("PDF Service configured.\nMedical Portal API startup completed.\n\n");
         }
 
         private MedicalPortalConfiguration InitializeConfiguration(IServiceCollection services)
