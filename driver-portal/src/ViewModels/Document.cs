@@ -65,5 +65,7 @@ namespace Rsbc.Dmf.DriverPortal.ViewModels
         public string SubmittalStatus { get; set; }
 
         public bool showOnPortals { get; set; }
+        public string? ErrorMessage { get; set; }
     }
+
 }
