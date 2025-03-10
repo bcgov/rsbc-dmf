@@ -111,7 +111,7 @@ using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 
                     using (var stream2 = new MemoryStream(encodedFile))
                     {
-                        var newPage = pdfDocument.Pages.Add(new PdfSharpCore.Pdf.PdfPage());
+                        var newPage = pdfDocument.Pages.Add(new PdfPage());
 
                         XGraphics xgr = XGraphics.FromPdfPage(newPage);
 
@@ -136,8 +136,8 @@ using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
             return pdfMemoryStream.ToArray();
 
         }
- 
-         public static string checkTiff2Pdf(string documentId, CaseManager.CaseManagerClient _cmsAdapterClient, DocumentStorageAdapterClient _documentStorageAdapterClient)
+
+        public static string checkTiff2Pdf(string documentId, CaseManager.CaseManagerClient _cmsAdapterClient, DocumentStorageAdapterClient _documentStorageAdapterClient)
         {
             var reply = _cmsAdapterClient.GetLegacyDocument(new LegacyDocumentRequest() { DocumentId = documentId });
             string errorMessage = "";
