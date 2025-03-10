@@ -7,6 +7,7 @@ using Rsbc.Dmf.DriverPortal.ViewModels;
 using Rsbc.Dmf.IcbcAdapter;
 using Rsbc.Dmf.IcbcAdapter.Client;
 using System.Net;
+using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using static Rsbc.Dmf.CaseManagement.Service.DocumentManager;
 
@@ -23,18 +24,20 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<DriverController> _logger;
+        private readonly DocumentStorageAdapterClient _documentStorageAdapterClient;
 
-        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, DocumentManager.DocumentManagerClient documentManagerClient, ICachedIcbcAdapterClient icbcAdapterClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory)
+        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, DocumentManager.DocumentManagerClient documentManagerClient, ICachedIcbcAdapterClient icbcAdapterClient, DocumentStorageAdapterClient documentStorageAdapterClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory)
         {
             _cmsAdapterClient = cmsAdapterClient;
             _icbcAdapterClient = icbcAdapterClient;
+            _documentStorageAdapterClient = documentStorageAdapterClient;
             _userService = userService;
             _mapper = mapper;
             _logger = loggerFactory.CreateLogger<DriverController>();
             _documentManagerClient = documentManagerClient;
         }
 
-       
+
         /// <summary>
         /// Get all documents for a given driver but filter out documents without a url
         /// </summary>
@@ -53,12 +56,27 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 var replyItemsWithDocuments = reply.Items;
-
                 var result = _mapper.Map<List<ViewModels.Document>>(replyItemsWithDocuments);
 
                 // sort the documents
                 if (result.Count > 0)
                 {
+                    result.ForEach(doc =>
+                        {
+                            if (doc.DocumentUrl.EndsWith(".tif") || doc.DocumentUrl.EndsWith(".tiff"))
+                            {
+                                // Convert FileContents here
+                                try
+                                {
+                                    doc.ErrorMessage = DocumentUtils.checkTiff2Pdf(doc.DocumentId, _cmsAdapterClient, _documentStorageAdapterClient);
+                                }
+                                catch
+                                {
+                                    doc.ErrorMessage = "This file is corrupted and cannot be opened.";
+                                }
+                            }
+                        });
+                    
                     result = result.OrderByDescending(cs => cs.CreateDate).ToList();
                 }
 

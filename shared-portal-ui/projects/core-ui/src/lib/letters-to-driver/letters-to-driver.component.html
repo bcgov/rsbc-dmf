@@ -76,11 +76,17 @@
                     {{ letter?.documentSubType }}
                     }
                   </b>
+                  
+                  @if(letter?.errorMessage) {
+                    <div></div>
+                    <div style="color: red">{{ letter?.errorMessage }}</div>
+                  }
                 </div>
               </div>
               <div>
                 <div>
-                  <button
+                    <button 
+                    *ngIf="!letter?.errorMessage"
                   mat-flat-button
                   class="primaryButton"
                   (click)="downloadLetters(letter?.documentId)"

@@ -52,7 +52,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         public async Task<ActionResult> DownloadDocumentFile([FromRoute] string documentId)
         {
             // call the back end
-            var reply = _cmsAdapterClient.GetLegacyDocument(new LegacyDocumentRequest() { DocumentId = documentId });
+             var reply = _cmsAdapterClient.GetLegacyDocument(new LegacyDocumentRequest() { DocumentId = documentId });
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
@@ -76,6 +76,15 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                         byte[] fileContents = documentReply.Data.ToByteArray();
                         string fileName = Path.GetFileName(reply.Document.DocumentUrl);
                         string mimetype = DocumentUtils.GetMimeType(fileName);
+
+                        if (fileName.EndsWith(".tif") || fileName.EndsWith(".tiff"))
+                        {
+                            // means we need to convert tif to pdf
+                            fileContents = DocumentUtils.convertTiff2Pdf(fileContents);
+                            fileName = Path.ChangeExtension(fileName, ".pdf");
+                            mimetype = "application/pdf";
+                        }
+
                         Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={fileName}");
                         return new FileContentResult(fileContents, mimetype)
                         {
