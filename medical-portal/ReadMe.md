@@ -85,21 +85,16 @@ To enrol the user in DMFT, click on the access link on top menu, click on "Get A
 
 ### How to add endorsements
 1. Login as user A
-2. Navigate to endorsements
+2. To navigate to endorsements -- > Go to access on the onehealth app -- > Home Grant Access --> 
 3. Enter the email of user B and request endorsement
 4. Logout
-5. Navigate to [Mailhog](https://mailhog-test.healthprovideridentityportal.gov.bc.ca/)
-6. Open new email from user A and click "this link" and follow the instructions in the email
-7. Login as user B after clicking the link
-8. At the top of the page, you will see an pending endorsement link, click on the link
-9. Under incoming requests, you will see a request from user A, click Approve
-10. Logout
-11. Navigate to Mailhog
-12. Open new email from system and click the link and follow the instructions in the email
-13. Login as user A
-14. Click on the pending endorsement request link
-15. Under incoming requests, you will see an request from user B, click Approve
-16. You will receive a new email and also see a new "Working relationship" for both users
+
+
+5. Login as user B after clicking the link
+6. At the top of the page, you will see an Access --> Home --> Grant Access
+7. Under incoming requests, you will see a request from user A, click Approve
+8. Logout
+
 
 ### Contacts
 Mailhot, Nicholas <Nick.Mailhot@nttdata.com> - Scrum Master
