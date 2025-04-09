@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, ViewChild, TemplateRef } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogActions } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogRef } from '@angular/material/dialog';
 import { PopupService } from './popup.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ChefsService } from '../shared/api/services';
@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { SubmissionStatus } from '@app/features/chefs/enums/chefs-status.enum';
 import { MatIcon } from '@angular/material/icon';
 import { ConfigurationService } from '@app/shared/services/configuration.service';
+
 
 @Component({
   selector: 'app-popup',
@@ -30,7 +31,8 @@ export class PopupComponent {
     private sanitizer: DomSanitizer,
     private configService: ConfigurationService,
     @Inject(MAT_DIALOG_DATA) public data: { caseId: string, documentId: string },
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private dialogRef: MatDialogRef<PopupComponent>
   ) {
       this.caseId = data.caseId;
       this.documentId = data.documentId;
@@ -84,7 +86,9 @@ export class PopupComponent {
       assign: string;
       priority: string;
     };
+    
   }): void {
+    console.log("Chefs Receive Data message",event.data);
     // TODO this should be configurable
     if (event.origin !== 'https://submit.digital.gov.bc.ca' && event.origin !== 'https://common-logon-test.hlth.gov.bc.ca') {
       console.error(`Event message origin was not expected: ${event.origin}`);
@@ -163,7 +167,10 @@ export class PopupComponent {
         });
     }
     if (status === SubmissionStatus.Final) {
-      this.closePopup();
+      
+      this.dialogRef.close(event);
+      
+      
     }
   }
 }

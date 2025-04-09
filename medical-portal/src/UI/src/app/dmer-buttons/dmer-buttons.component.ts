@@ -9,6 +9,7 @@ import { Role } from '@app/features/auth/enums/role.enum';
 import { PopupService } from '@app/popup/popup.service';
 import { PatientCase } from '@app/shared/api/models';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-dmer-buttons',
@@ -32,7 +33,8 @@ export class DmerButtonsComponent {
   constructor(
     private profileManagementService: ProfileManagementService,
     private dialog: MatDialog,
-    private popupService: PopupService
+    private popupService: PopupService,
+    private _snackBar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
@@ -48,8 +50,21 @@ export class DmerButtonsComponent {
     }
     this.popupService
       .openPopup(this.searchedCase.caseId as string, this.searchedCase.documentId as string)
-      .subscribe(() => {
-        this.popupClosed.emit();
+      .subscribe((event) => {
+        console.log('Popup closed', event);
+        const snackbarRef = this._snackBar.open(
+          'Successfully Submitted the Chefs Form',
+          'Close',
+          {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 8000,
+          }
+        );
+
+        snackbarRef.afterDismissed().subscribe(() => {
+          this.popupClosed.emit();
+        });
       });
   }
 
