@@ -181,4 +181,18 @@ export class DashboardComponent {
       data: documentId,
     });
   }
+
+  getEndorsementName(id?: string | null): string {
+    if (!id) return '';
+
+    const user = this.profile?.endorsements?.find((endorsement) => {  
+      return endorsement.loginId === id;
+    });
+
+    if (user) {
+      return `${user.firstName} ${user.lastName}`; 
+    }
+
+    return '';
+  }
 }

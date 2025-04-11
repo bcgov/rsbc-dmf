@@ -304,6 +304,10 @@
                       @if(profile?.loginId === dmer.loginId) {
                        <b>- {{dmer.loggedInUserName}}</b> 
                       }
+                      @else {
+
+                        <b>- {{getEndorsementName(dmer.loginId)}}</b> 
+                      }
                         
                     } @else {
                       {{ " " }}
