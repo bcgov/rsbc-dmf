@@ -320,12 +320,14 @@
               <div class="dmer-details-row-1">
                 This needs to be submitted by
                 {{ dmer.dueDate | date: "longDate" }}.
-
-                <div class="right full-width">
-                  <button mat-flat-button class="primaryButton" (click)="openClaimPopup(dmer.documentId)">
-                    Unclaim Dmer
-                  </button>
-                </div>
+                @if(dmer.dmerStatus !== "Submitted") {
+                  <div class="right full-width">
+                    <button mat-flat-button class="primaryButton" (click)="openClaimPopup(dmer.documentId)">
+                      Unclaim Dmer
+                    </button>
+                  </div>
+                }
+               
               </div>
 
             </div>
