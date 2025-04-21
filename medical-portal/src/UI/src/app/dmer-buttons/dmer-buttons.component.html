@@ -41,10 +41,10 @@
     }
 
     @if (
-      searchedCase.dmerStatus ===
+      (searchedCase.dmerStatus ===
         DMERStatusEnum.RequiredClaimed ||
       searchedCase.dmerStatus ===
-        DMERStatusEnum.NonComplyClaimed 
+        DMERStatusEnum.NonComplyClaimed) && searchedCase.isOwner
     ) {
       <div>
         <button
