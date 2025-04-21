@@ -52,8 +52,13 @@ export class DmerButtonsComponent {
       .openPopup(this.searchedCase.caseId as string, this.searchedCase.documentId as string)
       .subscribe((event) => {
         console.log('Popup closed', event);
+        let message = 'Successfully Submitted the Chefs Form';
+        if (!event) {
+          message = ' Chefs Draft form has been saved';
+        }
+
         const snackbarRef = this._snackBar.open(
-          'Successfully Submitted the Chefs Form',
+          message,
           'Close',
           {
             horizontalPosition: 'center',
