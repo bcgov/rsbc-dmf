@@ -18,4 +18,5 @@ export interface PatientCase {
   name?: string | null;
   openedDate?: string | null;
   status?: string | null;
+  claimedUserId?: string | null;
 }
