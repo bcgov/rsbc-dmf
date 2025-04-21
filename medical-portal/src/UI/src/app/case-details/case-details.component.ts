@@ -34,7 +34,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { CaseSubmissionsComponent } from '../case-submissions/case-submissions.component';
 import { SubmissionRequirementsComponent } from '../submission-requirements/submission-requirements.component';
 import { CasesService, DocumentService } from '@app/shared/api/services';
-import { CaseDocument, PatientCase } from '@app/shared/api/models';
+import { CaseDocument, PatientCase, UserProfile } from '@app/shared/api/models';
 import {
   CaseStageEnum,
   DMERStatusEnum,
@@ -45,6 +45,7 @@ import { DatePipe } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
 import { PopupService } from '../popup/popup.service';
 import { DmerButtonsComponent } from "../dmer-buttons/dmer-buttons.component";
+import { ProfileManagementService } from '@app/shared/services/profile.service';
 
 @Component({
   selector: 'app-case-details',
@@ -71,7 +72,7 @@ import { DmerButtonsComponent } from "../dmer-buttons/dmer-buttons.component";
     SubmissionRequirementsComponent,
     DatePipe,
     DmerButtonsComponent
-],
+  ],
   templateUrl: './case-details.component.html',
   styleUrl: './case-details.component.scss',
   viewProviders: [MatExpansionPanel],
@@ -87,6 +88,7 @@ export class CaseDetailsComponent implements OnInit {
   idCode = input<string>();
   caseId = input<string>();
   caseDetails?: PatientCase;
+  public profile?: UserProfile;
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   selectedIndex = 0;
@@ -106,6 +108,7 @@ export class CaseDetailsComponent implements OnInit {
     private casesService: CasesService,
     private documentService: DocumentService,
     private popupService: PopupService,
+    private profileManagementService: ProfileManagementService,
   ) { }
 
   ngAfterViewInit(): void {
@@ -122,10 +125,11 @@ export class CaseDetailsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+
     this.casesService
       .apiCasesSearchIdCodeGet$Json({ idCode: this.idCode() as string })
       .subscribe((caseDetails) => {
-        console.log(this.caseDetails);
+        console.log("case Details ", caseDetails);
         this.caseDetails = caseDetails;
         if (caseDetails?.status === CaseStageEnum.Opened) {
           this.selectedIndex = 0;
@@ -146,9 +150,14 @@ export class CaseDetailsComponent implements OnInit {
           this.selectedIndex = 5;
         }
 
-        // Load docuemnts
+        // Load documents
         this.getDriverDocuments(this.caseDetails?.driverId as string);
+
       });
+
+     
+       
+
   }
 
   getDriverDocuments(driverId: string) {
@@ -202,5 +211,27 @@ export class CaseDetailsComponent implements OnInit {
       return;
     }
     this.popupService.openPopup(this.caseId() as string, this.caseDetails.documentId as string);
+  }
+
+  getClaimedUserName(id?: string | null): string {
+    // Check if the id is valid
+    if (!id) return '';
+
+    this.profile = this.profileManagementService.getCachedProfile();
+
+    if(this.profile.loginId === id) {
+      return `${this.profile.firstName} ${this.profile.lastName}`;
+    }
+
+    // Check if the profile has endorsements and find the user with the matching ClaimedUserId
+    const user = this.profile?.endorsements?.find((endorsement) => {
+      return endorsement.loginId === id;
+    });
+
+    if (user) {
+      return `${user.firstName} ${user.lastName}`;
+    } 
+
+    return '';
   }
 }

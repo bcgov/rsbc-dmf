@@ -38,7 +38,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(500)]
         [ActionName("SearchCaseByIdCode")]
         public async Task<ActionResult> SearchCaseByIdCode([Required][FromRoute] string idCode)
-        {
+         {
             var profile = await _userService.GetCurrentUserContext();
 
             PatientCase result = null;
@@ -77,7 +77,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.DmerType = string.IsNullOrEmpty(@case.Item?.DmerType) ? "Suspected Medical Condition" : @case.Item.DmerType;
                 result.DmerStatus = string.IsNullOrEmpty(document.Item?.Status) ? "Not Requested" : document.Item?.Status;
                 result.DmerStatus = DmerUtilities.TranslateDmerStatus(result.DmerStatus, document.Item?.Provider?.Id);
-                result.IsOwner = document.Item?.Provider?.Id == profile.Id;
+                result.IsOwner = document.Item?.Provider?.Id == profile.LoginId;
+                result.ClaimedUserId = document.Item?.Provider?.Id ?? string.Empty;
                 result.Name = document.Item?.Provider?.Name ?? string.Empty;
                 result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
                 result.IdCode = @case.Item.IdCode;
@@ -85,8 +86,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.DriverId = @case.Item.DriverId;
                 result.DocumentId = document.Item?.DocumentId ?? string.Empty;
                 result.Status = @case.Item.Status;
-                result.OpenedDate = @case.Item.OpenedDate?.ToDateTimeOffset();
-                
+                result.OpenedDate = @case.Item.OpenedDate?.ToDateTimeOffset();                
                 
                 // get driver info from ICBC
                 if (@case.Item.DriverLicenseNumber != null)

@@ -32,5 +32,7 @@ public class PatientCase
 
     public string DocumentId { get; set; }
 
-    
+    // Claimed user Id
+
+    public string ClaimedUserId { get; set; }
 }
