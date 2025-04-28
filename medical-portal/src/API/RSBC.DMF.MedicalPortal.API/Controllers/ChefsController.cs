@@ -20,6 +20,9 @@ using Rsbc.Dmf.IcbcAdapter.Client;
 using Microsoft.AspNetCore.Authorization;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 using Pssg.SharedUtils;
+using System.Globalization;
+using System.Globalization;
+
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -140,6 +143,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
+            
+
             // serialize and log the payload
             var jsonString = JsonSerializer.Serialize(submission);
             logger.LogInformation($"ChefsSubmission payload: {jsonString}");
@@ -161,8 +166,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
             else if (submission.Status == SubmissionStatus.Final)
             {
-                jsonUploadRequest.EntityName = "dfp";
-                jsonUploadRequest.FileName = $"{caseId}.json";
+                jsonUploadRequest.EntityName = "dfp"; 
+                jsonUploadRequest.FileName = $"{caseId}.json"; // Document Type - DRiver (DL-Surname)
                 jsonUploadRequest.FolderName = "triage-request";
             }
 
@@ -215,8 +220,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var updateCaseRequest = new UpdateCaseRequest();
                 updateCaseRequest.IsDmer = true;
                 updateCaseRequest.CaseId = caseId;
-                updateCaseRequest.Priority = submission.Priority;
-                updateCaseRequest.Assign = submission.Assign;
+                updateCaseRequest.Priority = TranslatePriority( submission.Priority);
+                updateCaseRequest.Assign = TranslateAssign(submission.Assign);
                 // used to add Document linked to case for the JSON data S3 file
                 updateCaseRequest.DataFileKey = jsonUploadReply.FileName;
                 updateCaseRequest.DataFileSize = jsonUploadRequest.Data.Length;
@@ -238,7 +243,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     {
                         Id = documentId,
                         // TODO portals should be agnostic of Dynamics specific values, this should be an enum [translated in CMS] or string value
-                        SubmittalStatus = (int)SubmittalStatus.UnderReview
+                        SubmittalStatus = (int)SubmittalStatus.UnderReview,
+                        DocumentType = "DMER",
                     };
                     _documentManagerClient.UpdateDocument(UpdateDocumentRequest);
                 }
@@ -280,7 +286,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 chefsBundle.medicalConditions = mapper.Map<IEnumerable<MedicalCondition>>(c.Item.MedicalConditions);
                 chefsBundle.dmerType = c.Item.DmerType;
             }
-
+           
             var driverInfoReply = new DriverInfoReply();
 
             if (caseResult.DriverLicenseNumber != null)
@@ -302,7 +308,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     Name = driverInfoReply.GivenName + ' ' + driverInfoReply.Surname,
                     GivenName = driverInfoReply.GivenName,
                     Surname = driverInfoReply.Surname,
-                    BirthDate = driverInfoReply.BirthDate,
+                    BirthDate = DateTime.TryParse(driverInfoReply.BirthDate, out var parsedDate)
+                    ? parsedDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture): string.Empty,
                     DriverLicenceNumber = caseResult.DriverLicenseNumber,
                     LicenceClass = driverInfoReply.LicenceClass,
                     Address = new Address()
@@ -335,5 +342,47 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
             return submissionStatus;
         }
+
+        private string TranslatePriority(string priority)
+        {
+
+            var statusMap = new Dictionary<string, string>()
+            {
+                {"PR", "Regular" },
+                {"PC", "Critical Review" },
+                {"PU", "Urgent / Immediate" },
+            };
+
+            if (priority != null && statusMap.ContainsKey(priority))
+            {
+                return statusMap[priority];
+            }
+            else
+            {
+                return priority;
+            }
+        }
+
+        private string TranslateAssign(string Assign)
+        {
+
+            var statusMap = new Dictionary<string, string>()
+            {
+                {"EI", "Team - Intake" },
+                {"EN", "Team - Nurse Case Manager" },
+                {"EA", "Team - Adjudicator" },
+            };
+
+            if (Assign != null && statusMap.ContainsKey(Assign))
+            {
+                return statusMap[Assign];
+            }
+            else
+            {
+                return Assign;
+            }
+        }
+
     }
 }
+
