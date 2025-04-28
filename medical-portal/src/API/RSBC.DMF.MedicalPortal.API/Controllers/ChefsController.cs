@@ -220,8 +220,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var updateCaseRequest = new UpdateCaseRequest();
                 updateCaseRequest.IsDmer = true;
                 updateCaseRequest.CaseId = caseId;
-                updateCaseRequest.Priority = TranslatePriority( submission.Priority);
-                updateCaseRequest.Assign = TranslateAssign(submission.Assign);
+                updateCaseRequest.Priority = submission.Priority;
+                updateCaseRequest.Assign = submission.Assign;
                 // used to add Document linked to case for the JSON data S3 file
                 updateCaseRequest.DataFileKey = jsonUploadReply.FileName;
                 updateCaseRequest.DataFileSize = jsonUploadRequest.Data.Length;
