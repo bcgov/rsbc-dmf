@@ -313,7 +313,7 @@ namespace Rsbc.Dmf.CaseManagement
             if (request.SubmittalStatus != default)
             {
                 document.dfp_submittalstatus = request.SubmittalStatus;
-                document.dfp_DocumentTypeID.dfp_name = request.DocumentType;
+                //document.dfp_DocumentTypeID.dfp_name = request.DocumentType;
             }
 
             dynamicsContext.UpdateObject(document);

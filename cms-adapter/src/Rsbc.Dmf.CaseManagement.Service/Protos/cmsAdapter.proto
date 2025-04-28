@@ -559,7 +559,7 @@ service DocumentManager {
 message UpdateDocumentRequest {
     string id = 1;
     int32 submittalStatus = 2;
-    string documentType = 3;
+    //string documentType = 3;
 }
 
 message UpdateDocumentReply {

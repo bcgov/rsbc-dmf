@@ -244,7 +244,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                         Id = documentId,
                         // TODO portals should be agnostic of Dynamics specific values, this should be an enum [translated in CMS] or string value
                         SubmittalStatus = (int)SubmittalStatus.UnderReview,
-                        DocumentType = "DMER",
+                       // DocumentType = "DMER",
                     };
                     _documentManagerClient.UpdateDocument(UpdateDocumentRequest);
                 }
