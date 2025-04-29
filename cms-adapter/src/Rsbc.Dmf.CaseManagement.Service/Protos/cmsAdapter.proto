@@ -559,6 +559,8 @@ service DocumentManager {
 message UpdateDocumentRequest {
     string id = 1;
     int32 submittalStatus = 2;
+    string dpsPriority = 3;
+    string queue = 4;
 }
 
 message UpdateDocumentReply {

@@ -143,7 +143,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            
+            // string filenameOverride = $"{driversLicense}-{surname}-{documentType}{extension}";    
 
             // serialize and log the payload
             var jsonString = JsonSerializer.Serialize(submission);
@@ -220,8 +220,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var updateCaseRequest = new UpdateCaseRequest();
                 updateCaseRequest.IsDmer = true;
                 updateCaseRequest.CaseId = caseId;
-                updateCaseRequest.Priority = submission.Priority;
-                updateCaseRequest.Assign = submission.Assign;
+                updateCaseRequest.Priority = TranslatePriority(submission.Priority);
+                updateCaseRequest.Assign = TranslateAssign(submission.Assign);
                 // used to add Document linked to case for the JSON data S3 file
                 updateCaseRequest.DataFileKey = jsonUploadReply.FileName;
                 updateCaseRequest.DataFileSize = jsonUploadRequest.Data.Length;
@@ -244,7 +244,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                         Id = documentId,
                         // TODO portals should be agnostic of Dynamics specific values, this should be an enum [translated in CMS] or string value
                         SubmittalStatus = (int)SubmittalStatus.UnderReview,
-                       // DocumentType = "DMER",
+                        DpsPriority = TranslatePriority(submission.Priority),
+                        Queue = TranslateAssign (submission.Assign)
+                       
                     };
                     _documentManagerClient.UpdateDocument(UpdateDocumentRequest);
                 }
@@ -350,7 +352,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             {
                 {"PR", "Regular" },
                 {"PC", "Critical Review" },
-                {"PU", "Urgent / Immediate" },
+                {"PU", "Urgent/ Immediate" },
             };
 
             if (priority != null && statusMap.ContainsKey(priority))
@@ -359,7 +361,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
             else
             {
-                return priority;
+                return statusMap["PR"];
             }
         }
 
@@ -368,9 +370,11 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             var statusMap = new Dictionary<string, string>()
             {
-                {"EI", "Team - Intake" },
-                {"EN", "Team - Nurse Case Manager" },
-                {"EA", "Team - Adjudicator" },
+                {"EI", "Team - Intake"},
+                {"EA", " Team - Adjudicators"},
+                {"EN", "Team - Case Managers"},
+               
+               
             };
 
             if (Assign != null && statusMap.ContainsKey(Assign))
@@ -379,7 +383,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
             else
             {
-                return Assign;
+                return statusMap["EI"];
             }
         }
 

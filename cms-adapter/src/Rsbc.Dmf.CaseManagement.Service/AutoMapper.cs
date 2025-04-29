@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Rsbc.Dmf.CaseManagement.Dynamics.Mapper;
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentMapper;
 using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentTypeMapper;
 using static Rsbc.Dmf.CaseManagement.Dynamics.Mapper.CallbackMapper;
@@ -47,7 +48,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<CaseManagement.DocumentSubType, DocumentSubType>();
             CreateMap<CaseManagement.Callback, Callback>()
                 .AddTransform(NullStringConverter);
-            CreateMap<UpdateDocumentRequest, UpdateDocumentCommand>();
+            CreateMap<UpdateDocumentRequest, UpdateDocumentCommand>()
+              .ForMember(dest => dest.DpsPriority, opt => opt.MapFrom(src => src.DpsPriority))
+              .ForMember(dest => dest.Queue, opt => opt.MapFrom(src => src.Queue));
+
 
             CreateMap<Dto.Document, Document>()
                 .ForMember(dest => dest.Provider, opt => opt.MapFrom(src => src.Login))
