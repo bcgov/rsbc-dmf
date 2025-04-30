@@ -6,6 +6,10 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public Guid Id { get; set; }
         public int SubmittalStatus { get; set; }
+
+        public string DpsPriority { get; set; }
+
+        public string Queue { get; set; }
         //public string DocumentType { get; set; }
     }
 }

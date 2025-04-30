@@ -313,8 +313,12 @@ namespace Rsbc.Dmf.CaseManagement
             if (request.SubmittalStatus != default)
             {
                 document.dfp_submittalstatus = request.SubmittalStatus;
-                //document.dfp_DocumentTypeID.dfp_name = request.DocumentType;
+               
             }
+
+            document.dfp_dpspriority = TranslatePriorityCode(request.DpsPriority);
+            document.dfp_queue = TranslateQueueCode(request.Queue);
+            //document.dfp_DocumentTypeID.dfp_name = "DMER";
 
             dynamicsContext.UpdateObject(document);
             dynamicsContext.SaveChanges();
@@ -405,9 +409,58 @@ namespace Rsbc.Dmf.CaseManagement
             return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
         }
 
+
+        /// <summary>
+        /// Translate the Dynamics Priority (status reason) field to text
+        /// </summary>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        private int TranslatePriorityCode(string priorityCode)
+        {
+            var statusMap = new Dictionary<string, int>()
+            {
+                { "Regular", 100000000 },
+                { "Urgent/ Immediate",  100000001 },
+                { "Critical Review" , 100000003},
+            };
+
+            if (priorityCode != null && statusMap.ContainsKey(priorityCode))
+            {
+                return statusMap[priorityCode];
+            }
+            else
+            {
+                return 100000000;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="priorityCode"></param>
+        /// <returns></returns>
+        private int TranslateQueueCode(string queueCode)
+        {
+            var statusMap = new Dictionary<string, int>()
+            {
+                { "Team - Intake", 100000000 },
+                { "Team - Adjudicators",  100000001 },
+                { "Team - Case Managers" ,  100000002},
+            };
+
+            if (queueCode != null && statusMap.ContainsKey(queueCode))
+            {
+                return statusMap[queueCode];
+            }
+            else
+            {
+                return 100000000;
+            }
+        }
+
+
     }
 
-
-}
+    }
 
 

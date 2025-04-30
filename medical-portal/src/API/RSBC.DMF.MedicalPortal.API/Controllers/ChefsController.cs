@@ -22,6 +22,8 @@ using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 using Pssg.SharedUtils;
 using System.Globalization;
 using System.Globalization;
+using System.Net;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
@@ -143,7 +145,19 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            
+            // Get driver details
+                string driverLicenseNumber = string.Empty;
+                string surname = string.Empty;
+
+                var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
+                if (c != null && c.ResultStatus == CMSResultStatus.Success)
+                {
+                    driverLicenseNumber = c.Item.DriverLicenseNumber;
+                    surname = c.Item.LastName;
+                   
+                }
+
+                 string filenameOverride = $"DMER-{driverLicenseNumber} -{surname}";
 
             // serialize and log the payload
             var jsonString = JsonSerializer.Serialize(submission);
@@ -167,7 +181,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             else if (submission.Status == SubmissionStatus.Final)
             {
                 jsonUploadRequest.EntityName = "dfp"; 
-                jsonUploadRequest.FileName = $"{caseId}.json"; // Document Type - DRiver (DL-Surname)
+                jsonUploadRequest.FileName = $"{filenameOverride}.json"; // Document Type - DRiver (DL-Surname)
                 jsonUploadRequest.FolderName = "triage-request";
             }
 
@@ -190,8 +204,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 {
                     ContentType = "application/pdf",
                     Data = ByteString.CopyFrom(pdfData),
-                    EntityName = "dfp",
-                    FileName = $"{caseId}.pdf",
+                    EntityName = "dfp_driver",
+                    FileName = $"{filenameOverride}.pdf",
                     FolderName = "triage-request"
                 };
                 var pdfUploadReply = documentStorageAdapterClient.UploadFile(pdfUploadRequest);
@@ -201,6 +215,10 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError, pdfUploadReply.ErrorDetail);
                 }
                 logger.LogInformation($"PUT Submission - Successfully uploaded PDF to S3, dataFileKey: {pdfUploadReply.FileName}, dataFileSize: {pdfData.Length}, reply: {JsonSerializer.Serialize(pdfUploadReply)}");
+
+                
+                // find the location for doc
+
 
                 // get a list of all available Case Flags 
                 var getAllFlagsReply = _cmsAdapterClient.GetAllFlags(new EmptyRequest());
@@ -220,14 +238,15 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var updateCaseRequest = new UpdateCaseRequest();
                 updateCaseRequest.IsDmer = true;
                 updateCaseRequest.CaseId = caseId;
-                updateCaseRequest.Priority = submission.Priority;
-                updateCaseRequest.Assign = submission.Assign;
+                updateCaseRequest.Priority = TranslatePriority(submission.Priority);
+                updateCaseRequest.Assign = TranslateAssign(submission.Assign);
                 // used to add Document linked to case for the JSON data S3 file
                 updateCaseRequest.DataFileKey = jsonUploadReply.FileName;
                 updateCaseRequest.DataFileSize = jsonUploadRequest.Data.Length;
                 // used to add Document linked to case for the PDF version
                 updateCaseRequest.PdfFileKey = pdfUploadReply.FileName;
                 updateCaseRequest.PdfFileSize = pdfUploadRequest.Data.Length;
+                
 
                 foreach (var item in matchedFlags)
                 {
@@ -244,7 +263,10 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                         Id = documentId,
                         // TODO portals should be agnostic of Dynamics specific values, this should be an enum [translated in CMS] or string value
                         SubmittalStatus = (int)SubmittalStatus.UnderReview,
-                       // DocumentType = "DMER",
+                        DpsPriority = TranslatePriority(submission.Priority),
+                        Queue = TranslateAssign (submission.Assign)
+                        // Add type of document, add location
+                       
                     };
                     _documentManagerClient.UpdateDocument(UpdateDocumentRequest);
                 }
@@ -350,7 +372,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             {
                 {"PR", "Regular" },
                 {"PC", "Critical Review" },
-                {"PU", "Urgent / Immediate" },
+                {"PU", "Urgent/ Immediate" },
             };
 
             if (priority != null && statusMap.ContainsKey(priority))
@@ -359,7 +381,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
             else
             {
-                return priority;
+                return statusMap["PR"];
             }
         }
 
@@ -368,9 +390,11 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             var statusMap = new Dictionary<string, string>()
             {
-                {"EI", "Team - Intake" },
-                {"EN", "Team - Nurse Case Manager" },
-                {"EA", "Team - Adjudicator" },
+                {"EI", "Team - Intake"},
+                {"EA", " Team - Adjudicators"},
+                {"EN", "Team - Case Managers"},
+               
+               
             };
 
             if (Assign != null && statusMap.ContainsKey(Assign))
@@ -379,7 +403,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
             else
             {
-                return Assign;
+                return statusMap["EI"];
             }
         }
 
