@@ -22,6 +22,8 @@ using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 using Pssg.SharedUtils;
 using System.Globalization;
 using System.Globalization;
+using System.Net;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
@@ -143,7 +145,19 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            // string filenameOverride = $"{driversLicense}-{surname}-{documentType}{extension}";    
+            // Get driver details
+                string driverLicenseNumber = string.Empty;
+                string surname = string.Empty;
+
+                var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
+                if (c != null && c.ResultStatus == CMSResultStatus.Success)
+                {
+                    driverLicenseNumber = c.Item.DriverLicenseNumber;
+                    surname = c.Item.LastName;
+                   
+                }
+
+                 string filenameOverride = $"DMER-{driverLicenseNumber} -{surname}";
 
             // serialize and log the payload
             var jsonString = JsonSerializer.Serialize(submission);
@@ -167,7 +181,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             else if (submission.Status == SubmissionStatus.Final)
             {
                 jsonUploadRequest.EntityName = "dfp"; 
-                jsonUploadRequest.FileName = $"{caseId}.json"; // Document Type - DRiver (DL-Surname)
+                jsonUploadRequest.FileName = $"{filenameOverride}.json"; // Document Type - DRiver (DL-Surname)
                 jsonUploadRequest.FolderName = "triage-request";
             }
 
@@ -190,8 +204,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 {
                     ContentType = "application/pdf",
                     Data = ByteString.CopyFrom(pdfData),
-                    EntityName = "dfp",
-                    FileName = $"{caseId}.pdf",
+                    EntityName = "dfp_driver",
+                    FileName = $"{filenameOverride}.pdf",
                     FolderName = "triage-request"
                 };
                 var pdfUploadReply = documentStorageAdapterClient.UploadFile(pdfUploadRequest);
@@ -201,6 +215,10 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     return StatusCode(StatusCodes.Status500InternalServerError, pdfUploadReply.ErrorDetail);
                 }
                 logger.LogInformation($"PUT Submission - Successfully uploaded PDF to S3, dataFileKey: {pdfUploadReply.FileName}, dataFileSize: {pdfData.Length}, reply: {JsonSerializer.Serialize(pdfUploadReply)}");
+
+                
+                // find the location for doc
+
 
                 // get a list of all available Case Flags 
                 var getAllFlagsReply = _cmsAdapterClient.GetAllFlags(new EmptyRequest());
@@ -228,6 +246,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 // used to add Document linked to case for the PDF version
                 updateCaseRequest.PdfFileKey = pdfUploadReply.FileName;
                 updateCaseRequest.PdfFileSize = pdfUploadRequest.Data.Length;
+                
 
                 foreach (var item in matchedFlags)
                 {
@@ -246,6 +265,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                         SubmittalStatus = (int)SubmittalStatus.UnderReview,
                         DpsPriority = TranslatePriority(submission.Priority),
                         Queue = TranslateAssign (submission.Assign)
+                        // Add type of document, add location
                        
                     };
                     _documentManagerClient.UpdateDocument(UpdateDocumentRequest);
