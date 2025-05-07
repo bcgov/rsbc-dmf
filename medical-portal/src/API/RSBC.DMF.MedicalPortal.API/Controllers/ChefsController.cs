@@ -375,7 +375,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             {
                 {"PR", "Regular" },
                 {"PC", "Critical Review" },
-                {"PU", "Urgent / Immediate" },
+                {"PU", "Urgent/ Immediate" },
             };
 
             if (priority != null && statusMap.ContainsKey(priority))
