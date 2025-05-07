@@ -155,22 +155,32 @@ export class PopupComponent {
         },
       };
       let previouSubmissionStatus = status;
+      console.log("Previous Submission Status", previouSubmissionStatus);
       this.chefsService
         .apiChefsSubmissionPut$Json({ ...params })
         .subscribe((submission) => {
-          console.log(submission);
+          console.log("Submission on PUT",submission);
           // if submission status was final but returned draft, it is because the user lacked permissions, so display a warning dialog
           if (previouSubmissionStatus == SubmissionStatus.Final && submission.status == SubmissionStatus.Draft) {
             this.dialog.open(this.warningDialog);
           }
           return submission;
-        });
+          
+        },
+        (error) => {
+          if (error.status === 404) {
+            this.sendMessage(type, {});
+          } else {
+            console.error('[HOST] apiChefsSubmissionPut An error occurred:', error);
+          }
+        }
+      );
+       
     }
     if (status === SubmissionStatus.Final) {
       
       this.dialogRef.close(event);
-      
-      
+
     }
   }
 }

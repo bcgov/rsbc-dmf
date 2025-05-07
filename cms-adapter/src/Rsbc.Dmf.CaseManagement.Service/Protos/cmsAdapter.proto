@@ -471,6 +471,8 @@ message UpdateCaseRequest{
     string priority = 8;
     string assign = 9;
     bool isDmer = 10;
+    string documentType = 11;
+    string documentTypeCode = 12;
 }
 
 message UpdateCaseReply {	

@@ -1740,7 +1740,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     {
                         Description = item.Question,
                         Id = item.Identifier,
-                        FormId = item.FormId
+                        FormId = item.FormId,
+                        FlagType = (FlagTypeOptionSet?)item.FlagType,
                     };
                     flags.Add(newFlag);
                     _logger.LogInformation($"Added flag {item.Question} to flags for set case flags.");
@@ -1749,7 +1750,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 SubmittalStatus? submittalStatus = null;
                 if (request.IsDmer)
                 {
-                    submittalStatus = hasFlags ? SubmittalStatus.Uploaded : SubmittalStatus.CleanPass;
+                    submittalStatus = hasFlags ? SubmittalStatus.Received : SubmittalStatus.CleanPass;
                 }
                 // set the flags.
                 var x = await _caseManager.SetCaseFlags(request.CaseId, request.IsCleanPass, flags);
@@ -1759,12 +1760,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 _logger.LogInformation($"Add file - {request.CaseId}, files - {request.DataFileKey} {request.PdfFileKey}");
                 if (!string.IsNullOrEmpty(request.PdfFileKey))
                 {
-                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey, request.PdfFileSize, request.Priority, request.Assign, (int?)submittalStatus);
+                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey, request.PdfFileSize, request.Priority, request.Assign, (int?)submittalStatus, request.DocumentType, request.DocumentTypeCode);
                 }
-                if (!string.IsNullOrEmpty(request.DataFileKey))
-                {
-                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey, request.DataFileSize, request.Priority, request.Assign, (int?)submittalStatus);
-                }
+                //if (!string.IsNullOrEmpty(request.DataFileKey))
+                //{
+                //    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey, request.DataFileSize, request.Priority, request.Assign, (int?)submittalStatus,request.DocumentType, request.DocumentTypeCode);
+                //}
                 reply.ResultStatus = ResultStatus.Success;
             }
             catch (Exception e)
