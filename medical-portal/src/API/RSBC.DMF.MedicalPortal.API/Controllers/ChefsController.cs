@@ -180,8 +180,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
             else if (submission.Status == SubmissionStatus.Final)
             {
-                jsonUploadRequest.EntityName = "dfp"; 
-                jsonUploadRequest.FileName = $"{filenameOverride}.json"; // Document Type - DRiver (DL-Surname)
+                jsonUploadRequest.EntityName = "dfp_driver"; 
+                jsonUploadRequest.FileName = $"{filenameOverride}.json";
                 jsonUploadRequest.FolderName = "triage-request";
             }
 
@@ -246,7 +246,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 // used to add Document linked to case for the PDF version
                 updateCaseRequest.PdfFileKey = pdfUploadReply.FileName;
                 updateCaseRequest.PdfFileSize = pdfUploadRequest.Data.Length;
-                
+                updateCaseRequest.DocumentType = "DMER";
+                updateCaseRequest.DocumentTypeCode = "001";
 
                 foreach (var item in matchedFlags)
                 {
@@ -256,20 +257,22 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var caseResult = _cmsAdapterClient.UpdateCase(updateCaseRequest);
 
                 // update DMER document status to "Under Reviewed" on success
-                if (caseResult.ResultStatus == CMSResultStatus.Success)
-                {
-                    var UpdateDocumentRequest = new UpdateDocumentRequest
-                    {
-                        Id = documentId,
-                        // TODO portals should be agnostic of Dynamics specific values, this should be an enum [translated in CMS] or string value
-                        SubmittalStatus = (int)SubmittalStatus.UnderReview,
-                        DpsPriority = TranslatePriority(submission.Priority),
-                        Queue = TranslateAssign (submission.Assign)
-                        // Add type of document, add location
-                       
-                    };
-                    _documentManagerClient.UpdateDocument(UpdateDocumentRequest);
-                }
+                //if (caseResult.ResultStatus == CMSResultStatus.Success)
+                //{
+                //    var UpdateDocumentRequest = new UpdateDocumentRequest
+                //    {
+                //        Id = documentId,
+                //        // TODO portals should be agnostic of Dynamics specific values, this should be an enum [translated in CMS] or string value
+                //        SubmittalStatus = (int)SubmittalStatus.UnderReview,
+                //        DpsPriority = TranslatePriority(submission.Priority),
+                //        Queue = TranslateAssign (submission.Assign),
+                //        //DocumentUrl = pdfUploadReply.FileName,
+                //        //DocumentType = "DMER",
+                //        //DocumentTypeCode = "001"
+
+                //    };
+                //    _documentManagerClient.UpdateDocument(UpdateDocumentRequest);
+                //}
 
                 logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
             }
@@ -372,7 +375,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             {
                 {"PR", "Regular" },
                 {"PC", "Critical Review" },
-                {"PU", "Urgent/ Immediate" },
+                {"PU", "Urgent / Immediate" },
             };
 
             if (priority != null && statusMap.ContainsKey(priority))
@@ -391,7 +394,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var statusMap = new Dictionary<string, string>()
             {
                 {"EI", "Team - Intake"},
-                {"EA", " Team - Adjudicators"},
+                {"EA", "Team - Adjudicators"},
                 {"EN", "Team - Case Managers"},
                
                

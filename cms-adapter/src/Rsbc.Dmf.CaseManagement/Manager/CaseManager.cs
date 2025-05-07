@@ -4,6 +4,7 @@ using Microsoft.OData.Client;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using Serilog;
+using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -226,6 +227,15 @@ namespace Rsbc.Dmf.CaseManagement
         Reviewed = 100000003,
         Uploaded = 100000010
     }
+
+    public enum DMERStatusOptionSet
+    {
+        Adjudicate = 100000000,
+        Reject = 100000001,
+        CleanPass = 100000002,
+        ManualPass = 100000003,
+    }
+
 
     // TODO move to CallbackModel.cs
     public enum CallbackPriority
@@ -1899,8 +1909,6 @@ namespace Rsbc.Dmf.CaseManagement
                     bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
                     bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
                 }
-
-
 
                 try
                 {
@@ -5132,8 +5140,6 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
-       
-
 
         /// <summary>
         /// Add Document Url To Case If Not Exist
@@ -5142,78 +5148,113 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="fileKey"></param>
         /// <param name="fileSize"></param>
         /// <returns></returns>
-        public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize, string priority, string assign, int? submittalStatus)
+        public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize, string priority, string assign, int? submittalStatus, string documentType, string documentTypeCode)
         {
-            // add links to documents.
-            incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(dmerIdentifier)).Expand(x => x.bcgov_incident_bcgov_documenturl).GetValue();
+            // add links to documents for case entity
+            incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(dmerIdentifier))
+                .Expand(x => x.bcgov_incident_bcgov_documenturl)
+                .GetValue();
+
+            // Get documenttype id
+            var documentTypeId = GetDocumentType(documentTypeCode, documentType, null);
+
+            bool found = false;
+
+            bcgov_documenturl bcgovDocumentUrl = null;
 
             if (dmerEntity != null)
             {
+
                 if (dmerEntity.bcgov_incident_bcgov_documenturl.Count(x => x.bcgov_url == fileKey) == 0)
                 {
-                    // add the document url.
-                    //bcgov_documenturl givenUrl = dynamicsContext.bcgov_documenturls.Where(x => x.bcgov_url == fileKey).FirstOrDefault();
-                    string filename;
-                    if (fileKey.LastIndexOf("/") != -1)
-                    {
-                        filename = fileKey.Substring(fileKey.LastIndexOf("/") + 1);
-                    }
-                    else
-                    {
-                        filename = fileKey;
-                    }
+                    // scan through the documents to see if there is document in open pending status
+                    // ensure we have the documents.
+                    await dynamicsContext.LoadPropertyAsync(dmerEntity, nameof(incident.bcgov_incident_bcgov_documenturl));
 
-                    string extension;
-                    if (fileKey.LastIndexOf(".") != -1)
+                    if (documentTypeId != null)
                     {
-                        extension = fileKey.Substring(fileKey.LastIndexOf("."));
-                    }
-                    else
-                    {
-                        extension = "";
-                    }
+                        foreach (var doc in dmerEntity.bcgov_incident_bcgov_documenturl)
+                        {
+                            await dynamicsContext.LoadPropertyAsync(doc, nameof(doc.dfp_DocumentTypeID));
+                            
+                            if (doc.statecode == 0 // active
+                                && doc.dfp_DocumentTypeID?.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid
+                                && doc.dfp_submittalstatus == 100000000)
+                            {
+                                string filename;
+                                if (fileKey.LastIndexOf("/") != -1)
+                                {
+                                    filename = fileKey.Substring(fileKey.LastIndexOf("/") + 1);
+                                }
+                                else
+                                {
+                                    filename = fileKey;
+                                }
 
-                    //if (givenUrl == null)
-                    //{
-                    var dateUploaded = DateTimeOffset.Now;
-                    var givenUrl = new bcgov_documenturl()
-                    {
-                        bcgov_url = fileKey,
-                        bcgov_receiveddate = dateUploaded,
-                        dfp_uploadeddate = dateUploaded,
-                        bcgov_filename = filename,
-                        bcgov_fileextension = extension,
-                        bcgov_origincode = 931490000,
-                        bcgov_filesize = HumanReadableFileLength(fileSize)
-                    };
-                    if (!string.IsNullOrEmpty(priority))
-                    {
-                        givenUrl.dfp_priority = TranslatePriorityCode(priority);
-                    }
-                    if (!string.IsNullOrEmpty(assign))
-                    {
-                        givenUrl.dfp_queue = TranslateQueueCode(assign);
-                    }
-                    if (submittalStatus != null)
-                    {
-                        givenUrl.dfp_submittalstatus = submittalStatus;
-                    }
+                                string extension;
+                                if (fileKey.LastIndexOf(".") != -1)
+                                {
+                                    extension = fileKey.Substring(fileKey.LastIndexOf("."));
+                                }
+                                else
+                                {
+                                    extension = "";
+                                }
 
-                    await dynamicsContext.SaveChangesAsync();
-                    dynamicsContext.AddTobcgov_documenturls(givenUrl);
+                                var dateUploaded = DateTimeOffset.Now;
 
-                    var saveResult = await dynamicsContext.SaveChangesAsync();
-                    var tempId = GetCreatedId(saveResult);
-                    if (tempId != null)
-                    {
+                                doc.bcgov_url = fileKey;
+                                doc.bcgov_receiveddate = dateUploaded;
+                                doc.dfp_uploadeddate = dateUploaded;
+                                doc.bcgov_filename = filename;
+                                doc.bcgov_fileextension = extension;
+                                doc.bcgov_origincode = 931490000;
+                                doc.bcgov_filesize = HumanReadableFileLength(fileSize);
+                                doc.dfp_documentorigin = 100000000;
+                                doc.dfp_faxreceiveddate = dateUploaded;
+                              
+                                if (!string.IsNullOrEmpty(priority))
+                                {
+                                    doc.dfp_dpspriority = TranslatePriorityCode(priority);
+                                }
+                                if (!string.IsNullOrEmpty(assign))
+                                {
+                                    doc.dfp_queue = TranslateQueueCode(assign);
+                                }
+                                if (submittalStatus != null)
+                                {
+                                    doc.dfp_submittalstatus = submittalStatus;
+                                }
 
-                        givenUrl = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
+                                if (submittalStatus == (int)submittalStatusOptionSet.CleanPass)
+                                {
+                                    doc.dfp_dmerstatus = (int)DMERStatusOptionSet.CleanPass;
+                                }
+                                else
+                                {
+                                    doc.dfp_dmerstatus = (int)DMERStatusOptionSet.Adjudicate;
+                                }
+
+                                try
+                                {
+
+                                    dynamicsContext.UpdateObject(doc);
+                                    await dynamicsContext.SaveChangesAsync();
+
+                                    logger.LogInformation($"Document is updated");
+
+                                }
+                                catch (Exception ex)
+                                {
+                                    Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
+                                    
+                                }
+
+                                break;
+                            }
+                        }
                     }
-                    //}
-                    dynamicsContext.AddLink(dmerEntity, nameof(incident.bcgov_incident_bcgov_documenturl), givenUrl);
                 }
-
-                dynamicsContext.SaveChanges();
             }
         }
 

@@ -49,10 +49,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<CaseManagement.Callback, Callback>()
                 .AddTransform(NullStringConverter);
             CreateMap<UpdateDocumentRequest, UpdateDocumentCommand>()
+              .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? (Guid?)null : Guid.Parse(src.Id)))
               .ForMember(dest => dest.DpsPriority, opt => opt.MapFrom(src => src.DpsPriority))
               .ForMember(dest => dest.Queue, opt => opt.MapFrom(src => src.Queue));
-
-
+         
             CreateMap<Dto.Document, Document>()
                 .ForMember(dest => dest.Provider, opt => opt.MapFrom(src => src.Login))
                 .AddTransform(NullStringConverter);
