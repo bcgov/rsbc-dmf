@@ -27,6 +27,20 @@ form {
   }
 }
 
+.numberOfItems {
+  display: flex;
+  justify-content: center;
+  height: 90px;
+  background: inherit;
+  background-color: rgba(242, 242, 242, 1);
+  border: none;
+  border-radius: 5px;
+  align-items: center;
+  color: #003366;
+  flex-direction: column;
+  margin-bottom: 24px;
+}
+
 .search-button {
   width: 270px;
   height: 49px;

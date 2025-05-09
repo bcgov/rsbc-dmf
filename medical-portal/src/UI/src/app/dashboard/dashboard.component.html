@@ -7,9 +7,7 @@
         <li>Start, access and submit a Driver’s Medical Exam Report (DMER)</li>
         <li>See DMER Status</li>
         <li>
-          <a routerLink="/getHelp"
-            >Options for the driver to obtain a missing DMER CaseId</a
-          >
+          <a routerLink="/getHelp">Options for the driver to obtain a missing DMER CaseId</a>
         </li>
       </ul>
     </div>
@@ -28,29 +26,18 @@
 
           <div class="search-container">
             <mat-form-field class="search-input" appearance="outline">
-              <input
-                matInput
-                placeholder="Enter the DMER Case ID to start or access a DMER "
-                [formControl]="searchBox"
-                id="dmer-search"
-              />
+              <input matInput placeholder="Enter the DMER Case ID to start or access a DMER " [formControl]="searchBox"
+                id="dmer-search" />
             </mat-form-field>
-            <button
-              mat-flat-button
-              color="primary"
-              class="search-button"
-              (click)="searchDmerCase()"
-            >
+            <button mat-flat-button color="primary" class="search-button" (click)="searchDmerCase()">
               Search DMER Case
             </button>
           </div>
 
           <p>
             Missing DMER Case ID?
-            <a routerLink="/getHelp"
-              >Find out the options for the driver to obtain their DMER Case
-              ID</a
-            >
+            <a routerLink="/getHelp">Find out the options for the driver to obtain their DMER Case
+              ID</a>
           </p>
         </div>
       </form>
@@ -60,36 +47,34 @@
   <div *ngIf="showSearchResults">
     <div class="result-card">
       @if (isSearching) {
-        <div>
-          Showing Search Results for <b>{{ searchBox.value }}</b>
-          <button mat-button color="primary" (click)="clearResults()">
-            Clear
-          </button>
-        </div>
+      <div>
+        Showing Search Results for <b>{{ searchBox.value }}</b>
+        <button mat-button color="primary" (click)="clearResults()">
+          Clear
+        </button>
+      </div>
       }
 
       @if (noResults) {
-        <mat-card>
-          <mat-card-content>
-            <div class="noResults">
-              <p>
-                No record found for DMER Case ID
-                <b>{{ searchBox.value }}</b
-                >.Please re-enter the DMER Case ID and try again. <br />
+      <mat-card>
+        <mat-card-content>
+          <div class="noResults">
+            <p>
+              No record found for DMER Case ID
+              <b>{{ searchBox.value }}</b>.Please re-enter the DMER Case ID and try again. <br />
 
-                If you think you have the incorrect ID, you will want to provide
-                <a routerLink="/getHelp"
-                  >options to the driver on how to obtain the correct DMER Case
-                  ID.
-                </a>
-                <br />
+              If you think you have the incorrect ID, you will want to provide
+              <a routerLink="/getHelp">options to the driver on how to obtain the correct DMER Case
+                ID.
+              </a>
+              <br />
 
-                If you continue to experience issues please contact support at
-                XXX-XXX-XXXX.
-              </p>
-            </div>
-          </mat-card-content>
-        </mat-card>
+              If you continue to experience issues please contact support at
+              XXX-XXX-XXXX.
+            </p>
+          </div>
+        </mat-card-content>
+      </mat-card>
       }
 
       <mat-card *ngIf="searchedCase">
@@ -99,18 +84,12 @@
               <div>
                 <label>Case Id</label>
                 <div>
-                  <b
-                    ><a
-                      [routerLink]="[
+                  <b><a [routerLink]="[
                         '/caseDetails',
                         searchedCase.caseId,
                         searchedCase.idCode
-                      ]"
-                      routerLinkActive="active"
-                      >{{ searchedCase.idCode }}</a
-                    >
-                    <br
-                  /></b>
+                      ]" routerLinkActive="active">{{ searchedCase.idCode }}</a>
+                    <br /></b>
                   View case details
                 </div>
               </div>
@@ -121,10 +100,8 @@
                   <div>
                     <label>Patient's Name</label>
                     <div>
-                      <b
-                        >{{ searchedCase.lastName }},
-                        {{ searchedCase.firstName }}</b
-                      >
+                      <b>{{ searchedCase.lastName }},
+                        {{ searchedCase.firstName }}</b>
                     </div>
                   </div>
                   <div>
@@ -157,7 +134,8 @@
                     </div>
                   </div>
                   <div>
-                    <app-dmer-buttons [searchedCase]="this.searchedCase" (popupClosed)="this.popupClosed()"></app-dmer-buttons>
+                    <app-dmer-buttons [searchedCase]="this.searchedCase"
+                      (popupClosed)="this.popupClosed()"></app-dmer-buttons>
                   </div>
                 </div>
               </div>
@@ -165,12 +143,11 @@
               @if( searchedCase.dmerStatus !==
               DMERStatusEnum.NotRequested)
               {
-                <div style="padding-left: 18px" >
-                  This needs to be submitted by:
-                  <b>
-                    {{ searchedCase.latestComplianceDate | date: "longDate" }}</b
-                  >
-                </div>
+              <div style="padding-left: 18px">
+                This needs to be submitted by:
+                <b>
+                  {{ searchedCase.latestComplianceDate | date: "longDate" }}</b>
+              </div>
               }
 
             </div>
@@ -217,20 +194,9 @@
         <label aria-label="search" for="search-filter"></label>
         <mat-form-field class="cases-input" appearance="outline">
           <!-- <mat-label aria-label="search" for="search-filter">&nbsp;</mat-label> -->
-          <input
-            matInput
-            type="text"
-            aria-label="search"
-            placeholder="Search by Name or Case ID"
-            [(ngModel)]="searchCasesInput"
-            id="search-filter"
-          />
-          <button
-            matSuffix
-            mat-icon-button
-            aria-label="search"
-            (click)="filterCasesData()"
-          >
+          <input matInput type="text" aria-label="search" placeholder="Search by Name or Case ID"
+            [(ngModel)]="searchCasesInput" id="search-filter" />
+          <button matSuffix mat-icon-button aria-label="search" (click)="filterCasesData()">
             <mat-icon>search</mat-icon>
           </button>
         </mat-form-field>
@@ -239,14 +205,10 @@
         <mat-icon class="filter-icon">filter_alt</mat-icon>
         <mat-label style="color: #003366">Filter By: </mat-label>
         <mat-form-field class="status-filter">
-          <mat-select
-            [(ngModel)]="selectedStatus"
-            name="status"
-            (selectionChange)="filterCasesData()"
-          >
+          <mat-select [(ngModel)]="selectedStatus" name="status" (selectionChange)="filterCasesData()">
             @for (status of status; track status) {
-              <mat-option [value]="status.value">{{
-                status.viewValue
+            <mat-option [value]="status.value">{{
+              status.viewValue
               }}</mat-option>
             }
           </mat-select>
@@ -259,92 +221,100 @@
       </div>
     </div>
     <div>
-      @for (dmer of filteredData; track dmer.documentId) {
-        <mat-card style="margin-bottom: 24px">
-          <mat-card-content class="dmer-details">
+      @for (dmer of shownFilteredData; track dmer.documentId) {
+      <mat-card style="margin-bottom: 24px">
+        <mat-card-content class="dmer-details">
+          <div>
+            <label>DMER Case Id</label>
             <div>
-              <label>DMER Case Id</label>
-              <div>
-                <b>
-                  <a
-                    [routerLink]="['/caseDetails', dmer.caseId, dmer.idCode]"
-                    routerLinkActive="active"
-                    >{{ dmer.idCode }}
-                  </a>
-                </b>
-              </div>
-              <div>View Case Details</div>
+              <b>
+                <a [routerLink]="['/caseDetails', dmer.caseId, dmer.idCode]" routerLinkActive="active">{{ dmer.idCode }}
+                </a>
+              </b>
             </div>
-            <div class="dmer-details-row">
-              <div class="dmer-details-row-1">
-                <div class="column-width">
-                  <label>Patient's Name</label>
-                  <div>
-                    <b>{{ dmer.fullName }}</b>
-                  </div>
+            <div>View Case Details</div>
+          </div>
+          <div class="dmer-details-row">
+            <div class="dmer-details-row-1">
+              <div class="column-width">
+                <label>Patient's Name</label>
+                <div>
+                  <b>{{ dmer.fullName }}</b>
                 </div>
-                <div class="column-width">
-                  <label>Date of Birth</label>
-                  <div>
-                    <b>{{ dmer.birthDate | date: "longDate" }}</b>
-                  </div>
+              </div>
+              <div class="column-width">
+                <label>Date of Birth</label>
+                <div>
+                  <b>{{ dmer.birthDate | date: "longDate" }}</b>
                 </div>
-                <div class="column-width">
-                  <label>DMER Type</label>
-                  <div>
-                    <b>{{ dmer.dmerType }}</b>
-                  </div>
-                </div>
-
-                <div class="column-width">
-                  <label>DMER Status</label>
-                  <div>
-                    @if (dmer && dmer.dmerStatus) {
-                      <b> {{ dmer.dmerStatus }}  </b>
-                      @if(profile?.loginId === dmer.loginId) {
-                       <b>- {{dmer.loggedInUserName}}</b> 
-                      }
-                      @else {
-
-                        <b>- {{getEndorsementName(dmer.loginId)}}</b> 
-                      }
-                        
-                    } @else {
-                      {{ " " }}
-                    }
-                  </div>
-
+              </div>
+              <div class="column-width">
+                <label>DMER Type</label>
+                <div>
+                  <b>{{ dmer.dmerType }}</b>
                 </div>
               </div>
 
-              <div class="dmer-details-row-1">
-                This needs to be submitted by
-                {{ dmer.dueDate | date: "longDate" }}.
-                @if(dmer.dmerStatus !== "Submitted") {
-                  <div class="right full-width">
-                    <button mat-flat-button class="primaryButton" (click)="openClaimPopup(dmer.documentId)">
-                      Unclaim Dmer
-                    </button>
-                  </div>
-                }
-               
+              <div class="column-width">
+                <label>DMER Status</label>
+                <div>
+                  @if (dmer && dmer.dmerStatus) {
+                  <b> {{ dmer.dmerStatus }} </b>
+                  @if(profile?.loginId === dmer.loginId) {
+                  <b>- {{dmer.loggedInUserName}}</b>
+                  }
+                  @else {
+
+                  <b>- {{getEndorsementName(dmer.loginId)}}</b>
+                  }
+
+                  } @else {
+                  {{ " " }}
+                  }
+                </div>
+
               </div>
+            </div>
+
+            <div class="dmer-details-row-1">
+              This needs to be submitted by
+              {{ dmer.dueDate | date: "longDate" }}.
+              @if(dmer.dmerStatus !== "Submitted") {
+              <div class="right full-width">
+                <button mat-flat-button class="primaryButton" (click)="openClaimPopup(dmer.documentId)">
+                  Unclaim Dmer
+                </button>
+              </div>
+              }
 
             </div>
-          </mat-card-content>
-        </mat-card>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
       }
 
       @if (noResults) {
-        <mat-card>
-          <mat-card-content>
-            <h2>
-              You do not have any DMERs associated with your profile at this
-              time.
-            </h2>
-          </mat-card-content>
-        </mat-card>
+      <mat-card>
+        <mat-card-content>
+          <h2>
+            You do not have any DMERs associated with your profile at this
+            time.
+          </h2>
+        </mat-card-content>
+      </mat-card>
       }
+
+      <div class="numberOfItems" *ngIf="shownFilteredData &&
+        shownFilteredData.length > 0">
+        Showing {{ shownFilteredData.length }} of
+        {{ filteredData.length }} records
+        <br />
+        <a *ngIf="shownFilteredData.length < filteredData.length" (click)="viewMore()" class="viewMore"><b
+            style="color: #003366">View more records</b>
+          <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a>
+      </div>
+
     </div>
   </div>
 </div>
