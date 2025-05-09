@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, ViewChild } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, Input, ViewChild } from '@angular/core';
 import { MatExpansionModule, MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -67,8 +67,8 @@ export class DashboardComponent {
   public searchCasesInput: string = '';
   public searchedCase?: PatientCase | null;
   public practitionerDMERList: DmerDocument[] = [];
-  public filteredData?: DmerDocument[] = [];
-  public _allDocuments?: DmerDocument[] | null = [];
+  public filteredData: DmerDocument[] = [];
+  public shownFilteredData?: DmerDocument[] = [];
   public profile?: UserProfile;
 
   isSearching: boolean = false;
@@ -160,12 +160,14 @@ export class DashboardComponent {
       if (matchStatus && matchCaseNumber) return true;
       else return false;
     });
+
+    this.shownFilteredData = this.filteredData?.slice(0, this.pageSize);
   }
 
   viewMore() {
-    const pageSize = (this.filteredData?.length ?? 0) + this.pageSize;
+    const pageSize = (this.shownFilteredData?.length ?? 0) + this.pageSize;
 
-    this.filteredData = this._allDocuments?.slice(0, pageSize);
+    this.shownFilteredData = this.filteredData?.slice(0, pageSize);
   }
 
   popupClosed() {

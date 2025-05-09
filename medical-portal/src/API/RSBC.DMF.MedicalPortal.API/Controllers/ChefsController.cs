@@ -256,23 +256,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
                 var caseResult = _cmsAdapterClient.UpdateCase(updateCaseRequest);
 
-                // update DMER document status to "Under Reviewed" on success
-                //if (caseResult.ResultStatus == CMSResultStatus.Success)
-                //{
-                //    var UpdateDocumentRequest = new UpdateDocumentRequest
-                //    {
-                //        Id = documentId,
-                //        // TODO portals should be agnostic of Dynamics specific values, this should be an enum [translated in CMS] or string value
-                //        SubmittalStatus = (int)SubmittalStatus.UnderReview,
-                //        DpsPriority = TranslatePriority(submission.Priority),
-                //        Queue = TranslateAssign (submission.Assign),
-                //        //DocumentUrl = pdfUploadReply.FileName,
-                //        //DocumentType = "DMER",
-                //        //DocumentTypeCode = "001"
-
-                //    };
-                //    _documentManagerClient.UpdateDocument(UpdateDocumentRequest);
-                //}
+               
 
                 logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
             }
@@ -375,7 +359,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             {
                 {"PR", "Regular" },
                 {"PC", "Critical Review" },
-                {"PU", "Urgent/ Immediate" },
+                {"PU", "Urgent / Immediate" },
             };
 
             if (priority != null && statusMap.ContainsKey(priority))
