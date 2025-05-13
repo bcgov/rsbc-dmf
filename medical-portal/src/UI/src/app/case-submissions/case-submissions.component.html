@@ -100,7 +100,7 @@
         </mat-card>
       }
     </div>
-    @if (!isLoading && documents?.length === 0) {
+    @if (!isLoading && documents && documents.length === 0) {
       <div>
         <mat-card>
           <mat-card-content>
