@@ -1,0 +1,37 @@
+name: OpenShift Connection Test
+
+on:
+  workflow_dispatch:
+
+# defaults:
+  # run:
+    # working-directory: ./app
+
+jobs:
+  test_openshift:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Deprecated action, no longer used
+      # - name:  OpenShift Version
+      #   uses: redhat-developer/openshift-actions@v1.1
+      #   with:
+      #     version: "latest"
+      #     openshift_server_url: ${{ secrets.OPENSHIFT_URL }}
+      #     parameters: '{"apitoken": "${{ secrets.OPENSHIFT_TOKEN }}", "acceptUntrustedCerts": "true"}'
+      #     cmd: |
+      #       'version'
+
+      - name: Install oc
+        uses: redhat-actions/oc-installer@v1
+
+      - name: Test oc
+        run: oc version --client
+
+      - name: Login to OpenShift
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_URL }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          insecure_skip_tls_verify: true
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}

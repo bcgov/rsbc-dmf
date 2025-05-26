@@ -1,0 +1,24 @@
+name: OpenShift Registry Test
+
+on:
+  workflow_dispatch:
+
+env:
+  APP_NAME: demo_express
+
+# defaults:
+  # run:
+    # working-directory: ./app
+
+jobs:
+  test_openshift:
+    runs-on: ubuntu-latest
+
+    env:
+      OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
+      REGISTRY: ${{ secrets.OPENSHIFT_REGISTRY }}/${{ secrets.OPENSHIFT_NAMESPACE }}
+
+    steps:
+      - name: Log into registry
+        run: |
+          echo "${{ secrets.OPENSHIFT_TOKEN }}" | docker login -u unused --password-stdin $REGISTRY
