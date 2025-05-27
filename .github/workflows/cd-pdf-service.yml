@@ -2,7 +2,8 @@ name: cd-pdf-service
 
 on:
   workflow_dispatch:
-  push:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
     paths:
       - 'pdf-service/app/**'
       - '.github/workflows/cd-pdf-service.yml'
