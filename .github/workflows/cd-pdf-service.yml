@@ -23,8 +23,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Debug Registry
+        run: echo "Logging in to $REGISTRY"
+
       - name: Login to Registry
-        run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login $REGISTRY -u ${{ secrets.OCP4_USERNAME  }} --password-stdin
+        run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login "$REGISTRY" -u ${{ secrets.OCP4_USERNAME  }} --password-stdin
 
       - name: Build and push image
         uses: docker/build-push-action@v6
