@@ -15,10 +15,9 @@ env:
 
 jobs:
   build:
-    name: Build, Smoke Test, and Push Image
     permissions: write-all
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'testOrg'
+    if: github.repository_owner == 'bcgov'
 
     steps:
       - name: Checkout code
