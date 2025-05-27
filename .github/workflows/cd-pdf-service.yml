@@ -51,14 +51,14 @@ jobs:
               MESSAGE=$(jq -r .message output.json)
               if [ "$STATUS" = "OK" ]; then
                 echo "✅ PDF $MESSAGE"
-                docker stop smoke-test --quiet
-                docker rm smoke-test --quiet
+                docker stop smoke-test
+                docker rm smoke-test
                 exit 0
               fi
               echo "❌ Healthcheck returned status: $STATUS, message: $MESSAGE"
               docker logs smoke-test
-              docker stop smoke-test --quiet
-              docker rm smoke-test --quiet
+              docker stop smoke-test
+              docker rm smoke-test
               exit 1
             fi
             echo "Waiting for service..."
@@ -66,6 +66,6 @@ jobs:
           done
           echo "❌ Service did not become healthy in time."
           docker logs smoke-test
-          docker stop smoke-test --quiet
-          docker rm smoke-test --quiet
+          docker stop smoke-test
+          docker rm smoke-test
           exit 1
