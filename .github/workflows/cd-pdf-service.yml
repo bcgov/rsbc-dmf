@@ -11,7 +11,7 @@ on:
 env:
   IMAGE_NAME: pdf-service
   IMAGE_TAG: latest
-  REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
+  REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_TOOLS_NAMESPACE }}
 
 jobs:
   build:
@@ -26,11 +26,8 @@ jobs:
       - name: Debug Registry
         run: echo "Logging in to $REGISTRY"
 
-      # - name: Login to Registry
-      #   run: echo "${{ secrets.OCP4_TOKEN }}" | docker login -u unused --password-stdin $REGISTRY
-
-      - name: Log into registry
-        run: echo "${{ secrets.OCP4_PASSWORD }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME }} --password-stdin
+      - name: Login to Registry
+        run: echo "${{ secrets.OCP4_TOOLS_TOKEN }}" | docker login -u unused --password-stdin $REGISTRY
 
       - name: Build and push image
         uses: docker/build-push-action@v6
