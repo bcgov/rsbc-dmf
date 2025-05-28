@@ -1,0 +1,71 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: demo-openshift-express
+
+parameters:
+- name: APP_NAME
+  description: The name of the application
+  required: true
+  value: demo-express
+- name: IMAGE_NS
+  description: Namespace containing builds
+  required: true
+
+objects:
+
+- kind: Deployment
+  apiVersion: apps/v1
+  metadata:
+    annotations:
+      image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"${APP_NAME}:latest","namespace":"${IMAGE_NS}"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}\")].image"}]'
+    name: ${APP_NAME}
+  spec:
+    replicas: 2
+    selector:
+      matchLabels:
+        deployment: ${APP_NAME}
+    template:
+      metadata:
+        labels:
+          deployment: ${APP_NAME}
+      spec:
+        containers:
+          - name: ${APP_NAME}
+            image: ${IMAGE_NS}/${APP_NAME}:latest
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+        restartPolicy: Always
+
+
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: ${APP_NAME}
+    labels:
+      app: ${APP_NAME}
+  spec:
+    ipFamilies:
+      - IPv4
+    ports:
+      - name: 8080-tcp
+        protocol: TCP
+        port: 8080
+        targetPort: 8080
+    type: ClusterIP
+    selector:
+      deployment: ${APP_NAME}
+
+- kind: Route
+  apiVersion: route.openshift.io/v1
+  metadata:
+    name: ${APP_NAME}
+    labels: {}
+  spec:
+    to:
+      kind: Service
+      name: ${APP_NAME}
+    tls: null
+    port:
+      targetPort: 8080

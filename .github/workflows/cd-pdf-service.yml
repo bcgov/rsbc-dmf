@@ -1,0 +1,70 @@
+name: cd-pdf-service
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - 'pdf-service/app/**'
+      - '.github/workflows/cd-pdf-service.yml'
+
+env:
+  IMAGE_NAME: pdf-service
+  IMAGE_TAG: latest
+  REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_TOOLS_NAMESPACE }}
+  # REGISTRY: os-registry/os-namespace
+
+jobs:
+  build:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Debug Registry
+        run: echo "Logging in to $REGISTRY"
+
+      - name: Login to Registry
+        run: echo "${{ secrets.OCP4_TOOLS_TOKEN }}" | docker login -u unused --password-stdin $REGISTRY
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          push: false     # <-- change to true when ready to push
+          context: ./pdf-service/app
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+      - name: Smoke Test - run container and check /healthcheck
+        run: |
+          FULL_IMAGE="$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
+          docker run -d -p 3000:3000 --name smoke-test $FULL_IMAGE
+          sleep 3
+          for i in {1..10}; do
+            RESPONSE=$(curl -s -w "%{http_code}" -o output.json http://localhost:3000/healthcheck)
+            if [ "$RESPONSE" = "200" ]; then
+              STATUS=$(jq -r .status output.json)
+              MESSAGE=$(jq -r .message output.json)
+              if [ "$STATUS" = "OK" ]; then
+                echo "✅ PDF $MESSAGE"
+                docker stop smoke-test > /dev/null 2>&1
+                docker rm smoke-test > /dev/null 2>&1
+                exit 0
+              fi
+              echo "❌ Healthcheck returned status: $STATUS, message: $MESSAGE"
+              docker logs smoke-test
+              docker stop smoke-test > /dev/null 2>&1
+              docker rm smoke-test > /dev/null 2>&1
+              exit 1
+            fi
+            echo "Waiting for service..."
+            sleep 2
+          done
+          echo "❌ Service did not become healthy in time."
+          docker logs smoke-test
+          docker stop smoke-test > /dev/null 2>&1
+          docker rm smoke-test > /dev/null 2>&1
+          exit 1
