@@ -1,4 +1,4 @@
-name: cd-pdf-service
+name: build-pdf-service
 
 on:
   workflow_dispatch:
@@ -6,34 +6,29 @@ on:
     types: [opened, reopened, edited, synchronize]
     paths:
       - 'pdf-service/app/**'
-      - '.github/workflows/cd-pdf-service.yml'
+      - '.github/workflows/build-pdf-service.yml'
 
 env:
   IMAGE_NAME: pdf-service
-  IMAGE_TAG: latest
-  REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_TOOLS_NAMESPACE }}
-  # REGISTRY: os-registry/os-namespace
+  IMAGE_TAG: dev
+  REGISTRY: ${{ secrets.OPENSHIFT_REGISTRY_URL }}/${{ secrets.OPENSHIFT_TARGET_NAMESPACE }}
 
 jobs:
   build:
     permissions: write-all
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'bcgov'
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Debug Registry
-        run: echo "Logging in to $REGISTRY"
-
       - name: Login to Registry
-        run: echo "${{ secrets.OCP4_TOOLS_TOKEN }}" | docker login -u unused --password-stdin $REGISTRY
+        run: echo "${{ secrets.OPENSHIFT_TOKEN }}" | docker login -u unused --password-stdin $REGISTRY
 
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
-          push: false     # <-- change to true when ready to push
+          push: true     # <--- change to true when ready to push
           context: ./pdf-service/app
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
