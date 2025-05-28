@@ -11,8 +11,8 @@ on:
 env:
   IMAGE_NAME: pdf-service
   IMAGE_TAG: latest
-  # REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
-  REGISTRY: os-registry/os-namespace
+  REGISTRY: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}
+  # REGISTRY: os-registry/os-namespace
 
 jobs:
   build:
@@ -30,6 +30,9 @@ jobs:
       # - name: Login to Registry
       #   run: echo "${{ secrets.OCP4_TOKEN  }}" | docker login -u unused --password-stdin $REGISTRY
 
+      - name: Log into registry
+        run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME  }} --password-stdin
+
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
@@ -42,7 +45,6 @@ jobs:
         run: |
           FULL_IMAGE="$REGISTRY/$IMAGE_NAME:$IMAGE_TAG"
           docker run -d -p 3000:3000 --name smoke-test $FULL_IMAGE
-          docker logs smoke-test &  # background the log tailer
           sleep 3
           for i in {1..10}; do
             RESPONSE=$(curl -s -w "%{http_code}" -o output.json http://localhost:3000/healthcheck)
