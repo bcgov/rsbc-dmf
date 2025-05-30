@@ -1,6 +1,6 @@
 # Openshift CLI
 
-Use Template to perform the initial OpenShift setup and initial deployment.  Subsequent builds and deployments triggered by GitHub Actions.  Openshift token must be saved as a GitHub Action secret for this repo.
+Use Template to perform the initial OpenShift setup and initial deployment. Subsequent builds and deployments triggered by GitHub Actions. Openshift token must be saved as a GitHub Action secret for this repo.
 
 ##
 ## 1. Build Image on GitHub & Push to OpenShift registry
