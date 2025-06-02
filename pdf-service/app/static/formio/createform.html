@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="/static/formio/formio.full.min.css"
+    />
+    <script
+      src="/static/formio/formio.full.min.js"
+      defer
+    ></script>
+    <style>
+      .formio-form { page-break-inside: avoid; }
+      .formio-component { break-inside: avoid; page-break-after: auto; }
+    </style>
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        const formJson = JSON.parse(localStorage.getItem("formTemplate"));
+        const submissionData = JSON.parse(localStorage.getItem("submissionData"));
+    
+        if (typeof Formio !== "undefined" && formJson) {
+          Formio.createForm(document.getElementById("formio"), formJson)
+            .then((form) => {
+              form.submission = submissionData;
+    
+              // Wait until form is fully rendered (after data is set)
+              form.on('change', () => {
+                if (form.submission && form.submission.data) {
+                  // Avoid duplicating the marker
+                  if (!document.getElementById('form-render-complete')) {
+                    const marker = document.createElement('div');
+                    marker.id = 'form-render-complete';
+                    marker.style.display = 'none';
+                    document.body.appendChild(marker);
+                  }
+                }
+              });
+            })
+            .catch((err) => {
+              document.getElementById("formio").innerText = "Error loading form.";
+            });
+        } else {
+          document.getElementById("formio").innerText = "Formio is undefined or no template provided.";
+        }
+      });
+    </script> 
+  </head>
+  <body>
+    <div id="formio">Loading form...</div>
+  </body>
+</html>

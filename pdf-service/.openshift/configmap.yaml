@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pdf-service-config
+  namespace: 0137d5-dev   # Replace with the proper namespace
+data:
+  PORT: "3000"            # Internal container port
+  # rsbc-dmf dev environment form template
+  TEMPLATE_URL: "https://submit.digital.gov.bc.ca/app/api/v1/forms/5383fc89-b219-49a2-924c-251cd1557eb8/version"
+  LOG_LEVEL: "dev"

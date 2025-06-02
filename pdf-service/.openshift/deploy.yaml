@@ -1,0 +1,87 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: pdf-service-template
+
+parameters:
+  - name: APP_NAME
+    description: The name of the application
+    required: true
+    value: pdf-service
+  - name: IMAGE_NS
+    description: Namespace containing the image
+    required: true
+
+objects:
+
+  - kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: ${APP_NAME}
+      annotations:
+        image.openshift.io/triggers: >
+          [{"from":{"kind":"ImageStreamTag","name":"${APP_NAME}:dev","namespace":"${IMAGE_NS}"},
+          "fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}\")].image"}]
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          deployment: ${APP_NAME}
+      template:
+        metadata:
+          labels:
+            deployment: ${APP_NAME}
+        spec:
+          containers:
+            - name: ${APP_NAME}
+              image: ${IMAGE_NS}/${APP_NAME}:dev
+              ports:
+                - containerPort: 3000
+                  protocol: TCP
+              envFrom:
+                - configMapRef:
+                    name: pdf-service-config
+              livenessProbe:
+                httpGet:
+                  path: /healthcheck
+                  port: 3000
+                initialDelaySeconds: 15
+                periodSeconds: 40
+                timeoutSeconds: 5
+                failureThreshold: 3
+              readinessProbe:
+                httpGet:
+                  path: /healthcheck
+                  port: 3000
+                initialDelaySeconds: 10
+                periodSeconds: 30
+                timeoutSeconds: 5
+                failureThreshold: 3
+          restartPolicy: Always
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}
+      labels:
+        app: ${APP_NAME}
+    spec:
+      ports:
+        - name: http
+          port: 3000        # the port exposed by the service inside the cluster
+          targetPort: 3000  # must match the container's internal port, "containerPort" above
+          protocol: TCP
+      selector:
+        deployment: ${APP_NAME}
+      type: ClusterIP
+
+  - kind: Route
+    apiVersion: route.openshift.io/v1
+    metadata:
+      name: ${APP_NAME}
+    spec:
+      to:
+        kind: Service
+        name: ${APP_NAME}
+      port:
+        targetPort: http  # points to the Service "port" defined above
