@@ -42,6 +42,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private readonly ILogger<ChefsController> logger;
         private readonly IMapper mapper;
         private readonly IConfiguration configuration;
+        
 
         private const string DATA_ENTITY_NAME = "incident";
         private const string DATA_FILENAME = "data.json";
@@ -153,14 +154,13 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 if (c != null && c.ResultStatus == CMSResultStatus.Success)
                 {
                     driverLicenseNumber = c.Item.DriverLicenseNumber;
-                    surname = c.Item.LastName;
-                   
+                    surname = c.Item.LastName;                
                 }
 
                  string filenameOverride = $"DMER-{driverLicenseNumber} -{surname}";
 
-            // serialize and log the payload
-            var jsonString = JsonSerializer.Serialize(submission);
+            // serialize and log the payload and get the submission json data
+            var jsonString = JsonSerializer.Serialize(new { data = submission.Submission });
             logger.LogInformation($"ChefsSubmission payload: {jsonString}");
 
             // to submit final, make sure they are licenced practitioner, otherwise submission should be a draft
@@ -197,7 +197,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             if (submission.Status == SubmissionStatus.Final) 
             {
                 // create a PDF version of the JSON data
-                var pdfData = _pdfService.GeneratePdf(jsonString);
+                var pdfData = _pdfService.GeneratePdfFromPdfService(jsonString);
 
                 // upload the PDF version to S3
                 var pdfUploadRequest = new UploadFileRequest
