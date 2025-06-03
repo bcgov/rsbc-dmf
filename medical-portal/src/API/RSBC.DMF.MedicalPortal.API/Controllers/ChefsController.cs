@@ -154,8 +154,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 if (c != null && c.ResultStatus == CMSResultStatus.Success)
                 {
                     driverLicenseNumber = c.Item.DriverLicenseNumber;
-                    surname = c.Item.LastName;
-                   
+                    surname = c.Item.LastName;                
                 }
 
                  string filenameOverride = $"DMER-{driverLicenseNumber} -{surname}";
