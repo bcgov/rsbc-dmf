@@ -10,7 +10,7 @@ Run the following command in the ssl folder:
 
 ## Windows 10/11
 
-- Double-click on the certificate (server.crt)
+- Go to the file explorer and  Double-click on the certificate (localhost.crt)
 - Click on the button “Install Certificate …”
 - Select whether you want to store it on user level or on machine level
 - Click “Next”
@@ -25,7 +25,7 @@ Run the following command in the ssl folder:
 
 ## For OS X
 
-- Double-click on the certificate (server.crt)
+- Go to the file explorer and Double-click on the certificate (localhost.crt )
 - Select your desired keychain (login should suffice)
 - Add the certificate
 - Open Keychain Access if it isn’t already open
