@@ -6,7 +6,7 @@ on:
     types: [opened, reopened, edited, synchronize]
     paths:
       - 'pdf-service/app/**'
-      - '.github/workflows/build-pdf-service.yml'
+      - '.github/workflows/cd-build-pdf-service.yml'
 
 env:
   IMAGE_NAME: pdf-service
