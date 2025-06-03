@@ -28,7 +28,7 @@ jobs:
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
-          push: true     # <--- change to true when ready to push
+          push: true     # <--- change to true when ready to push.
           context: ./pdf-service/app
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
