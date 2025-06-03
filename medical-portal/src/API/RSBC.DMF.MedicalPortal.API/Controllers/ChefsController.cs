@@ -160,8 +160,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
                  string filenameOverride = $"DMER-{driverLicenseNumber} -{surname}";
 
-
-            // serialize and log the payload
+            // serialize and log the payload and get the submission json data
             var jsonString = JsonSerializer.Serialize(new { data = submission.Submission });
             logger.LogInformation($"ChefsSubmission payload: {jsonString}");
 
