@@ -1,0 +1,118 @@
+openapi: 3.0.0
+info:
+  title: Formio Render Microservice
+  version: 1.0.0
+  description: API docs for the form rendering microservice
+servers:
+  - url: http://localhost:3000
+paths:
+  /healthcheck:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+  /render:
+    post:
+      summary: Render a form into a PDF
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+              required:
+                - data
+      responses:
+        '200':
+          description: Successfully rendered PDF
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Validation failed
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        msg:
+                          type: string
+                        param:
+                          type: string
+                        location:
+                          type: string
+        '503':
+          description: Template not ready
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Template not ready.
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Internal server error.
+  /reload-template:
+    post:
+      summary: Reload from source the cached form template
+      description: Re-fetches and reinitializes the form template from the configured source TEMPLATE_URL.
+      responses:
+        '200':
+          description: Template successfully reloaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: OK
+                  message:
+                    type: string
+                    example: Template reloaded.
+        '500':
+          description: Failed to reload template
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Failed to reload template.
+
