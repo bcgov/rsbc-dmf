@@ -64,6 +64,9 @@ parameters:
   - description: CORS_ORIGINS
     name: CORS_ORIGINS
     value: "true"
+  - description: Pdf Service url
+    name: PDF_SERVICE_URI
+    required: true
 
 objects:
   - kind: ConfigMap

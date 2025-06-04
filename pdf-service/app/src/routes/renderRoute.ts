@@ -12,6 +12,7 @@ router.post(
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
+      console.error('❌ Validation errors:', errors.array());
       res.status(400).json({
         status: 'error',
         message: 'Validation failed',

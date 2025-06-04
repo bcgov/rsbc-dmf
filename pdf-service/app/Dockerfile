@@ -5,6 +5,7 @@ FROM node:22-slim AS build
 WORKDIR /app
 RUN npm install -g npm@11.4.1
 COPY package*.json ./
+
 RUN npm ci --include=dev
 COPY . ./
 RUN npm run build
