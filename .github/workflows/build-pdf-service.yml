@@ -2,8 +2,9 @@ name: build-pdf-service
 
 on:
   workflow_dispatch:
-  pull_request:
-    types: [opened, reopened, edited, synchronize]
+  push:
+    branches:
+      - main
     paths:
       - 'pdf-service/app/**'
       - '.github/workflows/build-pdf-service.yml'
