@@ -5,7 +5,6 @@ FROM node:22-slim AS build
 WORKDIR /app
 RUN npm install -g npm@11.4.1
 COPY package*.json ./
-RUN npm install
 RUN npm ci --include=dev
 COPY . ./
 RUN npm run build
@@ -28,6 +27,8 @@ RUN npm install -g npm@11.4.1 && \
 # Copy built application and static assets
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/static ./static
+COPY openapi.yaml ./openapi.yaml
+COPY fallback ./fallback
 
 EXPOSE 3000
 
