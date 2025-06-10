@@ -42,12 +42,14 @@ app/
 │   │
 │   ├── services/
 │   │   ├── initializeTemplate.ts          # 📡 Fetch remote template and cache
+│   │   ├── processTemplate.ts             # ⚙️ Recursively traverses a Form.io component tree and updates component collapsed element
 │   │   └── templateCache.ts               # 🔄 Manage template caching
 │   │
 │   ├── types/
-│   │   └── formTemplate.ts                # 🖥️ Interfaces for formio template
+│   │   └── serviceInterfaces.ts           # 🖥️ Interfaces for formio template
 │   │
 │   ├── utils/
+│   │   ├── extractFirstQuestionLookup.ts  # 📋 Extracts from submission JSON uncollapsed panels
 │   │   ├── extractSchema.ts               # 📋 Extracts formio template from downloaded template
 │   │   ├── renderFormToPDF.ts             # 📑 Renders html form and produces PDF
 │   │   ├── replaceCustomComponents.ts     # ♻️ Replaces formio custom components with basic ones
@@ -110,7 +112,7 @@ http://localhost:3000/static/formio/createform.html
 | POST   | `/render`            | Submits JSON data to render a PDF using the cached form template. Requires a body like:         |
 |        |                      | ```json<br>{ "data": { ... } }<br>```                                                           |
 | POST   | `/reload-template`   | Triggers a manual reload of the template from the configured remote URL or fallback.            |
-| GET    | `/api-docs`          | Swagger interactive UI API documentation. Swaffer/OpenAPI specification.                        |
+| GET    | `/api-docs`          | Swagger interactive UI API documentation. Swagger/OpenAPI specification.                        |
 ```
 
 ### GET /healthcheck

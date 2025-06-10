@@ -1,6 +1,3 @@
-// import fs from 'fs';
-// import path from 'path';
-
 const typeMap: Record<string, string> = {
     simplecheckboxadvanced: 'checkbox',
     simpleradioadvanced: 'radio',
@@ -10,6 +7,7 @@ const typeMap: Record<string, string> = {
     simplebuttonadvanced: 'button',
     simplenumberadvanced: 'number',
     simpledayadvanced: 'day',
+    simplepanel: 'panel',
   };
   
   export function replaceCustomComponents(template: object): object {
@@ -32,18 +30,8 @@ const typeMap: Record<string, string> = {
         }
         return newNode;
       }
-  
       return node;
     }
-  
-    const replacedTemplate = traverse(template);
-
-    
-//   // Output debug file
-//   const debugPath = path.resolve(process.cwd(), 'replaced-components.debug.json');
-//   fs.writeFileSync(debugPath, JSON.stringify(replacedTemplate, null, 2));
-  
-    // console.log(`🔁 Replaced ${replacementCount} custom component type(s).`);
-  
+    const replacedTemplate = traverse(template);  
     return replacedTemplate;
   }

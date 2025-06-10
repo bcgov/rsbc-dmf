@@ -1,18 +1,18 @@
 import axios from 'axios';
 import path from 'path';
 import fs from 'fs';
-import { FormioTemplate } from '../types/formioTemplate'; // Make sure to import your FormioTemplate type
+import { IFormioTemplate } from '../types/serviceInterfaces';
 import { replaceCustomComponents } from '../utils/replaceCustomComponents';
 import { stripFormLogic } from '../utils/stripFormLogic';
 import { setCachedTemplate } from './templateCache';
 import { extractSchema } from '../utils/extractSchema';
 
-export async function initializeTemplate(templateUrl: string): Promise<FormioTemplate | null> {
+export async function initializeTemplate(templateUrl: string): Promise<IFormioTemplate | null> {
   try {
     console.log('📡 Fetching form template from:', templateUrl);
 
     // Fetch the remote template via axios
-    const response = await axios.get<FormioTemplate>(templateUrl);
+    const response = await axios.get<IFormioTemplate>(templateUrl);
 
     // Extract the form schema from the downloaded template
     const schema = extractSchema(response.data);
@@ -35,7 +35,7 @@ export async function initializeTemplate(templateUrl: string): Promise<FormioTem
 
     if (fs.existsSync(fallbackPath)) {
       try {
-        const fallbackTemplate = JSON.parse(fs.readFileSync(fallbackPath, 'utf-8')) as FormioTemplate;
+        const fallbackTemplate = JSON.parse(fs.readFileSync(fallbackPath, 'utf-8')) as IFormioTemplate;
 
         // Extract the form schema from fallback template
         const fallbackSchema = extractSchema(fallbackTemplate);

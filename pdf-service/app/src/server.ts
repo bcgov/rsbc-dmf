@@ -36,7 +36,7 @@ app.use(reloadRoute);
 app.use(healthCheckRoute);
 
 // Start the server
-app.listen(config.PORT, async () => {
+const server = app.listen(config.PORT, async () => {
   console.log(`🚀 Formio render microservice running on port ${config.PORT}`);
   console.log(`📘 Swagger docs available at http://localhost:${config.PORT}/api-docs`);
   try {
@@ -45,5 +45,15 @@ app.listen(config.PORT, async () => {
     console.log('✅ Template initialized successfully');
   } catch (err) {
     console.error('⚠️ Failed to load template at startup:', err);
+  }
+});
+
+server.on('error', (err: any) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`❌ Port ${config.PORT} is already in use. Choose a different port.`);
+    process.exit(1);
+  } else {
+    console.error('❌ Server error:', err);
+    process.exit(1);
   }
 });
