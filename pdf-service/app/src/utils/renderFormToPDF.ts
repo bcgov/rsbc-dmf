@@ -1,5 +1,7 @@
 import { chromium } from 'playwright';
 import { getCachedTemplate } from '../services/templateCache';
+import { processTemplate } from '../services/processTemplate';
+import { extarctFirstQuestionLookup } from './extractFirstQuestionLookup';
 import { config } from '../config';
 
 export async function renderFormToPdf(data: any): Promise<Buffer> {
@@ -9,6 +11,8 @@ export async function renderFormToPdf(data: any): Promise<Buffer> {
   if (!cachedTemplate) {
     throw new Error('Form template not available in cache.');
   }
+
+  const processedTemplate = processTemplate(cachedTemplate, extarctFirstQuestionLookup(data));
 
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
@@ -26,7 +30,7 @@ export async function renderFormToPdf(data: any): Promise<Buffer> {
   await page.addInitScript(([formTemplate, submissionData]) => {
     window.localStorage.setItem('formTemplate', JSON.stringify(formTemplate));
     window.localStorage.setItem('submissionData', JSON.stringify(submissionData));
-  }, [cachedTemplate, data]);
+  }, [processedTemplate, data]);
 
   const formUrl = `http://localhost:${config.PORT}/static/formio/createform.html`;
   await page.goto(formUrl, { waitUntil: 'networkidle' });
@@ -38,10 +42,10 @@ export async function renderFormToPdf(data: any): Promise<Buffer> {
     format: 'A4',
     printBackground: true,
     margin: {
-      top: '1cm',
-      bottom: '1.5cm',
-      left: '1cm',
-      right: '1cm'
+      top: '0.5cm',
+      bottom: '0.5cm',
+      left: '0.1cm',
+      right: '0.1cm'
     }
   });
 
