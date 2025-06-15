@@ -42,12 +42,14 @@ app/
 │   │
 │   ├── services/
 │   │   ├── initializeTemplate.ts          # 📡 Fetch remote template and cache
+│   │   ├── processTemplate.ts             # ⚙️ Recursively traverses a Form.io component tree and updates component collapsed element
 │   │   └── templateCache.ts               # 🔄 Manage template caching
 │   │
 │   ├── types/
-│   │   └── formTemplate.ts                # 🖥️ Interfaces for formio template
+│   │   └── serviceInterfaces.ts           # 🖥️ Interfaces for formio template
 │   │
 │   ├── utils/
+│   │   ├── extractFirstQuestionLookup.ts  # 📋 Extracts from submission JSON uncollapsed panels
 │   │   ├── extractSchema.ts               # 📋 Extracts formio template from downloaded template
 │   │   ├── renderFormToPDF.ts             # 📑 Renders html form and produces PDF
 │   │   ├── replaceCustomComponents.ts     # ♻️ Replaces formio custom components with basic ones
@@ -64,6 +66,7 @@ app/
 │
 ├── .env                                   # 🌱 Environment config (LOG_LEVEL, TEMPLATE_URL, etc.)
 ├── Dockerfile                             # 🐳 Markup to build docker image
+├── openapi.yaml                           # 🔧 Openapi 3.x schema, endpoints definition (Swagger)
 ├── .gitignore
 ├── package.json
 ├── tsconfig.json                          # ⚙️ typescript settings
@@ -109,6 +112,7 @@ http://localhost:3000/static/formio/createform.html
 | POST   | `/render`            | Submits JSON data to render a PDF using the cached form template. Requires a body like:         |
 |        |                      | ```json<br>{ "data": { ... } }<br>```                                                           |
 | POST   | `/reload-template`   | Triggers a manual reload of the template from the configured remote URL or fallback.            |
+| GET    | `/api-docs`          | Swagger interactive UI API documentation. Swagger/OpenAPI specification.                        |
 ```
 
 ### GET /healthcheck
@@ -185,6 +189,11 @@ curl -X POST http://localhost:3000/reload-template
 }
 ```
 
+### Swagger web UI for API endpoint documentation
+ Allows to read and explore available endpoints of the pdf-service with a browser.
+ * Local:  `http://localhost:3000/api-docs/`
+ * Remote: `http://<server address>/api-docs/`
+
 ## Deployment
 The service is designed to run on various environments, including local and OpenShift. To deploy in OpenShift, follow the standard steps for deploying a Node.js application. The URLs for static assets and forms will be adjusted automatically based on the environment.
 
@@ -194,9 +203,8 @@ The service is designed to run on various environments, including local and Open
 * run as container: `podman run --name formio-pdf --rm -d -p 3000:3000 formio-pdf-service`
 
 #### Verify Running Container
-`http://<server address>:3000/formio-pdf`
-
-`http://localhost:3000/formio-pdf`
+* Local:  `http://localhost:3000/healthcheck`
+* Remote: `http://<server address>/healthcheck`
 
 
 ### OpenShift

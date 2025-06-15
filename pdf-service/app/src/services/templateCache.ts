@@ -1,12 +1,12 @@
-import { FormioTemplate } from '../types/formioTemplate';
+import { IFormioTemplate } from '../types/serviceInterfaces';
 
-let cachedTemplate: FormioTemplate | null = null;
+let cachedTemplate: IFormioTemplate | null = null;
 
-export function setCachedTemplate(template: FormioTemplate): void {
+export function setCachedTemplate(template: IFormioTemplate): void {
   cachedTemplate = template;
 }
 
-export function getCachedTemplate(): FormioTemplate | null {
+export function getCachedTemplate(): IFormioTemplate | null {
   return cachedTemplate;
 }
 

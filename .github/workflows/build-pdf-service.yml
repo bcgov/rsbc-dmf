@@ -1,12 +1,13 @@
-name: cd-build-pdf-service
+name: build-pdf-service
 
 on:
   workflow_dispatch:
-  pull_request:
-    types: [opened, reopened, edited, synchronize]
+  push:
+    branches:
+      - main
     paths:
       - 'pdf-service/app/**'
-      - '.github/workflows/cd-build-pdf-service.yml'
+      - '.github/workflows/build-pdf-service.yml'
 
 env:
   IMAGE_NAME: pdf-service
@@ -23,12 +24,12 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Login to Registry
-        run: echo "${{ secrets.OPENSHIFT_TOKEN }}" | docker login -u serviceaccount --password-stdin $REGISTRY
+        run: echo "${{ secrets.OPENSHIFT_TOKEN }}" | docker login -u unused --password-stdin $REGISTRY
 
       - name: Build and push image
         uses: docker/build-push-action@v6
         with:
-          push: true     # <--- change to true when ready to push.
+          push: true     # <--- change to true when ready to push
           context: ./pdf-service/app
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
