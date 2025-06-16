@@ -403,16 +403,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
 
 
-                //else // handle situations where the CaseID is not supplied.
-                //{
-                //    if (comment.SequenceNumber != null)
-                //    {
-                //        // fetch it from the sequence number.
-                //        caseId = _cmsAdapterClient.GetCaseId(comment.Driver.LicenseNumber, comment.Driver.LastName, (int)comment.SequenceNumber.Value);
-                //    }
+                else // handle situations where the CaseID is not supplied.
+                {
+                    if (comment.SequenceNumber != null)
+                    {
+                        // fetch it from the sequence number.
+                        caseId = _cmsAdapterClient.GetCaseId(comment.Driver.LicenseNumber, comment.Driver.LastName, (int)comment.SequenceNumber.Value);
+                    }
 
-                //    // 2024-03-01 - do not try further, the comment will just be attached to the driver.
-                //}
+                    // 2024-03-01 - do not try further, the comment will just be attached to the driver.
+                }
 
 
                 var payload = new LegacyComment()
