@@ -1495,6 +1495,8 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if (secondCandidateCreate)
                 {
+
+                    Log.Information("Case Creation method: CreateUnsolicitedCaseDocument");
                     // create the case                   
                     await CreateCase(newCase);
 
@@ -2920,6 +2922,8 @@ namespace Rsbc.Dmf.CaseManagement
                     dynamicsContext.SaveChanges();
                 }
 
+                Log.Information($"Case has successfully Created : LegacyCandidateCreate {newIncident.incidentid} ");
+
             }
             catch (Exception e)
             {
@@ -3442,6 +3446,8 @@ namespace Rsbc.Dmf.CaseManagement
                         dynamicsContext.Detach(newIncident);
                         newIncident = dynamicsContext.incidents.ByKey(tempId).GetValue();
                     }
+
+                    Log.Information($"Case has successfully Created : CreateCase {newIncident.incidentid} ");
 
                 }
                 catch (Exception e)
