@@ -415,6 +415,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
 
 
+
                 var payload = new LegacyComment()
                 {
                     CaseId = caseId ?? string.Empty,
