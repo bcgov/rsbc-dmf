@@ -255,8 +255,8 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                     if (tokenReply != null && tokenReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                     {
-                        // Add the bearer token to the client.
-                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                        Add the bearer token to the client.
+                       httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
                     }
                 }
 

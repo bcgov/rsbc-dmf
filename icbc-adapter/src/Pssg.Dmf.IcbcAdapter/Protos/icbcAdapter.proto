@@ -19,6 +19,7 @@ service IcbcAdapter {
 
    rpc ProcessMedicalStatusUpdates(EmptyRequest) returns (ResultStatusReply); 
    rpc DryRunMedicalDisposition(EmptyRequest) returns (ResultStatusReply); 
+   rpc GetIcbcNotifications(EmptyRequest) returns (ResultStatusReply); 
 
    // Update Date of Birth
    rpc UpdateBirthdate(EmptyRequest) returns (ResultStatusReply);

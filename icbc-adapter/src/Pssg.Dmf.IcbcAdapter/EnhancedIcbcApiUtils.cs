@@ -8,6 +8,7 @@ using Pssg.Interfaces.IcbcModels;
 using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 using System;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -473,6 +474,32 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
 
             return result;
+        }
+
+        public async Task GetIcbcNotificationsAndUpdateCase()
+        {
+            var notificationFile = await GetIcbcNotifications();
+
+            var cases = await ParseIcbcNotication(notificationFile);
+
+            CreateOrUpdateCases(cases);
+        }
+
+        private void CreateOrUpdateCases(Case[] cases)
+        {
+            Log.Logger.Information("Creating Or Updating case with ICBC Notification data...");
+        }
+
+        private async Task<Case[]> ParseIcbcNotication(Stream notificationFile)
+        {
+            Log.Logger.Information("Parsing ICBC Notification dat file...");
+            return null;
+        }
+
+        private async Task<Stream> GetIcbcNotifications()
+        {
+            Log.Logger.Information("Fetching ICBC Notifications dat file...");
+            return null;
         }
 
         public class ClientResult
