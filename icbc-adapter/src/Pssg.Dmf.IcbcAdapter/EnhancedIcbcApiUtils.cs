@@ -1,13 +1,17 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Hangfire.Console;
 using Hangfire.Server;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Pssg.Interfaces;
 using Pssg.Interfaces.Icbc.Models;
 using Pssg.Interfaces.IcbcModels;
+using Pssg.Interfaces.Models;
 using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -473,6 +477,126 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
 
             return result;
+        }
+
+        public async Task GetIcbcNotificationsAndUpdateCase()
+        {
+            var notificationFile = await GetIcbcNotifications();
+
+            var cases = await ParseIcbcNotication(notificationFile);
+
+            CreateOrUpdateCases(cases);
+        }
+
+        internal void CreateOrUpdateCases(List<DRVILS> cases)
+        {
+            Log.Logger.Information("Creating Or Updating case with ICBC Notification data...");
+        }
+
+        public async Task<List<DRVILS>> ParseIcbcNotication(IFormFile file)
+        {
+            Log.Logger.Information("Parsing ICBC Notification dat file...");
+            if (file == null || file.Length == 0)
+                throw new ArgumentException("File is empty or null.");
+
+            var records = new List<DRVILS>();
+
+            using (var reader = new StreamReader(file.OpenReadStream()))
+            {
+                string? line;
+                while ((line = await reader.ReadLineAsync()) != null)
+                {
+                    if (string.IsNullOrWhiteSpace(line)) continue;
+
+                    var record = new DRVILS
+                    {
+                        LNUM = line.Length >= 8 ? line.Substring(0, 8).Trim() : null,
+                        CLNO = line.Length >= 16 ? line.Substring(8, 9).Trim() : null,
+                        SURNAME = line.Length >= 51 ? line.Substring(17, 35).Trim() : null,
+                        GENDER = line.Length >= 52 ? line.Substring(52, 1).Trim() : null,
+                        CAND_CAUSE_CD = line.Length >= 57 ? line.Substring(53, 5).Trim() : null,
+                        BIRTH_DT = line.Length >= 65 ? line.Substring(58, 10) : null,
+                        LIC_EXPIRY_DT = line.Length >= 73 ? line.Substring(68, 10) : null,
+                        LAST_EXAM_DT = line.Length >= 81 ? line.Substring(78, 10) : null,
+                        ADDR_DOCMNT_DT = line.Length >= 89 ? line.Substring(88, 10) : null,
+                        MASTER_STATUS_CD = line.Length >= 90 ? line.Substring(98, 1).Trim() : null,
+                        LIC_CLASS = line.Length >= 93 ? line.Substring(99, 3).Trim() : null,
+                        CAND_SENT_DT = line.Length >= 102 ? line.Substring(102, 10) : null
+                    };
+
+                    string validationErrors = ValidateRecord(record);
+
+                    if (validationErrors != "")
+                    {
+                        Log.Logger.Warning($"Record was not added: " + record.ToString() + "\n Invalid values: " + validationErrors);
+                    }
+
+                    else
+                    {
+                        records.Add(record);
+                    }
+                }
+            }
+
+            return records;
+        }
+
+
+        private string ValidateRecord(DRVILS record)
+        {
+            string errors = null;
+            if (record.LNUM.Contains(" "))
+            {
+                errors += "\nLNUM: " + record.LNUM;
+            }
+            if (record.CLNO.Contains(" "))
+            {
+                errors += "\nCLNO: " + record.CLNO;
+            }
+            char[] genderCharactors = { 'M', 'F', 'X', 'U' };
+            if (genderCharactors.Any(c=> record.GENDER.Contains(c)))
+            {
+                errors += "\nGENDER: " + record.GENDER;
+            }
+            if (DateTime.TryParseExact(record.BIRTH_DT, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out _))
+            {
+                errors += "\nBIRTH_DT: " + record.BIRTH_DT;
+            }
+            if (DateTime.TryParseExact(record.LIC_EXPIRY_DT, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out _))
+            {
+                errors += "\nLIC_EXPIRY_DT: " + record.LIC_EXPIRY_DT;
+            }
+            if (DateTime.TryParseExact(record.LIC_EXPIRY_DT, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out _))
+            {
+                errors += "\nLAST_EXAM_DT: " + record.LAST_EXAM_DT;
+            }
+            if (DateTime.TryParseExact(record.ADDR_DOCMNT_DT, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out _))
+            {
+                errors += "\nADDR_DOCMNT_DT : " + record.ADDR_DOCMNT_DT;
+            }
+            if (DateTime.TryParseExact(record.LIC_EXPIRY_DT, "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out _))
+            {
+                errors += "\nCAND_SENT_DT: " + record.CAND_SENT_DT;
+            }
+            return string.Empty;
+        }
+
+        private async Task<IFormFile> GetIcbcNotifications()
+        {
+            Log.Logger.Information("Fetching ICBC Notifications dat file...");
+
+            var filePath = @"C:\Users\FintanR\Downloads\drv-ilsnew-202506110013 (1).dat";
+            var fileName = Path.GetFileName(filePath);
+            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+
+            var formFile = new FormFile(stream, 0, stream.Length, "file", fileName)
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = "application/octet-stream",
+                ContentDisposition = $"form-data; name=\"file\"; filename=\"{fileName}\""
+            };
+
+            return formFile;
         }
 
         public class ClientResult

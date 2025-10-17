@@ -19,6 +19,8 @@ using Pssg.Interfaces.Icbc.Helpers;
 using Rsbc.Dmf.CaseManagement.Helpers;
 using static Rsbc.Dmf.IcbcAdapter.EnhancedIcbcApiUtils;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
+using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -30,6 +32,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         private IIcbcClient IcbcClient { get; set; }
         CaseManager.CaseManagerClient CaseManagerClient { get; set; }
         EnhancedIcbcApiUtils enhancedIcbcApiUtils;
+        private const string FileBase64 = "MDEyMzQ1NjcwMTIzNDU2NzJTTUlUSEVORSAgICAgICAgICAgICAgICAgICAgICAgICAgIE1DQ0MgIDE5OTYtMDItMjYgICAgICAgICAgMjAxNy0wNS0wMzIwMTctMDUtMDMxNTAwMjAyNS0wNi0xMQ0KOTg3NjU0MzI5ODc2NTQzMjNHUkFZICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEZDQ0MgIDE5NjYtMDEtMDQgICAgICAgICAgMjAxMy0wNy0xOTIwMjUtMDMtMjAxNTAwMjAyNS0wNi0xMQ0KMTkyODM3NDYxOTI4Mzc0NjFBUkNISUJBTERFTlkgICAgICAgICAgICAgICAgICAgICAgIE1BRE1JTjE5OTktMDQtMjAyMDI5LTA0LTIwMjAyNC0wOC0yODIwMTktMDUtMTkxMzYwMjAyNS0wNi0xMQ0KNTY0NzM4Mjk1NjQ3MzgyOTJST0JCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1BRE1JTjE5OTktMDctMDEyMDI2LTA3LTAxMjAyMS0wOS0wOTIwMjQtMDEtMTYxNTAwMjAyNS0wNi0xMQ0KMTEyMjMzNDQxMTIyMzM0NDJNT09SRVNZICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1BRE1JTjIwMDQtMDctMTUgICAgICAgICAgMjAyMi0wNS0yNTIwMjAtMTItMDUxMDAwMjAyNS0wNi0xMQ0K";
 
         /// <summary>
         /// Setup the test
@@ -99,6 +102,20 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             enhancedIcbcApiUtils = new EnhancedIcbcApiUtils(Configuration, CaseManagerClient,null);
 
             
+        }
+
+        public static IFormFile CreateTestFile()
+        {
+            // Decode the base64 string into bytes
+            var fileBytes = Convert.FromBase64String(FileBase64);
+            var stream = new MemoryStream(fileBytes);
+
+            // Create the IFormFile
+            return new FormFile(stream, 0, stream.Length, "file", "drv-ilsnew-202506110013.dat")
+            {
+                Headers = new HeaderDictionary(),
+                ContentType = "application/octet-stream"
+            };
         }
 
         [Fact]
@@ -302,6 +319,25 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             var medicalUpdateData = f.GetMedicalUpdateData(searchReply);
             // should be P for Pass, as the Pass Decision is after the Fail.
             Assert.Equal("P", medicalUpdateData[0].MedicalDisposition);
+        }
+
+        [Fact]
+        public async Task ParseNotifacationFailPassAsync()
+        {
+           var testRecords= await enhancedIcbcApiUtils.ParseIcbcNotication(CreateTestFile());
+
+            Assert.Equal("01234567", testRecords[0].LNUM);
+            Assert.Equal("012345672", testRecords[0].CLNO);
+            Assert.Equal("SMITHENE", testRecords[0].SURNAME);
+            Assert.Equal("M", testRecords[0].GENDER);
+            Assert.Equal("CCC", testRecords[0].CAND_CAUSE_CD);
+            Assert.Equal("1996-02-26", testRecords[0].BIRTH_DT);
+            Assert.Equal("          ", testRecords[0].LIC_EXPIRY_DT);
+            Assert.Equal("2017-05-03", testRecords[0].LAST_EXAM_DT);
+            Assert.Equal("2017-05-03", testRecords[0].ADDR_DOCMNT_DT);
+            Assert.Equal("1", testRecords[0].MASTER_STATUS_CD);
+            Assert.Equal("500", testRecords[0].LIC_CLASS);
+            Assert.Equal("2025-06-11", testRecords[0].CAND_SENT_DT);
         }
 
     }
