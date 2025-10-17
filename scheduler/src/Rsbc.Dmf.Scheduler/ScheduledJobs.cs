@@ -202,6 +202,21 @@ namespace Rsbc.Dmf.Scheduler
         /// Hangfire job to check for and send recent items in the queue
         /// </summary>
         [AutomaticRetry(Attempts = 0)]
+        public async Task GetIcbcNotifications(PerformContext hangfireContext)
+        {
+            LogStatement(hangfireContext, "Starting fetching ICBC Notifications.");
+
+            // Call ICBC Adapter to do the check for candidates
+            _icbcAdapterClient.GetIcbcNotifications(new IcbcAdapter.EmptyRequest());
+
+
+            LogStatement(hangfireContext, "End of fetching ICBC Notifications.");
+        }
+
+        /// <summary>
+        /// Hangfire job to check for and send recent items in the queue
+        /// </summary>
+        [AutomaticRetry(Attempts = 0)]
         public async Task SendMedicalUpdatesDryRun(PerformContext hangfireContext)
         {
             LogStatement(hangfireContext, "Starting check for Candidates dry run.");
