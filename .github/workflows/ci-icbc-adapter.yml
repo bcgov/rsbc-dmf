@@ -6,6 +6,7 @@ on:
     paths:
       - 'icbc-adapter/src/**'
       - '.github/workflows/ci-icbc-adapter.yml'
+  workflow_dispatch:
 
 env:
   IMAGE_NAME: icbc-adapter
