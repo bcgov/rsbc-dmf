@@ -24,6 +24,7 @@ import { LettersToDriverComponent } from '@app/letters-to-driver/letters-to-driv
 import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.component';
 import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
 import { MatButtonModule } from '@angular/material/button';
+import { DriverDetailsComponent } from '@app/driver-details/driver-details.component';
 
 
 @Component({
@@ -49,7 +50,8 @@ import { MatButtonModule } from '@angular/material/button';
     GetAssistanceComponent,
     SubmissionHistoryComponent,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    DriverDetailsComponent
   ],
   templateUrl: './driver-search.component.html',
   styleUrl: './driver-search.component.scss',
