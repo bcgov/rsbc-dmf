@@ -1,0 +1,38 @@
+.driver-details-card {
+    margin-top: 0px;
+    margin-bottom: 0px
+}
+
+.driver-details {
+    display: flex;
+    justify-content: space-evenly;
+    line-height: 24px;
+}
+
+.top-padding {
+    padding-top: 32px;
+}
+
+.driver-details {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+}
+
+.caseDetailRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    gap: 150px;
+    line-height: 32px;
+    padding-bottom: 24px;
+  }
+
+   .caseBorder{ 
+    border-top: 2px solid grey;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  
+@media only screen and (max-width: 896px) {}
