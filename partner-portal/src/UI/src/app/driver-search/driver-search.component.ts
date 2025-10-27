@@ -120,7 +120,7 @@ export class DriverSearchComponent implements OnInit {
       .subscribe({
         next: (driver) => {
           this.userService.setCacheDriver(driver);
-          this.driverDetails = this.driverDetails;
+          this.driverDetails = driver;
         },
         error: (error) => {
          
@@ -141,7 +141,7 @@ export class DriverSearchComponent implements OnInit {
         bottom: '8px',
         right: '8px',
       },
-      data: this.driverDetails.driverId
+      data: this.driverDetails.id,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
