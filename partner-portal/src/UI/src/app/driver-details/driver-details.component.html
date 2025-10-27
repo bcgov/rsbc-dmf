@@ -18,7 +18,7 @@
                         <div>
                             <label>Class</label>
                             <div>
-                                <b>Test</b>
+                                <b>{{driverDetails.licenceClass}}</b>
                             </div>
                         </div>
 
@@ -47,19 +47,19 @@
                         <div>
                             <label> Gender</label>
                             <div>
-                                <b>Test</b>
+                                <b>{{driverDetails.sex}}</b>
                             </div>
                         </div>
                         <div>
                             <label>Birth Date</label>
                             <div>
-                                <b>Test</b>
+                                <b>{{driverDetails.birthDate}}</b>
                             </div>
                         </div>
                         <div>
                             <label>Address</label>
                             <div>
-                                <b>Test</b>
+                                <b>{{driverDetails.addressLine1}}</b>
                             </div>
                         </div>
                         <div>
@@ -112,10 +112,33 @@
     </div>
     <div class="list top-padding">
         <h2>MXM Information</h2>
-        <mat-card>
-            <mat-card-content>
-
-            </mat-card-content>
-        </mat-card>
+                <table mat-table [dataSource]="mxmDataSource" class="mat-elevation-z8">
+                    <ng-container matColumnDef="issuedDate">
+                        <th mat-header-cell *matHeaderCellDef> Issue Date </th>
+                        <td mat-cell *matCellDef="let element">{{element.issuedDate}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="issuedBy">
+                        <th mat-header-cell *matHeaderCellDef> Issue By </th>
+                        <td mat-cell *matCellDef="let element">{{element.issuedBy}} </td>
+                    </ng-container>
+                     <ng-container matColumnDef="physiciansGuide">
+                        <th mat-header-cell *matHeaderCellDef>Physician's Guide </th>
+                        <td mat-cell *matCellDef="let element">{{element.physiciansGuide}} </td>
+                    </ng-container>
+                     <ng-container matColumnDef="examDate">
+                        <th mat-header-cell *matHeaderCellDef>Exam Date </th>
+                        <td mat-cell *matCellDef="let element">{{element.examDate}} </td>
+                    </ng-container>
+                     <ng-container matColumnDef="recvdDate">
+                        <th mat-header-cell *matHeaderCellDef>Recvd Date </th>
+                        <td mat-cell *matCellDef="let element">{{element.recvdDate}} </td>
+                    </ng-container>
+                     <ng-container matColumnDef="disposition">
+                        <th mat-header-cell *matHeaderCellDef>Physician's Guide </th>
+                        <td mat-cell *matCellDef="let element">{{element.disposition}} </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
     </div>
 </div>

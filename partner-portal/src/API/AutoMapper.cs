@@ -36,7 +36,11 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                 .ForMember(dest => dest.Topic, opt => opt.MapFrom(src => src.Subject));
             CreateMap<DriverInfoReply, ViewModels.Driver>()
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Surname))
-                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.GivenName));
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.GivenName))
+                .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
+                .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
+                .ForMember(dest => dest.AddressLine1, opt => opt.MapFrom(src => src.AddressLine1))
+                .ForMember(dest => dest.LicenceClass, opt => opt.MapFrom(src => src.LicenceClass));
             CreateMap<LegacyComment, ViewModels.Comment>();
             CreateMap<CaseManagement.Service.Driver, ViewModels.Driver>();
             CreateMap<Comment, ViewModels.Comment>();
