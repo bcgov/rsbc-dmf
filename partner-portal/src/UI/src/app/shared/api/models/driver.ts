@@ -21,6 +21,7 @@ export interface Driver {
   medicals?: Array<DriverMedicals> | null;
   postal?: string | null;
   province?: string | null;
+  restrictionCodes?: Array<string> | null;
   securityKeyword?: string | null;
   sex?: string | null;
   status?: Array<DriverStatus> | null;

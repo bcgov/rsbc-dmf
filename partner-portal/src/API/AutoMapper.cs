@@ -40,7 +40,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                 .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
                 .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
                 .ForMember(dest => dest.AddressLine1, opt => opt.MapFrom(src => src.AddressLine1))
-                .ForMember(dest => dest.LicenceClass, opt => opt.MapFrom(src => src.LicenceClass));
+                .ForMember(dest => dest.LicenceClass, opt => opt.MapFrom(src => src.LicenceClass))
+                .ForMember(dest => dest.RestrictionCodes, opt => opt.MapFrom(src => ConvertRestrictionCodes(src.RestrictionCodes)));
             CreateMap<LegacyComment, ViewModels.Comment>();
             CreateMap<CaseManagement.Service.Driver, ViewModels.Driver>();
             CreateMap<Comment, ViewModels.Comment>();
@@ -98,6 +99,17 @@ namespace Rsbc.Dmf.PartnerPortal.Api
             }
 
             return faxReceivedDate;
+        }
+
+        private List<string> ConvertRestrictionCodes(string restrictionCodes)
+        {
+            if (string.IsNullOrEmpty(restrictionCodes))
+                return new List<string>();
+
+            return restrictionCodes.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                                  .Select(code => code.Trim())
+                                  .Where(code => !string.IsNullOrEmpty(code))
+                                  .ToList();
         }
 
 
