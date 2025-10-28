@@ -17,6 +17,7 @@
     display: flex;
     flex-direction: row;
     gap: 24px;
+    padding: 24px;
 }
 
 .caseDetailRow {
@@ -29,10 +30,31 @@
     padding-bottom: 24px;
   }
 
+  .caseDetailRow2 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 20px;
+    line-height: 32px;
+    padding-bottom: 24px;
+  }
+
+  .caseDetailRow2 > div {
+    flex: 1;
+    min-width: 0;
+  }
+
    .caseBorder{ 
     border-top: 2px solid grey;
     padding-top: 20px;
     padding-bottom: 20px;
   }
+
+  .table-padding{
+    padding: 24px;
+  }
+
+
   
 @media only screen and (max-width: 896px) {}

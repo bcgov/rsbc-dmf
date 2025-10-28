@@ -43,7 +43,7 @@
                         </div>
                     </div>
 
-                    <div class="caseDetailRow caseBorder">
+                    <div class="caseDetailRow2 caseBorder">
                         <div>
                             <label> Gender</label>
                             <div>
@@ -59,19 +59,19 @@
                         <div>
                             <label>Address</label>
                             <div>
-                                <b>{{driverDetails.addressLine1}}</b>
+                                <b>{{driverDetails.addressLine1}} {{driverDetails.city}}, {{driverDetails.province}}, {{driverDetails.postal}}</b>
                             </div>
                         </div>
                         <div>
                             <label>Height</label>
                             <div>
-                                <b>{{driverDetails.height}}</b>
+                                <b>{{driverDetails.height}} cm</b>
                             </div>
                         </div>
                         <div>
                             <label>Weight</label>
                             <div>
-                                <b>{{driverDetails.weight}}</b>
+                                <b>{{driverDetails.weight}} kg</b>
                             </div>
                         </div>
                         <div>
@@ -87,7 +87,7 @@
     </div>
     <div class="list top-padding">
         <h2>XS Status Code</h2>
-                <mat-table [dataSource]="xsStatusDataSource" class="mat-elevation-z8">
+                <mat-table [dataSource]="xsStatusDataSource" class="mat-elevation-z8 table-padding">
                     <ng-container matColumnDef="expandedStatus">
                         <th mat-header-cell *matHeaderCellDef> Code </th>
                         <td mat-cell *matCellDef="let element">{{element.expandedStatus}} </td>
@@ -101,10 +101,10 @@
                     <tr mat-row *matRowDef="let row; columns: xsStatusColumns;"></tr>
                 </mat-table>
     </div>
-    <div class="list top-padding">
+    <div class="list top-padding" style="padding-bottom: 32px;">
         <h2>MXM Information</h2>
 
-                <mat-table [dataSource]="mxmDataSource" class="mat-elevation-z8">
+                <mat-table [dataSource]="mxmDataSource" class="mat-elevation-z8 table-padding">
                     <ng-container matColumnDef="medicalIssueDate">
                         <th mat-header-cell *matHeaderCellDef> Issue Date </th>
                         <td mat-cell *matCellDef="let element">{{element.medicalIssueDate | date : "longDate"}} </td>

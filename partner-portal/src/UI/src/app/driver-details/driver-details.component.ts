@@ -19,11 +19,11 @@ export class DriverDetailsComponent {
   driverDetails: Driver = {};
   driverLicenceNumber = this.route.snapshot.params['driverLicenceNumber'];
 
-  displayedColumns: string[] = ['issuedDate', 'issuedBy', 'physiciansGuide', 'examDate', 'recvdDate', 'disposition'];
-  mxmDataSource: any[] = [
-    { issuedDate: 'Test Date', issuedBy: 'Test User', physiciansGuide: 'Test Guide', examDate: 'Test Exam', recvdDate: 'Test Recvd', disposition: 'Test Disposition' }
-    // Add your actual data here
-  ];
+  mxmColumns: string[] = ['medicalIssueDate', 'issuingOffice', 'physicianGuideNumber', 'medicalExamDate' ,'receivedDate', 'medicalDisposition'];
+  mxmDataSource: any[] = [];
+
+  xsStatusColumns: string[] = ['expandedStatus', 'newExpandedStatus'];
+  xsStatusDataSource: any[] = [];
   constructor(
     private userService: UserService,
     private caseManagementService: CaseManagementService,
@@ -40,6 +40,10 @@ export class DriverDetailsComponent {
         next: (driver) => {
           this.userService.setCacheDriver(driver);
           this.driverDetails = driver;
+          // Update the XS Status data source with actual driver status data
+          this.xsStatusDataSource = driver.status || [];
+          // Update the MXM Information data source with actual medical data
+          this.mxmDataSource = driver.medicals || [];
         },
         error: (error) => {
           console.error('error', error);
