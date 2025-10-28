@@ -77,7 +77,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
                         .OrderByDescending(stat => stat.EFDT ?? DateTime.MinValue)
                         .Select(stat => new DriverStatus
                         {
-                            Section = stat.SECT ?? string.Empty,
+                            ExpandedStatus = stat.EXDS ?? string.Empty,
                             NewExpandedStatus = stat.NECD ?? string.Empty
                         })
                         .ToList();

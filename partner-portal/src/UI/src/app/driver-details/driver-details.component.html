@@ -25,7 +25,7 @@
                         <div>
                             <label>Licence Expiry</label>
                             <div>
-                                <b>{{driverDetails.licenceExpiryDate  | date : "longDate"}}</b>
+                                <b>{{driverDetails.licenceExpiryDate  |  date:'yyyy-MM-dd'}}</b>
                             </div>
                         </div>
 
@@ -53,7 +53,7 @@
                         <div>
                             <label>Birth Date</label>
                             <div>
-                                <b>{{driverDetails.birthDate  | date : "longDate"}}</b>
+                                <b>{{driverDetails.birthDate  | date:'yyyy-MM-dd'}}</b>
                             </div>
                         </div>
                         <div>
@@ -87,58 +87,51 @@
     </div>
     <div class="list top-padding">
         <h2>XS Status Code</h2>
-        <mat-card>
-            <mat-card-content class="driver-details">
-                <div style="flex: 1">
-                    <div class="caseDetailRow">
-                        <div>
-                            <label> Code</label>
-                            <div>
-                                <b>Test</b>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label>Description</label>
-                            <div>
-                                <b>Test</b>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
+                <mat-table [dataSource]="xsStatusDataSource" class="mat-elevation-z8">
+                    <ng-container matColumnDef="expandedStatus">
+                        <th mat-header-cell *matHeaderCellDef> Code </th>
+                        <td mat-cell *matCellDef="let element">{{element.expandedStatus}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="newExpandedStatus">
+                        <th mat-header-cell *matHeaderCellDef> Description </th>
+                        <td mat-cell *matCellDef="let element">{{element.newExpandedStatus}} </td>
+                    </ng-container>
+                    
+                    <tr mat-header-row *matHeaderRowDef="xsStatusColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: xsStatusColumns;"></tr>
+                </mat-table>
     </div>
     <div class="list top-padding">
         <h2>MXM Information</h2>
-                <table mat-table [dataSource]="mxmDataSource" class="mat-elevation-z8">
-                    <ng-container matColumnDef="issuedDate">
+
+                <mat-table [dataSource]="mxmDataSource" class="mat-elevation-z8">
+                    <ng-container matColumnDef="medicalIssueDate">
                         <th mat-header-cell *matHeaderCellDef> Issue Date </th>
-                        <td mat-cell *matCellDef="let element">{{element.issuedDate}} </td>
+                        <td mat-cell *matCellDef="let element">{{element.medicalIssueDate | date : "longDate"}} </td>
                     </ng-container>
-                    <ng-container matColumnDef="issuedBy">
-                        <th mat-header-cell *matHeaderCellDef> Issue By </th>
-                        <td mat-cell *matCellDef="let element">{{element.issuedBy}} </td>
+                    <ng-container matColumnDef="issuingOffice">
+                        <th mat-header-cell *matHeaderCellDef> Issued By </th>
+                        <td mat-cell *matCellDef="let element">{{element.issuingOffice}} - {{element.issuingOfficeDescription}} </td>
                     </ng-container>
-                     <ng-container matColumnDef="physiciansGuide">
-                        <th mat-header-cell *matHeaderCellDef>Physician's Guide </th>
-                        <td mat-cell *matCellDef="let element">{{element.physiciansGuide}} </td>
+                    <ng-container matColumnDef="physicianGuideNumber">
+                        <th mat-header-cell *matHeaderCellDef> Physician's Guide </th>
+                        <td mat-cell *matCellDef="let element">{{element.physicianGuideNumber}} </td>
                     </ng-container>
-                     <ng-container matColumnDef="examDate">
-                        <th mat-header-cell *matHeaderCellDef>Exam Date </th>
-                        <td mat-cell *matCellDef="let element">{{element.examDate}} </td>
+                    <ng-container matColumnDef="medicalExamDate">
+                        <th mat-header-cell *matHeaderCellDef> Exam Date </th>
+                        <td mat-cell *matCellDef="let element">{{element.medicalExamDate |  date:'yyyy-MM-dd'}} </td>
                     </ng-container>
-                     <ng-container matColumnDef="recvdDate">
-                        <th mat-header-cell *matHeaderCellDef>Recvd Date </th>
-                        <td mat-cell *matCellDef="let element">{{element.recvdDate}} </td>
+                    <ng-container matColumnDef="receivedDate">
+                        <th mat-header-cell *matHeaderCellDef> Received Date </th>
+                        <td mat-cell *matCellDef="let element">{{element.medicalExamDate |  date:'yyyy-MM-dd'}} </td>
                     </ng-container>
-                     <ng-container matColumnDef="disposition">
-                        <th mat-header-cell *matHeaderCellDef>Physician's Guide </th>
-                        <td mat-cell *matCellDef="let element">{{element.disposition}} </td>
+                    <ng-container matColumnDef="medicalDisposition">
+                        <th mat-header-cell *matHeaderCellDef> Disposition </th>
+                        <td mat-cell *matCellDef="let element">{{element.medicalDisposition}} - {{element.medicalDispositionDescription}}</td>
                     </ng-container>
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
+                    
+                    <tr mat-header-row *matHeaderRowDef="mxmColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: mxmColumns;"></tr>
+                </mat-table>
     </div>
 </div>

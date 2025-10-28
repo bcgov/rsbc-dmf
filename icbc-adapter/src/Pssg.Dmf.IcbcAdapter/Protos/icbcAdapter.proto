@@ -59,7 +59,7 @@ message DriverInfoReply {
 }
 
 message DriverStatus {
-  string section = 1;
+  string expandedStatus = 1;
   string newExpandedStatus = 2;
 }
 

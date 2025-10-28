@@ -1,5 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
+import { DriverMedicals } from '../models/driver-medicals';
+import { DriverStatus } from '../models/driver-status';
 export interface Driver {
   addressLine1?: string | null;
   birthDate?: string | null;
@@ -16,9 +18,11 @@ export interface Driver {
   loadedFromICBC?: boolean | null;
   masterStatusCode?: string | null;
   medicalIssueDate?: string | null;
+  medicals?: Array<DriverMedicals> | null;
   postal?: string | null;
   province?: string | null;
   securityKeyword?: string | null;
   sex?: string | null;
+  status?: Array<DriverStatus> | null;
   weight?: string | null;
 }
