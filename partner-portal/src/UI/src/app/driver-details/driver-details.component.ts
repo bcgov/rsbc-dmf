@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
@@ -9,7 +10,7 @@ import { UserService } from '@app/shared/services/user.service';
 @Component({
   selector: 'app-driver-details',
   standalone: true,
-  imports: [MatCardModule, MatTableModule],
+  imports: [MatCardModule, MatTableModule, DatePipe],
   templateUrl: './driver-details.component.html',
   styleUrl: './driver-details.component.scss'
 })

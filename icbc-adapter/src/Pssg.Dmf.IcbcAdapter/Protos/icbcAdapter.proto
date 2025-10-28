@@ -48,6 +48,13 @@ message DriverInfoReply {
     string province = 10;
     string country = 11;
     int32 licenceClass = 12;
+    string height = 13;
+    string weight = 14;
+    string securityKeyword = 15;
+    string masterStatusCode = 16;
+    string licenceExpiryDate = 17;
+    string restrictionCodes = 18;
+
 }
 
 enum ResultStatus {

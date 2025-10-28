@@ -62,6 +62,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
                 result.Surname = reply.INAM?.SURN ?? string.Empty;
                 result.LicenceClass = reply.DR1MST?.LCLS ?? default;
                 result.ResultStatus = ResultStatus.Success;
+                result.Height = reply.HGHT.HasValue ? reply.HGHT.Value.ToString(CultureInfo.InvariantCulture) : string.Empty;
+                result.Weight = reply.WGHT.HasValue ? reply.WGHT.Value.ToString(CultureInfo.InvariantCulture) : string.Empty;
+                result.SecurityKeyword = reply.SECK ?? string.Empty;
+                result.MasterStatusCode = reply.DR1MST?.MSCD ?? string.Empty;
+                result.LicenceExpiryDate = reply.DR1MST?.RRDT?.ToString() ?? string.Empty;
+                result.RestrictionCodes = reply.DR1MST?.RSCD != null ? string.Join(",", reply.DR1MST.RSCD) : string.Empty;
             }
 
             return Task.FromResult(result);

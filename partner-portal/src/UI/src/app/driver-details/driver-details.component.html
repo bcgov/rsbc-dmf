@@ -11,7 +11,7 @@
                         <div>
                             <label>Driver Status</label>
                             <div>
-                                <b>Test</b>
+                                <b>{{driverDetails.masterStatusCode}}</b>
                             </div>
                         </div>
 
@@ -25,7 +25,7 @@
                         <div>
                             <label>Licence Expiry</label>
                             <div>
-                                <b>Test</b>
+                                <b>{{driverDetails.licenceExpiryDate  | date : "longDate"}}</b>
                             </div>
                         </div>
 
@@ -53,7 +53,7 @@
                         <div>
                             <label>Birth Date</label>
                             <div>
-                                <b>{{driverDetails.birthDate}}</b>
+                                <b>{{driverDetails.birthDate  | date : "longDate"}}</b>
                             </div>
                         </div>
                         <div>
@@ -65,19 +65,19 @@
                         <div>
                             <label>Height</label>
                             <div>
-                                <b>Test</b>
+                                <b>{{driverDetails.height}}</b>
                             </div>
                         </div>
                         <div>
                             <label>Weight</label>
                             <div>
-                                <b>Test</b>
+                                <b>{{driverDetails.weight}}</b>
                             </div>
                         </div>
                         <div>
                             <label>Keyword</label>
                             <div>
-                                <b>Test</b>
+                                <b>{{driverDetails.securityKeyword}}</b>
                             </div>
                         </div>
                     </div>
