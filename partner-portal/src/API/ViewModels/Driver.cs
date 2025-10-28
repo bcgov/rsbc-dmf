@@ -1,4 +1,6 @@
-﻿namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels
+﻿using Rsbc.Dmf.IcbcAdapter;
+
+namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels
 {
     public class Driver
     {
@@ -23,5 +25,7 @@
         public string Height { get; set; }
         public string Weight { get; set; }
         public string SecurityKeyword { get; set; }
+        public List<DriverStatus> Status { get; set; }
+        public List<DriverMedicals> Medicals { get; set; }
     }
 }
