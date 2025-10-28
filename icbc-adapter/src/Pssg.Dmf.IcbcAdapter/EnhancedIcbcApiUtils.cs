@@ -490,7 +490,19 @@ namespace Rsbc.Dmf.IcbcAdapter
 
         internal void CreateOrUpdateCases(List<DRVILS> cases)
         {
-            Log.Logger.Information("Creating Or Updating case with ICBC Notification data...");
+            foreach (DRVILS dmf_case in cases)
+            {
+                var caseToCreate = new CreateCaseRequest()
+                {
+                    DriverLicenseNumber = dmf_case.LNUM,
+                    CaseTypeCode = "REM",
+                    TriggerType = dmf_case.CAND_CAUSE_CD,
+                    Owner = "Remedial"
+                };
+
+                _caseManagerClient.CreateCase(caseToCreate);
+            }
+
         }
 
         public async Task<List<DRVILS>> ParseIcbcNotication(IFormFile file)
@@ -585,15 +597,20 @@ namespace Rsbc.Dmf.IcbcAdapter
         {
             Log.Logger.Information("Fetching ICBC Notifications dat file...");
 
-            var filePath = @"C:\Users\FintanR\Downloads\drv-ilsnew-202506110013 (1).dat";
-            var fileName = Path.GetFileName(filePath);
-            var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            using var httpClient = new HttpClient();
+            //TO Do update ICBC_Notifaction_Endpoint
+            var endpointUrl = "ICBC_Notifaction_Endpoint";
+            using var response = await httpClient.GetAsync(endpointUrl);
+            response.EnsureSuccessStatusCode();
 
-            var formFile = new FormFile(stream, 0, stream.Length, "file", fileName)
+            var fileBytes = await response.Content.ReadAsByteArrayAsync();
+
+            var stream = new MemoryStream(fileBytes);
+
+            var formFile = new FormFile(stream, 0, stream.Length, "file", "ICBC_Notifactions")
             {
                 Headers = new HeaderDictionary(),
-                ContentType = "application/octet-stream",
-                ContentDisposition = $"form-data; name=\"file\"; filename=\"{fileName}\""
+                ContentType = "application/octet-stream"
             };
 
             return formFile;
