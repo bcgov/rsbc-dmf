@@ -269,11 +269,14 @@ namespace Rsbc.Dmf.CaseManagement
         public string DriverLicenseNumber { get; set; }
 
         public string DocumentType { get; set; }
-       
+
         public string CaseTypeCode { get; set; }
+
+        public string TriggerType { get; set; }
+        public string Owner { get; set; }
     }
 
-
+  
 
     public class CreateDecisionRequest
     {
@@ -3352,7 +3355,7 @@ namespace Rsbc.Dmf.CaseManagement
         public async Task<ResultStatusReply> CreateCase(CreateCaseRequest request )
         {
             //return case Id in response
-            ResultStatusReply result = null;
+            ResultStatusReply result = new ResultStatusReply();
 
             dfp_driver driver;
 
@@ -3388,6 +3391,11 @@ namespace Rsbc.Dmf.CaseManagement
                     sequenceNumber = 1;
                 }
 
+                Guid? ownerId = null;
+                if (request.Owner != null)
+                {
+                    ownerId = dynamicsContext.teams.Where(x => x.name == request.Owner).FirstOrDefault()?.ownerid;
+                }
 
 
                 incident newIncident = new incident()
@@ -3401,8 +3409,7 @@ namespace Rsbc.Dmf.CaseManagement
                     casetypecode = TranslateCaseType(request.CaseTypeCode ?? request.DocumentType),
                     dfp_progressstatus = 100000000,
                     dfp_dfcmscasesequencenumber = request.SequenceNumber,
-
-
+                    _ownerid_value = ownerId,
                 };
 
                 // Check sequence number on case 
@@ -3447,6 +3454,7 @@ namespace Rsbc.Dmf.CaseManagement
                         newIncident = dynamicsContext.incidents.ByKey(tempId).GetValue();
                     }
 
+                    result.Id = newIncident.incidentid.ToString();
                     Log.Information($"Case has successfully Created : CreateCase {newIncident.incidentid} ");
 
                 }
@@ -3486,6 +3494,45 @@ namespace Rsbc.Dmf.CaseManagement
 
             return result;
         }
+
+        public async Task<ResultStatusReply> CreateRehabTrigger(CreateCaseRequest caseCreateRequest)
+        {
+            ResultStatusReply result = new ResultStatusReply();
+
+            try
+            {
+                var x = RehabTriggerType.CCC;
+                var triggerTypeId = Enum.Parse<RehabTriggerType>(caseCreateRequest.TriggerType);
+
+
+                var newRehabTrigger = new dfp_rehabtrigger()
+                {
+                    dfp_triggertype = (int?)triggerTypeId
+                };
+
+            dynamicsContext.AddTodfp_rehabtriggers(newRehabTrigger);
+                var dfpcase = dynamicsContext.incidents.Where(i => i.incidentid == Guid.Parse(caseCreateRequest.CaseId)).FirstOrDefault();
+                dynamicsContext.SetLink(newRehabTrigger, nameof(dfp_rehabtrigger.dfp_CaseId),
+                dfpcase);
+
+                var driver = dynamicsContext.dfp_drivers.Where(i => i.dfp_licensenumber == caseCreateRequest.DriverLicenseNumber).FirstOrDefault();
+                dynamicsContext.SetLink(newRehabTrigger, nameof(dfp_rehabtrigger.dfp_DriverId),
+                driver);
+
+                await dynamicsContext.SaveChangesAsync();
+       
+
+    result.Success = true;
+            
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, " Candidate Create  {source} ERROR set link incident - driver  " + e.Message);
+
+            }
+            return result;
+        }
+
 
         /// <summary>
         /// Returns a Dynamics Principal that can be used in a set Owner call.

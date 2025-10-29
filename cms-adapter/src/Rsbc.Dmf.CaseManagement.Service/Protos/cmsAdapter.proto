@@ -458,6 +458,8 @@ message CreateCaseRequest {
     string Priority = 4;
     string Owner = 5;
     string SubmittalStatus = 6;
+    string CaseTypeCode = 7;
+    string TriggerType = 8;
 }
 
 message UpdateCaseRequest{
