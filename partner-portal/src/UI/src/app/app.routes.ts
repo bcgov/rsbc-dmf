@@ -8,6 +8,7 @@ import { SubmissionHistoryComponent } from './submission-history/submission-hist
 import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.component';
 import { GetHelpComponent } from './get-help/get-help.component';
 import { AuthGuard } from './modules/keycloak/keycloak.guard';
+import { DriverDetailsComponent } from './driver-details/driver-details.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'search', pathMatch: 'full' },
@@ -22,7 +23,8 @@ export const routes: Routes = [
       { path: 'submissionHistory', component: SubmissionHistoryComponent },
       { path: 'letterToDriver', component: LettersToDriverComponent },
       { path: 'caseSearch/:caseId', component: CaseSearchComponent },
-      { path: 'getHelp', component: GetHelpComponent}
+      { path: 'getHelp', component: GetHelpComponent},
+      { path: 'driverDetails', component: DriverDetailsComponent}
     ],
   },
 ];

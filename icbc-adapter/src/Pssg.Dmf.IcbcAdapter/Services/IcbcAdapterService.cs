@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Pssg.Interfaces;
+using Pssg.Interfaces.Icbc.Models;
 using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 
@@ -62,6 +63,50 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
                 result.Surname = reply.INAM?.SURN ?? string.Empty;
                 result.LicenceClass = reply.DR1MST?.LCLS ?? default;
                 result.ResultStatus = ResultStatus.Success;
+                result.Height = reply.HGHT.HasValue ? reply.HGHT.Value.ToString(CultureInfo.InvariantCulture) : string.Empty;
+                result.Weight = reply.WGHT.HasValue ? reply.WGHT.Value.ToString(CultureInfo.InvariantCulture) : string.Empty;
+                result.SecurityKeyword = reply.SECK ?? string.Empty;
+                result.MasterStatusCode = reply.DR1MST?.MSCD ?? string.Empty;
+                result.LicenceExpiryDate = reply.DR1MST?.RRDT?.ToString() ?? string.Empty;
+                result.RestrictionCodes = reply.DR1MST?.RSCD != null ? string.Join(",", reply.DR1MST.RSCD) : string.Empty;
+                // Map DriverStatus items from DR1STAT
+                if (reply.DR1MST?.DR1STAT != null && reply.DR1MST.DR1STAT.Any())
+                {
+                    var driverStatusItems = reply.DR1MST.DR1STAT
+                        .Where(stat => !string.IsNullOrEmpty(stat.SECT))
+                        .OrderByDescending(stat => stat.EFDT ?? DateTime.MinValue)
+                        .Select(stat => new DriverStatus
+                        {
+                            ExpandedStatus = stat.EXDS ?? string.Empty,
+                            NewExpandedStatus = stat.NECD ?? string.Empty
+                        })
+                        .ToList();
+
+                    result.Status.AddRange(driverStatusItems);
+                }
+
+                // Map DriverMedicals from DR1MEDN
+                if (reply.DR1MST?.DR1MEDN != null && reply.DR1MST.DR1MEDN.Any())
+                {
+                    var driverMedicals = reply.DR1MST.DR1MEDN
+                        .Where(medical => medical.MIDT.HasValue)
+                        .OrderByDescending(medical => medical.MIDT.Value)
+                        .Select(medical => new DriverMedicals
+                        {
+                            MedicalIssueDate = medical.MIDT?.ToString("yyyy-MM-dd") ?? string.Empty,
+                            IssuingOffice = medical.ISOF.HasValue ? medical.ISOF.Value.ToString() : string.Empty,
+                            IssuingOfficeDescription = medical.ISOFDESC ?? string.Empty,
+                            PhysicianGuideNumber = medical.PGN1 ?? string.Empty,
+                            MedicalExamDate = medical.MEDT?.ToString("yyyy-MM-dd") ?? string.Empty,
+                            MedicalDisposition = medical.MDSP ?? string.Empty,
+                            MedicalDispositionDescription = medical.MDSPDESC ?? string.Empty
+                        })
+                        .ToList();
+
+                    result.Medicals.AddRange(driverMedicals);
+                }
+
+
             }
 
             return Task.FromResult(result);

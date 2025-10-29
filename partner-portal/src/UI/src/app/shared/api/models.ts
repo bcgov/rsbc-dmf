@@ -13,6 +13,8 @@ export { CommentRequest } from './models/comment-request';
 export { Document } from './models/document';
 export { DocumentSubType } from './models/document-sub-type';
 export { Driver } from './models/driver';
+export { DriverMedicals } from './models/driver-medicals';
+export { DriverStatus } from './models/driver-status';
 export { KeycloakConfig } from './models/keycloak-config';
 export { KeycloakConfiguration } from './models/keycloak-configuration';
 export { KeycloakInitOptions } from './models/keycloak-init-options';

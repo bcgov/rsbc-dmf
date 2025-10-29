@@ -23,5 +23,4 @@ export interface Document {
   showOnPortals?: boolean;
   submittalStatus?: string | null;
   userId?: string | null;
-  errorMessage?: boolean | null;
 }

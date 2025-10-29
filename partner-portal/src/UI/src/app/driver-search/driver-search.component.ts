@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbar } from '@angular/material/toolbar';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { MedicalDmerTypesComponent } from '../../app/definitions/medical-dmer-types/medical-dmer-types.component';
 import { RecentCaseComponent, CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, EligibleLicenseClassComponent, PortalsEnum } from '@shared/core-ui';
@@ -24,6 +24,7 @@ import { LettersToDriverComponent } from '@app/letters-to-driver/letters-to-driv
 import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.component';
 import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
 import { MatButtonModule } from '@angular/material/button';
+import { DriverDetailsComponent } from '@app/driver-details/driver-details.component';
 
 
 @Component({
@@ -49,7 +50,8 @@ import { MatButtonModule } from '@angular/material/button';
     GetAssistanceComponent,
     SubmissionHistoryComponent,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    DriverDetailsComponent
   ],
   templateUrl: './driver-search.component.html',
   styleUrl: './driver-search.component.scss',
@@ -67,7 +69,7 @@ export class DriverSearchComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
   _closedCaseDetails: CaseDetail[] | null = [];
-  driverLicenceNumber = '';
+  driverLicenceNumber = this.route.snapshot.params['driverLicenceNumber'];
 
    // Get Driver details
    driverDetails = this.userService.getCachedriver();
@@ -89,6 +91,7 @@ export class DriverSearchComponent implements OnInit {
   constructor(
      public caseManagementService: CaseManagementService,
      private userService: UserService,
+     private route: ActivatedRoute
      ) {}
 
   ngOnInit(): void {
@@ -117,7 +120,7 @@ export class DriverSearchComponent implements OnInit {
       .subscribe({
         next: (driver) => {
           this.userService.setCacheDriver(driver);
-          this.driverDetails = this.driverDetails;
+          this.driverDetails = driver;
         },
         error: (error) => {
          
@@ -138,7 +141,7 @@ export class DriverSearchComponent implements OnInit {
         bottom: '8px',
         right: '8px',
       },
-      data: this.driverDetails.driverId
+      data: this.driverDetails.id,
     });
 
     dialogRef.afterClosed().subscribe((result) => {

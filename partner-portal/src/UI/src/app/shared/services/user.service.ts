@@ -19,10 +19,10 @@ export class UserService {
     return this.driverService.apiDriverDriverSessionGet$Json();
   }
 
-  getCachedriver(): UserContext {
+  getCachedriver(): Driver {
     let driver = sessionStorage.getItem(SESSION_STORAGE_KEYS.DRIVER);
     if (!driver) return {};
-    return JSON.parse(driver) as UserContext;
+    return JSON.parse(driver) as Driver;
   }
 
   // Set cache driver on driver serach

@@ -48,6 +48,29 @@ message DriverInfoReply {
     string province = 10;
     string country = 11;
     int32 licenceClass = 12;
+    string height = 13;
+    string weight = 14;
+    string securityKeyword = 15;
+    string masterStatusCode = 16;
+    string licenceExpiryDate = 17;
+    string restrictionCodes = 18;
+    repeated DriverStatus status = 19;
+    repeated DriverMedicals medicals = 20;
+}
+
+message DriverStatus {
+  string expandedStatus = 1;
+  string newExpandedStatus = 2;
+}
+
+message DriverMedicals {
+    string medicalIssueDate = 1;
+    string issuingOffice = 2;
+    string issuingOfficeDescription = 3;
+    string physicianGuideNumber = 4;
+    string medicalExamDate = 5;
+    string medicalDisposition = 6;
+    string medicalDispositionDescription = 7;
 }
 
 enum ResultStatus {
