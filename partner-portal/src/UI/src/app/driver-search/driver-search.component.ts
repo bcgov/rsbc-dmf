@@ -25,6 +25,8 @@ import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.compo
 import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
 import { MatButtonModule } from '@angular/material/button';
 import { DriverDetailsComponent } from '@app/driver-details/driver-details.component';
+import { RehabInterlockComponent } from '@app/rehab-interlock/rehab-interlock.component';
+import { RemedialCaseDetailsComponent } from '@app/remedial-case-details/remedial-case-details.component';
 
 
 @Component({
@@ -51,7 +53,9 @@ import { DriverDetailsComponent } from '@app/driver-details/driver-details.compo
     SubmissionHistoryComponent,
     MatButtonModule,
     MatIconModule,
-    DriverDetailsComponent
+    DriverDetailsComponent, 
+    RehabInterlockComponent,
+    RemedialCaseDetailsComponent
   ],
   templateUrl: './driver-search.component.html',
   styleUrl: './driver-search.component.scss',
