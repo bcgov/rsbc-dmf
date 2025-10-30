@@ -1740,10 +1740,19 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var caseCreateRequest = new CaseManagement.CreateCaseRequest()
                 {
                     CaseId = request.CaseId,
+                    DriverLicenseNumber = request.DriverLicenseNumber,
+                    TriggerType =request.TriggerType,
+                    Owner = request.Owner
                 };
 
 
                 var createDriver = await _caseManager.CreateCase(caseCreateRequest);
+                caseCreateRequest.CaseId = createDriver?.Id;
+
+                if(caseCreateRequest.TriggerType != null)
+                {
+                    await _caseManager.CreateRehabTrigger(caseCreateRequest);
+                }
                 
 
                    reply.ResultStatus = ResultStatus.Success;

@@ -130,6 +130,23 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
             return Task.FromResult(result);
         }
 
+        /// <summary>
+        /// Process Medical Status Updates
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        [AllowAnonymous]
+        public override Task<ResultStatusReply> GetIcbcNotifications(EmptyRequest request, ServerCallContext context)
+        {
+            var result = new ResultStatusReply();
+
+            var enhancedIcbcUtils = new EnhancedIcbcApiUtils(_configuration, _caseManagerClient, _icbcClient);
+            enhancedIcbcUtils.GetIcbcNotificationsAndUpdateCase().GetAwaiter().GetResult();
+
+            return Task.FromResult(result);
+        }
+
         public override Task<ResultStatusReply> DryRunMedicalDisposition(EmptyRequest request, ServerCallContext context)
         {
             var result = new ResultStatusReply();

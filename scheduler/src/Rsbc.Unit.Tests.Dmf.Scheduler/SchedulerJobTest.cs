@@ -35,5 +35,11 @@ namespace Rsbc.Unit.Tests.Dmf.Scheduler
         {
             await _scheduledJobs.UpdateBirthdate(null);
         }
+
+        [Fact]
+        public async void TestGetIcbcNotifications()
+        {
+            await _scheduledJobs.GetIcbcNotifications(null);
+        }
     }
 }
