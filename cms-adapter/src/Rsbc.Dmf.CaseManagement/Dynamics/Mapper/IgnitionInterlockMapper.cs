@@ -13,6 +13,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
         {
 
             CreateMap<dfp_ignitioninterlock, IgnitionInterlockDetails>()
+           .ForMember(dest => dest.IgnitionId, opt => opt.MapFrom(src => src.dfp_ignitioninterlockid))
            .ForMember(dest => dest.IIActivity, opt => opt.MapFrom(src => TranslateIIActivityStatus(src.dfp_iiactivity)))
            .ForMember(dest => dest.TermMonths, opt => opt.MapFrom(src => src.dfp_termmonths.ToString() ?? string.Empty))
            .ForMember(dest => dest.InstallDate, opt => opt.MapFrom(src => src.dfp_installdate))

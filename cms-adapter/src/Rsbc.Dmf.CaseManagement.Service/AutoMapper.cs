@@ -85,6 +85,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<CaseManagement.MedicalCondition, Service.MedicalConditionItem>();
 
             CreateMap<IgnitionInterlockDetails, IgnitionInterlock>()
+                .ForMember(dest => dest.IgnitionId, opt => opt.MapFrom(src => src.IgnitionId ?? string.Empty))
                 .ForMember(dest => dest.IiActivity, opt => opt.MapFrom(src => src.IIActivity ?? string.Empty))
                 .ForMember(dest => dest.TermMonths, opt => opt.MapFrom(src => src.TermMonths ?? string.Empty))
                 .ForMember(dest => dest.InstallDate, opt => opt.MapFrom(src => src.InstallDate != null ? Timestamp.FromDateTimeOffset(src.InstallDate.Value) : null))
