@@ -2,6 +2,7 @@
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
 using Rsbc.Dmf.CaseManagement.Dynamics.Mapper;
+using Rsbc.Dmf.CaseManagement.Model;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -52,7 +53,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? (Guid?)null : Guid.Parse(src.Id)))
               .ForMember(dest => dest.DpsPriority, opt => opt.MapFrom(src => src.DpsPriority))
               .ForMember(dest => dest.Queue, opt => opt.MapFrom(src => src.Queue));
-         
+
             CreateMap<Dto.Document, Document>()
                 .ForMember(dest => dest.Provider, opt => opt.MapFrom(src => src.Login))
                 .AddTransform(NullStringConverter);
@@ -65,7 +66,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.DocumentId))
                 .ForMember(dest => dest.Provider, opt => opt.MapFrom(src => src.Login))
                 .AddTransform(NullStringConverter);
-            
+
             CreateMap<Dto.Login, Provider>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.LoginId))
@@ -82,6 +83,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullStringConverter);
 
             CreateMap<CaseManagement.MedicalCondition, Service.MedicalConditionItem>();
+
+            CreateMap<IgnitionInterlockDetails, IgnitionInterlock>()
+                .ForMember(dest => dest.IiActivity, opt => opt.MapFrom(src => src.IIActivity ?? string.Empty))
+                .ForMember(dest => dest.TermMonths, opt => opt.MapFrom(src => src.TermMonths ?? string.Empty))
+                .ForMember(dest => dest.InstallDate, opt => opt.MapFrom(src => src.InstallDate != null ? Timestamp.FromDateTimeOffset(src.InstallDate.Value) : null))
+                .ForMember(dest => dest.CompletionDate, opt => opt.MapFrom(src => src.CompletionDate != null ? Timestamp.FromDateTimeOffset(src.CompletionDate.Value) : null))
+                .ForMember(dest => dest.ClientPaid, opt => opt.MapFrom(src => src.ClientPaid ?? string.Empty));
         }
 
         // convert null string to empty string (default) for gRPC
@@ -121,6 +129,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 mc.AddProfile(new DriverAutoMapperProfile());
                 mc.AddProfile(new LoginAutoMapperProfile());
                 mc.AddProfile(new FlagAutoMapperProfile());
+                mc.AddProfile(new IgnitionInterlockMapperProfile());
                 mc.AddProfile(new MedicalConditionAutoMapperProfile());
             });
 

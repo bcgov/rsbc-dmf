@@ -798,5 +798,16 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             Assert.NotNull(response);
 
         }
+
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task  CanGetIgnitionInterLockDetails()
+        {
+            string driverLicense = _configuration["ICBC_TEST_DL"];
+            var response = _caseManager.GetIgnitionInterlockDetails(driverLicense);
+
+            Assert.NotNull(response);
+
+        }
     }
 }

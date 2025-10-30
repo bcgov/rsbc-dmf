@@ -126,7 +126,11 @@ service CaseManager {
   // Update Non Comply documents
   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
 
-  
+  // Get Rehab Trigger by driver license number
+  rpc GetRehabTriggerDetails(DriverLicenseRequest) returns (RehabTriggerReply);
+
+   // Get Ignition Interlock by driver license number
+   rpc GetIgnitionInterlockDetails(DriverLicenseRequest) returns (IgnitionInterlockReply);
 }
 
 // sync with EntityState enum in Rsbc.Dmf.CaseManagement\Dynamics\DynamicsContext.cs
@@ -397,6 +401,40 @@ message Provider {
     string faxNumber = 13;
     Address address = 14;	
 }
+
+// Rehab Trigger Details 
+message RehabTriggerReply {
+    repeated RehabTrigger items = 1;
+    ResultStatus resultStatus = 2;
+    string errorDetail = 3;
+}
+
+message RehabTrigger {
+    google.protobuf.Timestamp assignmentDate = 1;
+    string clientType = 2;
+    string rehabActivity = 3;
+    string clientPaid = 4;
+    string stream = 5;
+    string decision = 6;
+    google.protobuf.Timestamp decisionDate = 7;
+}
+
+// Ignition Interlock Details
+message IgnitionInterlockReply {
+    repeated IgnitionInterlock items = 1;
+    ResultStatus resultStatus = 2;
+    string errorDetail = 3;
+}
+
+message IgnitionInterlock{
+    string iiActivity = 1;
+    string termMonths = 2;
+    google.protobuf.Timestamp installDate = 3;
+    google.protobuf.Timestamp completionDate = 4;
+    string clientPaid = 5;
+    
+}
+
 
 // Obsolete use FullAddress instead
 message Address {

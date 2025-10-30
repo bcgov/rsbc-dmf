@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Pssg.SharedUtils;
+using Rsbc.Dmf.CaseManagement.Model;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -724,6 +725,44 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return reply;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<IgnitionInterlockReply> GetIgnitionInterlockDetails(DriverLicenseRequest request, ServerCallContext context)
+        {
+            var reply = new IgnitionInterlockReply() { ResultStatus = ResultStatus.Fail };
+
+            try
+            {
+                var ignitionInterlockDetailsList = await _caseManager.GetIgnitionInterlockDetails(request.DriverLicenseNumber);
+                if (ignitionInterlockDetailsList != null)
+                {
+                    foreach (var item in ignitionInterlockDetailsList)
+                    {
+                        var mappedItems = _mapper.Map<IEnumerable<IgnitionInterlock>>(ignitionInterlockDetailsList);
+                        reply.Items.AddRange(mappedItems);
+                        reply.ResultStatus = ResultStatus.Success;
+                    }
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ErrorDetail = "No ignition interlock details found";
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+        }
+
         /// <summary>
         /// Get Case Comments
         /// </summary>
