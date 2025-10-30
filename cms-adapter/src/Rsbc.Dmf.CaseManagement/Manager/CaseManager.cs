@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
 using Rsbc.Dmf.CaseManagement.Dynamics;
+using Rsbc.Dmf.CaseManagement.Model;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using Serilog;
 using Serilog.Core;
@@ -940,10 +941,34 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        public async Task<IEnumerable<IgnitionInterlockDetails>> GetIgnitionInterlockDetails(string DriverLicenseNumber)
+        {
+            var result = new List<IgnitionInterlockDetails>();
+            try
+            {
+                var ignitionDetails = dynamicsContext.dfp_ignitioninterlocks
+                    .Where(d => d.dfp_DriverId.dfp_licensenumber == DriverLicenseNumber)
+                    .OrderByDescending(x => x.createdon)
+                    .ToList(); // Convert to list to get all records
+
+
+                if (ignitionDetails != null && ignitionDetails.Any())
+                {
+                    result = _mapper.Map<List<IgnitionInterlockDetails>>(ignitionDetails);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, $"Error getting Ignition Interlock Details {DriverLicenseNumber}");
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Get Legacy Document
         /// </summary>
-        /// <param name="commentId"></param>
+        /// <param name="commentId"></param>    
         /// <returns></returns>
         public async Task<LegacyComment> GetComment(string commentId)
         {

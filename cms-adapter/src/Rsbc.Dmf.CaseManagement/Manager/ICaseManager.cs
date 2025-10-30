@@ -1,4 +1,5 @@
 ﻿using Rsbc.Dmf.CaseManagement.Dynamics;
+using Rsbc.Dmf.CaseManagement.Model;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -122,6 +123,8 @@ namespace Rsbc.Dmf.CaseManagement
         Task<CreateStatusReply> CreateICBCDocumentEnvelope(LegacyDocument newDocument);
 
         Task<CreateStatusReply> CreateICBCMedicalCandidateComment(LegacyComment request);
+
+        Task<IEnumerable<IgnitionInterlockDetails>> GetIgnitionInterlockDetails(string DriverLicenseNumber);
 
     }
 }
