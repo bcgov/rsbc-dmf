@@ -732,13 +732,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<IgnitionInterlockReply> GetIgnitionInterlockDetails(DriverLicenseRequest request, ServerCallContext context)
+        public async override Task<IgnitionInterlockReply> GetIgnitionInterlockDetails(DriverIdRequest request, ServerCallContext context)
         {
             var reply = new IgnitionInterlockReply() { ResultStatus = ResultStatus.Fail };
 
             try
             {
-                var ignitionInterlockDetailsList = await _caseManager.GetIgnitionInterlockDetails(request.DriverLicenseNumber);
+                var ignitionInterlockDetailsList = await _caseManager.GetIgnitionInterlockDetails(request.Id);
                 if (ignitionInterlockDetailsList != null)
                 {
                     foreach (var item in ignitionInterlockDetailsList)

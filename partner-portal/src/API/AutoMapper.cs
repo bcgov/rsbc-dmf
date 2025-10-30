@@ -45,6 +45,15 @@ namespace Rsbc.Dmf.PartnerPortal.Api
             CreateMap<LegacyComment, ViewModels.Comment>();
             CreateMap<CaseManagement.Service.Driver, ViewModels.Driver>();
             CreateMap<Comment, ViewModels.Comment>();
+            CreateMap<CaseManagement.Service.IgnitionInterlock, ViewModels.IgnitionInterlock>()
+                .ForMember(dest => dest.IgnitionId, opt => opt.MapFrom(src => src.IgnitionId))
+                .ForMember(dest => dest.IIActivity, opt => opt.MapFrom(src => src.IiActivity))
+                .ForMember(dest => dest.TermMonths, opt => opt.MapFrom(src => src.TermMonths))
+                .ForMember(dest => dest.InstallDate, opt => opt.MapFrom(src => src.InstallDate != null ? src.InstallDate.ToDateTimeOffset() : (DateTimeOffset?)null))
+                .ForMember(dest => dest.CompletionDate, opt => opt.MapFrom(src => src.CompletionDate != null ? src.CompletionDate.ToDateTimeOffset() : (DateTimeOffset?)null))
+                .ForMember(dest => dest.ClientPaid, opt => opt.MapFrom(src => src.ClientPaid));
+
+
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
