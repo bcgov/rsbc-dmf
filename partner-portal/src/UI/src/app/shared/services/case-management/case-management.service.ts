@@ -6,6 +6,7 @@ import {
   DocumentService,
   DocumentTypeService,
   DriverService,
+  RemedialService,
   //ProfileService,
 } from '../../api/services';
 
@@ -20,7 +21,8 @@ export class CaseManagementService {
     //private profileService: ProfileService,
     private documentTypeService: DocumentTypeService,
     private callbackService: CallbackService,
-    private commentsService: CommentsService
+    private commentsService: CommentsService,
+    private remedialService: RemedialService
   ) { }
 
   // Case
@@ -69,7 +71,7 @@ export class CaseManagementService {
     return this.callbackService.apiCallbackCancelPut$Json(params);
   }
 
- // Search 
+  // Search 
   public searchByDriver(
     params: Parameters<DriverService['apiDriverInfoDriverLicenceNumberGet$Json']>[0]
   ) {
@@ -96,4 +98,19 @@ export class CaseManagementService {
   ) {
     return this.commentsService.apiCommentsCreatePost$Json(params);
   }
+
+  // Remedial Cased
+
+  public getIgnitionInterlockDetails(
+    params: Parameters<RemedialService['apiRemedialGetIgnitionInterlockGet$Json']>[0]
+  ) {
+    return this.remedialService.apiRemedialGetIgnitionInterlockGet$Json(params);
+  }
+
+  public getRehabTriggerDetails(
+    params: Parameters<RemedialService['apiRemedialGetRehabTriggersGet$Json']>[0]
+  ) {
+    return this.remedialService.apiRemedialGetRehabTriggersGet$Json(params);
+  }
+  
 }
