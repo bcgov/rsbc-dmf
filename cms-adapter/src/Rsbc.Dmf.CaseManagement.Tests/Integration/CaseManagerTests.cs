@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Service;
 using Shouldly;
 using System;
@@ -803,9 +804,17 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task  CanGetIgnitionInterLockDetails()
         {
-            string driverLicense = _configuration["ICBC_TEST_DL"];
-            var response = _caseManager.GetIgnitionInterlockDetails(driverLicense);
+            string driverId = _configuration["ICBC_TEST_DRIVERID"];
+            var response = _caseManager.GetIgnitionInterlockDetails(Guid.Parse(driverId));
+            Assert.NotNull(response);
 
+        }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanGetRehabTriggerDetails()
+        {
+            string driverId = _configuration["ICBC_TEST_DRIVERID"];
+            var response = _caseManager.GetRehabTriggerDetails(Guid.Parse(driverId));
             Assert.NotNull(response);
 
         }

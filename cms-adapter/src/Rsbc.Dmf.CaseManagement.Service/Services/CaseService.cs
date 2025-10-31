@@ -726,42 +726,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public async override Task<IgnitionInterlockReply> GetIgnitionInterlockDetails(DriverIdRequest request, ServerCallContext context)
-        {
-            var reply = new IgnitionInterlockReply() { ResultStatus = ResultStatus.Fail };
-
-            try
-            {
-                var ignitionInterlockDetailsList = await _caseManager.GetIgnitionInterlockDetails(request.Id);
-                if (ignitionInterlockDetailsList != null)
-                {
-                    foreach (var item in ignitionInterlockDetailsList)
-                    {
-                        var mappedItems = _mapper.Map<IEnumerable<IgnitionInterlock>>(ignitionInterlockDetailsList);
-                        reply.Items.AddRange(mappedItems);
-                        reply.ResultStatus = ResultStatus.Success;
-                    }
-                    reply.ResultStatus = ResultStatus.Success;
-                }
-                else
-                {
-                    reply.ErrorDetail = "No ignition interlock details found";
-                }
-            }
-            catch (Exception e)
-            {
-                reply.ResultStatus = ResultStatus.Fail;
-                reply.ErrorDetail = e.Message;
-            }
-
-            return reply;
-        }
 
         /// <summary>
         /// Get Case Comments
@@ -2433,6 +2397,81 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.ErrorDetail = e.Message;
             }
             
+
+            return reply;
+        }
+
+
+        /// <summary>
+        /// Get Ignition Interlock Details
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<IgnitionInterlockReply> GetIgnitionInterlockDetails(DriverIdRequest request, ServerCallContext context)
+        {
+            var reply = new IgnitionInterlockReply() { ResultStatus = ResultStatus.Fail };
+
+            try
+            {
+                var ignitionInterlockDetailsList = await _caseManager.GetIgnitionInterlockDetails(Guid.Parse(request.Id));
+                if (ignitionInterlockDetailsList != null)
+                {
+                    foreach (var item in ignitionInterlockDetailsList)
+                    {
+                        var mappedItems = _mapper.Map<IEnumerable<IgnitionInterlock>>(ignitionInterlockDetailsList);
+                        reply.Items.AddRange(mappedItems);
+                        reply.ResultStatus = ResultStatus.Success;
+                    }
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ErrorDetail = "No ignition interlock details found";
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+        }
+
+        /// <summary>
+        /// Get Rehab Trigger Details
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<RehabTriggerReply> GetRehabTriggerDetails(DriverIdRequest request, ServerCallContext context)
+        {
+            var reply = new RehabTriggerReply() { ResultStatus = ResultStatus.Fail };
+
+            try
+            {
+                var rehabTriggerDetailsList = await _caseManager.GetRehabTriggerDetails(Guid.Parse(request.Id));
+                if (rehabTriggerDetailsList != null)
+                {
+                    foreach (var item in rehabTriggerDetailsList)
+                    {
+                        var mappedItems = _mapper.Map<IEnumerable<RehabTrigger>>(rehabTriggerDetailsList);
+                        reply.Items.AddRange(mappedItems);
+                        reply.ResultStatus = ResultStatus.Success;
+                    }
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ErrorDetail = "No Rehab Trigger details found";
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
 
             return reply;
         }

@@ -944,13 +944,18 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public async Task<IEnumerable<IgnitionInterlockDetails>> GetIgnitionInterlockDetails(string DriverLicenseNumber)
+        /// <summary>
+        /// GetIgnitionInterlockDetails
+        /// </summary>
+        /// <param name="driverId"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<IgnitionInterlockDetails>> GetIgnitionInterlockDetails(Guid driverId)
         {
             var result = new List<IgnitionInterlockDetails>();
             try
             {
                 var ignitionDetails = dynamicsContext.dfp_ignitioninterlocks
-                    .Where(d => d.dfp_DriverId.dfp_licensenumber == DriverLicenseNumber)
+                    .Where(d => d.dfp_DriverId.dfp_driverid == driverId)
                     .OrderByDescending(x => x.createdon)
                     .ToList(); // Convert to list to get all records
 
@@ -962,7 +967,36 @@ namespace Rsbc.Dmf.CaseManagement
             }
             catch (Exception ex)
             {
-                Log.Logger.Error(ex, $"Error getting Ignition Interlock Details {DriverLicenseNumber}");
+                Log.Logger.Error(ex, $"Error getting Ignition Interlock Details {driverId}");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="driverId"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<RehabTriggerDetails>> GetRehabTriggerDetails(Guid driverId)
+        {
+            var result = new List<RehabTriggerDetails>();
+            try
+            {
+                var ignitionDetails = dynamicsContext.dfp_rehabtriggers
+                    .Where(d => d.dfp_DriverId.dfp_driverid == driverId)
+                    .OrderByDescending(x => x.createdon)
+                    .ToList(); // Convert to list to get all records
+
+
+                if (ignitionDetails != null && ignitionDetails.Any())
+                {
+                    result = _mapper.Map<List<RehabTriggerDetails>>(ignitionDetails);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, $"Error getting Ignition Interlock Details {driverId}");
             }
 
             return result;

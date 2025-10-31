@@ -13,7 +13,7 @@ using static Rsbc.Dmf.CaseManagement.Service.FlagItem.Types;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
-    public class MappingProfile : Profile 
+    public class MappingProfile : Profile
     {
         public MappingProfile()
         {
@@ -91,6 +91,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .ForMember(dest => dest.InstallDate, opt => opt.MapFrom(src => src.InstallDate != null ? Timestamp.FromDateTimeOffset(src.InstallDate.Value) : null))
                 .ForMember(dest => dest.CompletionDate, opt => opt.MapFrom(src => src.CompletionDate != null ? Timestamp.FromDateTimeOffset(src.CompletionDate.Value) : null))
                 .ForMember(dest => dest.ClientPaid, opt => opt.MapFrom(src => src.ClientPaid ?? string.Empty));
+
+            CreateMap<RehabTriggerDetails, RehabTrigger>()
+                .ForMember(dest => dest.RehabId, opt => opt.MapFrom(src => src.RehabId ?? string.Empty))
+                .ForMember(dest => dest.AssignmentDate, opt => opt.MapFrom(src => src.AssignmentDate != null ? Timestamp.FromDateTimeOffset(src.AssignmentDate.Value) : null))
+                .ForMember(dest => dest.DecisionDate, opt => opt.MapFrom(src => src.DecisionDate != null ? Timestamp.FromDateTimeOffset(src.DecisionDate.Value) : null))
+                .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => src.ClientType ?? string.Empty))
+                .ForMember(dest => dest.RehabActivity, opt => opt.MapFrom(src => src.RehabActivity ?? string.Empty))
+                .ForMember(dest => dest.ClientPaid, opt => opt.MapFrom(src => src.ClientPaid ?? string.Empty))
+                .ForMember(dest => dest.Stream, opt => opt.MapFrom(src => src.Stream ?? string.Empty))
+                .ForMember(dest => dest.Decision, opt => opt.MapFrom(src => src.Decision ?? string.Empty));
+
         }
 
         // convert null string to empty string (default) for gRPC
@@ -130,8 +141,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 mc.AddProfile(new DriverAutoMapperProfile());
                 mc.AddProfile(new LoginAutoMapperProfile());
                 mc.AddProfile(new FlagAutoMapperProfile());
-                mc.AddProfile(new IgnitionInterlockMapperProfile());
                 mc.AddProfile(new MedicalConditionAutoMapperProfile());
+                mc.AddProfile(new IgnitionInterlockMapperProfile());
+                mc.AddProfile(new RehabTriggerMapperProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();

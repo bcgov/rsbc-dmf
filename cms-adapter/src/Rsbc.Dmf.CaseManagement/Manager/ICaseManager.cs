@@ -124,7 +124,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CreateStatusReply> CreateICBCMedicalCandidateComment(LegacyComment request);
         Task<ResultStatusReply> CreateRehabTrigger(CreateCaseRequest caseCreateRequest);
-        Task<IEnumerable<IgnitionInterlockDetails>> GetIgnitionInterlockDetails(string DriverLicenseNumber);
+        Task<IEnumerable<IgnitionInterlockDetails>> GetIgnitionInterlockDetails(Guid driverId);
+        Task<IEnumerable<RehabTriggerDetails>> GetRehabTriggerDetails(Guid driverId);
 
     }
 }
