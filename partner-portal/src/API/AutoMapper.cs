@@ -52,7 +52,15 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                 .ForMember(dest => dest.InstallDate, opt => opt.MapFrom(src => src.InstallDate != null ? src.InstallDate.ToDateTimeOffset() : (DateTimeOffset?)null))
                 .ForMember(dest => dest.CompletionDate, opt => opt.MapFrom(src => src.CompletionDate != null ? src.CompletionDate.ToDateTimeOffset() : (DateTimeOffset?)null))
                 .ForMember(dest => dest.ClientPaid, opt => opt.MapFrom(src => src.ClientPaid));
-
+            CreateMap<CaseManagement.Service.RehabTrigger, ViewModels.RehabTrigger>()
+                    .ForMember(dest => dest.RehabId, opt => opt.MapFrom(src => src.RehabId))
+                    .ForMember(dest => dest.AssignmentDate, opt => opt.MapFrom(src => src.AssignmentDate != null ? src.AssignmentDate.ToDateTimeOffset() : (DateTimeOffset?)null))
+                    .ForMember(dest => dest.DecisionDate, opt => opt.MapFrom(src => src.DecisionDate != null ? src.DecisionDate.ToDateTimeOffset() : (DateTimeOffset?)null))
+                    .ForMember(dest => dest.ClientType, opt => opt.MapFrom(src => src.ClientType))
+                    .ForMember(dest => dest.RehabActivity, opt => opt.MapFrom(src => src.RehabActivity))
+                    .ForMember(dest => dest.ClientPaid, opt => opt.MapFrom(src => src.ClientPaid))
+                    .ForMember(dest => dest.Stream, opt => opt.MapFrom(src => src.Stream))
+                    .ForMember(dest => dest.Decision, opt => opt.MapFrom(src => src.Decision));
 
         }
 

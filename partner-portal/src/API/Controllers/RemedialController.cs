@@ -74,5 +74,31 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 
             return Json(result);
         }
+
+        [HttpGet("getRehabTriggers")]
+        [ProducesResponseType(typeof(IEnumerable<ViewModels.RehabTrigger>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName(nameof(GetRehabTriggerDetails))]
+        public async Task<ActionResult> GetRehabTriggerDetails()
+        {
+            var result = new List<ViewModels.RehabTrigger>();
+
+            var profile = _userService.GetDriverInfo();
+
+            var request = new DriverIdRequest { Id = profile.DriverId };
+            var getRehabTriggerDetails = _cmsAdapterClient.GetRehabTriggerDetails(request);
+
+            if (getRehabTriggerDetails?.ResultStatus == ResultStatus.Success)
+            {
+                result = _mapper.Map<List<ViewModels.RehabTrigger>>(getRehabTriggerDetails.Items);
+            }
+            else
+            {
+                return StatusCode(500, getRehabTriggerDetails?.ErrorDetail ?? $"{nameof(getRehabTriggerDetails)} failed.");
+            }
+
+            return Json(result);
+        }
     }
 }
