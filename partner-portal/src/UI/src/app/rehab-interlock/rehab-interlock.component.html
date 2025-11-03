@@ -1,0 +1,132 @@
+<div class="container">
+
+    <div class="list top-padding">
+        <h2>Rehab Assignment</h2>
+        <mat-card *ngFor="let rehabDetail of rehabInterlockDetails"
+            [ngClass]="{ open: rehabDetail.rehabId && isExpanded[rehabDetail.rehabId] }">
+            <mat-card-content class="cardContent">
+                <div style="text-align: center">
+                    <mat-icon (click)="toggleIsExpandable(rehabDetail.rehabId)" class="expandedIcon">
+                        expand_circle_down
+                    </mat-icon>
+                </div>
+                <div style="display: flex; flex-direction: column">
+                    <div class="case-details-border">&nbsp;</div>
+                    <div>&nbsp;</div>
+                </div>
+                <div style="flex:1">
+                    <div class="caseDetailRow">
+                        <div>
+                            <label>Assignment Date</label>
+                            <div>
+                                <b>{{rehabDetail.assignmentDate | date:'yyyy-MM-dd'}}</b>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label>Client Type</label>
+                            <div>
+                                <b>{{rehabDetail.clientType}}</b>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label>Rehab Activity</label>
+                            <div>
+                                <b>{{rehabDetail.rehabActivity}}</b>
+                            </div>
+                        </div>
+                        <div>
+                            <label>Client Paid?</label>
+                            <div>
+                                <b>{{rehabDetail.clientPaid}}</b>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="caseDetailRow caseborder"
+                        *ngIf="rehabDetail.rehabId && isExpanded?.[rehabDetail.rehabId]">
+                        <div>
+                            <label>Stream</label>
+                            <div>
+                                <b>{{rehabDetail.stream}}</b>
+                            </div>
+                        </div>
+                        <div>
+                            <label>Decision</label>
+                            <div>
+                                <b>{{rehabDetail.decision}}</b>
+                            </div>
+                        </div>
+                        <div>
+                            <label>Decision Date</label>
+                            <div>
+                                <b>{{rehabDetail.decisionDate | date:'yyyy-MM-dd'}}</b>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Show message when no rehab details are available -->
+        <mat-card *ngIf="rehabInterlockDetails.length === 0">
+            <mat-card-content class="cardContent">
+                <div style="text-align: center; padding: 20px;">
+                    <p>No rehab assignment details available.</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="list top-padding">
+        <h2>Ignition Interlock</h2>
+        <mat-card *ngFor="let interlockDetail of ignitionInterlockDetails">
+            <mat-card-content class="cardContent">
+                <div class="interlockDetailRow">
+                    <div>
+                        <label>I/I Activity</label>
+                        <div>
+                            <b>{{interlockDetail.iiActivity}}</b>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Term (months)</label>
+                        <div>
+                            <b>{{interlockDetail.termMonths}}</b>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Install Date</label>
+                        <div>
+                            <b>{{interlockDetail.installDate | date:'yyyy-MM-dd'}}</b>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Completion Date</label>
+                        <div>
+                            <b>{{interlockDetail.completionDate | date:'yyyy-MM-dd'}}</b>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Client Paid?</label>
+                        <div>
+                            <b>{{interlockDetail.clientPaid}}</b>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Show message when no ignition interlock details are available -->
+        <mat-card *ngIf="ignitionInterlockDetails.length === 0">
+            <mat-card-content class="cardContent">
+                <div style="text-align: center; padding: 20px;">
+                    <p>No ignition interlock details available.</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

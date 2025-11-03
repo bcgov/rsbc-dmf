@@ -12,6 +12,7 @@ import { ConfigService } from './services/config.service';
 import { DocumentService } from './services/document.service';
 import { DocumentTypeService } from './services/document-type.service';
 import { DriverService } from './services/driver.service';
+import { RemedialService } from './services/remedial.service';
 
 /**
  * Module that provides all services and configuration.
@@ -29,6 +30,7 @@ import { DriverService } from './services/driver.service';
     DocumentService,
     DocumentTypeService,
     DriverService,
+    RemedialService,
     ApiConfiguration
   ],
 })

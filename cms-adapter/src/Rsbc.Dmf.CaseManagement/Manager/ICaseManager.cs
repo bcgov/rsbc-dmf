@@ -1,4 +1,5 @@
 ﻿using Rsbc.Dmf.CaseManagement.Dynamics;
+using Rsbc.Dmf.CaseManagement.Model;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -123,5 +124,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CreateStatusReply> CreateICBCMedicalCandidateComment(LegacyComment request);
         Task<ResultStatusReply> CreateRehabTrigger(CreateCaseRequest caseCreateRequest);
+        Task<IEnumerable<IgnitionInterlockDetails>> GetIgnitionInterlockDetails(Guid driverId);
+        Task<IEnumerable<RehabTriggerDetails>> GetRehabTriggerDetails(Guid driverId);
+
     }
 }

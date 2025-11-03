@@ -6,3 +6,4 @@ export { ConfigService } from './services/config.service';
 export { DocumentService } from './services/document.service';
 export { DocumentTypeService } from './services/document-type.service';
 export { DriverService } from './services/driver.service';
+export { RemedialService } from './services/remedial.service';
