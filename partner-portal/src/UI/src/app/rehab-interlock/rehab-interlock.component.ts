@@ -17,13 +17,14 @@ import { UserService } from '@app/shared/services/user.service';
 export class RehabInterlockComponent implements OnInit   {
  rehabInterlockDetails: RehabTrigger[] = [];
  ignitionInterlockDetails: IgnitionInterlock[] = [];
+  isExpanded: Record<string, boolean> = {};
 
   constructor(
     private caseManagementService: CaseManagementService,
     private userService: UserService) { }
 
-  toggleIsExpandable(): void {
-    // this.isExpandable = !this.isExpandable;
+  toggleIsExpandable(id?: string | null) {
+    if (id) this.isExpanded[id] = !this.isExpanded[id];
   }
 
   ngOnInit(): void {

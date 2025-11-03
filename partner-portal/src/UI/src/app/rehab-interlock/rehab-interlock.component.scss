@@ -1,11 +1,22 @@
-.interlock-details {
-    display: flex;
-    flex-direction: row;
-    gap: 24px;
-    padding: 24px;
-}
+// .interlock-details {
+//     display: flex;
+//     flex-direction: row;
+//     gap: 24px;
+//     padding: 24px;
+// }
 
-.interlockDetailRow {
+
+// .interlockDetailRow {
+//     display: flex;
+//     flex-direction: row;
+//     flex-wrap: wrap;
+//     justify-content: start;
+//     gap: 150px;
+//     line-height: 32px;
+//     padding-bottom: 24px;
+//   }
+
+.caseDetailRow {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -14,6 +25,22 @@
     line-height: 32px;
     padding-bottom: 24px;
   }
+  
+.cardContent {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .interlockDetailRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: start;
+    gap: 100px;
+    line-height: 32px;
+  }
+  
 
   .top-padding{
   padding-top: 32px;
@@ -40,4 +67,20 @@
     border-top: 2px solid grey;
     padding-top: 20px;
     padding-bottom: 20px;
+  }
+
+  .mat-mdc-card {
+    border: 1px solid gray;
+    box-shadow: none !important;
+    margin: 30px 0 30px 0;
+    padding: 32px;
+    margin-bottom: 24px;
+  
+  .mat-mdc-card-header {
+      padding-top: 12px;
+  
+      .mat-mdc-card-header-text {
+        vertical-align: middle;
+      }
+    }
   }

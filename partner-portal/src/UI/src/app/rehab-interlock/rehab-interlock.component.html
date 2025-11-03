@@ -2,19 +2,20 @@
 
     <div class="list top-padding">
         <h2>Rehab Assignment</h2>
-        <mat-card *ngFor="let rehabDetail of rehabInterlockDetails; let i = index">
-            <mat-card-content class="interlock-details">
-                <div style="text-align: center" *ngIf="i === 0">
-                    <mat-icon (click)="toggleIsExpandable()" class="expandedIcon">
+        <mat-card *ngFor="let rehabDetail of rehabInterlockDetails"
+            [ngClass]="{ open: rehabDetail.rehabId && isExpanded[rehabDetail.rehabId] }">
+            <mat-card-content class="cardContent">
+                <div style="text-align: center">
+                    <mat-icon (click)="toggleIsExpandable(rehabDetail.rehabId)" class="expandedIcon">
                         expand_circle_down
                     </mat-icon>
                 </div>
-                <div style="display: flex; flex-direction: column" *ngIf="i === 0">
+                <div style="display: flex; flex-direction: column">
                     <div class="case-details-border">&nbsp;</div>
                     <div>&nbsp;</div>
                 </div>
                 <div style="flex:1">
-                    <div class="interlockDetailRow">
+                    <div class="caseDetailRow">
                         <div>
                             <label>Assignment Date</label>
                             <div>
@@ -42,7 +43,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="interlockDetailRow caseborder">
+                    <div class="caseDetailRow caseborder"
+                        *ngIf="rehabDetail.rehabId && isExpanded?.[rehabDetail.rehabId]">
                         <div>
                             <label>Stream</label>
                             <div>
@@ -66,10 +68,10 @@
                 </div>
             </mat-card-content>
         </mat-card>
-        
+
         <!-- Show message when no rehab details are available -->
         <mat-card *ngIf="rehabInterlockDetails.length === 0">
-            <mat-card-content class="interlock-details">
+            <mat-card-content class="cardContent">
                 <div style="text-align: center; padding: 20px;">
                     <p>No rehab assignment details available.</p>
                 </div>
@@ -79,7 +81,7 @@
     <div class="list top-padding">
         <h2>Ignition Interlock</h2>
         <mat-card *ngFor="let interlockDetail of ignitionInterlockDetails">
-            <mat-card-content class="interlock-details">
+            <mat-card-content class="cardContent">
                 <div class="interlockDetailRow">
                     <div>
                         <label>I/I Activity</label>
@@ -117,10 +119,10 @@
                 </div>
             </mat-card-content>
         </mat-card>
-        
+
         <!-- Show message when no ignition interlock details are available -->
         <mat-card *ngIf="ignitionInterlockDetails.length === 0">
-            <mat-card-content class="interlock-details">
+            <mat-card-content class="cardContent">
                 <div style="text-align: center; padding: 20px;">
                     <p>No ignition interlock details available.</p>
                 </div>
