@@ -2417,13 +2417,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var ignitionInterlockDetailsList = await _caseManager.GetIgnitionInterlockDetails(Guid.Parse(request.Id));
                 if (ignitionInterlockDetailsList != null)
                 {
-                    foreach (var item in ignitionInterlockDetailsList)
-                    {
                         var mappedItems = _mapper.Map<IEnumerable<IgnitionInterlock>>(ignitionInterlockDetailsList);
                         reply.Items.AddRange(mappedItems);
                         reply.ResultStatus = ResultStatus.Success;
-                    }
-                    reply.ResultStatus = ResultStatus.Success;
+                        reply.ResultStatus = ResultStatus.Success;
                 }
                 else
                 {
@@ -2454,13 +2451,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var rehabTriggerDetailsList = await _caseManager.GetRehabTriggerDetails(Guid.Parse(request.Id));
                 if (rehabTriggerDetailsList != null)
                 {
-                    foreach (var item in rehabTriggerDetailsList)
-                    {
                         var mappedItems = _mapper.Map<IEnumerable<RehabTrigger>>(rehabTriggerDetailsList);
                         reply.Items.AddRange(mappedItems);
                         reply.ResultStatus = ResultStatus.Success;
-                    }
-                    reply.ResultStatus = ResultStatus.Success;
+                        reply.ResultStatus = ResultStatus.Success;
                 }
                 else
                 {
