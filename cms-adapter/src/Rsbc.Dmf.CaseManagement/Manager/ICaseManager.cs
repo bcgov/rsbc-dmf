@@ -126,6 +126,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<ResultStatusReply> CreateRehabTrigger(CreateCaseRequest caseCreateRequest);
         Task<IEnumerable<IgnitionInterlockDetails>> GetIgnitionInterlockDetails(Guid driverId);
         Task<IEnumerable<RehabTriggerDetails>> GetRehabTriggerDetails(Guid driverId);
+        Task<CaseDetail> GetMostRecentRemedialCaseDetail(Guid driverId);
 
     }
 }

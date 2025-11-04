@@ -126,11 +126,14 @@ service CaseManager {
   // Update Non Comply documents
   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
 
+  // Remedial Case Details
+  rpc GetMostRecentRemedialCaseDetail (DriverIdRequest) returns (GetCaseDetailReply);
+
   // Get Rehab Trigger by driver license number
   rpc GetRehabTriggerDetails(DriverIdRequest) returns (RehabTriggerReply);
 
-   // Get Ignition Interlock by driver license number
-   rpc GetIgnitionInterlockDetails(DriverIdRequest) returns (IgnitionInterlockReply);
+  // Get Ignition Interlock by driver license number
+  rpc GetIgnitionInterlockDetails(DriverIdRequest) returns (IgnitionInterlockReply);
 }
 
 // sync with EntityState enum in Rsbc.Dmf.CaseManagement\Dynamics\DynamicsContext.cs

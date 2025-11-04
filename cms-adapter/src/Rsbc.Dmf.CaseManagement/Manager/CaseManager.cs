@@ -944,6 +944,35 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
+        /// <summary>
+        /// GetMostRecentCaseDetail
+        /// </summary>
+        /// <param name="driverId"></param>
+        /// <returns></returns>
+        public async Task<CaseDetail> GetMostRecentRemedialCaseDetail(Guid driverId)
+        {
+            CaseDetail result = null;
+
+            try
+            {
+                var fetchedCase = dynamicsContext.incidents
+                    .Where(i => i.dfp_DriverId.dfp_driverid == driverId && i.dfp_showonportals == true && i.dfp_programarea == 100000001)
+                    .OrderByDescending(x => x.createdon).FirstOrDefault();
+
+                if (fetchedCase != null)
+                {
+                    result = await _caseMapper.Map(fetchedCase);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, $"Error getting driver {driverId}");
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// GetIgnitionInterlockDetails
         /// </summary>

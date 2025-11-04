@@ -818,5 +818,15 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             Assert.NotNull(response);
 
         }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task GetMostRecentRemedialCase()
+        {
+            string driverId = _configuration["ICBC_TEST_DRIVERID"];
+            var response = _caseManager.GetMostRecentRemedialCaseDetail(Guid.Parse(driverId));
+
+            Assert.NotNull(response);
+
+        }
     }
 }

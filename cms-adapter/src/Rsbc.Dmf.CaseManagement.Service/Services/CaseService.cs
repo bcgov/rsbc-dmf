@@ -2470,6 +2470,40 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<GetCaseDetailReply> GetMostRecentRemedialCaseDetail(DriverIdRequest request, ServerCallContext context)
+        {
+            var reply = new GetCaseDetailReply() { ResultStatus = ResultStatus.Fail };
+
+            try
+            {
+                var driverId = Guid.Parse(request.Id);
+                var c = await _caseManager.GetMostRecentRemedialCaseDetail(driverId);
+
+                if (c != null)
+                {
+                    reply.Item = _mapper.Map<CaseDetail>(c);
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ErrorDetail = "Case ID not found";
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+        }
+
         [Obsolete("Use CallbackService.Create instead.")]
         public async override Task<ResultStatusReply> CreateBringForward(BringForwardRequest request, ServerCallContext context)
         {
