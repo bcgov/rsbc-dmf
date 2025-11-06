@@ -922,14 +922,21 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="driverId"></param>
         /// <returns></returns>
-        public async Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId)
+        public async Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId, string? programArea)
         {
             CaseDetail result = null;
 
             try
             {
-                var fetchedCase = dynamicsContext.incidents.Where(i => i.dfp_DriverId.dfp_driverid == driverId && i.dfp_showonportals == true)
-                    .OrderByDescending(x => x.createdon).FirstOrDefault();
+                var fetchedCaseQuery = dynamicsContext.incidents
+                    .Where(i => i.dfp_DriverId.dfp_driverid == driverId && i.dfp_showonportals == true);
+
+                if (!string.IsNullOrEmpty(programArea))
+                {
+                    fetchedCaseQuery = fetchedCaseQuery.Where(i => i.dfp_programarea == TranslateProgramArea(programArea));
+                }
+
+                var fetchedCase = fetchedCaseQuery.OrderByDescending(x => x.createdon).FirstOrDefault();
 
                 if(fetchedCase != null)
                 {
@@ -942,6 +949,31 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return result;
+        }
+
+
+        /// <summary>
+        /// Translate the Program Type
+        /// </summary>
+        /// <param name="programArea"></param>
+        /// <returns></returns>
+        private int TranslateProgramArea(string? programArea)
+        {
+            var statusMap = new Dictionary<string, int>()
+            {
+                { "DMF", 100000000 },
+                { "Remedial", 100000001 },
+                { "DIP", 100000002 },
+            };
+
+            if (statusMap.ContainsKey(programArea))
+            {
+                return statusMap[programArea];
+            }
+            else
+            {
+                return statusMap["Unknown"];
+            }
         }
 
 
@@ -3726,6 +3758,7 @@ namespace Rsbc.Dmf.CaseManagement
                 return "Unknown";
             }
         }
+
 
         /// <summary>
         /// Translate the Dynamics Priority (status reason) field to text

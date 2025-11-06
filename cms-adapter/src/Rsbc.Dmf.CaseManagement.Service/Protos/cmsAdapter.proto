@@ -164,6 +164,11 @@ message UpdateDriverRequest{
 
 message DriverIdRequest {
     string id = 1;
+    CaseFilterRequest caseFilter = 2;
+}
+
+message CaseFilterRequest {
+    string programArea = 1;
 }
 
 message DriverLicenseRequest {

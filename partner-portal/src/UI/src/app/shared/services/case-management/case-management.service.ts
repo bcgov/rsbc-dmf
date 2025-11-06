@@ -26,8 +26,8 @@ export class CaseManagementService {
   ) { }
 
   // Case
-  public getMostRecentCase() {
-    return this.casesService.apiCasesMostRecentGet$Json();
+  public getMostRecentCase(params: Parameters<CasesService['apiCasesMostRecentGet$Json']>[0]) {
+    return this.casesService.apiCasesMostRecentGet$Json(params);
   }
 
   public getClosedCases(

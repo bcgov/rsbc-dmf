@@ -1,1 +1,10 @@
-<p>remedial-case-details works!</p>
+<div class="container">
+<div class="list">
+    <h2>Most Recent Case</h2>
+    <div>
+        <app-shared-recent-case [caseManagementService]="caseManagementService"
+            [portal]="PortalsEnum.PartnerPortal" [programArea] = "'Remedial'" ></app-shared-recent-case>
+    </div>
+</div>
+</div>
+

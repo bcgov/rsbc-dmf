@@ -705,7 +705,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             try
             {
                 var driverId = Guid.Parse(request.Id);
-                var c = await _caseManager.GetMostRecentCaseDetail(driverId);
+
+                var c = await _caseManager.GetMostRecentCaseDetail(driverId, request.CaseFilter?.ProgramArea);
                 
                 if (c != null)
                 {

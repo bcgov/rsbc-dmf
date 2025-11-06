@@ -44,6 +44,7 @@ export class RecentCaseComponent implements OnInit {
 
   @Input() caseManagementService: any;
   @Input() portal!: PortalsEnum;
+  @Input() programArea: string | null = null;
 
   PortalsEnum = PortalsEnum;
   hasActiveCase?: boolean;
@@ -78,7 +79,7 @@ export class RecentCaseComponent implements OnInit {
 
   public ngOnInit(): void {
     this.caseManagementService
-      .getMostRecentCase()
+      .getMostRecentCase({programArea: this.programArea})
       .subscribe((recentCase: any) => {
         this.caseDetails = recentCase;
         if (recentCase.status === CaseStageEnum.Opened) {
