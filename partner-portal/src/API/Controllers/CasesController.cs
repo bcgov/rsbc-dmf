@@ -105,11 +105,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             {
                 request.CaseFilter = new CaseFilterRequest { ProgramArea = programArea };
             }
-            //var request = new DriverIdRequest { Id = profile.DriverId, CaseFilter = new CaseFilterRequest { ProgramArea = null } };
 
             var c = await _cmsAdapterClient.GetMostRecentCaseDetailAsync(request);
-
-            //var c = _cmsAdapterClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId, CaseFilter = { ProgramArea = "Remedial" } });
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 result = _mapper.Map<ViewModels.CaseDetail>(c.Item);

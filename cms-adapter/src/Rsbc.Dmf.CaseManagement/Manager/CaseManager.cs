@@ -935,8 +935,12 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     fetchedCaseQuery = fetchedCaseQuery.Where(i => i.dfp_programarea == TranslateProgramArea(programArea));
                 }
+                else
+                {
+                    fetchedCaseQuery = fetchedCaseQuery.Where(i => i.dfp_programarea != TranslateProgramArea("Remedial"));
+                }
 
-                var fetchedCase = fetchedCaseQuery.OrderByDescending(x => x.createdon).FirstOrDefault();
+                    var fetchedCase = fetchedCaseQuery.OrderByDescending(x => x.createdon).FirstOrDefault();
 
                 if(fetchedCase != null)
                 {

@@ -25,7 +25,5 @@ export class RemedialCaseDetailsComponent {
 
   constructor(
     public caseManagementService: CaseManagementService,
-    //private userService: UserService,
-    //private route: ActivatedRoute
   ) { }
 }
