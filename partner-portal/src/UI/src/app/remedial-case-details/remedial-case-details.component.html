@@ -1,65 +1,136 @@
 <div class="container">
-<div class="list topPadding">
-    <h2>Most Recent Case</h2>
-    <div>
-        <app-shared-recent-case [caseManagementService]="caseManagementService"
-            [portal]="PortalsEnum.PartnerPortal" [programArea] = "'Remedial'" ></app-shared-recent-case>
+    <div class="list topPadding">
+        <h2>Most Recent Case</h2>
+        <div>
+            <app-shared-recent-case [caseManagementService]="caseManagementService" [portal]="PortalsEnum.PartnerPortal"
+                [programArea]="'Remedial'"></app-shared-recent-case>
+        </div>
     </div>
-</div>
- <div class="list topPadding">
-          <h2>Closed Cases</h2>
- </div>
- <div class="list topPadding">
-          <h2>Definitions</h2>
-           <div class="accordion-btn-container">
+    <div class="list topPadding">
+        <h2>Closed Cases</h2>
+        <div>
+            <mat-card *ngFor="let closedCase of closedCaseDetails" [ngClass]="{
+                open: closedCase.caseId && isExpanded[closedCase.caseId],
+              }">
+                <mat-card-content class="closedCaseContent">
+                    <div style="text-align: center">
+                        <mat-icon (click)="toggleIsExpandable(closedCase.caseId)" class="expandedIcon">
+                            expand_circle_down
+                        </mat-icon>
+                    </div>
+                    <div style="display: flex; flex-direction: column">
+                        <div class="case-details-border">&nbsp;</div>
+                        <div>&nbsp;</div>
+                    </div>
+                    <div style="flex: 1">
+                        <div class="caseDetailRow">
+                            <div>
+                                <label>Created Date</label>
+                                <div>
+                                    <b>{{ closedCase?.openedDate | date: "longDate" }}</b>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label>Case Id</label>
+                                <div>
+                                    <b>{{ closedCase?.idCode }}</b>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label>Case Type</label>
+                                <div>
+                                    <b>{{ closedCase?.caseType }}</b>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label>Decision Outcome</label>
+                                <div>
+                                    <b>{{ closedCase?.latestDecision }}</b>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="caseDetailRow caseBorder"
+                            *ngIf="closedCase.caseId && isExpanded?.[closedCase.caseId]">
+                            <div>
+                                <label> Decision date </label>
+                                <div>
+                                    <b>{{ closedCase?.decisionDate | date: "longDate" }}</b>
+                                </div>
+                            </div>
+                            <div>
+                                <label>Eligible License Class</label>
+                                <div>
+                                    <b>{{ closedCase?.decisionForClass }}</b>
+                                </div>
+                            </div>
+                            <div></div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div *ngIf="!isLoading && closedCaseDetails?.length === 0">
+            <mat-card>
+                <mat-card-content>
+                    <b>No Closed Cases found</b>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+    <div class="list topPadding">
+        <h2>Definitions</h2>
+        <div class="accordion-btn-container">
             <a class="accordion-btn show-btn" (click)="accordion.openAll()">
-              Expand All
+                Expand All
             </a>
             <span class="accordion-bar">&nbsp;|&nbsp;</span>
             <a class="accordion-btn hide-btn" (click)="accordion.closeAll()">
-              Collapse All
+                Collapse All
             </a>
-          </div>
-          <div>
+        </div>
+        <div>
             <mat-accordion multi>
-              <mat-expansion-panel>
-                <mat-expansion-panel-header class="panel-header">
-                  <mat-panel-title class="accordian-Title">Case type</mat-panel-title>
-                </mat-expansion-panel-header>
-                <app-case-type></app-case-type>
-              </mat-expansion-panel>
-              <mat-expansion-panel>
-                <mat-expansion-panel-header class="panel-header">
-                  <mat-panel-title class="accordian-Title">
-                    Case Status
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <app-case-status></app-case-status>
-              </mat-expansion-panel>
-              <mat-expansion-panel>
-                <mat-expansion-panel-header class="panel-header">
-                  <mat-panel-title class="accordian-Title">DMER type</mat-panel-title>
-                </mat-expansion-panel-header>
-                <app-medical-dmer-types></app-medical-dmer-types>
-              </mat-expansion-panel>
-              <mat-expansion-panel>
-                <mat-expansion-panel-header class="panel-header">
-                  <mat-panel-title class="accordian-Title">
-                    Decision outcome
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <app-decision-outcome></app-decision-outcome>
-              </mat-expansion-panel>
-              <mat-expansion-panel>
-                <mat-expansion-panel-header class="panel-header">
-                  <mat-panel-title class="accordian-Title">
-                    Eligible License Class
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <app-eligible-license-class></app-eligible-license-class>
-              </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header class="panel-header">
+                        <mat-panel-title class="accordian-Title">Case type</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <app-case-type></app-case-type>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header class="panel-header">
+                        <mat-panel-title class="accordian-Title">
+                            Case Status
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <app-case-status></app-case-status>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header class="panel-header">
+                        <mat-panel-title class="accordian-Title">DMER type</mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <app-medical-dmer-types></app-medical-dmer-types>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header class="panel-header">
+                        <mat-panel-title class="accordian-Title">
+                            Decision outcome
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <app-decision-outcome></app-decision-outcome>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header class="panel-header">
+                        <mat-panel-title class="accordian-Title">
+                            Eligible License Class
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <app-eligible-license-class></app-eligible-license-class>
+                </mat-expansion-panel>
             </mat-accordion>
-          </div>
- </div>
+        </div>
+    </div>
 </div>
-

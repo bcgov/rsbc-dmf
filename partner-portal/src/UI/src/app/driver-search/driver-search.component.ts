@@ -110,7 +110,7 @@ export class DriverSearchComponent implements OnInit {
 
   getClosedCases(driverId: string) {
     this.caseManagementService
-      .getClosedCases({ driverId })
+      .getClosedCases({})
       .subscribe((closedCases: any) => {
         this.closedCaseDetails = closedCases;
         this.isLoading = false;
