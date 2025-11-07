@@ -23,7 +23,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenseNumber, bool allComments);
 
-        Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, EntityState entityState);
+        Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, EntityState entityState, string? programArea);
 
         Task<CaseDetail> GetCaseDetail(string caseId);
 

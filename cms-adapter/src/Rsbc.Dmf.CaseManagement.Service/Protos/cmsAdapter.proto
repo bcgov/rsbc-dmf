@@ -182,6 +182,7 @@ message CaseIdRequest {
 message CaseStatusRequest {
 	string driverId = 1;
 	EntityState status = 2;
+    CaseFilterRequest caseFilter = 3;
 }
 
 enum OriginRestrictions {

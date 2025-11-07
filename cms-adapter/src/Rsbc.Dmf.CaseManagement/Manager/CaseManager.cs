@@ -834,13 +834,26 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="driverId"></param>
         /// <param name="activeStatus"></param>
         /// <returns>IEnumerable<CaseDetail></returns>
-        public async Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, EntityState activeStatus)
+        public async Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, EntityState activeStatus, string? programArea)
         {
             var result = new List<CaseDetail>();
 
             try
             {
-                var cases = dynamicsContext.incidents.Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)activeStatus);
+                var casesQuery = dynamicsContext.incidents.Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)activeStatus);
+
+                // Apply program area filtering if provided
+                if (!string.IsNullOrEmpty(programArea))
+                {
+                    casesQuery = casesQuery.Where(i => i.dfp_programarea == TranslateProgramArea(programArea));
+                }
+                else
+                {
+                    casesQuery = casesQuery.Where(i => i.dfp_programarea != TranslateProgramArea("Remedial"));
+                }
+
+                var cases = casesQuery.ToList();
+                //var cases = dynamicsContext.incidents.Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)activeStatus);
                 if (cases != null)
                 {
                     var mostRecentProcessingDate = GetDpsProcessingDate();

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Model;
 using System;
@@ -583,7 +584,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 var driverId = Guid.Parse(caseStatusRequest.DriverId);
                 var activeStatus = caseStatusRequest.Status.Convert<EntityState, Dynamics.EntityState>();
-                var cases = await _caseManager.GetCases(driverId, activeStatus);
+                var cases = await _caseManager.GetCases(driverId, activeStatus, caseStatusRequest.CaseFilter?.ProgramArea);
                 if (cases == null)
                 {
                     reply.ErrorDetail = "No cases match driver ID";
@@ -972,7 +973,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 else
                 {
                     var activeStatus = Dynamics.EntityState.Active;
-                    var cases = await _caseManager.GetCases(Guid.Parse(driver.Id), activeStatus);
+                    var cases = await _caseManager.GetCases(Guid.Parse(driver.Id), activeStatus, null);
                     if (cases == null)
                     {
                         reply.ResultStatus = ResultStatus.Fail;

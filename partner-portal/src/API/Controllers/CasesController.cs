@@ -50,12 +50,17 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName("GetClosedCases")]
-        public async Task<ActionResult> GetClosedCases()
+        public async Task<ActionResult> GetClosedCases([FromQuery] string programArea)
         {
            try
            {
                 var user = _userService.GetDriverInfo();
                 var caseStatusRequest = new CaseStatusRequest() { DriverId = user.DriverId, Status = EntityState.Inactive };
+                // Add program area filter if provided
+                if (!string.IsNullOrEmpty(programArea))
+                {
+                    caseStatusRequest.CaseFilter = new CaseFilterRequest { ProgramArea = programArea };
+                }
                 var reply = _cmsAdapterClient.GetCases(caseStatusRequest);
                 if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                 {
