@@ -750,7 +750,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     CreateStatusReply result;
 
                     string[] documentTypeCodes = {
-                            "080",
+                            "080", 
                             "081",
                             "110",
                             "120",
@@ -758,15 +758,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             "122",
                             "123",
                             "124",
-                            "250",
-                            "210",
                             "125",
-                            "212",
-                            "320",
+                            "210",
                             "211",
+                            "212",
                             "213",
                             "214",
-                            "180" // 2024-03-01 Added letter out, as all letter outs received from DPS are remedial.
+                            "250",                             
+                            "180", // 2024-03-01 Added letter out, as all letter outs received from DPS are remedial.
+                            // Added new codes for DPS remediation 10-07-2025
+                            "111", "126", "127", "128", "181", "215", "217"
                             };
 
                     var documentTypeindex = Array.IndexOf(documentTypeCodes, documentTypeCode);
@@ -801,8 +802,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 ValidationMethod = validationMethod ?? string.Empty,
                                 ValidationPrevious = validationPrevious ?? string.Empty,
                                 Priority = "Regular",
-                                Owner = "Client Services",
-                                SubmittalStatus = "Received",
+                                Owner = "Team - Remedial Intake", // Remedial Intake Agent
+                                SubmittalStatus = "Uploaded",
                                 Queue = assign ?? string.Empty,
                             };
 
@@ -810,6 +811,15 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             if (documentTypeCode == "180")
                             {
                                 remedialDocument.SubmittalStatus = "Issued";  
+                            }
+
+                            // For Document type HRDIR High Risk Driving Incident Report
+                            if (documentTypeCode == "210")
+                            {
+                                remedialDocument.SubmittalStatus = "Uploaded";
+                                remedialDocument.Priority = "Critical review";
+                                remedialDocument.Owner = "Team - DIP Team Lead";
+
                             }
 
                             var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialDocument);
