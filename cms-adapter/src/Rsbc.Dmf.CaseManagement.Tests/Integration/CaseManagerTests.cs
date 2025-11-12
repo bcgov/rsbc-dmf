@@ -794,7 +794,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task GetMostRecentCase()
         {
             string driverId = _configuration["ICBC_TEST_DRIVERID"];
-            var response = _caseManager.GetMostRecentCaseDetail(Guid.Parse(driverId));
+            string programArea = _configuration["ICBC_TEST_PROGRAMAREA"];
+            var response = _caseManager.GetMostRecentCaseDetail(Guid.Parse(driverId), programArea);
 
             Assert.NotNull(response);
 
@@ -815,6 +816,16 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         {
             string driverId = _configuration["ICBC_TEST_DRIVERID"];
             var response = _caseManager.GetRehabTriggerDetails(Guid.Parse(driverId));
+            Assert.NotNull(response);
+
+        }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task GetMostRecentRemedialCase()
+        {
+            string driverId = _configuration["ICBC_TEST_DRIVERID"];
+            var response = _caseManager.GetMostRecentRemedialCaseDetail(Guid.Parse(driverId));
+
             Assert.NotNull(response);
 
         }
