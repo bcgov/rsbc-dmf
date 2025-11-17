@@ -12,91 +12,25 @@ on:
                 description: "The target tag to promote to (e.g., prod)"
                 required: false
                 default: "prod"
-
-            # Service Selection Checkboxes
-            cms_adapter:
-                description: "Promote CMS Adapter"
-                required: false
-                type: boolean
-                default: false
-
-            medical_portal_api:
-                description: "Promote Medical Portal API"
-                required: false
-                type: boolean
-                default: false
-
-            medical_portal_ui:
-                description: "Promote Medical Portal UI"
-                required: false
-                type: boolean
-                default: false
-
-            document_storage_adapter:
-                description: "Promote Document Storage Adapter"
-                required: false
-                type: boolean
-                default: false
-
-            document_triage_service:
-                description: "Promote Document Triage Service"
-                required: false
-                type: boolean
-                default: false
-
-            icbc_adapter:
-                description: "Promote ICBC Adapter"
-                required: false
-                type: boolean
-                default: false
-
-            landing_page:
-                description: "Promote Landing Page"
-                required: false
-                type: boolean
-                default: false
-
-            oauth_server:
-                description: "Promote OAuth Server"
-                required: false
-                type: boolean
-                default: false
-
-            phsa_adapter:
-                description: "Promote PHSA Adapter"
-                required: false
-                type: boolean
-                default: false
-
-            legacy_adapter:
-                description: "Promote Legacy Adapter"
-                required: false
-                type: boolean
-                default: false
-
-            bcmail_adapter:
-                description: "Promote BCMail Adapter"
-                required: false
-                type: boolean
-                default: false
-
-            driver_portal_api:
-                description: "Promote Driver Portal API"
-                required: false
-                type: boolean
-                default: false
-
-            driver_portal_ui:
-                description: "Promote Driver Portal UI"
-                required: false
-                type: boolean
-                default: false
-
-            scheduler_service:
-                description: "Promote Scheduler Service"
-                required: false
-                type: boolean
-                default: false
+            service:
+                description: "Select service to promote"
+                required: true
+                type: choice
+                options:
+                    - cms-adapter
+                    - medical-portal-api
+                    - medical-portal-ui
+                    - document-storage-adapter
+                    - document-triage-service
+                    - icbc-adapter
+                    - landing-page
+                    - oauth-server
+                    - phsa-adapter
+                    - legacy-adapter
+                    - bcmail-adapter
+                    - driver-portal-api
+                    - driver-portal-ui
+                    - scheduler-service
 
 # --- ENVIRONMENT VARIABLES ---------------------------------------------------------
 env:
@@ -112,7 +46,7 @@ jobs:
     promote-cms-adapter:
         name: Promote CMS Adapter to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.cms_adapter == 'true' }}
+        if: ${{ github.event.inputs.service == 'cms-adapter' }}
         env:
             IMAGE_NAME: "cms-adapter"
 
@@ -160,7 +94,7 @@ jobs:
     promote-medical-portal-api:
         name: Promote Medical Portal API to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.medical_portal_api == 'true' }}
+        if: ${{ github.event.inputs.service == 'medical-portal-api' }}
         env:
             IMAGE_NAME: "medical-portal-api"
 
@@ -208,7 +142,7 @@ jobs:
     promote-medical-portal-ui:
         name: Promote Medical Portal UI to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.medical_portal_ui == 'true' }}
+        if: ${{ github.event.inputs.service == 'medical-portal-ui' }}
         env:
             IMAGE_NAME: "medical-portal-ui"
 
@@ -256,7 +190,7 @@ jobs:
     promote-document-storage-adapter:
         name: Promote Document Storage Adapter to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.document_storage_adapter == 'true' }}
+        if: ${{ github.event.inputs.service == 'document-storage-adapter' }}
         env:
             IMAGE_NAME: "document-storage-adapter"
 
@@ -304,7 +238,7 @@ jobs:
     promote-document-triage-service:
         name: Promote Document Triage Service to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.document_triage_service == 'true' }}
+        if: ${{ github.event.inputs.service == 'document-triage-service' }}
         env:
             IMAGE_NAME: "document-triage-service"
 
@@ -352,7 +286,7 @@ jobs:
     promote-icbc-adapter:
         name: Promote ICBC Adapter to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.icbc_adapter == 'true' }}
+        if: ${{ github.event.inputs.service == 'icbc-adapter' }}
         env:
             IMAGE_NAME: "icbc-adapter"
 
@@ -400,7 +334,7 @@ jobs:
     promote-landing-page:
         name: Promote Landing Page to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.landing_page == 'true' }}
+        if: ${{ github.event.inputs.service == 'landing-page' }}
         env:
             IMAGE_NAME: "landing-page"
 
@@ -448,7 +382,7 @@ jobs:
     promote-oauth-server:
         name: Promote OAuth Server to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.oauth_server == 'true' }}
+        if: ${{ github.event.inputs.service == 'oauth-server' }}
         env:
             IMAGE_NAME: "oauth-server"
 
@@ -496,7 +430,7 @@ jobs:
     promote-phsa-adapter:
         name: Promote PHSA Adapter to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.phsa_adapter == 'true' }}
+        if: ${{ github.event.inputs.service == 'phsa-adapter' }}
         env:
             IMAGE_NAME: "phsa-adapter"
 
@@ -544,7 +478,7 @@ jobs:
     promote-legacy-adapter:
         name: Promote Legacy Adapter to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.legacy_adapter == 'true' }}
+        if: ${{ github.event.inputs.service == 'legacy-adapter' }}
         env:
             IMAGE_NAME: "legacy-adapter"
 
@@ -592,7 +526,7 @@ jobs:
     promote-bcmail-adapter:
         name: Promote BCMail Adapter to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.bcmail_adapter == 'true' }}
+        if: ${{ github.event.inputs.service == 'bcmail-adapter' }}
         env:
             IMAGE_NAME: "bcmail-adapter"
 
@@ -640,7 +574,7 @@ jobs:
     promote-driver-portal-api:
         name: Promote Driver Portal API to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.driver_portal_api == 'true' }}
+        if: ${{ github.event.inputs.service == 'driver-portal-api' }}
         env:
             IMAGE_NAME: "driver-portal-api"
 
@@ -688,7 +622,7 @@ jobs:
     promote-driver-portal-ui:
         name: Promote Driver Portal UI to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.driver_portal_ui == 'true' }}
+        if: ${{ github.event.inputs.service == 'driver-portal-ui' }}
         env:
             IMAGE_NAME: "driver-portal-ui"
 
@@ -736,7 +670,7 @@ jobs:
     promote-scheduler-service:
         name: Promote Scheduler Service to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.scheduler_service == 'true' }}
+        if: ${{ github.event.inputs.service == 'scheduler-service' }}
         env:
             IMAGE_NAME: "scheduler-service"
 
