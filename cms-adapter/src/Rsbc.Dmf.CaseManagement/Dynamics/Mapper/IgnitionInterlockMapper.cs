@@ -48,7 +48,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                 case 100000010:
                     return "Interlock - Withdrawn EOP Voluntary";
                 default:
-                    return "Interlock - Notice Sent";
+                    return null;
             }
         }
 
@@ -63,7 +63,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                 case 100000002:
                     return "NSF";
                 default:
-                    return "Yes";
+                    return null;
             }
         }
     }

@@ -93,11 +93,15 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
                         .OrderByDescending(medical => medical.MIDT.Value)
                         .Select(medical => new DriverMedicals
                         {
-                            MedicalIssueDate = medical.MIDT?.ToString("yyyy-MM-dd") ?? string.Empty,
+                            MedicalIssueDate = (medical.MIDT.HasValue && medical.MIDT.Value != DateTime.MinValue)
+                                ? medical.MIDT.Value.ToString("yyyy-MM-dd")
+                                : string.Empty,
                             IssuingOffice = medical.ISOF.HasValue ? medical.ISOF.Value.ToString() : string.Empty,
                             IssuingOfficeDescription = medical.ISOFDESC ?? string.Empty,
                             PhysicianGuideNumber = medical.PGN1 ?? string.Empty,
-                            MedicalExamDate = medical.MEDT?.ToString("yyyy-MM-dd") ?? string.Empty,
+                            MedicalExamDate = (medical.MEDT.HasValue && medical.MEDT.Value != DateTime.MinValue)
+                                ? medical.MEDT.Value.ToString("yyyy-MM-dd")
+                                : string.Empty,
                             MedicalDisposition = medical.MDSP ?? string.Empty,
                             MedicalDispositionDescription = medical.MDSPDESC ?? string.Empty
                         })
@@ -105,8 +109,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
 
                     result.Medicals.AddRange(driverMedicals);
                 }
-
-
             }
 
             return Task.FromResult(result);

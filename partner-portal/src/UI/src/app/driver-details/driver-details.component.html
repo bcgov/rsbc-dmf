@@ -25,7 +25,7 @@
                         <div>
                             <label>Licence Expiry</label>
                             <div>
-                                <b>{{driverDetails.licenceExpiryDate  |  date:'yyyy-MM-dd'}}</b>
+                                <b>{{driverDetails.licenceExpiryDate  |  date:'yyyy-MM-dd':'UTC'}}</b>
                             </div>
                         </div>
 
@@ -53,7 +53,7 @@
                         <div>
                             <label>Birth Date</label>
                             <div>
-                                <b>{{driverDetails.birthDate  | date:'yyyy-MM-dd'}}</b>
+                                <b>{{driverDetails.birthDate  | date:'yyyy-MM-dd':'UTC'}}</b>
                             </div>
                         </div>
                         <div>
@@ -107,7 +107,7 @@
                 <mat-table [dataSource]="mxmDataSource" class="mat-elevation-z8 table-padding">
                     <ng-container matColumnDef="medicalIssueDate">
                         <th mat-header-cell *matHeaderCellDef> Issue Date </th>
-                        <td mat-cell *matCellDef="let element"><b>{{element.medicalIssueDate | date : "longDate"}}</b> </td>
+                        <td mat-cell *matCellDef="let element"><b>{{element.medicalIssueDate | date:'yyyy-MM-dd':'UTC'}}</b> </td>
                     </ng-container>
                     <ng-container matColumnDef="issuingOffice">
                         <th mat-header-cell *matHeaderCellDef> Issued By </th>
@@ -119,11 +119,11 @@
                     </ng-container>
                     <ng-container matColumnDef="medicalExamDate">
                         <th mat-header-cell *matHeaderCellDef> Exam Date </th>
-                        <td mat-cell *matCellDef="let element"><b>{{element.medicalExamDate |  date:'yyyy-MM-dd'}}</b> </td>
+                        <td mat-cell *matCellDef="let element"><b>{{element.medicalExamDate | date:'yyyy-MM-dd':'UTC'}}</b> </td>
                     </ng-container>
                     <ng-container matColumnDef="receivedDate">
                         <th mat-header-cell *matHeaderCellDef> Received Date </th>
-                        <td mat-cell *matCellDef="let element"><b>{{element.medicalExamDate |  date:'yyyy-MM-dd'}}</b> </td>
+                        <td mat-cell *matCellDef="let element"><b>{{element.medicalExamDate |  date:'yyyy-MM-dd':'UTC'}}</b> </td>
                     </ng-container>
                     <ng-container matColumnDef="medicalDisposition">
                         <th mat-header-cell *matHeaderCellDef> Disposition </th>

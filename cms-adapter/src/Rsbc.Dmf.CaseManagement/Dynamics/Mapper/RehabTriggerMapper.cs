@@ -28,7 +28,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                 case 100000001:
                     return "License - Not allowed";
                 default:
-                    return "License - Allowed";
+                    return null;
             }
         }
 
@@ -75,7 +75,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                 case 100000018:
                     return "Cancelled";
                 default:
-                    return "Registration Received";
+                    return null;
             }
         }
 
@@ -83,6 +83,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
         {
             switch (clientPaidStatusCode)
             {
+               
                 case 100000000:
                     return "Yes";
                 case 100000001:
@@ -90,7 +91,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                 case 100000002:
                     return "NSF";
                 default:
-                    return "Yes";
+                    return null;
             }
         }
 
@@ -105,7 +106,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                 case 100000002:
                     return "Treatment";
                 default:
-                    return "Education";
+                    return null;
             }
         }
 
@@ -122,7 +123,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                 case 100000003:
                     return "Cancelled";
                 default:
-                    return "Fit";
+                    return null;
             }
         }
     }
