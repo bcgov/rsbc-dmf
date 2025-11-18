@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Model;
 using System;
@@ -583,7 +584,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 var driverId = Guid.Parse(caseStatusRequest.DriverId);
                 var activeStatus = caseStatusRequest.Status.Convert<EntityState, Dynamics.EntityState>();
-                var cases = await _caseManager.GetCases(driverId, activeStatus);
+                var cases = await _caseManager.GetCases(driverId, activeStatus, caseStatusRequest.CaseFilter?.ProgramArea);
                 if (cases == null)
                 {
                     reply.ErrorDetail = "No cases match driver ID";
@@ -705,7 +706,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             try
             {
                 var driverId = Guid.Parse(request.Id);
-                var c = await _caseManager.GetMostRecentCaseDetail(driverId);
+
+                var c = await _caseManager.GetMostRecentCaseDetail(driverId, request.CaseFilter?.ProgramArea);
                 
                 if (c != null)
                 {
@@ -971,7 +973,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 else
                 {
                     var activeStatus = Dynamics.EntityState.Active;
-                    var cases = await _caseManager.GetCases(Guid.Parse(driver.Id), activeStatus);
+                    var cases = await _caseManager.GetCases(Guid.Parse(driver.Id), activeStatus, null);
                     if (cases == null)
                     {
                         reply.ResultStatus = ResultStatus.Fail;
@@ -2459,6 +2461,40 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 else
                 {
                     reply.ErrorDetail = "No Rehab Trigger details found";
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<GetCaseDetailReply> GetMostRecentRemedialCaseDetail(DriverIdRequest request, ServerCallContext context)
+        {
+            var reply = new GetCaseDetailReply() { ResultStatus = ResultStatus.Fail };
+
+            try
+            {
+                var driverId = Guid.Parse(request.Id);
+                var c = await _caseManager.GetMostRecentRemedialCaseDetail(driverId);
+
+                if (c != null)
+                {
+                    reply.Item = _mapper.Map<CaseDetail>(c);
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ErrorDetail = "Case ID not found";
                 }
             }
             catch (Exception e)

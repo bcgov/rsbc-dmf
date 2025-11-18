@@ -16,7 +16,7 @@
         @if(portal===PortalsEnum.PartnerPortal){
         <div>
           <b>
-            <a [routerLink]="['/caseSearch', caseDetails?.idCode]" routerLinkActive="active">
+            <a [routerLink]="['/caseSearch', caseDetails?.idCode]" [queryParams]="{programArea: programArea}" routerLinkActive="active">
               <h3>{{ caseDetails?.idCode }}</h3>
             </a>
           </b>
