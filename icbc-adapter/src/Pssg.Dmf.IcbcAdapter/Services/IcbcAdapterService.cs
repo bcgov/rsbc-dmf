@@ -69,6 +69,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
                 result.MasterStatusCode = reply.DR1MST?.MSCD ?? string.Empty;
                 result.LicenceExpiryDate = reply.DR1MST?.RRDT?.ToString() ?? string.Empty;
                 result.RestrictionCodes = reply.DR1MST?.RSCD != null ? string.Join(",", reply.DR1MST.RSCD) : string.Empty;
+
                 // Map DriverStatus items from DR1STAT
                 if (reply.DR1MST?.DR1STAT != null && reply.DR1MST.DR1STAT.Any())
                 {
