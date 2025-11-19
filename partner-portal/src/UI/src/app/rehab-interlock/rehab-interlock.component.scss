@@ -17,13 +17,12 @@
 //   }
 
 .caseDetailRow {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: start;
-    gap: 150px;
+
     line-height: 32px;
     padding-bottom: 24px;
+    display: flex; 
+    justify-content: space-between; 
+    gap: 20px;
   }
   
 .cardContent {
