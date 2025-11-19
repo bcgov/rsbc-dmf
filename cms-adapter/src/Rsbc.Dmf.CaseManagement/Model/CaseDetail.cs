@@ -94,5 +94,15 @@ namespace Rsbc.Dmf.CaseManagement
         public IEnumerable<MedicalCondition> MedicalConditions { get; set; }
 
         public bool showOnPortals { get; set; }
+
+        public bool IsRehab { get; set; }
+
+        public bool IsInterlock { get; set; }
+
+        public string Priority { get; set; }
+
+
+
+
     }
 }

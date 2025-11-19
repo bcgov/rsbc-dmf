@@ -86,5 +86,11 @@
 
         public bool showOnPortals { get; set; }
 
+        public bool IsRehab { get; set; }
+
+        public bool IsInterlock { get; set; }
+
+        public string Priority { get; set; }
+
     }
 }

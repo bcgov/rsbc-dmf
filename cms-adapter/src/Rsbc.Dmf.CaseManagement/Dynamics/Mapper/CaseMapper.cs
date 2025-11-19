@@ -85,7 +85,9 @@ namespace Rsbc.Dmf.CaseManagement
             result.LastName = @case.dfp_DriverId?.dfp_PersonId?.lastname;
             result.MiddleName = @case.dfp_DriverId?.dfp_PersonId?.middlename;
             result.showOnPortals = @case.dfp_showonportals.GetValueOrDefault();
-
+            result.IsRehab = @case.dfp_rehab.GetValueOrDefault();
+            result.IsInterlock = @case.dfp_interlock.GetValueOrDefault();
+            
             if (@case.dfp_dfcmscasesequencenumber == null)
             {
                 result.CaseSequence = -1;
