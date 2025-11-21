@@ -92,22 +92,24 @@ mat-stepper {
     padding-bottom: 24px;
   }
 
-  .caseDetailRow {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: start;
-    gap: 150px;
-    line-height: 32px;
+.caseDetailRow {
+   line-height: 32px;
     padding-bottom: 24px;
+    display: flex; 
+    justify-content: space-between; 
+    gap: 20px;
   }
-
-  .closedCaseContent {
+ 
+  .remedialCaseContent {
     display: flex;
     flex-direction: row;
     gap: 24px;
   }
 
+   .expandedIcon {
+    transform: scale(1.5);
+    color: #003366;
+  }
     
 .case-details-border {
     border-left: 2px solid #808080;

@@ -59,9 +59,8 @@
   }
 
   @if(programArea === 'Remedial'){
-
   <mat-card [ngClass]="{open : caseDetails?.caseId && isExpanded[caseDetails?.caseId]}">
-    <mat-card-content class="closedCaseContent">
+    <mat-card-content class="remedialCaseContent">
       <div style="text-align: center">
         <mat-icon (click)="toggleIsExpandable(caseDetails?.caseId)" class="expandedIcon">
           expand_circle_down
@@ -82,29 +81,29 @@
         <div>&nbsp;</div>
       </div>
       <div style="flex: 1">
-        <div class="caseDetailRow">
-          <div>
+        <div class="caseDetailRow" style="display: flex; justify-content: space-between; gap: 20px;">
+          <div style="flex: 1;">
             <label>Case Priority</label>
             <div>
               <b>TBD</b>
             </div>
           </div>
 
-          <div>
+          <div style="flex: 1;">
             <label>Case Type</label>
             <div>
               <b>{{ caseDetails?.caseType }}</b>
             </div>
           </div>
 
-          <div>
+          <div style="flex: 1;">
             <label>Decision Outcome</label>
             <div>
               <b>{{ caseDetails?.latestDecision }}</b>
             </div>
           </div>
 
-          <div>
+          <div style="flex: 1;">
             <label>Decision Date</label>
             <div>
               <b>{{ caseDetails?.decisionDate }}</b>
@@ -113,26 +112,26 @@
         </div>
 
         <div *ngIf="caseDetails.caseId && isExpanded?.[caseDetails?.caseId]">
-        <div class="caseDetailRow caseBorder" >
-          <div>
+        <div class="caseDetailRow caseBorder" style="display: flex; justify-content: space-between; gap: 20px;">
+          <div style="flex: 1;">
             <label> Rehab </label>
             <div>
               <b>{{ caseDetails?.isRehab }}</b>
             </div>
           </div>
-          <div>
+          <div style="flex: 1;">
             <label>Rehab Activity</label>
             <div>
               <b>{{ caseDetails?.isRehab }}</b>
             </div>
           </div>
-          <div>
+          <div style="flex: 1;">
             <label>Interlock</label>
             <div>
               <b>{{ caseDetails?.isInterlock }}</b>
             </div>
           </div>
-          <div>
+          <div style="flex: 1;">
             <label>Opened Date</label>
             <div>
               <b>{{ caseDetails?.openedDate | date: "longDate"}}</b>
@@ -140,20 +139,31 @@
           </div>
         </div>
 
-        <div class="caseDetailRow caseBorder">
-          <div>
+        <div class="caseDetailRow caseBorder" style="display: flex; justify-content: space-between; gap: 20px;">
+          <div style="flex: 1;">
             <label> Latest Case Event Date </label>
             <div>
               <b>{{ caseDetails?.lastActivityDate | date: "longDate" }}</b>
             </div>
           </div>
-          <div>
+          <div style="flex: 1;">
             <label>Case Owner</label>
             <div>
               <b>TBD</b>
             </div>
           </div>
-
+          <div style="flex: 1;">
+            <label></label>
+            <div>
+              <b></b>
+            </div>
+          </div>
+          <div style="flex: 1;">
+            <label></label>
+            <div>
+              <b></b>
+            </div>
+          </div>
         </div>
         </div>
       </div>
