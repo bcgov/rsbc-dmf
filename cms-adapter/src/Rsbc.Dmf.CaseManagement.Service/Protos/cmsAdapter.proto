@@ -309,6 +309,11 @@ message CaseDetail {
     google.protobuf.Timestamp latestComplianceDate = 24;
     repeated MedicalConditionItem medicalConditions = 25;
     bool ShowOnPortals = 26;
+    bool isRehab = 27;
+    bool isInterlock = 28;
+    string priority = 29;
+
+
 }
 
 message CreateStatusReply {	

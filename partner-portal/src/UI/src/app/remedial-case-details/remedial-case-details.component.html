@@ -24,28 +24,28 @@
                     </div>
                     <div style="flex: 1">
                         <div class="caseDetailRow">
-                            <div>
+                            <div style="flex: 1;">
                                 <label>Created Date</label>
                                 <div>
                                     <b>{{ closedCase?.openedDate | date: "longDate" }}</b>
                                 </div>
                             </div>
 
-                            <div>
+                            <div style="flex: 1;">
                                 <label>Case Id</label>
                                 <div>
                                     <b>{{ closedCase?.idCode }}</b>
                                 </div>
                             </div>
 
-                            <div>
+                            <div style="flex: 1;">
                                 <label>Case Type</label>
                                 <div>
                                     <b>{{ closedCase?.caseType }}</b>
                                 </div>
                             </div>
 
-                            <div>
+                            <div style="flex: 1;">
                                 <label>Decision Outcome</label>
                                 <div>
                                     <b>{{ closedCase?.latestDecision }}</b>
@@ -53,21 +53,32 @@
                             </div>
                         </div>
 
-                        <div class="caseDetailRow caseBorder"
+                        <div class="caseDetailRow caseBorder" style="display: flex; justify-content: space-between; gap: 20px;"
                             *ngIf="closedCase.caseId && isExpanded?.[closedCase.caseId]">
-                            <div>
+                            <div style="flex: 1;">
                                 <label> Decision date </label>
                                 <div>
                                     <b>{{ closedCase?.decisionDate | date: "longDate" }}</b>
                                 </div>
                             </div>
-                            <div>
-                                <label>Eligible License Class</label>
+                            <div style="flex: 1;">
+                                <label>Rehab</label>
                                 <div>
-                                    <b>{{ closedCase?.decisionForClass }}</b>
+                                    <b>{{ closedCase?.isRehab }}</b>
                                 </div>
                             </div>
-                            <div></div>
+                             <div style="flex: 1;">
+                                <label>Interlock</label>
+                                <div>
+                                    <b>{{ closedCase?.isInterlock }}</b>
+                                </div>
+                            </div>
+                            <div style="flex: 1;">
+                                <label>Latest Case Event Date</label>
+                                <div>
+                                    <b>{{ closedCase?.lastActivityDate | date: "longDate"}}</b>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </mat-card-content>

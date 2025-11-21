@@ -3,19 +3,28 @@
 }
 
 .caseDetailRow {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: start;
-    gap: 150px;
-    line-height: 32px;
+   line-height: 32px;
     padding-bottom: 24px;
+    display: flex; 
+    justify-content: space-between; 
+    gap: 20px;
+  }
+ 
+  .caseBorder{ 
+    border-top: 2px solid grey;
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
   
 .closedCaseContent {
     display: flex;
     flex-direction: row;
     gap: 24px;
+  }
+
+  .expandedIcon {
+    transform: scale(1.5);
+    color: #003366;
   }
   
 .case-details-border {
