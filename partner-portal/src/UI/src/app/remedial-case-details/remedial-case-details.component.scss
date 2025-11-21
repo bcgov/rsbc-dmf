@@ -3,13 +3,17 @@
 }
 
 .caseDetailRow {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: start;
-    gap: 150px;
-    line-height: 32px;
+   line-height: 32px;
     padding-bottom: 24px;
+    display: flex; 
+    justify-content: space-between; 
+    gap: 20px;
+  }
+ 
+  .caseBorder{ 
+    border-top: 2px solid grey;
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
   
 .closedCaseContent {
