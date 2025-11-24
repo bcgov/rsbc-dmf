@@ -126,9 +126,20 @@ namespace Rsbc.Dmf.CaseManagement
             // case assignment
             if (@case._owningteam_value.HasValue)
             {
+                // Case assigned to a team
                 await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.owningteam));
-                result.AssigneeTitle = @case.owningteam.name;
-                
+                result.AssigneeTitle = @case.owningteam?.name ?? "Unknown Team";
+            }
+            else if (@case._owninguser_value.HasValue)
+            {
+                // Case assigned to a system user
+                _dynamicsContext.LoadProperty(@case, nameof(incident.owninguser));
+                result.AssigneeTitle = @case.owninguser?.fullname ?? "Assigned User";
+               
+            }
+            else
+            {
+                result.AssigneeTitle = "Unassigned";
             }
 
             // get the medical conditions.
