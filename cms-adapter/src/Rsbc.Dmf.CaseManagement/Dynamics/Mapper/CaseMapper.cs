@@ -87,7 +87,12 @@ namespace Rsbc.Dmf.CaseManagement
             result.showOnPortals = @case.dfp_showonportals.GetValueOrDefault();
             result.IsRehab = @case.dfp_rehab.GetValueOrDefault();
             result.IsInterlock = @case.dfp_interlock.GetValueOrDefault();
-            
+
+            if(@case.prioritycode != null)
+            {
+                result.Priority = TranslatePriorityCode(@case.prioritycode);
+            }
+
             if (@case.dfp_dfcmscasesequencenumber == null)
             {
                 result.CaseSequence = -1;
@@ -123,6 +128,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.owningteam));
                 result.AssigneeTitle = @case.owningteam.name;
+                
             }
 
             // get the medical conditions.
@@ -249,6 +255,27 @@ namespace Rsbc.Dmf.CaseManagement
                     break;
             }
             return result;
+        }
+
+       
+        private string TranslatePriorityCode(int? optionSetValue)
+        {
+            var statusMap = new Dictionary<int, string>()
+            {
+                { 1, "Critical Review" },
+                { 2, "Regular" },
+                { 3, "Urgent" },
+                { 4, "Expedited" },
+            };
+
+            if (optionSetValue != null && statusMap.ContainsKey(optionSetValue.Value))
+            {
+                return statusMap[optionSetValue.Value];
+            }
+            else
+            {
+                return "Regular";
+            }
         }
 
 

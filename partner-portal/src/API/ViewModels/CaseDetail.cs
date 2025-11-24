@@ -91,6 +91,7 @@
         public bool IsInterlock { get; set; }
 
         public string Priority { get; set; }
+       
 
     }
 }
