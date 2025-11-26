@@ -74,6 +74,7 @@ export class DriverSearchComponent implements OnInit {
 
   _closedCaseDetails: CaseDetail[] | null = [];
   driverLicenceNumber = this.route.snapshot.params['driverLicenceNumber'];
+  surcode = this.route.snapshot.queryParams['surcode'] || '';
 
    // Get Driver details
    driverDetails = this.userService.getCachedriver();
@@ -120,7 +121,8 @@ export class DriverSearchComponent implements OnInit {
 
   search() {
     this.caseManagementService
-      .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber })
+      .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber,
+        surCode: this.surcode })
       .subscribe({
         next: (driver) => {
           this.userService.setCacheDriver(driver);
@@ -128,7 +130,7 @@ export class DriverSearchComponent implements OnInit {
         },
         error: (error) => {
          
-          console.error('error', error);
+          console.error('Driver search error:', error);
         }
       });
   }

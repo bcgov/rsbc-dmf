@@ -18,6 +18,7 @@ export class DriverDetailsComponent {
   cachedDriver = this.userService.getCachedriver();
   driverDetails: Driver = {};
   driverLicenceNumber = this.route.snapshot.params['driverLicenceNumber'];
+  surcode = this.route.snapshot.queryParams['surcode'] || '';
 
   mxmColumns: string[] = ['medicalIssueDate', 'issuingOffice', 'physicianGuideNumber', 'medicalExamDate' ,'receivedDate', 'medicalDisposition'];
   mxmDataSource: any[] = [];
@@ -35,7 +36,7 @@ export class DriverDetailsComponent {
 
   getDriverDetails() {
     this.caseManagementService
-      .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber })
+      .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber , surCode: this.surcode})
       .subscribe({
         next: (driver) => {
           this.userService.setCacheDriver(driver);

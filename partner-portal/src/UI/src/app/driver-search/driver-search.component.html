@@ -26,33 +26,28 @@
 <div class="container">
   <mat-tab-group animationDuration="0ms">
     <mat-tab label="Driver Details">
-     <app-driver-details></app-driver-details>
+      <app-driver-details></app-driver-details>
     </mat-tab>
     <mat-tab label="DMF Case Details">
       <div class="container" style="padding-top: 24px">
         <div class="list">
           <h2>Most Recent Case</h2>
           <div>
-            <app-shared-recent-case [caseManagementService]="caseManagementService" [portal]="PortalsEnum.PartnerPortal"></app-shared-recent-case>
+            <app-shared-recent-case [caseManagementService]="caseManagementService"
+              [portal]="PortalsEnum.PartnerPortal"></app-shared-recent-case>
           </div>
         </div>
-      
+
         <div class="list topPadding">
           <h2>Closed Cases</h2>
-      
+
           <div>
-            <mat-card
-              *ngFor="let closedCase of closedCaseDetails"
-              [ngClass]="{
+            <mat-card *ngFor="let closedCase of closedCaseDetails" [ngClass]="{
                 open: closedCase.caseId && isExpanded[closedCase.caseId],
-              }"
-            >
+              }">
               <mat-card-content class="closedCaseContent">
                 <div style="text-align: center">
-                  <mat-icon
-                    (click)="toggleIsExpandable(closedCase.caseId)"
-                    class="expandedIcon"
-                  >
+                  <mat-icon (click)="toggleIsExpandable(closedCase.caseId)" class="expandedIcon">
                     expand_circle_down
                   </mat-icon>
                 </div>
@@ -62,52 +57,54 @@
                 </div>
                 <div style="flex: 1">
                   <div class="caseDetailRow">
-                    <div>
+                    <div style="flex: 1;">
                       <label>Created Date</label>
                       <div>
                         <b>{{ closedCase?.openedDate | date: "longDate" }}</b>
                       </div>
                     </div>
-      
-                    <div>
+
+                    <div style="flex: 1;">
                       <label>Case Id</label>
                       <div>
                         <b>{{ closedCase?.idCode }}</b>
                       </div>
                     </div>
-      
-                    <div>
+
+                    <div style="flex: 1;">
                       <label>Case Type</label>
                       <div>
                         <b>{{ closedCase?.caseType }}</b>
                       </div>
                     </div>
-      
-                    <div>
+
+                    <div style="flex: 1;">
                       <label>Decision Outcome</label>
                       <div>
                         <b>{{ closedCase?.latestDecision }}</b>
                       </div>
                     </div>
                   </div>
-      
-                  <div
-                    class="caseDetailRow caseBorder"
-                    *ngIf="closedCase.caseId && isExpanded?.[closedCase.caseId]"
-                  >
-                    <div>
+
+                  <div class="caseDetailRow caseBorder" *ngIf="closedCase.caseId && isExpanded?.[closedCase.caseId]">
+                    <div style="flex: 1;">
                       <label> Decision date </label>
                       <div>
                         <b>{{ closedCase?.decisionDate | date: "longDate" }}</b>
                       </div>
                     </div>
-                    <div>
+                    <div style="flex: 1;">
                       <label>Eligible License Class</label>
                       <div>
                         <b>{{ closedCase?.decisionForClass }}</b>
                       </div>
                     </div>
-                    <div></div>
+                    <div style="flex: 1;">
+                      <label></label>
+                    </div>
+                    <div style="flex: 1;">
+                      <label></label>
+                    </div>
                   </div>
                 </div>
               </mat-card-content>
@@ -121,10 +118,7 @@
             </mat-card>
           </div>
         </div>
-        <div
-          class="numberOfItems"
-          *ngIf="closedCaseDetails && closedCaseDetails.length > 0"
-        >
+        <div class="numberOfItems" *ngIf="closedCaseDetails && closedCaseDetails.length > 0">
           Showing {{ closedCaseDetails.length }} of
           {{ closedCaseDetails.length }} records
         </div>
@@ -182,28 +176,28 @@
         </div>
       </div>
     </mat-tab>
-    <mat-tab label = "Remedial Case Details">
-    <app-remedial-case-details> </app-remedial-case-details>
+    <mat-tab label="Remedial Case Details">
+      <app-remedial-case-details> </app-remedial-case-details>
     </mat-tab>
     <mat-tab label="Rehab Interlock">
-        <app-rehab-interlock></app-rehab-interlock>
+      <app-rehab-interlock></app-rehab-interlock>
     </mat-tab>
     <mat-tab label="Letters to Driver">
-        <app-letters-to-driver></app-letters-to-driver>
-      </mat-tab>
-      <mat-tab label="Submission History">
-        <app-submission-history></app-submission-history>
-      </mat-tab>
-     
-      <mat-tab label="Assist Driver">
-        <app-get-assistance></app-get-assistance>
-      </mat-tab>
-    </mat-tab-group>
+      <app-letters-to-driver></app-letters-to-driver>
+    </mat-tab>
+    <mat-tab label="Submission History">
+      <app-submission-history></app-submission-history>
+    </mat-tab>
+
+    <mat-tab label="Assist Driver">
+      <app-get-assistance></app-get-assistance>
+    </mat-tab>
+  </mat-tab-group>
 </div>
 
 <!-- Comments button -->
 
 <div class="comment">
-  <button mat-button class="commentsButton" (click)="openCommentsDialog()"><mat-icon class="matIcon">edit_document</mat-icon> Comments </button>
+  <button mat-button class="commentsButton" (click)="openCommentsDialog()"><mat-icon
+      class="matIcon">edit_document</mat-icon> Comments </button>
 </div>
-
