@@ -743,6 +743,16 @@ namespace Rsbc.Dmf.CaseManagement
             return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_driverid == Guid.Parse(id)).ToList();
         }
 
+        public IEnumerable<dfp_driver> GetDriverObjectsByIdAndSurCode(string licensenumber, string surCode)
+        {
+            //return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber && d.dfp_surname == surCode).ToList();
+            string truncatedSurCode = string.IsNullOrEmpty(surCode) ? string.Empty : surCode.Substring(0, Math.Min(3, surCode.Length));
+
+            return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
+                .Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber && d.dfp_surname.StartsWith(truncatedSurCode))
+                .ToList();
+        }
+
         public async Task<IEnumerable<Driver>> GetDriverByLicenseNumber(string licensenumber)
         {
             List<Driver> result = new List<Driver>();
@@ -778,6 +788,27 @@ namespace Rsbc.Dmf.CaseManagement
                     DriverLicenseNumber = item.dfp_licensenumber,
                     Surname = item.dfp_PersonId?.lastname,
                     GivenName = item.dfp_PersonId?.firstname
+                };
+                result.Add(d);
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<Driver>> GetDriverByIdAndSurCode(string licenseNumber, string surCode)
+        {
+            List<Driver> result = new List<Driver>();
+
+            var @drivers = GetDriverObjectsByIdAndSurCode(licenseNumber, surCode);
+
+            foreach (var item in @drivers)
+            {
+                Driver d = new Driver()
+                {
+                    Id = item.dfp_driverid.ToString(),
+                    DriverLicenseNumber = item.dfp_licensenumber,
+                    Surname = item.dfp_PersonId?.lastname,
+                    BirthDate = item.dfp_PersonId?.birthdate ?? default(DateTime),
                 };
                 result.Add(d);
             }

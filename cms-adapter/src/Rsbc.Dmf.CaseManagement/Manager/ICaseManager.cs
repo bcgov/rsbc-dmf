@@ -48,6 +48,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
 
+        Task<IEnumerable<Driver>> GetDriverByIdAndSurCode(string licenseNumber, string surCode);
+
         /// <summary>
         /// Create a Legacy Candidate
         /// </summary>

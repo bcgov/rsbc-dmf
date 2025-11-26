@@ -68,6 +68,8 @@ service CaseManager {
 
   rpc GetDriverById (DriverIdRequest) returns (GetDriversReply);
 
+  rpc GetDriverByIdAndSurCode (DriverRequest) returns (GetDriversReply);
+
   rpc GetLegacyDocument (LegacyDocumentRequest) returns (GetLegacyDocumentReply);
 
   // Get a token given a secret.
@@ -173,6 +175,11 @@ message CaseFilterRequest {
 
 message DriverLicenseRequest {
 	string driverLicenseNumber = 1;
+}
+
+message DriverRequest {
+    string driverLicenseNumber = 1;
+    string surCode = 2;
 }
 
 message CaseIdRequest {
