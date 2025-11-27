@@ -7,8 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { MatToolbar } from '@angular/material/toolbar';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { MedicalDmerTypesComponent } from '../../app/definitions/medical-dmer-types/medical-dmer-types.component';
 import { RecentCaseComponent, CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, EligibleLicenseClassComponent, PortalsEnum } from '@shared/core-ui';
@@ -19,7 +18,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommentsComponent } from '@app/comments/comments.component';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { UserService } from '@app/shared/services/user.service';
-import { MatTabsModule } from '@angular/material/tabs';
+import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
 import { LettersToDriverComponent } from '@app/letters-to-driver/letters-to-driver.component';
 import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.component';
 import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
@@ -34,8 +33,6 @@ import { RemedialCaseDetailsComponent } from '@app/remedial-case-details/remedia
   standalone: true,
   imports: [
     MatCardModule,
-    MatToolbar,
-    RouterLink,
     MatExpansionModule,
     CaseStatusComponent,
     CaseTypeComponent,
@@ -46,7 +43,6 @@ import { RemedialCaseDetailsComponent } from '@app/remedial-case-details/remedia
     DatePipe,
     NgFor,
     NgIf,
-    CommentsComponent,
     MatTabsModule,
     LettersToDriverComponent,
     GetAssistanceComponent,
@@ -137,6 +133,12 @@ export class DriverSearchComponent implements OnInit {
 
   toggleIsExpandable(id?: string | null) {
     if (id) this.isExpanded[id] = !this.isExpanded[id];
+  }
+
+  onTabChange(event: MatTabChangeEvent) {
+    if (event.index === 6) {
+      this.openCommentsDialog();
+    }
   }
 
   openCommentsDialog() {

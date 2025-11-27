@@ -24,13 +24,16 @@
 </div>
 
 <div class="container">
-  <mat-tab-group animationDuration="0ms">
+  <mat-tab-group animationDuration="0ms" (selectedTabChange)="onTabChange($event)">
     <mat-tab label="Driver Details">
       <app-driver-details></app-driver-details>
     </mat-tab>
-    <mat-tab label="DMF Case Details">
+    <mat-tab label="Driver Fitness Cases">
       <div class="container" style="padding-top: 24px">
-        <div class="list">
+        <div class="disclaimer">
+            <b>Disclaimer: Most Recent DMF Case Disclaimer Banner TBD by business</b>
+          </div>
+        <div class="list topPadding">
           <h2>Most Recent Case</h2>
           <div>
             <app-shared-recent-case [caseManagementService]="caseManagementService"
@@ -188,7 +191,12 @@
     <mat-tab label="Submission History">
       <app-submission-history></app-submission-history>
     </mat-tab>
-
+    <mat-tab label="Comments">
+      <!-- Comments tab content - dialog will open on tab selection -->
+      <div style="padding: 20px; text-align: center;">
+        <p>Comments for the Driver.</p>
+      </div>
+    </mat-tab>
     <mat-tab label="Assist Driver">
       <app-get-assistance></app-get-assistance>
     </mat-tab>
