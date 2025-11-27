@@ -829,5 +829,16 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             Assert.NotNull(response);
 
         }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanGetDriverByIdAndSurCode()
+        {
+            string driverLicence =  _configuration["ICBC_TEST_DRIVERID"];
+            string surCode =  _configuration["TEST_SURCODE"];;
+            var response = _caseManager.GetDriverByIdAndSurCode(driverLicence, surCode);
+
+            Assert.NotNull(response);
+
+        }
     }
 }

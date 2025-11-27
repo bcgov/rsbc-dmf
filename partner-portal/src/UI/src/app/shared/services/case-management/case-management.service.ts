@@ -73,9 +73,9 @@ export class CaseManagementService {
 
   // Search 
   public searchByDriver(
-    params: Parameters<DriverService['apiDriverInfoDriverLicenceNumberGet$Json']>[0]
+    params: Parameters<DriverService['apiDriverInfoDriverLicenceNumberSurCodeGet$Json']>[0]
   ) {
-    return this.driverService.apiDriverInfoDriverLicenceNumberGet$Json(params);
+    return this.driverService.apiDriverInfoDriverLicenceNumberSurCodeGet$Json(params);
   }
 
 

@@ -31,6 +31,7 @@ export class SearchComponent {
   driverLicenceNumber = '';
   idCode = '';
   noResults: boolean = false;
+  surcode = '';
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -40,16 +41,25 @@ export class SearchComponent {
 
   search() {
     this.noResults = false;
+    
+    // Ensure surcode is not empty - use a default value if empty
+    const effectiveSurcode = this.surcode?.trim();
+
     this.caseManagementService
-      .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber })
+      .searchByDriver({ 
+        driverLicenceNumber: this.driverLicenceNumber,
+        surCode: effectiveSurcode
+      })
       .subscribe({
         next: (driver) => {
           this.userService.setCacheDriver(driver);
-          this.router.navigate(['/driverSearch', this.driverLicenceNumber as string]);
+          this.router.navigate(['/driverSearch', this.driverLicenceNumber as string], {
+            queryParams: { surcode: this.surcode }
+          });
         },
         error: (error) => {
           this.noResults = true;
-          console.error('error', error);
+          console.error('Search error:', error);
         }
       });
   }

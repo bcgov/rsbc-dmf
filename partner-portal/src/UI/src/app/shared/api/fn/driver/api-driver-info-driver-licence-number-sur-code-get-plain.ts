@@ -8,18 +8,20 @@ import { RequestBuilder } from '../../request-builder';
 
 import { Driver } from '../../models/driver';
 
-export interface ApiDriverInfoDriverLicenceNumberGet$Json$Params {
+export interface ApiDriverInfoDriverLicenceNumberSurCodeGet$Plain$Params {
   driverLicenceNumber: string;
+  surCode: string;
 }
 
-export function apiDriverInfoDriverLicenceNumberGet$Json(http: HttpClient, rootUrl: string, params: ApiDriverInfoDriverLicenceNumberGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Driver>> {
-  const rb = new RequestBuilder(rootUrl, apiDriverInfoDriverLicenceNumberGet$Json.PATH, 'get');
+export function apiDriverInfoDriverLicenceNumberSurCodeGet$Plain(http: HttpClient, rootUrl: string, params: ApiDriverInfoDriverLicenceNumberSurCodeGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Driver>> {
+  const rb = new RequestBuilder(rootUrl, apiDriverInfoDriverLicenceNumberSurCodeGet$Plain.PATH, 'get');
   if (params) {
     rb.path('driverLicenceNumber', params.driverLicenceNumber, {});
+    rb.path('surCode', params.surCode, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'text/json', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -28,4 +30,4 @@ export function apiDriverInfoDriverLicenceNumberGet$Json(http: HttpClient, rootU
   );
 }
 
-apiDriverInfoDriverLicenceNumberGet$Json.PATH = '/api/Driver/info/{driverLicenceNumber}';
+apiDriverInfoDriverLicenceNumberSurCodeGet$Plain.PATH = '/api/Driver/info/{driverLicenceNumber}/{surCode}';

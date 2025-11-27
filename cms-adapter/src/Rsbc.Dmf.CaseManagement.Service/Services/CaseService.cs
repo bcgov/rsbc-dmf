@@ -1230,6 +1230,43 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+
+        /// <summary>
+        /// Get Drivers
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<GetDriversReply> GetDriverByIdAndSurCode(DriverRequest request, ServerCallContext context)
+        {
+            var reply = new GetDriversReply();
+            try
+            {
+                var result = await _caseManager.GetDriverByIdAndSurCode(request.DriverLicenseNumber, request.SurCode);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item != null && item.DriverLicenseNumber != null)
+                    {
+                        driver.DriverLicenseNumber = item.DriverLicenseNumber;
+                        driver.Surname = item.Surname ?? string.Empty;
+                        driver.GivenName = item.GivenName ?? string.Empty;
+                        driver.Id = item.Id;
+                        driver.BirthDate = Timestamp.FromDateTime(item.BirthDate.ToUniversalTime());
+                    }
+                    reply.Items.Add(driver);
+                }
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
         // Get Driver With BirthDate by linking driver to person
         public async override Task<GetDriversReply> GetDriverPerson(DriverLicenseRequest request, ServerCallContext context)
         {
