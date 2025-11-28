@@ -1,0 +1,96 @@
+<div class="container">
+    <div class="disclaimer">
+        <b>Authorization Request: You are not authorized to use this application. Please use the form below to request the access.</b>
+    </div>
+    
+    <form [formGroup]="userAccessForm" (ngSubmit)="onSubmit()">
+        <!-- User Information Card -->
+        <div class="list topPadding">
+            <h2>User Information</h2>
+            <mat-card>
+                <mat-card-content>
+                    <div class="user-form-row">
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Given Name</mat-label>
+                            <input matInput formControlName="givenName" placeholder="Enter your given name">
+                            <mat-error *ngIf="userAccessForm.get('givenName')?.hasError('required') && userAccessForm.get('givenName')?.touched">
+                                Given name is required
+                            </mat-error>
+                        </mat-form-field>
+                        
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Second Given Name</mat-label>
+                            <input matInput formControlName="secondGivenName" placeholder="Enter your second given name">
+                        </mat-form-field>
+                        
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Third Given Name</mat-label>
+                            <input matInput formControlName="thirdGivenName" placeholder="Enter your third given name">
+                        </mat-form-field>
+                        
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Surname</mat-label>
+                            <input matInput formControlName="surname" placeholder="Enter your surname">
+                            <mat-error *ngIf="userAccessForm.get('surname')?.hasError('required') && userAccessForm.get('surname')?.touched">
+                                Surname is required
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <!-- Contact Information Card -->
+        <div class="list topPadding">
+            <h2>Contact Information</h2>
+            <mat-card>
+                <mat-card-content>
+                    <div class="contact-form-container">
+                        <!-- First Column -->
+                        <div class="contact-column">
+                            <mat-form-field appearance="outline" class="form-field">
+                                <mat-label>Address First Line</mat-label>
+                                <input matInput formControlName="address" placeholder="Enter your address">
+                                <mat-error *ngIf="userAccessForm.get('address')?.hasError('required') && userAccessForm.get('address')?.touched">
+                                    Address is required
+                                </mat-error>
+                            </mat-form-field>
+
+                            
+                            <mat-form-field appearance="outline" class="form-field">
+                                <mat-label>Phone Number</mat-label>
+                                <input matInput formControlName="phoneNumber" placeholder="Enter your phone number" type="tel">
+                            </mat-form-field>
+                        </div>
+                        
+                        <!-- Second Column -->
+                        <div class="contact-column">
+                            <mat-form-field appearance="outline" class="form-field">
+                                <mat-label>City</mat-label>
+                                <input matInput formControlName="city" placeholder="Enter your city">
+                                <mat-error *ngIf="userAccessForm.get('city')?.hasError('required') && userAccessForm.get('city')?.touched">
+                                    City is required
+                                </mat-error>
+                            </mat-form-field>
+                            
+                            <mat-form-field appearance="outline" class="form-field">
+                                <mat-label>Province</mat-label>
+                                <input matInput formControlName="province" placeholder="Enter your province">
+                                <mat-error *ngIf="userAccessForm.get('province')?.hasError('required') && userAccessForm.get('province')?.touched">
+                                    Province is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="submit-section">
+            <button mat-raised-button color="primary" type="submit" class="submit-button">
+                Submit Request
+            </button>
+        </div>
+    </form>
+</div>
