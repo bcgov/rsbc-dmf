@@ -29,10 +29,16 @@ export class UserAccessRequestComponent {
       secondGivenName: [''], // Optional field
       thirdGivenName: [''], // Optional field
       surname: ['', [Validators.required]],
-      address: ['', [Validators.required]],
+      addressFirstLine: ['', [Validators.required]],
+      addressSecondLine: [''],
+      addressThirdLine: [''],
       city: ['', [Validators.required]],
       province: ['', [Validators.required]],
-      phoneNumber: ['']
+      country : ['', [Validators.required]],
+      postalCode: ['', [Validators.required]],
+      phoneNumber: [''],
+      cellPhoneNumber: [''],
+      emailAddress:['']
     });
   }
 

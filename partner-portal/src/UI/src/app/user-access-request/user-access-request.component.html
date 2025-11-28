@@ -1,8 +1,9 @@
 <div class="container">
     <div class="disclaimer">
-        <b>Authorization Request: You are not authorized to use this application. Please use the form below to request the access.</b>
+        <b>Authorization Request: You are not authorized to use this application. Please use the form below to request
+            the access.</b>
     </div>
-    
+
     <form [formGroup]="userAccessForm" (ngSubmit)="onSubmit()">
         <!-- User Information Card -->
         <div class="list topPadding">
@@ -13,25 +14,28 @@
                         <mat-form-field appearance="outline" class="form-field">
                             <mat-label>Given Name</mat-label>
                             <input matInput formControlName="givenName" placeholder="Enter your given name">
-                            <mat-error *ngIf="userAccessForm.get('givenName')?.hasError('required') && userAccessForm.get('givenName')?.touched">
+                            <mat-error
+                                *ngIf="userAccessForm.get('givenName')?.hasError('required') && userAccessForm.get('givenName')?.touched">
                                 Given name is required
                             </mat-error>
                         </mat-form-field>
-                        
+
                         <mat-form-field appearance="outline" class="form-field">
                             <mat-label>Second Given Name</mat-label>
-                            <input matInput formControlName="secondGivenName" placeholder="Enter your second given name">
+                            <input matInput formControlName="secondGivenName"
+                                placeholder="Enter your second given name">
                         </mat-form-field>
-                        
+
                         <mat-form-field appearance="outline" class="form-field">
                             <mat-label>Third Given Name</mat-label>
                             <input matInput formControlName="thirdGivenName" placeholder="Enter your third given name">
                         </mat-form-field>
-                        
+
                         <mat-form-field appearance="outline" class="form-field">
                             <mat-label>Surname</mat-label>
                             <input matInput formControlName="surname" placeholder="Enter your surname">
-                            <mat-error *ngIf="userAccessForm.get('surname')?.hasError('required') && userAccessForm.get('surname')?.touched">
+                            <mat-error
+                                *ngIf="userAccessForm.get('surname')?.hasError('required') && userAccessForm.get('surname')?.touched">
                                 Surname is required
                             </mat-error>
                         </mat-form-field>
@@ -50,36 +54,75 @@
                         <div class="contact-column">
                             <mat-form-field appearance="outline" class="form-field">
                                 <mat-label>Address First Line</mat-label>
-                                <input matInput formControlName="address" placeholder="Enter your address">
-                                <mat-error *ngIf="userAccessForm.get('address')?.hasError('required') && userAccessForm.get('address')?.touched">
+                                <input matInput formControlName="addressFirstLine" placeholder="Enter your address">
+                                <mat-error
+                                    *ngIf="userAccessForm.get('addressFirstLine')?.hasError('required') && userAccessForm.get('addressFirstLine')?.touched">
                                     Address is required
                                 </mat-error>
                             </mat-form-field>
-
-                            
                             <mat-form-field appearance="outline" class="form-field">
-                                <mat-label>Phone Number</mat-label>
-                                <input matInput formControlName="phoneNumber" placeholder="Enter your phone number" type="tel">
+                                <mat-label>Address Second Line</mat-label>
+                                <input matInput formControlName="addressSecondLine" placeholder="Enter your Address"
+                                    type="tel">
                             </mat-form-field>
-                        </div>
-                        
-                        <!-- Second Column -->
-                        <div class="contact-column">
+                            <mat-form-field appearance="outline" class="form-field">
+                                <mat-label>Address Third Line</mat-label>
+                                <input matInput formControlName="addressThirdLine" placeholder="Enter your Address">
+                            </mat-form-field>
                             <mat-form-field appearance="outline" class="form-field">
                                 <mat-label>City</mat-label>
                                 <input matInput formControlName="city" placeholder="Enter your city">
-                                <mat-error *ngIf="userAccessForm.get('city')?.hasError('required') && userAccessForm.get('city')?.touched">
+                                <mat-error
+                                    *ngIf="userAccessForm.get('city')?.hasError('required') && userAccessForm.get('city')?.touched">
                                     City is required
                                 </mat-error>
                             </mat-form-field>
-                            
+
                             <mat-form-field appearance="outline" class="form-field">
                                 <mat-label>Province</mat-label>
                                 <input matInput formControlName="province" placeholder="Enter your province">
-                                <mat-error *ngIf="userAccessForm.get('province')?.hasError('required') && userAccessForm.get('province')?.touched">
+                                <mat-error
+                                    *ngIf="userAccessForm.get('province')?.hasError('required') && userAccessForm.get('province')?.touched">
                                     Province is required
                                 </mat-error>
                             </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="form-field">
+                                <mat-label>Country</mat-label>
+                                <input matInput formControlName="country" placeholder="Enter your country">
+                                <mat-error
+                                    *ngIf="userAccessForm.get('country')?.hasError('required') && userAccessForm.get('province')?.touched">
+                                    Country is required
+                                </mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="form-field">
+                                <mat-label>Postal Code</mat-label>
+                                <input matInput formControlName="postalCode" placeholder="Enter your postalCode">
+                                <mat-error
+                                    *ngIf="userAccessForm.get('postalCode')?.hasError('required') && userAccessForm.get('postalCode')?.touched">
+                                    Postal Code is required
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Second Column -->
+                        <div class="contact-column">
+                            <mat-form-field appearance="outline" class="form-field">
+                                <mat-label>Phone Number</mat-label>
+                                <input matInput formControlName="phoneNumber" placeholder="Enter your phone number"
+                                    type="tel">
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="form-field">
+                                <mat-label>Cell Phone Number</mat-label>
+                                <input matInput formControlName="cellPhoneNumber"
+                                    placeholder="Enter your cell phone number" type="tel">
+                            </mat-form-field>
+                            <mat-form-field appearance="outline" class="form-field">
+                                <mat-label>Email Address</mat-label>
+                                <input matInput formControlName="emailAddress" placeholder="Enter your email address"
+                                    type="email">
+                            </mat-form-field>
+
                         </div>
                     </div>
                 </mat-card-content>
