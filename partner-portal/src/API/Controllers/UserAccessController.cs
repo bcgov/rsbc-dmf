@@ -52,7 +52,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(CreateUser))]
-        public async Task<IActionResult> CreateUser([FromBody] CallbackRequest callbackRequest)
+        public async Task<IActionResult> CreateUser([FromBody] UserAccessRequest userAccessRequest)
         {
             return null;
         }
