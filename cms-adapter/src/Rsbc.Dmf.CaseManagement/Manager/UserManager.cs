@@ -22,6 +22,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<bool> UpdateLogin(UpdateLoginRequest request);
         bool IsDriverAuthorized(string userId, Guid driverId);
         Task<PractitionerReply> GetPractitionerContact(PractitionerRequest request);
+        Task<ResultStatusReply> CreateUserContact(UserAccessRequest request);
     }
 
     public class UpdateLoginRequest
@@ -126,6 +127,25 @@ namespace Rsbc.Dmf.CaseManagement
         public string ClinicName { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
     }
+    public class UserAccessRequest
+    {
+        public string GivenName { get; set; }
+        public string SecondGivenName { get; set; }
+        public string ThirdGivenName { get; set; }
+        public string SurName { get; set; }
+        public string AddressFirstLine { get; set; }
+        public string AddressSecondLine { get; set; }
+        public string AddressThirdLine { get; set; }
+        public string City { get; set; }
+        public string Province { get; set; }
+        public string Country { get; set; }
+        public string PostalCode { get; set; }
+        public string PhoneNumber { get; set; }
+        public string CellPhoneNumber { get; set; }
+        public string EmailAddress { get; set; }
+
+    }
+
 
     #endregion Model
 
@@ -495,6 +515,11 @@ namespace Rsbc.Dmf.CaseManagement
             loginUserResponse.DriverLicenseNumber = login.dfp_DriverId?.dfp_licensenumber ?? string.Empty;
             loginUserResponse.LoginIds = logins.Select(l => l.dfp_loginid.ToString()).ToList();
             return loginUserResponse;
+        }
+
+        public async Task<ResultStatusReply> CreateUserContact(UserAccessRequest request)
+        {
+            return null;
         }
 
         private LoginType ParseExternalSystem(string externalSystem) => externalSystem.ToLowerInvariant() switch

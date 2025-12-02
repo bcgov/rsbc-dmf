@@ -786,6 +786,28 @@ service UserManager {
   rpc UpdateLogin(UpdateLoginRequest) returns (ResultStatusReply);
   rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
   rpc GetPractitionerContact(PractitionerRequest) returns (PractitionerReply);
+  // Partner Portal user access
+  rpc CreateUserContact (UserAccessRequest) returns (ResultStatusReply); 
+
+}
+
+message UserAccessRequest{
+    string givenName = 1;
+    string secondGivenName = 2;
+    string thirdGivenName = 3;
+    string surname = 4;
+    string addressFirstLine = 5;
+    string addressSecondLine = 6;
+    string addressThirdLine = 7;
+    string city =8;
+    string province = 9;
+    string country = 10;
+    string postalCode = 11;
+    string phoneNumber = 12;
+    string cellPhoneNumber = 13;
+    string emailAddress= 14;
+    string externalSystem = 15;
+    string externalSystemUserId = 16;
 }
 
 message PractitionerReply{

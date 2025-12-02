@@ -222,5 +222,32 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return result;
         }
+
+        public async override Task<ResultStatusReply> CreateUserContact(UserAccessRequest request, ServerCallContext context)
+        {
+            var reply = new ResultStatusReply();
+
+            try
+            {
+                var userAccessRequest = _mapper.Map<CaseManagement.UserAccessRequest>(request);
+                var result = await _userManager.CreateUserContact(userAccessRequest);
+                if (result != null && result.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ResultStatus = ResultStatus.Fail;
+                }
+            }
+            catch (Exception ex)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = ex.Message;
+            }
+
+            return reply;
+        }
+
     }
 }
