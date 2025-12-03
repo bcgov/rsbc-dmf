@@ -519,7 +519,59 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task<ResultStatusReply> CreateUserContact(UserAccessRequest request)
         {
-            return null;
+
+            if (request == null)
+            {
+                return new ResultStatusReply
+                {
+                    Success = false,
+                    ErrorDetail = "UserAccessRequest is null"
+                };
+            }
+
+            try
+            {
+                // Map UserAccessRequest to Dynamics contact fields
+                var newContact = new contact
+                {
+                    contactid = Guid.NewGuid(),
+                    firstname = request.GivenName,
+                    middlename = request.SecondGivenName,
+                    bcgov_thirdgivenname = request.ThirdGivenName,
+                    lastname = request.SurName,
+                    address1_line1 = request.AddressFirstLine,
+                    address1_line2 = request.AddressSecondLine,
+                    address1_line3 = request.AddressThirdLine,
+                    address1_city = request.City,
+                    address1_stateorprovince = request.Province,
+                    address1_country = request.Country,
+                    address1_postalcode = request.PostalCode,
+                    address1_telephone1 = request.PhoneNumber,
+                    mobilephone = request.CellPhoneNumber,
+                    emailaddress1 = request.EmailAddress
+                };
+                dynamicsContext.AddTocontacts(newContact);
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.DetachAll();
+
+                return new ResultStatusReply
+                {
+                    Id = newContact.contactid.ToString(),
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                // Surface exception detail for diagnostics; caller can log or expose as needed.
+                var detail = ex.Message;
+                if (ex.InnerException != null) detail += " | " + ex.InnerException.Message;
+
+                return new ResultStatusReply
+                {
+                    Success = false,
+                    ErrorDetail = detail
+                };
+            }
         }
 
         private LoginType ParseExternalSystem(string externalSystem) => externalSystem.ToLowerInvariant() switch
