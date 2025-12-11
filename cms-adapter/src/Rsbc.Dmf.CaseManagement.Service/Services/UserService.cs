@@ -95,67 +95,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             _ => throw new NotImplementedException()
         };
 
-        public async override Task<UserLoginReply> PartnerPortalLogin(UserLoginRequest request, ServerCallContext context)
-        {
-            try
-            {
-                var loginRequest = new PartnerPortalLoginRequest();
-                if(request.UserType == UserType.PartnerPortalUserType)
-                {
-                    loginRequest.contact = new CaseManagement.UserAccess
-                    {
-                        ExternalSystem = request.ExternalSystem,
-                        ExternalSystemUserId = request.ExternalSystemUserId,
-                        GivenName = request.FirstName,
-                        SurName = request.LastName
-                    };
-                }
-
-                var loginResult = await _userManager.PartnerPortalLoginUser(loginRequest);
-                var userLoginReply = new UserLoginReply { ResultStatus = ResultStatus.Success };
-                userLoginReply.UserId = loginResult.Userid;
-                if (loginResult.LoginIds?.Count > 0)
-                {
-                    userLoginReply.LoginIds.AddRange(loginResult.LoginIds);
-                }
-                return userLoginReply;
-
-            }
-
-            catch (Exception e)
-            {
-                return new UserLoginReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
-            }
-        }
-
-
-        public async override Task<UsersSearchReply> PartnerPortalSearch(UsersSearchRequest request, ServerCallContext context)
-        {
-            try
-            {
-                var users = (await _userManager.PartnerPortalSearchUsers(new PartnerPortalSearchRequest
-                {
-                    ByExternalUserId = string.IsNullOrEmpty(request.ExternalSystemUserId) ? null : (request.ExternalSystemUserId, request.ExternalSystem),
-                    //ByType = request.UserType == UserType.PartnerPortalUserType
-                    ByUserId = request.UserId
-                })).Items.Select(u => new User
-                {
-                    Id = u.Id,
-                    FirstName = u.FirstName ?? string.Empty,
-                    LastName = u.LastName ?? string.Empty,
-                    ExternalSystem = u.ExternalSystem,
-                    ExternalSystemUserId = u.ExternalSystemUserId,
-                });
-
-                return new UsersSearchReply { ResultStatus = ResultStatus.Success, User = { users } };
-            }
-            catch (Exception e)
-            {
-                return new UsersSearchReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
-            }
-        }
-
-
         public async override Task<UserLoginReply> Login(UserLoginRequest request, ServerCallContext context)
         {
             try
@@ -289,10 +228,66 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
         // Partner Portal
 
-        //public async override Task<UserLoginReply> PartnerPortalLogin(UserLoginRequest request, ServerCallContext context)
-        //{
 
-        //}
+        public async override Task<UserLoginReply> PartnerPortalLogin(UserLoginRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var loginRequest = new PartnerPortalLoginRequest();
+                if (request.UserType == UserType.PartnerPortalUserType)
+                {
+                    loginRequest.contact = new CaseManagement.UserAccess
+                    {
+                        ExternalSystem = request.ExternalSystem,
+                        ExternalSystemUserId = request.ExternalSystemUserId,
+                        GivenName = request.FirstName,
+                        SurName = request.LastName
+                    };
+                }
+
+                var loginResult = await _userManager.PartnerPortalLoginUser(loginRequest);
+                var userLoginReply = new UserLoginReply { ResultStatus = ResultStatus.Success };
+                userLoginReply.UserId = loginResult.Userid;
+                if (loginResult.LoginIds?.Count > 0)
+                {
+                    userLoginReply.LoginIds.AddRange(loginResult.LoginIds);
+                }
+                return userLoginReply;
+
+            }
+
+            catch (Exception e)
+            {
+                return new UserLoginReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
+            }
+        }
+
+
+        public async override Task<UsersSearchReply> PartnerPortalSearch(UsersSearchRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var users = (await _userManager.PartnerPortalSearchUsers(new PartnerPortalSearchRequest
+                {
+                    ByExternalUserId = string.IsNullOrEmpty(request.ExternalSystemUserId) ? null : (request.ExternalSystemUserId, request.ExternalSystem),
+                    //ByType = request.UserType == UserType.PartnerPortalUserType
+                    ByUserId = request.UserId
+                })).Items.Select(u => new User
+                {
+                    Id = u.Id,
+                    FirstName = u.GivenName ?? string.Empty,
+                    LastName = u.SurName ?? string.Empty,
+                    ExternalSystem = u.ExternalSystem,
+                    ExternalSystemUserId = u.ExternalSystemUserId,
+                });
+
+                return new UsersSearchReply { ResultStatus = ResultStatus.Success, User = { users } };
+            }
+            catch (Exception e)
+            {
+                return new UsersSearchReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
+            }
+        }
 
         public async override Task<ResultStatusReply> CreateUserContact(UserAccessRequest request, ServerCallContext context)
         {

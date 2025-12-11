@@ -54,6 +54,8 @@ public class UserService : IUserService
         {
             UserId = user.FindFirstValue(UserClaimTypes.UserId),
             DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName),
+            FirstName = user.FindFirstValue(UserClaimTypes.GivenName),
+            LastName = user.FindFirstValue(UserClaimTypes.FamilyName),
         });
     }
 
@@ -67,6 +69,8 @@ public class UserService : IUserService
 
             ExternalSystem = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
             ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
+            FirstName = user.FindFirstValue(UserClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
+            LastName = user.FindFirstValue(UserClaimTypes.FamilyName) ?? user.FindFirstValue("last_name") ?? string.Empty,
         };
 
         var loginResponse = await userManager.PartnerPortalLoginAsync(loginRequest);

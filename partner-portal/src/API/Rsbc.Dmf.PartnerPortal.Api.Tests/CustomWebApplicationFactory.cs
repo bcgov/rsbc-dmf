@@ -130,13 +130,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         public virtual async Task<AuthenticateResult> AuthenticateAsync(AuthorizationPolicy policy, HttpContext context)
         {
             var principal = new ClaimsPrincipal();
-            principal.AddIdentity(
-                new ClaimsIdentity(new[] {
-                    // TODO change this to the correct role after keycloak is migrated
-                    // NOTE the role used in the Api is ClaimsIdentity.RoleClaimType, not ClaimTypes.Role
-                    new Claim(ClaimTypes.Role, Roles.Practitoner)
-                }));
-
             return await Task.FromResult(
                 AuthenticateResult.Success(new AuthenticationTicket(principal, new AuthenticationProperties(), null)));
         }
