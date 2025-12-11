@@ -95,6 +95,40 @@ namespace Rsbc.Dmf.CaseManagement.Service
             _ => throw new NotImplementedException()
         };
 
+        public async override Task<UserLoginReply> PartnerPortalLogin(UserLoginRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var loginRequest = new PartnerPortalLoginRequest();
+                if(request.UserType == UserType.PartnerPortalUserType)
+                {
+                    loginRequest.contact = new CaseManagement.UserAccessRequest
+                    {
+                        ExternalSystem = request.ExternalSystem,
+                        ExternalSystemUserId = request.ExternalSystemUserId,
+                        GivenName = request.FirstName,
+                        SurName = request.LastName
+                    };
+                }
+
+                var loginResult = await _userManager.PartnerPortalLoginUser(loginRequest);
+                var userLoginReply = new UserLoginReply { ResultStatus = ResultStatus.Success };
+                userLoginReply.UserId = loginResult.Userid;
+                if (loginResult.LoginIds?.Count > 0)
+                {
+                    userLoginReply.LoginIds.AddRange(loginResult.LoginIds);
+                }
+                return userLoginReply;
+
+            }
+
+            catch (Exception e)
+            {
+                return new UserLoginReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
+            }
+        }
+
+
         public async override Task<UserLoginReply> Login(UserLoginRequest request, ServerCallContext context)
         {
             try
@@ -147,6 +181,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 return new UserLoginReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
             }
         }
+
+
 
         // same as UpdateEmail but for medical practitioners
         public async override Task<ResultStatusReply> SetEmail(UserSetEmailRequest request, ServerCallContext context)
@@ -222,6 +258,14 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return result;
         }
+
+
+        // Partner Portal
+
+        //public async override Task<UserLoginReply> PartnerPortalLogin(UserLoginRequest request, ServerCallContext context)
+        //{
+
+        //}
 
         public async override Task<ResultStatusReply> CreateUserContact(UserAccessRequest request, ServerCallContext context)
         {

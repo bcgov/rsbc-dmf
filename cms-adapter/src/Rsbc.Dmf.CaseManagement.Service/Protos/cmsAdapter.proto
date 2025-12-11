@@ -788,6 +788,7 @@ service UserManager {
   rpc GetPractitionerContact(PractitionerRequest) returns (PractitionerReply);
   // Partner Portal user access
   rpc CreateUserContact (UserAccessRequest) returns (ResultStatusReply); 
+  rpc PartnerPortalLogin(UserLoginRequest) returns (UserLoginReply);
 
 }
 
@@ -937,6 +938,7 @@ message DriverProfile {
 enum UserType {
     MedicalPractitionerUserType = 0;
     DriverUserType = 1;
+    PartnerPortalUserType = 2;
 }
 
 message IdListRequest {

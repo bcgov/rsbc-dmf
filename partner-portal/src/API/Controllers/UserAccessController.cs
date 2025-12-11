@@ -54,6 +54,17 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         [ActionName(nameof(CreateUser))]
         public async Task<IActionResult> CreateUser([FromBody] UserAccessRequest userAccessRequest)
         {
+          
+            // Step 1 : Get the user context 
+            var profile = await _userService.GetCurrentUserContext();
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            // Step 2
+
+
             return null;
         }
     }
