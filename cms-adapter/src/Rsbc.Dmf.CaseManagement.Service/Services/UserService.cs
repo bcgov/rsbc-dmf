@@ -102,7 +102,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var loginRequest = new PartnerPortalLoginRequest();
                 if(request.UserType == UserType.PartnerPortalUserType)
                 {
-                    loginRequest.contact = new CaseManagement.UserAccessRequest
+                    loginRequest.contact = new CaseManagement.UserAccess
                     {
                         ExternalSystem = request.ExternalSystem,
                         ExternalSystemUserId = request.ExternalSystemUserId,
@@ -125,6 +125,33 @@ namespace Rsbc.Dmf.CaseManagement.Service
             catch (Exception e)
             {
                 return new UserLoginReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
+            }
+        }
+
+
+        public async override Task<UsersSearchReply> PartnerPortalSearch(UsersSearchRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var users = (await _userManager.PartnerPortalSearchUsers(new PartnerPortalSearchRequest
+                {
+                    ByExternalUserId = string.IsNullOrEmpty(request.ExternalSystemUserId) ? null : (request.ExternalSystemUserId, request.ExternalSystem),
+                    //ByType = request.UserType == UserType.PartnerPortalUserType
+                    ByUserId = request.UserId
+                })).Items.Select(u => new User
+                {
+                    Id = u.Id,
+                    FirstName = u.FirstName ?? string.Empty,
+                    LastName = u.LastName ?? string.Empty,
+                    ExternalSystem = u.ExternalSystem,
+                    ExternalSystemUserId = u.ExternalSystemUserId,
+                });
+
+                return new UsersSearchReply { ResultStatus = ResultStatus.Success, User = { users } };
+            }
+            catch (Exception e)
+            {
+                return new UsersSearchReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
             }
         }
 
@@ -273,7 +300,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             try
             {
-                var userAccessRequest = _mapper.Map<CaseManagement.UserAccessRequest>(request);
+                var userAccessRequest = _mapper.Map<CaseManagement.UserAccess>(request);
                 var result = await _userManager.CreateUserContact(userAccessRequest);
                 if (result != null && result.Success)
                 {

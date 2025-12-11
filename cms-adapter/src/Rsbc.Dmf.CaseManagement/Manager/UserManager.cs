@@ -23,8 +23,9 @@ namespace Rsbc.Dmf.CaseManagement
         Task<bool> UpdateLogin(UpdateLoginRequest request);
         bool IsDriverAuthorized(string userId, Guid driverId);
         Task<PractitionerReply> GetPractitionerContact(PractitionerRequest request);
-        Task<ResultStatusReply> CreateUserContact(UserAccessRequest request);
+        Task<ResultStatusReply> CreateUserContact(UserAccess request);
         Task<PartnerPortalLoginResponse> PartnerPortalLoginUser(PartnerPortalLoginRequest request);
+        Task<PartnerPortalSearchResponse> PartnerPortalSearchUsers(PartnerPortalSearchRequest request);
     }
 
     public class UpdateLoginRequest
@@ -135,7 +136,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class PartnerPortalLoginRequest
     {
-       public UserAccessRequest contact { get; set; }
+       public UserAccess contact { get; set; }
 
     }
 
@@ -145,8 +146,18 @@ namespace Rsbc.Dmf.CaseManagement
         public List<string> LoginIds { get; set; }
     }
 
+    public class PartnerPortalSearchRequest
+    {
+        public string ByUserId { get; set; }
+        public (string externalUserId, string externalSystem)? ByExternalUserId { get; set; }
+    }
 
-    public class UserAccessRequest
+    public class PartnerPortalSearchResponse
+    {
+        public IEnumerable<UserAccess> Items { get; set; }
+    }
+
+    public class UserAccess
     {
         public string Id { get; set; }
         public string ExternalSystem { get; set; }
@@ -242,6 +253,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             return loggedInDriver != default;
         }
+
 
         public async Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request)
         {
@@ -590,7 +602,42 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
-        public async Task<ResultStatusReply> CreateUserContact(UserAccessRequest request)
+        public async Task<PartnerPortalSearchResponse> PartnerPortalSearchUsers(PartnerPortalSearchRequest request)
+        {
+            IQueryable<dfp_login> query = dynamicsContext.dfp_logins
+                  .Expand(l => l.dfp_Person)
+                  .Where(l => l.statecode == (int)EntityState.Active);
+
+            if (!string.IsNullOrEmpty(request.ByUserId))
+                query = query.Where(l => l.dfp_loginid == Guid.Parse(request.ByUserId));
+
+            if (request.ByExternalUserId.HasValue)
+                query = query.Where(l => l.dfp_userid == request.ByExternalUserId.Value.externalUserId &&
+                                         l.dfp_type == (int)ParseExternalSystem(request.ByExternalUserId.Value.externalSystem));
+
+            var users = (await ((DataServiceQuery<dfp_login>)query).GetAllPagesAsync()).ToArray();
+
+            // detach to avoid tracking side-effects
+            dynamicsContext.DetachAll();
+
+            // Map to User subclasses (DriverUser is lightweight and suitable here).
+            var mappedUsers = users.Select(u => new UserAccess
+            {
+                Id = u.dfp_loginid.ToString(),
+                GivenName = u.dfp_Person?.firstname,
+                SurName = u.dfp_Person?.lastname,
+                EmailAddress = u.dfp_Person?.emailaddress1,
+                ExternalSystem = u.dfp_type.HasValue ? ((LoginType)u.dfp_type).ToString() : null,
+                ExternalSystemUserId = u.dfp_userid
+            }).ToArray();
+
+            return new PartnerPortalSearchResponse
+            {
+                Items = mappedUsers
+            };
+
+        }
+        public async Task<ResultStatusReply> CreateUserContact(UserAccess request)
         {
 
             if (request == null)

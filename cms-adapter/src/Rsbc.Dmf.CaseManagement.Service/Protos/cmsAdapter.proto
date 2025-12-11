@@ -789,6 +789,7 @@ service UserManager {
   // Partner Portal user access
   rpc CreateUserContact (UserAccessRequest) returns (ResultStatusReply); 
   rpc PartnerPortalLogin(UserLoginRequest) returns (UserLoginReply);
+  rpc PartnerPortalSearch (UsersSearchRequest) returns (UsersSearchReply);
 
 }
 

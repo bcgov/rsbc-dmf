@@ -11,7 +11,7 @@ public interface IUserService
     Task<UserContext> GetCurrentUserContext();
     void SetDriverInfo(ViewModels.Driver driver);
     SearchContext GetDriverInfo();
-    Task<ClaimsPrincipal> Login(ClaimsPrincipal user)
+    Task<ClaimsPrincipal> Login(ClaimsPrincipal user);
 }
 
 public record UserContext
@@ -69,10 +69,10 @@ public class UserService : IUserService
             ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
         };
 
-        var loginResponse = await userManager.LoginAsync(loginRequest);
+        var loginResponse = await userManager.PartnerPortalLoginAsync(loginRequest);
         if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
 
-        var searchResults = await userManager.SearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId, UserType = UserType.DriverUserType });
+        var searchResults = await userManager.PartnerPortalSearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId});
         if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
 
         var userProfile = searchResults.User.SingleOrDefault();
@@ -86,11 +86,6 @@ public class UserService : IUserService
         claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
         claims.Add(new Claim(UserClaimTypes.DisplayName, user.Claims.Single(u => u.Type == UserClaimTypes.DisplayName).Value));
 
-        //if (!string.IsNullOrEmpty(loginResponse.))
-        //{
-        //    claims.Add(new Claim(UserClaimTypes.DriverId, loginResponse.DriverId));
-        //    claims.Add(new Claim(UserClaimTypes.DriverLicenseNumber, loginResponse.DriverLicenseNumber));
-        //}
         user.AddIdentity(new ClaimsIdentity(claims));
 
         logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
