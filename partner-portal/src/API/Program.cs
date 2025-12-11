@@ -203,7 +203,5 @@ public static class Claims
 public static class Policies
 {
     public const string Oidc = "oidc";
-    public const string MedicalPractitioner = "medical-practitioner";
-    public const string Enrolled = "dmft-enrolled";
     public const string PartnerPortal = "partner-portal";
 }

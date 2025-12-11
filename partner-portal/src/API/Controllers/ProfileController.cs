@@ -52,6 +52,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             {
                 Id = userContext.UserId,
                 DisplayName = userContext.DisplayName,
+                FirstName = userContext.FirstName,
+                LastName = userContext.LastName,
             };
         }
 
