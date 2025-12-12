@@ -67,7 +67,7 @@ public class UserService : IUserService
         logger.LogDebug("Processing login {0}", user.Identity.Name);
         logger.LogDebug(" claims:\n{0}", string.Join(",\n", user.Claims.Select(c => $"{c.Type}: {c.Value}")));
 
-        var loginRequest = new UserLoginRequest
+        var loginRequest = new PartnerPortalLoginRequest
         {
 
             ExternalSystem = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
@@ -79,7 +79,7 @@ public class UserService : IUserService
         var loginResponse = await userManager.PartnerPortalLoginAsync(loginRequest);
         if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
 
-        var searchResults = await userManager.PartnerPortalSearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId});
+        var searchResults = await userManager.PartnerPortalSearchAsync(new PartnerPortalUserSearchRequest { UserId = loginResponse.UserId});
         if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
 
         var userProfile = searchResults.User.SingleOrDefault();
@@ -87,15 +87,15 @@ public class UserService : IUserService
 
         var claims = new List<Claim>();
         claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
-        claims.Add(new Claim(ClaimTypes.Email, loginResponse.UserEmail));
+        //claims.Add(new Claim(ClaimTypes.Email, loginResponse.UserEmail));
         claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
-        claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
-        claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
+        //claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
+        //claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
         claims.Add(new Claim(UserClaimTypes.DisplayName, user.Claims.Single(u => u.Type == UserClaimTypes.DisplayName).Value));
 
         user.AddIdentity(new ClaimsIdentity(claims));
 
-        logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
+        logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.ContactId, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
 
         return user;
 

@@ -187,6 +187,69 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
+        public async override Task<GetUserContactReply> GetUserContact(GetUserContactRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var getContact = await _userManager.GetUserContact(new CaseManagement.GetUserContactRequest { externalSystemUserId = request.ExternalSystemUserId });
+
+                if (getContact.contact.Id == string.Empty) { return new GetUserContactReply(); }
+
+                return new GetUserContactReply
+                {
+                   Contact = new UserContact
+                   {
+                       ContactId = getContact.contact.Id,
+                       ExternalSystem = getContact.contact.ExternalSystem,
+                       ExternalSystemUserId = getContact.contact.ExternalSystemUserId,
+                       GivenName = getContact.contact.GivenName,
+                       SecondGivenName = getContact.contact.SecondGivenName,
+                       ThirdGivenName = getContact.contact.ThirdGivenName,
+                       Surname = getContact.contact.SurName,
+                       AddressFirstLine = getContact.contact.AddressFirstLine,
+                       AddressSecondLine = getContact.contact.AddressSecondLine,
+                       AddressThirdLine = getContact.contact.AddressThirdLine,
+                       City = getContact.contact.City,
+                       Province = getContact.contact.Province,
+                       Country = getContact.contact.Country,
+                       PostalCode = getContact.contact.PostalCode,
+                       EmailAddress = getContact.contact.EmailAddress,
+                       PhoneNumber = getContact.contact.PhoneNumber,
+                       CellPhoneNumber = getContact.contact.CellPhoneNumber
+                   }
+                };
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public async override Task<SetUserContactLoginReply> SetUserContactLogin(SetUserContactLoginRequest request, ServerCallContext context)
+        {
+            var result = new SetUserContactLoginReply();
+
+            try
+            {
+                Guid? contactId = null;
+                if (request.ContactId != string.Empty)
+                {
+                    contactId = Guid.Parse(request.ContactId);
+                }
+                result.HasContact = await _userManager.SetUserContactLogin(Guid.Parse(request.LoginId), contactId);
+                result.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
+            }
+
+            return result;
+        }
+
+
         public async override Task<ResultStatusReply> UpdateLogin(UpdateLoginRequest request, ServerCallContext context)
         {
             var result = new ResultStatusReply();
@@ -229,24 +292,26 @@ namespace Rsbc.Dmf.CaseManagement.Service
         // Partner Portal
 
 
-        public async override Task<UserLoginReply> PartnerPortalLogin(UserLoginRequest request, ServerCallContext context)
+        public async override Task<PartnerPortalLoginReply> PartnerPortalLogin(PartnerPortalLoginRequest request, ServerCallContext context)
         {
             try
             {
-                var loginRequest = new PartnerPortalLoginRequest();
-                if (request.UserType == UserType.PartnerPortalUserType)
+                var loginRequest = new CaseManagement.PartnerPortalLoginRequest()
                 {
-                    loginRequest.contact = new CaseManagement.UserAccess
+                    contact = new CaseManagement.UserContact()
                     {
+                        
                         ExternalSystem = request.ExternalSystem,
                         ExternalSystemUserId = request.ExternalSystemUserId,
                         GivenName = request.FirstName,
                         SurName = request.LastName
-                    };
-                }
+                    }
+
+                };
+                
 
                 var loginResult = await _userManager.PartnerPortalLoginUser(loginRequest);
-                var userLoginReply = new UserLoginReply { ResultStatus = ResultStatus.Success };
+                var userLoginReply = new PartnerPortalLoginReply { ResultStatus = ResultStatus.Success };
                 userLoginReply.UserId = loginResult.Userid;
                 if (loginResult.LoginIds?.Count > 0)
                 {
@@ -258,12 +323,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             catch (Exception e)
             {
-                return new UserLoginReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
+                return new PartnerPortalLoginReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
             }
         }
 
 
-        public async override Task<UsersSearchReply> PartnerPortalSearch(UsersSearchRequest request, ServerCallContext context)
+        public async override Task<PartnerPortalUserSearchReply> PartnerPortalSearch(PartnerPortalUserSearchRequest request, ServerCallContext context)
         {
             try
             {
@@ -281,21 +346,21 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     ExternalSystemUserId = u.ExternalSystemUserId,
                 });
 
-                return new UsersSearchReply { ResultStatus = ResultStatus.Success, User = { users } };
+                return new PartnerPortalUserSearchReply { ResultStatus = ResultStatus.Success, };
             }
             catch (Exception e)
             {
-                return new UsersSearchReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
+                return new PartnerPortalUserSearchReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
             }
         }
 
-        public async override Task<ResultStatusReply> CreateUserContact(UserAccessRequest request, ServerCallContext context)
+        public async override Task<ResultStatusReply> CreateUserContact(UserContactRequest request, ServerCallContext context)
         {
             var reply = new ResultStatusReply();
 
             try
             {
-                var userAccessRequest = _mapper.Map<CaseManagement.UserAccess>(request);
+                var userAccessRequest = _mapper.Map<CaseManagement.UserContact>(request);
                 var result = await _userManager.CreateUserContact(userAccessRequest);
                 if (result != null && result.Success)
                 {

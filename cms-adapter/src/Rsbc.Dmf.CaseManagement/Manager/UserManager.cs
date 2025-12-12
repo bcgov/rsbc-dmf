@@ -23,9 +23,11 @@ namespace Rsbc.Dmf.CaseManagement
         Task<bool> UpdateLogin(UpdateLoginRequest request);
         bool IsDriverAuthorized(string userId, Guid driverId);
         Task<PractitionerReply> GetPractitionerContact(PractitionerRequest request);
-        Task<ResultStatusReply> CreateUserContact(UserAccess request);
+        Task<ResultStatusReply> CreateUserContact(UserContact request);
         Task<PartnerPortalLoginResponse> PartnerPortalLoginUser(PartnerPortalLoginRequest request);
         Task<PartnerPortalSearchResponse> PartnerPortalSearchUsers(PartnerPortalSearchRequest request);
+        Task<bool> SetUserContactLogin(Guid loginId, Guid? contactId);
+        Task<GetUserContactReply> GetUserContact(GetUserContactRequest request);
     }
 
     public class UpdateLoginRequest
@@ -136,7 +138,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class PartnerPortalLoginRequest
     {
-       public UserAccess contact { get; set; }
+       public UserContact contact { get; set; }
 
     }
 
@@ -154,10 +156,21 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class PartnerPortalSearchResponse
     {
-        public IEnumerable<UserAccess> Items { get; set; }
+        public IEnumerable<UserContact> Items { get; set; }
     }
 
-    public class UserAccess
+    public class GetUserContactRequest
+    {
+       public string externalSystemUserId { get; set; }
+    }
+
+
+    public class GetUserContactReply
+    {
+        public UserContact contact { get; set; }
+    }
+
+    public class UserContact
     {
         public string Id { get; set; }
         public string ExternalSystem { get; set; }
@@ -241,6 +254,7 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         #endregion Practitioner
+
 
         public bool IsDriverAuthorized(string userId, Guid driverId)
         {
@@ -621,7 +635,7 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
 
             // Map to User subclasses (DriverUser is lightweight and suitable here).
-            var mappedUsers = users.Select(u => new UserAccess
+            var mappedUsers = users.Select(u => new UserContact
             {
                 Id = u.dfp_loginid.ToString(),
                 GivenName = u.dfp_Person?.firstname,
@@ -637,7 +651,7 @@ namespace Rsbc.Dmf.CaseManagement
             };
 
         }
-        public async Task<ResultStatusReply> CreateUserContact(UserAccess request)
+        public async Task<ResultStatusReply> CreateUserContact(UserContact request)
         {
 
             if (request == null)
@@ -692,6 +706,107 @@ namespace Rsbc.Dmf.CaseManagement
                     ErrorDetail = detail
                 };
             }
+        }
+
+        public async Task<GetUserContactReply> GetUserContact(GetUserContactRequest request)
+        {
+
+            // Query to get the contact by externalSystemUserId
+
+            if (Guid.TryParse(request.externalSystemUserId, out Guid result))
+            {
+                contact = dynamicsContext.contacts
+                .Where(c => c.contactid == new Guid(request.externalSystemUserId))
+                .SingleOrDefault();
+            }
+            else
+            {
+                // Note do we need to use bcgov_userid or externaluseridentifier here?
+                contact = dynamicsContext.contacts
+                .Where(c => c.bcgov_userid == request.externalSystemUserId || c.externaluseridentifier == request.externalSystemUserId)
+                .SingleOrDefault();
+            }
+
+            if (contact != null)
+            {
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.contactid));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.firstname));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.middlename));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.bcgov_thirdgivenname));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.lastname));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.emailaddress1));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_line1));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_line2));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_line3));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_city));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_stateorprovince));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_country));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_postalcode));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.mobilephone));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.telephone1));
+                return new GetUserContactReply
+                {
+                    contact = new UserContact
+                    {
+                        Id = contact.contactid.ToString(),
+                        GivenName = contact.firstname,
+                        SecondGivenName = contact.middlename,
+                        ThirdGivenName = contact.bcgov_thirdgivenname,
+                        SurName = contact.lastname,
+                        EmailAddress = contact.emailaddress1,
+                        AddressFirstLine = contact.address1_line1,
+                        AddressSecondLine = contact.address1_line2,
+                        AddressThirdLine = contact.address1_line3,
+                        City = contact.address1_city,
+                        Province = contact.address1_stateorprovince,
+                        Country = contact.address1_country,
+                        PostalCode = contact.address1_postalcode,
+                        CellPhoneNumber = contact.mobilephone,
+                        PhoneNumber = contact.telephone1,
+                        ExternalSystemUserId = contact.bcgov_userid
+                    }
+                };
+            }
+
+            return new GetUserContactReply();
+        }
+
+
+        public async Task<bool> SetUserContactLogin(Guid loginId, Guid? contactId)
+        {
+            var login = dynamicsContext.dfp_logins
+                .Expand(l => l.dfp_Person)
+                //.Expand(l => l._dfp_person_value)
+                .Where(l => l.dfp_loginid == loginId)
+                .SingleOrDefault();
+
+            // for first time login, create login and link to contact
+            if (login.dfp_Person == null)
+            {
+                // Query to get the contact
+                contact contact = null;
+                if (contactId != null)
+                {
+
+                    contact = dynamicsContext.contacts.Where(x => x.contactid == contactId).FirstOrDefault();
+                    if (contact == null)
+                    {
+                        return false;
+                    }
+                }
+                if (contact != null)
+                {
+                    dynamicsContext.SetLink(login, nameof(dfp_login.dfp_Person), contact);
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.Detach(contact);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private LoginType ParseExternalSystem(string externalSystem) => externalSystem.ToLowerInvariant() switch

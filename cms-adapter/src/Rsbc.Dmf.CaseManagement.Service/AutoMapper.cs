@@ -36,7 +36,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullStringConverter);
             CreateMap<UpdateLoginRequest, CaseManagement.UpdateLoginRequest>();
             CreateMap<FullAddress, CaseManagement.FullAddress>();
-            CreateMap<UserAccessRequest, CaseManagement.UserAccess>()
+            CreateMap<UserContact, CaseManagement.UserContact>()
                 .AddTransform(NullStringConverter);
 
             // to Proto from CaseManagement
