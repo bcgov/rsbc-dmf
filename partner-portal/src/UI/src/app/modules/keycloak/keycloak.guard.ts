@@ -19,14 +19,18 @@ export class AuthGuard extends KeycloakAuthGuard {
 
   async isAccessAllowed(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Promise<boolean | UrlTree>
-  {
+    state: RouterStateSnapshot): Promise<boolean | UrlTree> {
     if (!this.authenticated) {
       const scope = this.configService.config.keycloak?.config?.scope || "openid profile email";
-      await this.keycloakService.login({
-        idpHint: IdentityProvider.IDIR,
-        scope: scope,
-      });
+      try {
+        await this.keycloakService.login({
+          idpHint: IdentityProvider.IDIR,
+          scope: scope,
+        });
+      } catch (error) {
+        console.error('Login failed', error);
+      }
+
     }
     return this.authenticated;
   }

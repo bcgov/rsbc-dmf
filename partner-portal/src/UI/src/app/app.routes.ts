@@ -9,6 +9,7 @@ import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.
 import { GetHelpComponent } from './get-help/get-help.component';
 import { AuthGuard } from './modules/keycloak/keycloak.guard';
 import { DriverDetailsComponent } from './driver-details/driver-details.component';
+import { UserAccessRequestComponent } from './user-access-request/user-access-request.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'search', pathMatch: 'full' },
@@ -18,6 +19,7 @@ export const routes: Routes = [
     children: [
       { path: 'search', component: SearchComponent },
       { path: 'remedial', component: RemedialComponent },
+       { path: 'userAccess', component: UserAccessRequestComponent },
       { path: 'driverSearch/:driverLicenceNumber', component: DriverSearchComponent },
       { path: 'assistDriver', component: AssistDriverComponent },
       { path: 'submissionHistory', component: SubmissionHistoryComponent },

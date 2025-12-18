@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Security.Claims;
+using System.Web;
 
 namespace Rsbc.Dmf.PartnerPortal.Api.Services;
 
@@ -90,7 +91,7 @@ public class UserService : IUserService
 
         var userProfile = searchResults.User.SingleOrDefault();
         if (userProfile == null) 
-         throw new Exception($"User {loginResponse.UserId} not found");
+         throw new BadHttpRequestException($"User not found {loginResponse.UserId}");
 
         var claims = new List<Claim>();
         claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));

@@ -23,4 +23,7 @@ export { OkResult } from './models/ok-result';
 export { PreferredTime } from './models/preferred-time';
 export { ProblemDetails } from './models/problem-details';
 export { RehabTrigger } from './models/rehab-trigger';
+export { UserAccessRequest } from './models/user-access-request';
 export { UserContext } from './models/user-context';
+export { UserProfile } from './models/user-profile';
+export { UserRegistration } from './models/user-registration';

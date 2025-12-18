@@ -1,11 +1,10 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface UserContext {
+export interface UserProfile {
   displayName?: string | null;
   email?: string | null;
-  externalUserName?: string | null;
   firstName?: string | null;
-  identityProvider?: string | null;
+  id?: string | null;
   lastName?: string | null;
-  userId?: string | null;
+  loginId?: string | null;
 }
