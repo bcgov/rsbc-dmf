@@ -696,7 +696,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             catch (Exception ex)
             {
-                // Surface exception detail for diagnostics; caller can log or expose as needed.
+             
                 var detail = ex.Message;
                 if (ex.InnerException != null) detail += " | " + ex.InnerException.Message;
 
@@ -813,7 +813,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             "bcsc" => LoginType.Bcsc,
             "bceid" => LoginType.Bceid,
-            "idir" => LoginType.Idir,
+            "azure-idir" => LoginType.Idir,
             "msEntra" => LoginType.MsEntra,
             
             _ => throw new NotImplementedException(externalSystem)

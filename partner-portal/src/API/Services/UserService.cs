@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
@@ -20,7 +21,9 @@ public record UserContext
     public string DisplayName { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-
+    public string IdentityProvider { get; set; }
+    public string Email { get; set; }
+    public string ExternalUserName { get; set; }
 }
 
 public record SearchContext
@@ -59,6 +62,9 @@ public class UserService : IUserService
             DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName),
             FirstName = user.FindFirstValue(UserClaimTypes.GivenName),
             LastName = user.FindFirstValue(UserClaimTypes.FamilyName),
+            IdentityProvider = user.FindFirstValue(UserClaimTypes.IdentityProvider),
+            Email = user.FindFirstValue(ClaimTypes.Email),
+            ExternalUserName = user.FindFirstValue(ClaimTypes.Upn),
         });
     }
 
@@ -70,7 +76,7 @@ public class UserService : IUserService
         var loginRequest = new PartnerPortalLoginRequest
         {
 
-            ExternalSystem = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
+            ExternalSystem = "azure-idir",//user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
             ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
             FirstName = user.FindFirstValue(UserClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
             LastName = user.FindFirstValue(UserClaimTypes.FamilyName) ?? user.FindFirstValue("last_name") ?? string.Empty,
@@ -83,7 +89,8 @@ public class UserService : IUserService
         if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
 
         var userProfile = searchResults.User.SingleOrDefault();
-        if (userProfile == null) throw new Exception($"User {loginResponse.UserId} not found");
+        if (userProfile == null) 
+         throw new Exception($"User {loginResponse.UserId} not found");
 
         var claims = new List<Claim>();
         claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));

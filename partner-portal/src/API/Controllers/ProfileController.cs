@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.IcbcAdapter.Client;
 using Rsbc.Dmf.PartnerPortal.Api.Services;
+using Rsbc.Dmf.PartnerPortal.Api.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +58,83 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             };
         }
 
+        /// <summary>
+        /// user registration which sets the user's profile email
+        /// </summary>
+        /// <param name="newEmail"></param>
+        /// <returns></returns>
+        [HttpPut("register")]
+        [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ActionName(nameof(Register))]
+        public async Task<ActionResult> Register([FromBody] UserRegistration userRegistration)
+        {
+            var profile = await _userService.GetCurrentUserContext();
+            if (profile == null)
+            {
+                return NotFound();
+            }
+            // Step 1 : Search for the contacts (Find with ID or names)
+
+            var userContactRequest = new GetUserContactRequest();
+            userContactRequest.ExternalSystemUserId = userContactRequest.ExternalSystemUserId;
+            var getContactReply = await _userManagerClient.GetUserContactAsync(userContactRequest);
+            if (getContactReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+            {
+                _logger.LogError($"{nameof(Register)} failed.\n {0}", getContactReply.ErrorDetail);
+                return StatusCode((int)HttpStatusCode.InternalServerError, getContactReply.ErrorDetail);
+            }
+
+            // Step 2: If contact is found link the contact with the login table
+            var request = new SetUserContactLoginRequest();
+            request.LoginId = profile.UserId;
+            request.ContactId = getContactReply.Contact.ContactId ?? string.Empty;
+            var setContactReply = await _userManagerClient.SetUserContactLoginAsync(request);
+            if (setContactReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+            {
+                _logger.LogError($"{nameof(Register)}.{nameof(UserManager.UserManagerClient.SetDriverLogin)} failed.\n {0}", setContactReply.ErrorDetail);
+                return StatusCode((int)HttpStatusCode.InternalServerError, setContactReply.ErrorDetail);
+            }
+
+
+            // Step 3: If contact does not Exists create contact
+
+            if (!setContactReply.HasContact)
+            {
+                var createContactRequest = new UserContactRequest();
+                createContactRequest.Contact.ExternalSystemUserId = profile.UserId;
+                createContactRequest.Contact.GivenName = profile.FirstName;
+                createContactRequest.Contact.SecondGivenName = userRegistration.SecondGivenName ?? string.Empty;
+                createContactRequest.Contact.ThirdGivenName =   userRegistration.ThirdGivenName ?? string.Empty;
+                createContactRequest.Contact.Surname = profile.LastName;
+                createContactRequest.Contact.AddressFirstLine = userRegistration.AddressFirstLine;
+                createContactRequest.Contact.AddressSecondLine = userRegistration.AddressSecondLine;
+                createContactRequest.Contact.AddressThirdLine = userRegistration.AddressThirdLine;
+                createContactRequest.Contact.City = userRegistration.City;
+                createContactRequest.Contact.Province = userRegistration.Province;
+                createContactRequest.Contact.Country = userRegistration.Country;
+                createContactRequest.Contact.PostalCode = userRegistration.PostalCode;
+                createContactRequest.Contact.PhoneNumber = userRegistration.PhoneNumber;
+                createContactRequest.Contact.CellPhoneNumber = userRegistration.CellPhoneNumber;
+                createContactRequest.Contact.EmailAddress = userRegistration.EmailAddress;
+
+                
+                var createContactReply = await _userManagerClient.CreateUserContactAsync(createContactRequest);
+                if (createContactReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+                {
+                    _logger.LogError($"{nameof(Register)} could not create Contact.");
+                    return StatusCode((int)HttpStatusCode.Unauthorized, "No Contact found.");
+                }
+
+            }
+            
+
+            return Ok();
+
+        }
+
         public record UserProfile
         {
             public string Id { get; set; }
@@ -65,7 +143,6 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string Email { get; set; }
-            //public IEnumerable<string> Roles { get; set; }
         }
 
     }
