@@ -1,28 +1,30 @@
 @if(hasActiveCase === true){
 <div>
+  @if(programArea !== 'Remedial'){
   <mat-card>
     <mat-card-content class="recentCaseContent">
       <div style="grid-area: A">
         <label>Case ID</label>
         @if(portal===PortalsEnum.DriverPortal){
-          <div>
-            <b>
-              <a>
-                <h3>{{ caseDetails?.idCode }}</h3>
-              </a>
-            </b>
-          </div>
-        }
-        @if(portal===PortalsEnum.PartnerPortal){
         <div>
           <b>
-            <a [routerLink]="['/caseSearch', caseDetails?.idCode]" routerLinkActive="active">
+            <a>
               <h3>{{ caseDetails?.idCode }}</h3>
             </a>
           </b>
         </div>
         }
-        
+        @if(portal===PortalsEnum.PartnerPortal){
+        <div>
+          <b>
+            <a [routerLink]="['/caseSearch', caseDetails?.idCode]" [queryParams]="{programArea: programArea}"
+              routerLinkActive="active">
+              <h3>{{ caseDetails?.idCode }}</h3>
+            </a>
+          </b>
+        </div>
+        }
+
       </div>
 
       <div style="grid-area: B">
@@ -54,21 +56,129 @@
       </div>
     </mat-card-content>
   </mat-card>
+  }
+
+  @if(programArea === 'Remedial'){
+  <mat-card [ngClass]="{open : caseDetails?.caseId && isExpanded[caseDetails?.caseId]}">
+    <mat-card-content class="remedialCaseContent">
+      <div style="text-align: center">
+        <mat-icon (click)="toggleIsExpandable(caseDetails?.caseId)" class="expandedIcon">
+          expand_circle_down
+        </mat-icon>
+      </div>
+      <div>
+        <label>Case ID</label>
+        <b>
+          <a [routerLink]="['/caseSearch', caseDetails?.idCode]" [queryParams]="{programArea: programArea}"
+            routerLinkActive="active">
+            <h3>{{ caseDetails?.idCode }}</h3>
+          </a>
+        </b>
+      </div>
+
+      <div style="display: flex; flex-direction: column">
+        <div class="case-details-border">&nbsp;</div>
+        <div>&nbsp;</div>
+      </div>
+      <div style="flex: 1">
+        <div class="caseDetailRow" style="display: flex; justify-content: space-between; gap: 20px;">
+          <div style="flex: 1;">
+            <label>Case Priority</label>
+            <div>
+              <b>{{caseDetails?.priority}}</b>
+            </div>
+          </div>
+
+          <div style="flex: 1;">
+            <label>Case Type</label>
+            <div>
+              <b>{{ caseDetails?.caseType }}</b>
+            </div>
+          </div>
+
+          <div style="flex: 1;">
+            <label>Decision Outcome</label>
+            <div>
+              <b>{{ caseDetails?.latestDecision }}</b>
+            </div>
+          </div>
+
+          <div style="flex: 1;">
+            <label>Decision Date</label>
+            <div>
+              <b>{{ caseDetails?.decisionDate }}</b>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="caseDetails.caseId && isExpanded?.[caseDetails?.caseId]">
+        <div class="caseDetailRow caseBorder" style="display: flex; justify-content: space-between; gap: 20px;">
+          <div style="flex: 1;">
+            <label> Rehab </label>
+            <div>
+              <b>{{ caseDetails?.isRehab }}</b>
+            </div>
+          </div>
+          <div style="flex: 1;">
+            <label>Rehab Activity</label>
+            <div>
+              <b>{{ caseDetails?.isRehab }}</b>
+            </div>
+          </div>
+          <div style="flex: 1;">
+            <label>Interlock</label>
+            <div>
+              <b>{{ caseDetails?.isInterlock }}</b>
+            </div>
+          </div>
+          <div style="flex: 1;">
+            <label>Opened Date</label>
+            <div>
+              <b>{{ caseDetails?.openedDate | date: "longDate"}}</b>
+            </div>
+          </div>
+        </div>
+
+        <div class="caseDetailRow caseBorder" style="display: flex; justify-content: space-between; gap: 20px;">
+          <div style="flex: 1;">
+            <label> Latest Case Event Date </label>
+            <div>
+              <b>{{ caseDetails?.lastActivityDate | date: "longDate" }}</b>
+            </div>
+          </div>
+          <div style="flex: 1;">
+            <label>Case Owner</label>
+            <div>
+              <b>{{caseDetails?.assigneeTitle}}</b>
+            </div>
+          </div>
+          <div style="flex: 1;">
+            <label></label>
+            <div>
+              <b></b>
+            </div>
+          </div>
+          <div style="flex: 1;">
+            <label></label>
+            <div>
+              <b></b>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+  }
 </div>
 
 <div>
-  <mat-stepper
-    labelPosition="bottom"
-    #stepper
-    [selectedIndex]="selectedIndex"
-    orientation="horizontal"
-  >
+  <mat-stepper labelPosition="bottom" #stepper [selectedIndex]="selectedIndex" orientation="horizontal">
     <mat-step state="circle">
-      <ng-template matStepLabel
-        >Opened:<br />{{
-          caseDetails?.openedDate | date : "longDate"
-        }}</ng-template
-      >
+      <ng-template matStepLabel>Opened:<br />{{
+        caseDetails?.openedDate | date : "longDate"
+        }}</ng-template>
     </mat-step>
     <mat-step state="circle">
       <ng-template matStepLabel>Open Pending Submission</ng-template>
@@ -100,10 +210,7 @@
 
 <div class="caseStatus">
   <mat-accordian>
-    <mat-expansion-panel
-      (opened)="panelOpenState = true"
-      (closed)="panelOpenState = false"
-    >
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
       <mat-expansion-panel-header class="panel-header">
         <mat-panel-title class="accordian-Title">
           Understanding Case Statuses
@@ -136,12 +243,11 @@
 }
 
 @if(hasActiveCase === false){
-  <div>
-    <mat-card>
-      <mat-card-content class="recentCaseContent">
-        <p>No active case exists for this driver</p>
-      </mat-card-content>
-    </mat-card>
-  </div>
+<div>
+  <mat-card>
+    <mat-card-content class="recentCaseContent">
+      <p>No active case exists for this driver</p>
+    </mat-card-content>
+  </mat-card>
+</div>
 }
-

@@ -49,13 +49,11 @@ z-index: 999;
 }
 
 .caseDetailRow {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: start;
-    gap: 150px;
     line-height: 32px;
     padding-bottom: 24px;
+    display: flex; 
+    justify-content: space-between; 
+    gap: 20px;
   }
   
 .closedCaseContent {
@@ -111,6 +109,13 @@ z-index: 999;
     border-top: 2px solid grey;
     padding-top: 20px;
     padding-bottom: 20px;
+  }
+
+  .disclaimer{
+  background-color: #f7d8da;
+  border-color: #eeaaad;
+  color: #712024;
+  padding: 24px;
   }
 
   @media only screen and (max-width: 896px) {

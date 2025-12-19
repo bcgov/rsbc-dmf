@@ -17,10 +17,10 @@ import { apiDriverDriverSessionGet$Json } from '../fn/driver/api-driver-driver-s
 import { ApiDriverDriverSessionGet$Json$Params } from '../fn/driver/api-driver-driver-session-get-json';
 import { apiDriverDriverSessionGet$Plain } from '../fn/driver/api-driver-driver-session-get-plain';
 import { ApiDriverDriverSessionGet$Plain$Params } from '../fn/driver/api-driver-driver-session-get-plain';
-import { apiDriverInfoDriverLicenceNumberGet$Json } from '../fn/driver/api-driver-info-driver-licence-number-get-json';
-import { ApiDriverInfoDriverLicenceNumberGet$Json$Params } from '../fn/driver/api-driver-info-driver-licence-number-get-json';
-import { apiDriverInfoDriverLicenceNumberGet$Plain } from '../fn/driver/api-driver-info-driver-licence-number-get-plain';
-import { ApiDriverInfoDriverLicenceNumberGet$Plain$Params } from '../fn/driver/api-driver-info-driver-licence-number-get-plain';
+import { apiDriverInfoDriverLicenceNumberSurCodeGet$Json } from '../fn/driver/api-driver-info-driver-licence-number-sur-code-get-json';
+import { ApiDriverInfoDriverLicenceNumberSurCodeGet$Json$Params } from '../fn/driver/api-driver-info-driver-licence-number-sur-code-get-json';
+import { apiDriverInfoDriverLicenceNumberSurCodeGet$Plain } from '../fn/driver/api-driver-info-driver-licence-number-sur-code-get-plain';
+import { ApiDriverInfoDriverLicenceNumberSurCodeGet$Plain$Params } from '../fn/driver/api-driver-info-driver-licence-number-sur-code-get-plain';
 import { Document } from '../models/document';
 import { Driver } from '../models/driver';
 import { UserContext } from '../models/user-context';
@@ -78,49 +78,49 @@ export class DriverService extends BaseService {
     );
   }
 
-  /** Path part for operation `apiDriverInfoDriverLicenceNumberGet()` */
-  static readonly ApiDriverInfoDriverLicenceNumberGetPath = '/api/Driver/info/{driverLicenceNumber}';
+  /** Path part for operation `apiDriverInfoDriverLicenceNumberSurCodeGet()` */
+  static readonly ApiDriverInfoDriverLicenceNumberSurCodeGetPath = '/api/Driver/info/{driverLicenceNumber}/{surCode}';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDriverInfoDriverLicenceNumberGet$Plain()` instead.
+   * To access only the response body, use `apiDriverInfoDriverLicenceNumberSurCodeGet$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverInfoDriverLicenceNumberGet$Plain$Response(params: ApiDriverInfoDriverLicenceNumberGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Driver>> {
-    return apiDriverInfoDriverLicenceNumberGet$Plain(this.http, this.rootUrl, params, context);
+  apiDriverInfoDriverLicenceNumberSurCodeGet$Plain$Response(params: ApiDriverInfoDriverLicenceNumberSurCodeGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Driver>> {
+    return apiDriverInfoDriverLicenceNumberSurCodeGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDriverInfoDriverLicenceNumberGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiDriverInfoDriverLicenceNumberSurCodeGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverInfoDriverLicenceNumberGet$Plain(params: ApiDriverInfoDriverLicenceNumberGet$Plain$Params, context?: HttpContext): Observable<Driver> {
-    return this.apiDriverInfoDriverLicenceNumberGet$Plain$Response(params, context).pipe(
+  apiDriverInfoDriverLicenceNumberSurCodeGet$Plain(params: ApiDriverInfoDriverLicenceNumberSurCodeGet$Plain$Params, context?: HttpContext): Observable<Driver> {
+    return this.apiDriverInfoDriverLicenceNumberSurCodeGet$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<Driver>): Driver => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDriverInfoDriverLicenceNumberGet$Json()` instead.
+   * To access only the response body, use `apiDriverInfoDriverLicenceNumberSurCodeGet$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverInfoDriverLicenceNumberGet$Json$Response(params: ApiDriverInfoDriverLicenceNumberGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Driver>> {
-    return apiDriverInfoDriverLicenceNumberGet$Json(this.http, this.rootUrl, params, context);
+  apiDriverInfoDriverLicenceNumberSurCodeGet$Json$Response(params: ApiDriverInfoDriverLicenceNumberSurCodeGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Driver>> {
+    return apiDriverInfoDriverLicenceNumberSurCodeGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDriverInfoDriverLicenceNumberGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `apiDriverInfoDriverLicenceNumberSurCodeGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverInfoDriverLicenceNumberGet$Json(params: ApiDriverInfoDriverLicenceNumberGet$Json$Params, context?: HttpContext): Observable<Driver> {
-    return this.apiDriverInfoDriverLicenceNumberGet$Json$Response(params, context).pipe(
+  apiDriverInfoDriverLicenceNumberSurCodeGet$Json(params: ApiDriverInfoDriverLicenceNumberSurCodeGet$Json$Params, context?: HttpContext): Observable<Driver> {
+    return this.apiDriverInfoDriverLicenceNumberSurCodeGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Driver>): Driver => r.body)
     );
   }

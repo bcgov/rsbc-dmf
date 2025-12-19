@@ -28,8 +28,8 @@ export class CaseManagementService {
   ) { }
 
   // Case
-  public getMostRecentCase() {
-    return this.casesService.apiCasesMostRecentGet$Json();
+  public getMostRecentCase(params: Parameters<CasesService['apiCasesMostRecentGet$Json']>[0]) {
+    return this.casesService.apiCasesMostRecentGet$Json(params);
   }
 
   public getClosedCases(
@@ -75,9 +75,9 @@ export class CaseManagementService {
 
   // Search 
   public searchByDriver(
-    params: Parameters<DriverService['apiDriverInfoDriverLicenceNumberGet$Json']>[0]
+    params: Parameters<DriverService['apiDriverInfoDriverLicenceNumberSurCodeGet$Json']>[0]
   ) {
-    return this.driverService.apiDriverInfoDriverLicenceNumberGet$Json(params);
+    return this.driverService.apiDriverInfoDriverLicenceNumberSurCodeGet$Json(params);
   }
 
 

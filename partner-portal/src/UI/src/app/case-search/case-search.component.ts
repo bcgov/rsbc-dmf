@@ -4,7 +4,7 @@ import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbar } from '@angular/material/toolbar';
 import { RecentCaseComponent, PortalsEnum, SharedSubmissionRequirementsComponent } from '@shared/core-ui';
 import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { CaseSearch } from '@app/shared/api/models';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -48,11 +48,13 @@ export class CaseSearchComponent implements OnInit{
   caseDetails: CaseSearch | null = null;
 
   PortalsEnum = PortalsEnum;
-  
+  programArea: string | null = this.route.snapshot.queryParams['programArea'];
+
   constructor(
 
     public caseManagementService: CaseManagementService,
     public apiConfiguration: ApiConfiguration,
+    public route: ActivatedRoute
   ) {}
     
   ngOnInit(): void {

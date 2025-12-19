@@ -7,8 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { MatToolbar } from '@angular/material/toolbar';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { MedicalDmerTypesComponent } from '../../app/definitions/medical-dmer-types/medical-dmer-types.component';
 import { RecentCaseComponent, CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, EligibleLicenseClassComponent, PortalsEnum } from '@shared/core-ui';
@@ -18,8 +17,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommentsComponent } from '@app/comments/comments.component';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
-import { UserServices } from '@app/shared/services/user.service';
-import { MatTabsModule } from '@angular/material/tabs';
+import { UserService } from '@app/shared/services/user.service';
+import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
 import { LettersToDriverComponent } from '@app/letters-to-driver/letters-to-driver.component';
 import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.component';
 import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
@@ -34,8 +33,6 @@ import { RemedialCaseDetailsComponent } from '@app/remedial-case-details/remedia
   standalone: true,
   imports: [
     MatCardModule,
-    MatToolbar,
-    RouterLink,
     MatExpansionModule,
     CaseStatusComponent,
     CaseTypeComponent,
@@ -46,7 +43,6 @@ import { RemedialCaseDetailsComponent } from '@app/remedial-case-details/remedia
     DatePipe,
     NgFor,
     NgIf,
-    CommentsComponent,
     MatTabsModule,
     LettersToDriverComponent,
     GetAssistanceComponent,
@@ -74,6 +70,7 @@ export class DriverSearchComponent implements OnInit {
 
   _closedCaseDetails: CaseDetail[] | null = [];
   driverLicenceNumber = this.route.snapshot.params['driverLicenceNumber'];
+  surcode = this.route.snapshot.queryParams['surcode'] || '';
 
    // Get Driver details
    driverDetails = this.userService.getCachedriver();
@@ -94,7 +91,7 @@ export class DriverSearchComponent implements OnInit {
 
   constructor(
      public caseManagementService: CaseManagementService,
-     private userService: UserServices,
+     private userService: UserService,
      private route: ActivatedRoute
      ) {}
 
@@ -110,7 +107,7 @@ export class DriverSearchComponent implements OnInit {
 
   getClosedCases(driverId: string) {
     this.caseManagementService
-      .getClosedCases({ driverId })
+      .getClosedCases({})
       .subscribe((closedCases: any) => {
         this.closedCaseDetails = closedCases;
         this.isLoading = false;
@@ -120,7 +117,8 @@ export class DriverSearchComponent implements OnInit {
 
   search() {
     this.caseManagementService
-      .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber })
+      .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber,
+        surCode: this.surcode })
       .subscribe({
         next: (driver) => {
           this.userService.setCacheDriver(driver);
@@ -128,13 +126,19 @@ export class DriverSearchComponent implements OnInit {
         },
         error: (error) => {
          
-          console.error('error', error);
+          console.error('Driver search error:', error);
         }
       });
   }
 
   toggleIsExpandable(id?: string | null) {
     if (id) this.isExpanded[id] = !this.isExpanded[id];
+  }
+
+  onTabChange(event: MatTabChangeEvent) {
+    if (event.index === 6) {
+      this.openCommentsDialog();
+    }
   }
 
   openCommentsDialog() {

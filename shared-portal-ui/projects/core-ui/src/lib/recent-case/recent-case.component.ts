@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 // import { CaseDetail } from '../shared/api/models';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper, MatStep, MatStepLabel, MatStepperIcon } from '@angular/material/stepper';
-import { DatePipe } from '@angular/common';
+import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
@@ -23,20 +23,22 @@ import{PortalsEnum} from '../app.model';
     ],
     standalone: true,
     imports: [
-        MatCard,
-        RouterLink,
-        MatCardContent,
-        MatStepper,
-        MatStep,
-        MatStepLabel,
-        MatStepperIcon,
-        MatIcon,
-        MatExpansionPanel,
-        MatExpansionPanelHeader,
-        MatExpansionPanelTitle,
-        DatePipe,
-        MatAccordion
-    ],
+    MatCard,
+    RouterLink,
+    MatCardContent,
+    MatStepper,
+    MatStep,
+    MatStepLabel,
+    MatStepperIcon,
+    MatIcon,
+    MatExpansionPanel,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    DatePipe,
+    MatAccordion,
+    NgClass,
+    NgIf
+],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RecentCaseComponent implements OnInit {
@@ -44,6 +46,8 @@ export class RecentCaseComponent implements OnInit {
 
   @Input() caseManagementService: any;
   @Input() portal!: PortalsEnum;
+  @Input() programArea: string | null = null;
+  isExpanded: Record<string, boolean> = {};
 
   PortalsEnum = PortalsEnum;
   hasActiveCase?: boolean;
@@ -78,7 +82,7 @@ export class RecentCaseComponent implements OnInit {
 
   public ngOnInit(): void {
     this.caseManagementService
-      .getMostRecentCase()
+      .getMostRecentCase({programArea: this.programArea})
       .subscribe((recentCase: any) => {
         this.caseDetails = recentCase;
         if (recentCase.status === CaseStageEnum.Opened) {
@@ -121,5 +125,9 @@ export class RecentCaseComponent implements OnInit {
       }
   
     });
+  }
+
+    toggleIsExpandable(id?: string | null) {
+    if (id) this.isExpanded[id] = !this.isExpanded[id];
   }
 }

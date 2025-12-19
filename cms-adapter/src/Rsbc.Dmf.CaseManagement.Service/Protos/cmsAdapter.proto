@@ -68,6 +68,8 @@ service CaseManager {
 
   rpc GetDriverById (DriverIdRequest) returns (GetDriversReply);
 
+  rpc GetDriverByIdAndSurCode (DriverRequest) returns (GetDriversReply);
+
   rpc GetLegacyDocument (LegacyDocumentRequest) returns (GetLegacyDocumentReply);
 
   // Get a token given a secret.
@@ -126,11 +128,14 @@ service CaseManager {
   // Update Non Comply documents
   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
 
+  // Remedial Case Details
+  rpc GetMostRecentRemedialCaseDetail (DriverIdRequest) returns (GetCaseDetailReply);
+
   // Get Rehab Trigger by driver license number
   rpc GetRehabTriggerDetails(DriverIdRequest) returns (RehabTriggerReply);
 
-   // Get Ignition Interlock by driver license number
-   rpc GetIgnitionInterlockDetails(DriverIdRequest) returns (IgnitionInterlockReply);
+  // Get Ignition Interlock by driver license number
+  rpc GetIgnitionInterlockDetails(DriverIdRequest) returns (IgnitionInterlockReply);
 }
 
 // sync with EntityState enum in Rsbc.Dmf.CaseManagement\Dynamics\DynamicsContext.cs
@@ -161,10 +166,20 @@ message UpdateDriverRequest{
 
 message DriverIdRequest {
     string id = 1;
+    CaseFilterRequest caseFilter = 2;
+}
+
+message CaseFilterRequest {
+    string programArea = 1;
 }
 
 message DriverLicenseRequest {
 	string driverLicenseNumber = 1;
+}
+
+message DriverRequest {
+    string driverLicenseNumber = 1;
+    string surCode = 2;
 }
 
 message CaseIdRequest {
@@ -174,6 +189,7 @@ message CaseIdRequest {
 message CaseStatusRequest {
 	string driverId = 1;
 	EntityState status = 2;
+    CaseFilterRequest caseFilter = 3;
 }
 
 enum OriginRestrictions {
@@ -300,6 +316,11 @@ message CaseDetail {
     google.protobuf.Timestamp latestComplianceDate = 24;
     repeated MedicalConditionItem medicalConditions = 25;
     bool ShowOnPortals = 26;
+    bool isRehab = 27;
+    bool isInterlock = 28;
+    string priority = 29;
+
+
 }
 
 message CreateStatusReply {	

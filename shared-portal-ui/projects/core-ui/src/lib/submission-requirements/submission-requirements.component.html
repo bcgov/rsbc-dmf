@@ -151,6 +151,10 @@
       </div>
     }
   </div>
+
+
+
+ @if (programArea !== 'Remedial') { 
   <div>
     <div>
       <mat-card *ngFor="let document of submissionRequirementDocuments">
@@ -207,6 +211,7 @@
     Showing {{ submissionRequirementDocuments.length }} of
     {{ submissionRequirementDocuments.length }} records
   </div>
+}
 
 </div>
 </div>

@@ -64,12 +64,12 @@ public class DriverController : Controller
         }
     }
 
-    [HttpGet("info/{driverLicenceNumber}")]
+    [HttpGet("info/{driverLicenceNumber}/{surCode}")]
     [ProducesResponseType(typeof(Rsbc.Dmf.PartnerPortal.Api.ViewModels.Driver), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ActionName(nameof(GetHistory))]
-    public async Task<ActionResult<Rsbc.Dmf.PartnerPortal.Api.ViewModels.Driver>> GetHistory([FromRoute]string driverLicenceNumber)
+    public async Task<ActionResult<Rsbc.Dmf.PartnerPortal.Api.ViewModels.Driver>> GetHistory([FromRoute]string driverLicenceNumber, [FromRoute] string surCode)
     {
         try
         {
@@ -85,8 +85,8 @@ public class DriverController : Controller
             result.DriverLicenseNumber = driverLicenceNumber;
 
             // get the driver id
-            var driverLicenceRequest = new DriverLicenseRequest { DriverLicenseNumber = driverLicenceNumber };
-            var getDriverReply = _caseManagerClient.GetDriver(driverLicenceRequest);
+            var driverLicenceRequest = new DriverRequest { DriverLicenseNumber = driverLicenceNumber, SurCode = surCode };
+            var getDriverReply = _caseManagerClient.GetDriverByIdAndSurCode(driverLicenceRequest);
             if (getDriverReply.ResultStatus != Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success || getDriverReply.Items?.Count == 0)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, getDriverReply.ErrorDetail ?? $"{nameof(GetHistory)} failed to get driver id.");
