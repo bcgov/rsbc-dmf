@@ -4,7 +4,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
+import { ProfileService } from '@app/shared/api/services';
 
 @Component({
   selector: 'app-user-access-request',
@@ -14,6 +16,7 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     CommonModule
   ],
@@ -23,7 +26,12 @@ import { CommonModule } from '@angular/common';
 export class UserAccessRequestComponent {
   userAccessForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(
+    private formBuilder: FormBuilder,
+    private profileService: ProfileService
+    ,
+    private snackBar: MatSnackBar
+  ) {
     this.userAccessForm = this.formBuilder.group({
       givenName: ['', [Validators.required]],
       secondGivenName: [''], // Optional field
@@ -46,6 +54,18 @@ export class UserAccessRequestComponent {
     if (this.userAccessForm.valid) {
       console.log('Form Submitted:', this.userAccessForm.value);
       // Add your submit logic here
+      this.profileService.apiProfileRegisterPut$Json({ body: this.userAccessForm.value }).subscribe({
+        next: (response) => {
+          console.log('User access request submitted successfully:', response);
+          // show a brief confirmation to the user
+          this.snackBar.open('User access request submitted successfully', 'Close', { duration: 5000 });
+        },
+        error: (error) => {
+          console.error('Error submitting user access request:', error);
+          // optionally surface the error to the user
+          this.snackBar.open('Error submitting user access request', 'Close', { duration: 5000 });
+        }
+      });
     } else {
       console.log('Form is invalid');
       this.markFormGroupTouched();
