@@ -18,7 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommentsComponent } from '@app/comments/comments.component';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
-import { UserService } from '@app/shared/services/user.service';
+import { UserServices } from '@app/shared/services/user.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LettersToDriverComponent } from '@app/letters-to-driver/letters-to-driver.component';
 import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.component';
@@ -94,7 +94,7 @@ export class DriverSearchComponent implements OnInit {
 
   constructor(
      public caseManagementService: CaseManagementService,
-     private userService: UserService,
+     private userService: UserServices,
      private route: ActivatedRoute
      ) {}
 

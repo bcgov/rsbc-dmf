@@ -1,0 +1,377 @@
+<div class="container">
+  <div class="admin">
+    <mat-card>
+      <mat-card-content>
+        <div
+          class="list user-details card-header"
+          style="min-width: 720px; flex-basis: 60%"
+        >
+          <h2>User Details</h2>
+          <button
+            mat-flat-button
+            (click)="onBackToDashboardButtonClicked()"
+            class="primaryButton"
+          >
+            Back To Dashboard
+          </button>
+        </div>
+        <div class="user-details-container">
+          <div class="user-details-row">
+            <div class="admin-details-input">
+              <label class="form-label">DFWeb User ID</label>
+              <div>
+                {{ user.dfWebuserId }}
+              </div>
+            </div>
+            <!-- <div class="admin-details-input">
+              <label class="form-label">User ID</label>
+              <div>
+                {{ user.userId }}
+              </div>
+            </div> -->
+            <div class="admin-details-input">
+              <label class="form-label">Directory</label>
+              <div>
+                {{ user.domain }}
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Effective Date</label>
+              <div>
+                {{ formatDate(user.effectiveDate) }}
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Expiry Date</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input
+                    matInput
+                    [matDatepicker]="picker"
+                    name="expiryDate"
+                    [(ngModel)]="user.expiryDate"
+                  />
+                  <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="user-details-row">
+            <div class="admin-details-input">
+              <label class="form-label">Given Name</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input
+                    matInput
+                    name="givenName"
+                    [(ngModel)]="user.firstName"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Second Given Name</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input
+                    matInput
+                    name="secondGivenName"
+                    [(ngModel)]="user.secondGivenName"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Third Given Name</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input
+                    matInput
+                    name="thirdGivenName"
+                    [(ngModel)]="user.thirdGivenName"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Surname</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input matInput name="surname" [(ngModel)]="user.lastName" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="list user-details"
+          style="min-width: 720px; flex-basis: 60%"
+        >
+          <h2>Contact Information</h2>
+        </div>
+        <div class="user-details-container">
+          <div class="user-details-row">
+            <div class="admin-details-input">
+              <label class="form-label">Address First Line</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input
+                    matInput
+                    name="AddressFirstLine"
+                    [(ngModel)]="user.addressLine1"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Address Second Line</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input
+                    matInput
+                    name="AddressSecondLine"
+                    [(ngModel)]="user.addressLine2"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Address Third Line</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input
+                    matInput
+                    name="AddressThirdLine"
+                    [(ngModel)]="user.addressLine3"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">City</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input matInput name="City" [(ngModel)]="user.city" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Province</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input matInput name="Province" [(ngModel)]="user.province" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="user-details-row">
+            <div class="admin-details-input">
+              <label class="form-label">Country</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input matInput name="Country" [(ngModel)]="user.country" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Postal Code</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input matInput name="PostCode" [(ngModel)]="user.postCode" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Phone Number</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input matInput name="Phone" [(ngModel)]="user.phoneNumber" />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Cell Phone Number</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input
+                    matInput
+                    name="CellPhone"
+                    [(ngModel)]="user.cellNumber"
+                  />
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="admin-details-input">
+              <label class="form-label">Email</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input matInput name="email" [(ngModel)]="user.email" />
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="submitButtonRow">
+          <div class="submitButtonContainer">
+            <button
+              mat-flat-button
+              (click)="updateUser()"
+              class="primaryButton"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-content>
+        <div>
+          <div
+            class="list user-details"
+            style="min-width: 600px; flex-basis: 60%"
+          >
+            <h2>User Roles</h2>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table
+            mat-table
+            [dataSource]="user.roles ?? []"
+            class="mat-elevation-z8 table-padding"
+            style="width: 100%; table-layout: fixed"
+          >
+            <ng-container matColumnDef="roleId">
+              <th mat-header-cell *matHeaderCellDef>Role Id</th>
+              <td mat-cell *matCellDef="let element">
+                <b>{{ element.roleID }}</b>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let element">
+                <b>{{ element.name }}</b>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let element">
+                <button
+                  mat-flat-button
+                  class="details-button"
+                  (click)="updateRoles(element, false)"
+                >
+                  Remove
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="xsStatusColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: xsStatusColumns"></tr>
+          </table>
+        </div>
+        <div>
+          <div
+            class="list user-details"
+            style="min-width: 600px; flex-basis: 60%"
+          >
+            <h2>Administer User Roles</h2>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table
+            mat-table
+            [dataSource]="unassignedAdminRoles"
+            class="mat-elevation-z8 table-padding"
+            style="width: 600px"
+          >
+            <ng-container matColumnDef="roleId">
+              <th mat-header-cell *matHeaderCellDef>Role Id</th>
+              <td mat-cell *matCellDef="let element">
+                <b>{{ element.roleID }}</b>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let element">
+                <b>{{ element.name }}</b>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let element">
+                <button
+                  mat-flat-button
+                  class="details-button"
+                  (click)="updateRoles(element, true)"
+                >
+                  Add
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="xsStatusColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: xsStatusColumns"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-content>
+        <div>
+          <div
+            class="list user-details"
+            style="min-width: 600px; flex-basis: 60%"
+          >
+            <h2>Audit Details</h2>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table
+            mat-table
+            [dataSource]="user.auditDetails ?? []"
+            class="mat-elevation-z8 table-padding"
+          >
+            <ng-container matColumnDef="entryId">
+              <th mat-header-cell *matHeaderCellDef>Entry Id</th>
+              <td mat-cell *matCellDef="let element">
+                <b>{{ element.entryId }}</b>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="entryDate">
+              <th mat-header-cell *matHeaderCellDef>Entry Date</th>
+              <td mat-cell *matCellDef="let element">
+                <b>{{ formatDate(element.entryDate) }}</b>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef>Description</th>
+              <td mat-cell *matCellDef="let element">
+                <b>{{ element.description }}</b>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="auditDetailColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: auditDetailColumns"></tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.4)"
+  size="medium"
+  color="#fff"
+  type="ball-clip-rotate"
+  [fullScreen]="true"
+  name="main"
+>
+</ngx-spinner>

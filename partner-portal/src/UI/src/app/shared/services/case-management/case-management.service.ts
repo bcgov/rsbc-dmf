@@ -7,6 +7,7 @@ import {
   DocumentTypeService,
   DriverService,
   RemedialService,
+  UserService
   //ProfileService,
 } from '../../api/services';
 
@@ -22,7 +23,8 @@ export class CaseManagementService {
     private documentTypeService: DocumentTypeService,
     private callbackService: CallbackService,
     private commentsService: CommentsService,
-    private remedialService: RemedialService
+    private remedialService: RemedialService,
+    private userServie: UserService
   ) { }
 
   // Case
@@ -112,5 +114,31 @@ export class CaseManagementService {
   ) {
     return this.remedialService.apiRemedialGetRehabTriggersGet$Json(params);
   }
-  
+
+
+  //User Service
+
+    public getUsers(
+    params: Parameters<UserService['apiUserGetUsersPost$Json']>[0]
+  ) {
+    return this.userServie. apiUserGetUsersPost$Json(params)
+  }
+
+  public updateUser(
+    params: Parameters<UserService['apiUserUpdateUserPost$Json']>[0]
+  ) {
+    return this.userServie.apiUserUpdateUserPost$Json(params)
+  }
+
+    public getContactRoles(
+    params: Parameters<UserService['apiUserGetContactRolesGet$Json']>[0]
+  ) {
+    return this.userServie.apiUserGetContactRolesGet$Json(params)
+  }
+
+      public updateContactRoles(
+    params: Parameters<UserService['apiUserUpdateContactRolesPost']>[0]
+  ) {
+    return this.userServie.apiUserUpdateContactRolesPost(params)
+  }
 }

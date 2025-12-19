@@ -3,13 +3,17 @@ import { DriverService } from '../api/services';
 import { Driver, UserContext } from '../api/models';
 import { Observable } from 'rxjs';
 import { SESSION_STORAGE_KEYS } from '@app/app.model';
+import {
+  UserService
+  //ProfileService,
+} from '../api/services';
 //import { ProfileService } from '../api/services';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
-  constructor(private driverService: DriverService) { }
+export class UserServices {
+  constructor(private driverService: DriverService, private userService: UserService) { }
 
   getUserId(): string {
     return this.getCachedriver().id as string;
@@ -30,5 +34,8 @@ export class UserService {
     sessionStorage.setItem(SESSION_STORAGE_KEYS.DRIVER, JSON.stringify(driver));
   }
 
+  public getCurrentLoginDetails(): Observable<string[]>{
+    return this.userService.apiUserGetCurrentLoginDetailsGet$Json();
+  }
 
 }

@@ -10,6 +10,8 @@ import { ApiModule } from '@app/shared/api/api.module';
 import { environment } from './environments/environment';
 import { BearerTokenInterceptor } from '@shared/core-ui';
 import { provideKeycloak } from './app/modules/keycloak/keycloak.provider';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -33,5 +35,8 @@ bootstrapApplication(AppComponent, {
       },
       deps: [PlatformLocation],
     },
+    provideMomentDateAdapter()
   ],
 }).catch((err) => console.error(err));
+
+

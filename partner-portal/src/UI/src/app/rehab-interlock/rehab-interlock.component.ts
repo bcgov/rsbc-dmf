@@ -5,7 +5,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { IgnitionInterlock, RehabTrigger } from '@app/shared/api/models';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
-import { UserService } from '@app/shared/services/user.service';
+import { UserServices } from '@app/shared/services/user.service';
 
 @Component({
   selector: 'app-rehab-interlock',
@@ -21,7 +21,7 @@ export class RehabInterlockComponent implements OnInit   {
 
   constructor(
     private caseManagementService: CaseManagementService,
-    private userService: UserService) { }
+    private userService: UserServices) { }
 
   toggleIsExpandable(id?: string | null) {
     if (id) this.isExpanded[id] = !this.isExpanded[id];

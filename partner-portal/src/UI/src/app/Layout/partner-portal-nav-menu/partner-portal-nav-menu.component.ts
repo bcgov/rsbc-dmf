@@ -1,12 +1,24 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { UserServices } from '@app/shared/services/user.service';
+import { AdminAuthGuard } from '@app/modules/admin/admin.guard';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-partner-portal-nav-menu',
   standalone: true,
-  imports: [MatToolbarModule, RouterLink],
+  imports: [MatToolbarModule, RouterLink, CommonModule],
   templateUrl: './partner-portal-nav-menu.component.html',
   styleUrl: './partner-portal-nav-menu.component.scss',
 })
-export class PartnerPortalNavMenuComponent {}
+export class PartnerPortalNavMenuComponent {
+  constructor(public authService: AdminAuthGuard) {}
+  hideAdminTab: boolean = true;
+
+  ngOnInit() {
+    this.authService.hasAdminAccess().then((hasAccess) => {
+      this.hideAdminTab = !hasAccess;
+    });
+  }
+}

@@ -5,7 +5,7 @@ import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import { Driver, UserContext } from '@app/shared/api/models';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
-import { UserService } from '@app/shared/services/user.service';
+import { UserServices } from '@app/shared/services/user.service';
 
 @Component({
   selector: 'app-driver-details',
@@ -25,7 +25,7 @@ export class DriverDetailsComponent {
   xsStatusColumns: string[] = ['expandedStatus', 'newExpandedStatus'];
   xsStatusDataSource: any[] = [];
   constructor(
-    private userService: UserService,
+    private userService: UserServices,
     private caseManagementService: CaseManagementService,
     private route: ActivatedRoute) { }
 

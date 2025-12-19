@@ -14,6 +14,7 @@ namespace Rsbc.Dmf.CaseManagement
             services.AddTransient<ICaseManager, CaseManager>();
             services.AddTransient<ICssManager, CssManager>();
             services.AddTransient<IUserManager, UserManager>();            
+            services.AddTransient<IPortalPartnerUserManager, PortalPartnerUserManager>();            
             services.AddTransient<IDocumentManager, DocumentManager>();
             services.AddTransient<IDocumentTypeManager, DocumentTypeManager>();
             return services;

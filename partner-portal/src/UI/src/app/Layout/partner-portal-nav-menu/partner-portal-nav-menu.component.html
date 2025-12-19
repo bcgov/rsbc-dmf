@@ -5,6 +5,9 @@
         <div>
           <a routerLinkActive="active" [routerLink]="'/search'">Search</a>
         </div>
+        <div>
+          <a routerLinkActive="active" *ngIf="!hideAdminTab" [routerLink]="'/admin'">User Administration</a>
+        </div>
         <div class="gethelp">
           <div>
             <a routerLinkActive="active" [routerLink]="'/getHelp'">Get Assistance</a>
