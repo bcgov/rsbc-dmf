@@ -27,19 +27,19 @@ export class AppComponent implements OnInit
   ) {}
   ngOnInit() {
 
-    this.profileService.apiProfileCurrentGet$Json().subscribe({
-      next: (profile) => {
-        console.info('User profile loaded:', profile);
-      },
-      error: (error) => {
-        console.error('Error loading user profile:', error);
-         if (error && error.status === 400) {
-          // Handle unauthorized access by redirecting to the User Access Request page
-          console.warn('Unauthorized access - redirecting to User Access Request page.');
-          this.router.navigate(['/userAccess']);
-        }
-      }
-    });
+    // this.profileService.apiProfileCurrentGet$Json().subscribe({
+    //   next: (profile) => {
+    //     console.info('User profile loaded:', profile);
+    //   },
+    //   error: (error) => {
+    //     console.error('Error loading user profile:', error);
+    //      if (error && error.status === 400) {
+    //       // Handle unauthorized access by redirecting to the User Access Request page
+    //       console.warn('Unauthorized access - redirecting to User Access Request page.');
+    //       this.router.navigate(['/userAccess']);
+    //     }
+    //   }
+    // });
       
     console.info('AppComponent initialization completed.');
   }

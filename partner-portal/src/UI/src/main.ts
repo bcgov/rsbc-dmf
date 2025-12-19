@@ -10,6 +10,7 @@ import { ApiModule } from '@app/shared/api/api.module';
 import { environment } from './environments/environment';
 import { BearerTokenInterceptor } from '@shared/core-ui';
 import { provideKeycloak } from './app/modules/keycloak/keycloak.provider';
+import { AuthGuard } from '@app/modules/keycloak/keycloak.guard';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -33,5 +34,6 @@ bootstrapApplication(AppComponent, {
       },
       deps: [PlatformLocation],
     },
+     AuthGuard
   ],
 }).catch((err) => console.error(err));

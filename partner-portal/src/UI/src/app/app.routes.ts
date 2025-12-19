@@ -19,7 +19,6 @@ export const routes: Routes = [
     children: [
       { path: 'search', component: SearchComponent },
       { path: 'remedial', component: RemedialComponent },
-       { path: 'userAccess', component: UserAccessRequestComponent },
       { path: 'driverSearch/:driverLicenceNumber', component: DriverSearchComponent },
       { path: 'assistDriver', component: AssistDriverComponent },
       { path: 'submissionHistory', component: SubmissionHistoryComponent },
@@ -29,4 +28,5 @@ export const routes: Routes = [
       { path: 'driverDetails', component: DriverDetailsComponent}
     ],
   },
+      { path: 'userAccess', component: UserAccessRequestComponent },
 ];
