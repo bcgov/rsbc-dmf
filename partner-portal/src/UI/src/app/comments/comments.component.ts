@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
-import { UserServices } from '@app/shared/services/user.service';
+import { UserService } from '@app/shared/services/user.service';
 import { Comment } from '@app/shared/api/models';
 import { CommentOrigin } from '@app/app.model';
 import { AddCommentsComponent } from './add-comments/add-comments.component';
@@ -47,7 +47,7 @@ export class CommentsComponent implements OnInit {
    constructor(
     private dialogRef: MatDialogRef<CommentsComponent>,
     private caseManagementService: CaseManagementService,
-    private userService: UserServices
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {

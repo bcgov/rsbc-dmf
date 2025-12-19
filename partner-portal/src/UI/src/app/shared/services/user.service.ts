@@ -4,7 +4,7 @@ import { Driver, UserContext } from '../api/models';
 import { Observable } from 'rxjs';
 import { SESSION_STORAGE_KEYS } from '@app/app.model';
 import {
-  UserService
+  PortalUserService
   //ProfileService,
 } from '../api/services';
 //import { ProfileService } from '../api/services';
@@ -12,8 +12,8 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-export class UserServices {
-  constructor(private driverService: DriverService, private userService: UserService) { }
+export class UserService {
+  constructor(private driverService: DriverService, private userService: PortalUserService) { }
 
   getUserId(): string {
     return this.getCachedriver().id as string;
@@ -35,7 +35,7 @@ export class UserServices {
   }
 
   public getCurrentLoginDetails(): Observable<string[]>{
-    return this.userService.apiUserGetCurrentLoginDetailsGet$Json();
+    return this.userService.apiPortalUserGetCurrentLoginDetailsGet$Json();
   }
 
 }

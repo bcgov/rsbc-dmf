@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
-import { UserServices } from '../shared/services/user.service';
+import { UserService } from '../shared/services/user.service';
 import { SharedGetAssistanceComponent } from '@shared/core-ui';
 
 
@@ -17,7 +17,7 @@ import { SharedGetAssistanceComponent } from '@shared/core-ui';
 export class GetAssistanceComponent  {
   constructor(
     public caseManagementService: CaseManagementService,
-    public userService: UserServices,
+    public userService: UserService,
   ) {}
 
 }

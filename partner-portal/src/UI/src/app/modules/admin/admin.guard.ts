@@ -6,7 +6,7 @@ import {
   UrlTree,
   Router,
 } from '@angular/router';
-import { UserServices } from '@app/shared/services/user.service';
+import { UserService } from '@app/shared/services/user.service';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable({
@@ -15,7 +15,7 @@ import { firstValueFrom } from 'rxjs';
 export class AdminAuthGuard implements CanActivate {
   constructor(
     private router: Router,
-    private userService: UserServices,
+    private userService: UserService,
   ) {}
 
   async canActivate(

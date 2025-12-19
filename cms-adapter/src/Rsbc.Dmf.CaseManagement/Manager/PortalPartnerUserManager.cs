@@ -12,7 +12,7 @@ namespace Rsbc.Dmf.CaseManagement
 {
     public interface IPortalPartnerUserManager
     {
-        Task<IEnumerable<PortalUser>> SearchSystemUsers(SearchUsersRequest request);
+        Task<IEnumerable<PortalUser>> SearchSystemUsers(SearchPortalPatnerUsersRequest request);
         Task UpdateContact(PortalUser contact);
         Task<IEnumerable<UserRoles>> GetContactRoles();
         Task AddContactRole(string roleId, string contactId, string modifiedBy);
@@ -92,7 +92,7 @@ namespace Rsbc.Dmf.CaseManagement
             this.dynamicsContext = dynamicsContext;
         }
 
-        public async Task<IEnumerable<PortalUser>> SearchSystemUsers(SearchUsersRequest request)
+        public async Task<IEnumerable<PortalUser>> SearchSystemUsers(SearchPortalPatnerUsersRequest request)
         {
             try
             {
@@ -385,7 +385,7 @@ namespace Rsbc.Dmf.CaseManagement
                 result.Add(auditDetail);
             }
 
-            if (contactToUpdate.bcgov_expirydate != contact.ExpiryDate)
+            if (contactToUpdate.bcgov_expirydate !=null && (contactToUpdate.bcgov_expirydate != contact.ExpiryDate))
             {
                 var auditDetail = new bcgov_portalauditdetails
                 {

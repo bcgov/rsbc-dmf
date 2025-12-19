@@ -79,8 +79,8 @@ export class AdminDetailsComponent {
   }
 
   updateUser() {
-    this.caseManagementService.updateUser({ body: this.user }).subscribe({
-      next: (users) => {
+    this.caseManagementService.updatePortalUser({ body: this.user }).subscribe({
+      next: () => {
         this._snackBar.open('Successfully Update User Info', 'Close', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -88,7 +88,7 @@ export class AdminDetailsComponent {
           panelClass: ['success-snackbar'],
         });
       },
-      error: (error) => {
+      error: () => {
         this.noResults = true;
         this._snackBar.open('Error Updating User Info', 'Close', {
           horizontalPosition: 'center',

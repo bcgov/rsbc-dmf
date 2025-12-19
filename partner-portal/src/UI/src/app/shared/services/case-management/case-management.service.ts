@@ -6,8 +6,8 @@ import {
   DocumentService,
   DocumentTypeService,
   DriverService,
+  PortalUserService,
   RemedialService,
-  UserService
   //ProfileService,
 } from '../../api/services';
 
@@ -24,7 +24,7 @@ export class CaseManagementService {
     private callbackService: CallbackService,
     private commentsService: CommentsService,
     private remedialService: RemedialService,
-    private userServie: UserService
+    private portalUserService: PortalUserService
   ) { }
 
   // Case
@@ -119,26 +119,26 @@ export class CaseManagementService {
   //User Service
 
     public getUsers(
-    params: Parameters<UserService['apiUserGetUsersPost$Json']>[0]
+    params: Parameters<PortalUserService['apiPortalUserGetUsersPost$Json']>[0]
   ) {
-    return this.userServie. apiUserGetUsersPost$Json(params)
+    return this.portalUserService.apiPortalUserGetUsersPost$Json(params)
   }
 
-  public updateUser(
-    params: Parameters<UserService['apiUserUpdateUserPost$Json']>[0]
+  public updatePortalUser(
+    params: Parameters<PortalUserService['apiPortalUserUpdateUserPost$Json']>[0]
   ) {
-    return this.userServie.apiUserUpdateUserPost$Json(params)
+    return this.portalUserService.apiPortalUserUpdateUserPost$Json(params)
   }
 
     public getContactRoles(
-    params: Parameters<UserService['apiUserGetContactRolesGet$Json']>[0]
+    params: Parameters<PortalUserService['apiPortalUserGetContactRolesGet$Json']>[0]
   ) {
-    return this.userServie.apiUserGetContactRolesGet$Json(params)
+    return this.portalUserService.apiPortalUserGetContactRolesGet$Json(params)
   }
 
       public updateContactRoles(
-    params: Parameters<UserService['apiUserUpdateContactRolesPost']>[0]
+    params: Parameters<PortalUserService['apiPortalUserUpdateContactRolesPost']>[0]
   ) {
-    return this.userServie.apiUserUpdateContactRolesPost(params)
+    return this.portalUserService.apiPortalUserUpdateContactRolesPost(params)
   }
 }

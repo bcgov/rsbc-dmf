@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { CaseSearch } from '@app/shared/api/models';
 import { DriverService } from '@app/shared/api/services';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
-import { UserServices } from '@app/shared/services/user.service';
+import { UserService } from '@app/shared/services/user.service';
 
 @Component({
   selector: 'app-search',
@@ -36,7 +36,7 @@ export class SearchComponent {
   constructor(
     private caseManagementService: CaseManagementService,
     private router: Router,
-    private userService: UserServices
+    private userService: UserService
   ) { }
 
   search() {

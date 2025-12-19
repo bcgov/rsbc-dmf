@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { UserServices } from '@app/shared/services/user.service';
+import { UserService } from '@app/shared/services/user.service';
 import { AdminAuthGuard } from '@app/modules/admin/admin.guard';
 import { CommonModule } from '@angular/common';
 

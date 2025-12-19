@@ -26,7 +26,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
         {
             try
             {
-                var users = (await _userManager.SearchSystemUsers(new SearchUsersRequest
+                var users = (await _userManager.SearchSystemUsers(new SearchPortalPatnerUsersRequest
                 {
                     FirstName = request.FirstName.Trim(),
                     LastName = request.LastName.Trim(),

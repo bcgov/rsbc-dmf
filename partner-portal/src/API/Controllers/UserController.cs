@@ -13,7 +13,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController: Controller
+    public class PortalUserController: Controller
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly PortalPartnerUserManager.PortalPartnerUserManagerClient _portalPartnerUserManagerClient;
@@ -21,10 +21,10 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        private readonly ILogger<UserController> _logger;
+        private readonly ILogger<PortalUserController> _logger;
 
 
-        public UserController(
+        public PortalUserController(
             IConfiguration configuration,
             CaseManager.CaseManagerClient cmsAdapterClient,
             UserManager.UserManagerClient userManagerClient,
@@ -33,7 +33,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             IMapper mapper,
             ILoggerFactory loggerFactory,
             ICachedIcbcAdapterClient icbcAdapterClient,
-            ILogger<UserController> logger,
+            ILogger<PortalUserController> logger,
             PortalPartnerUserManager.PortalPartnerUserManagerClient portalPartnerUserManagerClient
         )
         {
