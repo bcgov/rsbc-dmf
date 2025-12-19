@@ -9,6 +9,9 @@ import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.
 import { GetHelpComponent } from './get-help/get-help.component';
 import { AuthGuard } from './modules/keycloak/keycloak.guard';
 import { DriverDetailsComponent } from './driver-details/driver-details.component';
+import { AdminComponent } from './admin/admin.component';
+import { AdminDetailsComponent } from './admin/admin-details/admin-details.component';
+import { AdminAuthGuard } from './modules/admin/admin.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'search', pathMatch: 'full' },
@@ -18,13 +21,21 @@ export const routes: Routes = [
     children: [
       { path: 'search', component: SearchComponent },
       { path: 'remedial', component: RemedialComponent },
-      { path: 'driverSearch/:driverLicenceNumber', component: DriverSearchComponent },
+      {
+        path: 'driverSearch/:driverLicenceNumber',
+        component: DriverSearchComponent,
+      },
       { path: 'assistDriver', component: AssistDriverComponent },
       { path: 'submissionHistory', component: SubmissionHistoryComponent },
       { path: 'letterToDriver', component: LettersToDriverComponent },
       { path: 'caseSearch/:caseId', component: CaseSearchComponent },
-      { path: 'getHelp', component: GetHelpComponent},
-      { path: 'driverDetails', component: DriverDetailsComponent}
+      { path: 'getHelp', component: GetHelpComponent },
+      { path: 'driverDetails', component: DriverDetailsComponent },
     ],
+  },
+  {
+    path: '',
+    canActivate: [AdminAuthGuard, AuthGuard],
+    children: [{ path: 'admin', component: AdminComponent }],
   },
 ];

@@ -41,6 +41,7 @@ namespace Rsbc.Dmf.CaseManagement.Client
                     // add the service without authentication.
                     services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
                     services.AddTransient(_ => new UserManager.UserManagerClient(channel));
+                    services.AddTransient(_ => new PortalPartnerUserManager.PortalPartnerUserManagerClient(channel));
                     services.AddTransient(_ => new DocumentManager.DocumentManagerClient(channel));
                     services.AddTransient(_ => new CallbackManager.CallbackManagerClient(channel));
                     services.AddTransient(_ => new CommentManager.CommentManagerClient(channel));
@@ -60,6 +61,7 @@ namespace Rsbc.Dmf.CaseManagement.Client
 
                         services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
                         services.AddTransient(_ => new UserManager.UserManagerClient(channel));
+                        services.AddTransient(_ => new PortalPartnerUserManager.PortalPartnerUserManagerClient(channel));
                         services.AddTransient(_ => new DocumentManager.DocumentManagerClient(channel));
                         services.AddTransient(_ => new CallbackManager.CallbackManagerClient(channel));
                         services.AddTransient(_ => new CommentManager.CommentManagerClient(channel));

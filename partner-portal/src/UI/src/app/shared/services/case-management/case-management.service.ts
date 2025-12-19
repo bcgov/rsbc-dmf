@@ -6,6 +6,7 @@ import {
   DocumentService,
   DocumentTypeService,
   DriverService,
+  PortalUserService,
   RemedialService,
   //ProfileService,
 } from '../../api/services';
@@ -22,7 +23,8 @@ export class CaseManagementService {
     private documentTypeService: DocumentTypeService,
     private callbackService: CallbackService,
     private commentsService: CommentsService,
-    private remedialService: RemedialService
+    private remedialService: RemedialService,
+    private portalUserService: PortalUserService
   ) { }
 
   // Case
@@ -112,5 +114,31 @@ export class CaseManagementService {
   ) {
     return this.remedialService.apiRemedialGetRehabTriggersGet$Json(params);
   }
-  
+
+
+  //User Service
+
+    public getUsers(
+    params: Parameters<PortalUserService['apiPortalUserGetUsersPost$Json']>[0]
+  ) {
+    return this.portalUserService.apiPortalUserGetUsersPost$Json(params)
+  }
+
+  public updatePortalUser(
+    params: Parameters<PortalUserService['apiPortalUserUpdateUserPost$Json']>[0]
+  ) {
+    return this.portalUserService.apiPortalUserUpdateUserPost$Json(params)
+  }
+
+    public getContactRoles(
+    params: Parameters<PortalUserService['apiPortalUserGetContactRolesGet$Json']>[0]
+  ) {
+    return this.portalUserService.apiPortalUserGetContactRolesGet$Json(params)
+  }
+
+      public updateContactRoles(
+    params: Parameters<PortalUserService['apiPortalUserUpdateContactRolesPost']>[0]
+  ) {
+    return this.portalUserService.apiPortalUserUpdateContactRolesPost(params)
+  }
 }
