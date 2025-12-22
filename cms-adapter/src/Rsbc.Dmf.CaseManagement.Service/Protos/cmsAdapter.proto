@@ -787,7 +787,7 @@ service UserManager {
   rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
   rpc GetPractitionerContact(PractitionerRequest) returns (PractitionerReply);
   // Partner Portal user access
-  rpc CreateUserContact (UserContactRequest) returns (ResultStatusReply); 
+  rpc CreateUserContact (UserContactRequest) returns (UserContactReply); 
   rpc GetUserContact(GetUserContactRequest) returns (GetUserContactReply);
   rpc SetUserContactLogin(SetUserContactLoginRequest) returns (SetUserContactLoginReply);
   rpc PartnerPortalLogin(PartnerPortalLoginRequest) returns (PartnerPortalLoginReply);
@@ -820,6 +820,12 @@ message UserContactRequest{
     string externalSystem = 1;
     string externalSystemUserId = 2;
     UserContact contact = 10;
+}
+
+message UserContactReply{
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    string contactId = 3;
 }
 
 message UserContact{

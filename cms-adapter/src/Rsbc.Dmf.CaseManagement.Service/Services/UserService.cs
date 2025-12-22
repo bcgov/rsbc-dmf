@@ -189,41 +189,51 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
         public async override Task<GetUserContactReply> GetUserContact(GetUserContactRequest request, ServerCallContext context)
         {
+
+            var reply = new GetUserContactReply();
             try
             {
+
                 var getContact = await _userManager.GetUserContact(new CaseManagement.GetUserContactRequest { externalSystemUserId = request.ExternalSystemUserId });
-
-                if (getContact.contact.Id == string.Empty) { return new GetUserContactReply(); }
-
-                return new GetUserContactReply
+                if (getContact?.contact == null)
                 {
-                   Contact = new UserContact
+                    reply.ResultStatus = ResultStatus.Fail; // or NotFound if you have such a status
+                    reply.ErrorDetail = "Contact not found";
+                    return reply;
+                }
+
+                reply.Contact = new UserContact
                    {
-                       ContactId = getContact.contact.Id,
-                       ExternalSystem = getContact.contact.ExternalSystem,
-                       ExternalSystemUserId = getContact.contact.ExternalSystemUserId,
-                       GivenName = getContact.contact.GivenName,
-                       SecondGivenName = getContact.contact.SecondGivenName,
-                       ThirdGivenName = getContact.contact.ThirdGivenName,
-                       Surname = getContact.contact.SurName,
-                       AddressFirstLine = getContact.contact.AddressFirstLine,
-                       AddressSecondLine = getContact.contact.AddressSecondLine,
-                       AddressThirdLine = getContact.contact.AddressThirdLine,
-                       City = getContact.contact.City,
-                       Province = getContact.contact.Province,
-                       Country = getContact.contact.Country,
-                       PostalCode = getContact.contact.PostalCode,
-                       EmailAddress = getContact.contact.EmailAddress,
-                       PhoneNumber = getContact.contact.PhoneNumber,
-                       CellPhoneNumber = getContact.contact.CellPhoneNumber
-                   }
+                       ContactId = getContact.contact.Id ?? string.Empty,
+                       //ExternalSystem = getContact.contact.ExternalSystem ?? string.Empty,
+                       //ExternalSystemUserId = getContact.contact.ExternalSystemUserId ?? string.Empty,
+                       GivenName = getContact.contact.GivenName ?? string.Empty,
+                       SecondGivenName = getContact.contact.SecondGivenName ?? string.Empty,
+                       ThirdGivenName = getContact.contact.ThirdGivenName ?? string.Empty,
+                       Surname = getContact.contact.SurName ?? string.Empty,
+                       AddressFirstLine = getContact.contact.AddressFirstLine ?? string.Empty,
+                       AddressSecondLine = getContact.contact.AddressSecondLine ?? string.Empty,
+                       AddressThirdLine = getContact.contact.AddressThirdLine ?? string.Empty,
+                       City = getContact.contact.City ?? string.Empty,
+                       Province = getContact.contact.Province ?? string.Empty,
+                       Country = getContact.contact.Country ?? string.Empty,
+                       PostalCode = getContact.contact.PostalCode ?? string.Empty,
+                       EmailAddress = getContact.contact.EmailAddress ?? string.Empty,
+                       PhoneNumber = getContact.contact.PhoneNumber ?? string.Empty,
+                       CellPhoneNumber = getContact.contact.CellPhoneNumber ?? string.Empty,
+
                 };
+                reply.ResultStatus = ResultStatus.Success;
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
             }
+            return reply;
         }
 
         public async override Task<SetUserContactLoginReply> SetUserContactLogin(SetUserContactLoginRequest request, ServerCallContext context)
@@ -354,13 +364,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
         }
 
-        public async override Task<ResultStatusReply> CreateUserContact(UserContactRequest request, ServerCallContext context)
+        public async override Task<UserContactReply> CreateUserContact(UserContactRequest request, ServerCallContext context)
         {
-            var reply = new ResultStatusReply();
+            var reply = new UserContactReply();
 
             try
             {
-                var userAccessRequest = _mapper.Map<CaseManagement.UserContact>(request);
+                var userAccessRequest = _mapper.Map<CaseManagement.UserContact>(request.Contact);
                 var result = await _userManager.CreateUserContact(userAccessRequest);
                 if (result != null && result.Success)
                 {

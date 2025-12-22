@@ -79,57 +79,59 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             // Step 1 : Search for the contacts (Find with ID or names)
 
             var userContactRequest = new GetUserContactRequest();
-            userContactRequest.ExternalSystemUserId = userContactRequest.ExternalSystemUserId;
+            userContactRequest.ExternalSystemUserId = profile.UserId;
             var getContactReply = await _userManagerClient.GetUserContactAsync(userContactRequest);
-            if (getContactReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+            if (getContactReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                _logger.LogError($"{nameof(Register)} failed.\n {0}", getContactReply.ErrorDetail);
-                return StatusCode((int)HttpStatusCode.InternalServerError, getContactReply.ErrorDetail);
+                // @TODO Can send a warning message that contact exsists
+                _logger.LogInformation($"{nameof(Register)} Success.\n {0}", getContactReply.ErrorDetail);
+                 return StatusCode((int)HttpStatusCode.OK, getContactReply.Contact);
             }
 
-            // Step 2: If contact is found link the contact with the login table
-            var request = new SetUserContactLoginRequest();
-            request.LoginId = profile.UserId;
-            request.ContactId = getContactReply.Contact.ContactId ?? string.Empty;
-            var setContactReply = await _userManagerClient.SetUserContactLoginAsync(request);
-            if (setContactReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+            // Step 2: If contact does not Exists create contact
+ 
+            var createContactRequest = new UserContactRequest();
+            createContactRequest.Contact = new UserContact();
+            createContactRequest.Contact.ExternalSystemUserId = profile.UserId;
+            createContactRequest.Contact.GivenName = userRegistration.GivenName;
+            createContactRequest.Contact.SecondGivenName = userRegistration.SecondGivenName ?? string.Empty;
+            createContactRequest.Contact.ThirdGivenName = userRegistration.ThirdGivenName ?? string.Empty;
+            createContactRequest.Contact.Surname = userRegistration.SurName;
+            createContactRequest.Contact.AddressFirstLine = userRegistration.AddressFirstLine;
+            createContactRequest.Contact.AddressSecondLine = userRegistration.AddressSecondLine;
+            createContactRequest.Contact.AddressThirdLine = userRegistration.AddressThirdLine;
+            createContactRequest.Contact.City = userRegistration.City;
+            createContactRequest.Contact.Province = userRegistration.Province;
+            createContactRequest.Contact.Country = userRegistration.Country;
+            createContactRequest.Contact.PostalCode = userRegistration.PostalCode;
+            createContactRequest.Contact.PhoneNumber = userRegistration.PhoneNumber;
+            createContactRequest.Contact.CellPhoneNumber = userRegistration.CellPhoneNumber;
+            createContactRequest.Contact.EmailAddress = userRegistration.EmailAddress;
+
+
+            var createContactReply = await _userManagerClient.CreateUserContactAsync(createContactRequest);
+            if (createContactReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
             {
-                _logger.LogError($"{nameof(Register)}.{nameof(UserManager.UserManagerClient.SetDriverLogin)} failed.\n {0}", setContactReply.ErrorDetail);
-                return StatusCode((int)HttpStatusCode.InternalServerError, setContactReply.ErrorDetail);
+                _logger.LogError($"{nameof(Register)} could not create Contact.");
+                return StatusCode((int)HttpStatusCode.BadRequest, "No Contact found.");
             }
 
-
-            // Step 3: If contact does not Exists create contact
-
-            if (!setContactReply.HasContact)
+            if (string.IsNullOrEmpty(createContactReply.ContactId))
             {
-                var createContactRequest = new UserContactRequest();
-                createContactRequest.Contact.ExternalSystemUserId = profile.UserId;
-                createContactRequest.Contact.GivenName = profile.FirstName;
-                createContactRequest.Contact.SecondGivenName = userRegistration.SecondGivenName ?? string.Empty;
-                createContactRequest.Contact.ThirdGivenName =   userRegistration.ThirdGivenName ?? string.Empty;
-                createContactRequest.Contact.Surname = profile.LastName;
-                createContactRequest.Contact.AddressFirstLine = userRegistration.AddressFirstLine;
-                createContactRequest.Contact.AddressSecondLine = userRegistration.AddressSecondLine;
-                createContactRequest.Contact.AddressThirdLine = userRegistration.AddressThirdLine;
-                createContactRequest.Contact.City = userRegistration.City;
-                createContactRequest.Contact.Province = userRegistration.Province;
-                createContactRequest.Contact.Country = userRegistration.Country;
-                createContactRequest.Contact.PostalCode = userRegistration.PostalCode;
-                createContactRequest.Contact.PhoneNumber = userRegistration.PhoneNumber;
-                createContactRequest.Contact.CellPhoneNumber = userRegistration.CellPhoneNumber;
-                createContactRequest.Contact.EmailAddress = userRegistration.EmailAddress;
-
-                
-                var createContactReply = await _userManagerClient.CreateUserContactAsync(createContactRequest);
-                if (createContactReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
-                {
-                    _logger.LogError($"{nameof(Register)} could not create Contact.");
-                    return StatusCode((int)HttpStatusCode.Unauthorized, "No Contact found.");
-                }
-
+                _logger.LogError($"{nameof(Register)} Contact Id is null");
+                return StatusCode((int)HttpStatusCode.BadRequest, "Contact Id is null.");
             }
-            
+
+            // Step 3: If contact is found link the contact with the login table
+            var userLoginRequest = new SetUserContactLoginRequest();
+            userLoginRequest.LoginId = profile.UserId;
+            userLoginRequest.ContactId = createContactReply.ContactId;
+            var setUserContactLoginReply = await _userManagerClient.SetUserContactLoginAsync(userLoginRequest);
+            if (setUserContactLoginReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+            {
+                _logger.LogError($"{nameof(Register)}.{nameof(UserManager.UserManagerClient.SetDriverLogin)} failed.\n {0}", setUserContactLoginReply.ErrorDetail);
+                return StatusCode((int)HttpStatusCode.BadRequest, setUserContactLoginReply.ErrorDetail);
+            }
 
             return Ok();
 

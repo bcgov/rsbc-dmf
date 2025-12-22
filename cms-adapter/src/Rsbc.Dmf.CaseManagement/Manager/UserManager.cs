@@ -23,7 +23,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<bool> UpdateLogin(UpdateLoginRequest request);
         bool IsDriverAuthorized(string userId, Guid driverId);
         Task<PractitionerReply> GetPractitionerContact(PractitionerRequest request);
-        Task<ResultStatusReply> CreateUserContact(UserContact request);
+        Task<UserContactReply> CreateUserContact(UserContact request);
         Task<PartnerPortalLoginResponse> PartnerPortalLoginUser(PartnerPortalLoginRequest request);
         Task<PartnerPortalSearchResponse> PartnerPortalSearchUsers(PartnerPortalSearchRequest request);
         Task<bool> SetUserContactLogin(Guid loginId, Guid? contactId);
@@ -165,6 +165,7 @@ namespace Rsbc.Dmf.CaseManagement
     }
 
 
+
     public class GetUserContactReply
     {
         public UserContact contact { get; set; }
@@ -190,9 +191,14 @@ namespace Rsbc.Dmf.CaseManagement
         public string CellPhoneNumber { get; set; }
         public string EmailAddress { get; set; }
        
-
     }
 
+    public class UserContactReply
+    {
+        public string contactId { get; set; } = string.Empty;
+        public bool Success { get; set; }
+        public string ErrorDetail { get; set; }
+    }
 
     #endregion Model
 
@@ -651,12 +657,12 @@ namespace Rsbc.Dmf.CaseManagement
             };
 
         }
-        public async Task<ResultStatusReply> CreateUserContact(UserContact request)
+        public async Task<UserContactReply> CreateUserContact(UserContact request)
         {
 
             if (request == null)
             {
-                return new ResultStatusReply
+                return new UserContactReply
                 {
                     Success = false,
                     ErrorDetail = "UserAccessRequest is null"
@@ -669,6 +675,7 @@ namespace Rsbc.Dmf.CaseManagement
                 var newContact = new contact
                 {
                     contactid = Guid.NewGuid(),
+                    bcgov_userid = request.ExternalSystemUserId,
                     firstname = request.GivenName,
                     middlename = request.SecondGivenName,
                     bcgov_thirdgivenname = request.ThirdGivenName,
@@ -682,15 +689,16 @@ namespace Rsbc.Dmf.CaseManagement
                     address1_postalcode = request.PostalCode,
                     address1_telephone1 = request.PhoneNumber,
                     mobilephone = request.CellPhoneNumber,
-                    emailaddress1 = request.EmailAddress
+                    emailaddress1 = request.EmailAddress,
+                   
                 };
                 dynamicsContext.AddTocontacts(newContact);
                 await dynamicsContext.SaveChangesAsync();
                 dynamicsContext.DetachAll();
 
-                return new ResultStatusReply
+                return new UserContactReply
                 {
-                    Id = newContact.contactid.ToString(),
+                    contactId = newContact.contactid.ToString(),
                     Success = true
                 };
             }
@@ -700,7 +708,7 @@ namespace Rsbc.Dmf.CaseManagement
                 var detail = ex.Message;
                 if (ex.InnerException != null) detail += " | " + ex.InnerException.Message;
 
-                return new ResultStatusReply
+                return new UserContactReply
                 {
                     Success = false,
                     ErrorDetail = detail
@@ -713,19 +721,18 @@ namespace Rsbc.Dmf.CaseManagement
 
             // Query to get the contact by externalSystemUserId
 
-            if (Guid.TryParse(request.externalSystemUserId, out Guid result))
-            {
-                contact = dynamicsContext.contacts
-                .Where(c => c.contactid == new Guid(request.externalSystemUserId))
-                .SingleOrDefault();
-            }
-            else
-            {
+            //if (Guid.TryParse(request.externalSystemUserId, out Guid result))
+            //{
+            //    contact = dynamicsContext.contacts
+            //    .Where(c => c.contactid == new Guid(request.externalSystemUserId))
+            //    .SingleOrDefault();
+            //}
+           
                 // Note do we need to use bcgov_userid or externaluseridentifier here?
                 contact = dynamicsContext.contacts
                 .Where(c => c.bcgov_userid == request.externalSystemUserId || c.externaluseridentifier == request.externalSystemUserId)
                 .SingleOrDefault();
-            }
+            
 
             if (contact != null)
             {
