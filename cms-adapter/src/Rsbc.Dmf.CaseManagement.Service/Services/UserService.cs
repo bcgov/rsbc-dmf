@@ -375,10 +375,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 if (result != null && result.Success)
                 {
                     reply.ResultStatus = ResultStatus.Success;
+                    reply.ContactId = result.contactId;
                 }
                 else
                 {
                     reply.ResultStatus = ResultStatus.Fail;
+                    reply.ErrorDetail = result?.ErrorDetail ?? "CreateUserContact failed";
                 }
             }
             catch (Exception ex)

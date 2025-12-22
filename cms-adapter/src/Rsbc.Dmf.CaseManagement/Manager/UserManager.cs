@@ -195,7 +195,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class UserContactReply
     {
-        public string contactId { get; set; } = string.Empty;
+        public string contactId { get; set; }
         public bool Success { get; set; }
         public string ErrorDetail { get; set; }
     }
@@ -719,16 +719,6 @@ namespace Rsbc.Dmf.CaseManagement
         public async Task<GetUserContactReply> GetUserContact(GetUserContactRequest request)
         {
 
-            // Query to get the contact by externalSystemUserId
-
-            //if (Guid.TryParse(request.externalSystemUserId, out Guid result))
-            //{
-            //    contact = dynamicsContext.contacts
-            //    .Where(c => c.contactid == new Guid(request.externalSystemUserId))
-            //    .SingleOrDefault();
-            //}
-           
-                // Note do we need to use bcgov_userid or externaluseridentifier here?
                 contact = dynamicsContext.contacts
                 .Where(c => c.bcgov_userid == request.externalSystemUserId || c.externaluseridentifier == request.externalSystemUserId)
                 .SingleOrDefault();
@@ -781,36 +771,40 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task<bool> SetUserContactLogin(Guid loginId, Guid? contactId)
         {
-            var login = dynamicsContext.dfp_logins
-                .Expand(l => l.dfp_Person)
-                //.Expand(l => l._dfp_person_value)
-                .Where(l => l.dfp_loginid == loginId)
-                .SingleOrDefault();
-
-            // for first time login, create login and link to contact
-            if (login.dfp_Person == null)
+            dfp_login login;
+            try
             {
-                // Query to get the contact
-                contact contact = null;
-                if (contactId != null)
-                {
+                login = dynamicsContext.dfp_logins
+                    .Expand(l => l.dfp_Person)
+                    .Where(l => l.dfp_loginid == loginId)
+                    .FirstOrDefault();
+            } 
+            catch (Exception)
+            {
+               login = null;
+            }
 
-                    contact = dynamicsContext.contacts.Where(x => x.contactid == contactId).FirstOrDefault();
-                    if (contact == null)
-                    {
-                        return false;
-                    }
-                }
-                if (contact != null)
-                {
-                    dynamicsContext.SetLink(login, nameof(dfp_login.dfp_Person), contact);
-                    await dynamicsContext.SaveChangesAsync();
-                    dynamicsContext.Detach(contact);
-                }
-                else
+            // login must exist
+            if (login == null)
+            {
+                var contact = dynamicsContext.contacts
+                .Where(x => x.contactid == contactId.Value)
+                .FirstOrDefault();
+
+                if (contact == null)
                 {
                     return false;
                 }
+
+                // Create Login
+                //var loginType = ParseExternalSystem(request.User.ExternalSystem);
+            
+                login = CreateLogin(contact.bcgov_userid, LoginType.Idir);
+
+                // Create or replace the link
+                dynamicsContext.SetLink(login, nameof(dfp_login.dfp_Person), contact);
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.Detach(contact);
             }
 
             return true;

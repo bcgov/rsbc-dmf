@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '@app/shared/api/services';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-access-request',
@@ -28,7 +29,8 @@ export class UserAccessRequestComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private router: Router
     ,
     private snackBar: MatSnackBar
   ) {
@@ -59,6 +61,10 @@ export class UserAccessRequestComponent {
           console.log('User access request submitted successfully:', response);
           // show a brief confirmation to the user
           this.snackBar.open('User access request submitted successfully', 'Close', { duration: 5000 });
+
+          // Navigate to the search Page
+          this.router.navigate(['/search']);
+
         },
         error: (error) => {
           console.error('Error submitting user access request:', error);

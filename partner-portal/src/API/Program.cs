@@ -177,7 +177,7 @@ async Task OnTokenValidatedAsync(TokenValidatedContext context)
    
         // TODO I think this is wrong, we should only need to call this once but this is validating on every request
         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-        context.Principal = await userService.Login(context.Principal);
+        context.Principal = await userService.Login(context.Request, context.Principal);
     }
 }
 
