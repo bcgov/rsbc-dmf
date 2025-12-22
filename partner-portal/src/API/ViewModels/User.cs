@@ -1,12 +1,15 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using Rsbc.Dmf.PartnerPortal.Api.ViewModels.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels
 {
-    public class User
+    public class User : IExcelExportable
     {
         public string Id { get; set; }
         public bool Active { get; set; }
@@ -33,6 +36,26 @@ namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels
         public List<UserRole> Roles { get; set; }
         public List<AuditDetail> AuditDetails { get; set; }
         public string modifiedUserId { get; set; }
+
+
+        public string[] GetHeaders()
+        {
+            return new[] { "Active", "Surname", "Given Name", "User ID", "Domain", "Roles" };
+        }
+
+        public string[] GetRowValues()
+        {
+            var roles = Roles != null ? string.Join(", ", Roles.Select(r => r.Name)) : "";
+            return new[]
+            {
+            Active.ToString(),
+            LastName,
+            FirstName,
+            DFWebuserId,
+            Domain,
+            roles
+        };
+        }
     }
 
 

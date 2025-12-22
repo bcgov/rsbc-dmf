@@ -118,7 +118,7 @@ export class CaseManagementService {
 
   //User Service
 
-    public getUsers(
+  public getUsers(
     params: Parameters<PortalUserService['apiPortalUserGetUsersPost$Json']>[0]
   ) {
     return this.portalUserService.apiPortalUserGetUsersPost$Json(params)
@@ -136,9 +136,15 @@ export class CaseManagementService {
     return this.portalUserService.apiPortalUserGetContactRolesGet$Json(params)
   }
 
-      public updateContactRoles(
+  public updateContactRoles(
     params: Parameters<PortalUserService['apiPortalUserUpdateContactRolesPost']>[0]
   ) {
     return this.portalUserService.apiPortalUserUpdateContactRolesPost(params)
+  }
+
+  public exportUsers(
+    params: Parameters<PortalUserService['apiPortalUserExportUserPost$Json']>[0]
+  ) {
+    return this.portalUserService.apiPortalUserExportUserPost$Json(params)
   }
 }

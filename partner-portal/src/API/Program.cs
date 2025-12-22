@@ -95,6 +95,7 @@ services.AddDocumentStorageClient(builder.Configuration);
 services.AddCaseManagementAdapterClient(builder.Configuration, loggerFactory);
 
 services.AddTransient<IUserService, UserService>();
+services.AddTransient<IExportService, ExportService>();
 services.AddTransient<DocumentFactory>();
 
 // Add ICBC Adapter
