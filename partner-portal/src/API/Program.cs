@@ -62,10 +62,6 @@ services.AddAuthorization(options =>
         policy => policy
             // confirm this is working by using a bad secret, currently the secret is not being validated
             .RequireAuthenticatedUser().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-    // TODO verify if we need to add scope medical-portal-ui and medical-portal-api or if just medical-portal will do, in other projects there are api and ui
-    // the below does not work, since the scope claim looks something like "email profile openid". This problem has already been solved, research the proper way to handle scope
-    // need to add the scope to keycloak admin UI before we can add the scope to FE, which would pass the scope claim to the BE
-    //.RequireClaim(Claims.Scope, "medical-portal")
     );
 
     // TODO update these after auth is migrated to different keycloak
@@ -179,25 +175,6 @@ async Task OnTokenValidatedAsync(TokenValidatedContext context)
         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
         context.Principal = await userService.Login(context.Request, context.Principal);
     }
-}
-
-// TODO move and change these roles after auth is migrated to different keycloak
-public static class Claims
-{
-    public const string Address = "address";
-    public const string AssuranceLevel = "identity_assurance_level";
-    public const string Birthdate = "birthdate";
-    public const string Gender = "gender";
-    public const string Email = "pidp_email";
-    public const string FamilyName = "family_name";
-    public const string GivenName = "given_name";
-    public const string GivenNames = "given_names";
-    public const string IdentityProvider = "identity_provider";
-    public const string PreferredUsername = "preferred_username";
-    public const string ResourceAccess = "resource_access";
-    public const string Subject = "sub";
-    public const string LoginIds = "login_ids";
-    public const string Scope = "scope";
 }
 
 public static class Policies

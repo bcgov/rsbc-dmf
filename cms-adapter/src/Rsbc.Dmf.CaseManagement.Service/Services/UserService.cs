@@ -309,18 +309,22 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var loginRequest = new CaseManagement.PartnerPortalLoginRequest()
                 {
                     contact = new CaseManagement.UserContact()
-                    {
-                        
+                    {  
                         ExternalSystem = request.ExternalSystem,
                         ExternalSystemUserId = request.ExternalSystemUserId,
-                        GivenName = request.FirstName,
-                        SurName = request.LastName
                     }
-
                 };
                 
 
                 var loginResult = await _userManager.PartnerPortalLoginUser(loginRequest);
+                if (loginResult == null)
+                {
+                    return new PartnerPortalLoginReply
+                    {
+                        ResultStatus = ResultStatus.Fail,
+                        ErrorDetail = "Login not found for ExternalSystem/ExternalSystemUserId"
+                    };
+                }
                 var userLoginReply = new PartnerPortalLoginReply { ResultStatus = ResultStatus.Success };
                 userLoginReply.UserId = loginResult.Userid;
                 if (loginResult.LoginIds?.Count > 0)
@@ -342,21 +346,28 @@ namespace Rsbc.Dmf.CaseManagement.Service
         {
             try
             {
-                var users = (await _userManager.PartnerPortalSearchUsers(new PartnerPortalSearchRequest
+                var managerRequest = new CaseManagement.PartnerPortalSearchRequest
                 {
                     ByExternalUserId = string.IsNullOrEmpty(request.ExternalSystemUserId) ? null : (request.ExternalSystemUserId, request.ExternalSystem),
-                    //ByType = request.UserType == UserType.PartnerPortalUserType
                     ByUserId = request.UserId
-                })).Items.Select(u => new User
-                {
-                    Id = u.Id,
-                    FirstName = u.GivenName ?? string.Empty,
-                    LastName = u.SurName ?? string.Empty,
-                    ExternalSystem = u.ExternalSystem,
-                    ExternalSystemUserId = u.ExternalSystemUserId,
-                });
+                };
 
-                return new PartnerPortalUserSearchReply { ResultStatus = ResultStatus.Success, };
+                var partnerResults = await _userManager.PartnerPortalSearchUsers(managerRequest);
+                var users = partnerResults.Items
+                    .Select((CaseManagement.UserContact u) => new UserContact
+                    {
+                        ContactId = u.Id ?? string.Empty,
+                        GivenName = u.GivenName ?? string.Empty,
+                        Surname = u.SurName ?? string.Empty,
+                        ExternalSystem = u.ExternalSystem ?? string.Empty,
+                        ExternalSystemUserId = u.ExternalSystemUserId ?? string.Empty
+                    });
+
+                return new PartnerPortalUserSearchReply
+                {
+                    ResultStatus = ResultStatus.Success,
+                    User = { users }
+                };
             }
             catch (Exception e)
             {

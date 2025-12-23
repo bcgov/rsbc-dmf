@@ -44,13 +44,13 @@ export class AuthGuard extends KeycloakAuthGuard {
         await firstValueFrom(this.profileService.apiProfileCurrentGet$Json());
       } catch (error) {
         console.error('Login failed', error);
-        if (error && (error as HttpErrorResponse)?.status === 400 && ((error as HttpErrorResponse).error as string).includes('User not found')) {
+        // if (error && (error as HttpErrorResponse)?.status === 400 && ((error as HttpErrorResponse).error as string).includes('User not found')) {
           // Handle unauthorized access, possibly redirect to User Access Request page
           console.warn('Unauthorized access - redirecting to User Access.');
           this.router.navigate(['/userAccess']);
 
           return false;
-        }
+        //}
       }
     }
 

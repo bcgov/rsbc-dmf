@@ -58,9 +58,7 @@ public class UserService : IUserService
         if (user == null) throw new ArgumentNullException(nameof(user));
 
         //common claim types if the expected claim isn't present
-        var userId = user.FindFirstValue(UserClaimTypes.UserId)
-                     ?? user.FindFirstValue(ClaimTypes.Sid)
-                     ?? user.FindFirstValue(ClaimTypes.NameIdentifier);
+        var userId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub");
 
         return await Task.FromResult(new UserContext
         {
@@ -84,15 +82,9 @@ public class UserService : IUserService
 
             ExternalSystem = "azure-idir",//user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
             ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
-            FirstName = user.FindFirstValue(UserClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
-            LastName = user.FindFirstValue(UserClaimTypes.FamilyName) ?? user.FindFirstValue("last_name") ?? string.Empty,
+            FirstName = user.FindFirstValue(ClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
+            LastName = user.FindFirstValue(ClaimTypes.Surname) ?? user.FindFirstValue("last_name") ?? string.Empty,
         };
-
-        var loginResponse = await userManager.PartnerPortalLoginAsync(loginRequest);
-        if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
-
-        var searchResults = await userManager.PartnerPortalSearchAsync(new PartnerPortalUserSearchRequest { UserId = loginResponse.UserId});
-        if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
 
         var pathValue = request?.Path.Value ?? string.Empty;
         var isRegisterPath = pathValue.IndexOf("register", StringComparison.OrdinalIgnoreCase) >= 0;
@@ -100,8 +92,16 @@ public class UserService : IUserService
         // Registration endpoint - skip adding claims
         if (isRegisterPath) return user;
 
+        var loginResponse = await userManager.PartnerPortalLoginAsync(loginRequest);
+        if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
+
+        var searchResults = await userManager.PartnerPortalSearchAsync(new PartnerPortalUserSearchRequest { UserId = loginResponse.UserId});
+        if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
+
+      
+
         var userProfile = searchResults.User.SingleOrDefault();
-            
+
         if (userProfile == null)
         throw new BadHttpRequestException($"User not found {loginResponse.UserId}");
 

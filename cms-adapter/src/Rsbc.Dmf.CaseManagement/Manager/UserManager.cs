@@ -586,36 +586,9 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (login == null)
             {
-                login = CreateLogin(loginId, loginType);
+                return null;
             }
 
-            // if login is null create contact     
-
-            if (!login._dfp_person_value.HasValue)
-            {
-                    var person = new contact
-                    {
-                        contactid = Guid.NewGuid(),
-                        firstname = request.contact.GivenName,
-                        middlename = request.contact.SecondGivenName,
-                        bcgov_thirdgivenname = request.contact.ThirdGivenName,
-                        lastname = request.contact.SurName,
-                        address1_line1 = request.contact.AddressFirstLine,
-                        address1_line2 = request.contact.AddressSecondLine,
-                        address1_line3 = request.contact.AddressThirdLine,
-                        address1_city = request.contact.City,
-                        address1_stateorprovince = request.contact.Province,
-                        address1_country = request.contact.Country,
-                        address1_postalcode = request.contact.PostalCode,
-                        address1_telephone1 = request.contact.PhoneNumber,
-                        mobilephone = request.contact.CellPhoneNumber,
-                        emailaddress1 = request.contact.EmailAddress
-
-                    };
-                dynamicsContext.AddTocontacts(person);
-                await dynamicsContext.SaveChangesAsync();
-                dynamicsContext.DetachAll();
-            }
             var loginUserResponse = new PartnerPortalLoginResponse { Userid = login.dfp_loginid.ToString() };
             loginUserResponse.LoginIds = logins.Select(l => l.dfp_loginid.ToString()).ToList();
             return loginUserResponse;
@@ -629,7 +602,16 @@ namespace Rsbc.Dmf.CaseManagement
                   .Where(l => l.statecode == (int)EntityState.Active);
 
             if (!string.IsNullOrEmpty(request.ByUserId))
-                query = query.Where(l => l.dfp_loginid == Guid.Parse(request.ByUserId));
+            {
+                if (Guid.TryParse(request.ByUserId, out Guid loginGuid))
+                {
+                    query = query.Where(l => l.dfp_loginid == loginGuid);
+                }
+                else
+                {
+                    query = query.Where(l => l.dfp_userid == request.ByUserId);
+                }
+            }
 
             if (request.ByExternalUserId.HasValue)
                 query = query.Where(l => l.dfp_userid == request.ByExternalUserId.Value.externalUserId &&
@@ -637,10 +619,8 @@ namespace Rsbc.Dmf.CaseManagement
 
             var users = (await ((DataServiceQuery<dfp_login>)query).GetAllPagesAsync()).ToArray();
 
-            // detach to avoid tracking side-effects
             dynamicsContext.DetachAll();
 
-            // Map to User subclasses (DriverUser is lightweight and suitable here).
             var mappedUsers = users.Select(u => new UserContact
             {
                 Id = u.dfp_loginid.ToString(),
@@ -657,6 +637,8 @@ namespace Rsbc.Dmf.CaseManagement
             };
 
         }
+
+        
         public async Task<UserContactReply> CreateUserContact(UserContact request)
         {
 
@@ -799,7 +781,7 @@ namespace Rsbc.Dmf.CaseManagement
                 // Create Login
                 //var loginType = ParseExternalSystem(request.User.ExternalSystem);
             
-                login = CreateLogin(contact.bcgov_userid, LoginType.Idir);
+                login = CreateLogin(contact.bcgov_userid, LoginType.IDIR);
 
                 // Create or replace the link
                 dynamicsContext.SetLink(login, nameof(dfp_login.dfp_Person), contact);
@@ -814,7 +796,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             "bcsc" => LoginType.Bcsc,
             "bceid" => LoginType.Bceid,
-            "azure-idir" => LoginType.Idir,
+            "azure-idir" => LoginType.IDIR,
             "msEntra" => LoginType.MsEntra,
             
             _ => throw new NotImplementedException(externalSystem)
@@ -840,7 +822,7 @@ namespace Rsbc.Dmf.CaseManagement
     {
         Bcsc = 100000000,
         Bceid = 100000001,
-        Idir = 100000002,
+        IDIR = 100000002,
         MsEntra = 100000004
     }
 
