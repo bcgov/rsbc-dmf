@@ -36,7 +36,7 @@ bootstrapApplication(AppComponent, {
       },
       deps: [PlatformLocation],
     },
-     AuthGuard
+     AuthGuard,
     provideMomentDateAdapter()
   ],
 }).catch((err) => console.error(err));
