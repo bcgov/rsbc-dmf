@@ -2,6 +2,7 @@
 /* eslint-disable */
 export { AppConfiguration } from './models/app-configuration';
 export { ApplicationVersionInfo } from './models/application-version-info';
+export { AuditDetail } from './models/audit-detail';
 export { Callback } from './models/callback';
 export { CallbackCancelRequest } from './models/callback-cancel-request';
 export { CallbackRequest } from './models/callback-request';
@@ -24,6 +25,11 @@ export { PreferredTime } from './models/preferred-time';
 export { ProblemDetails } from './models/problem-details';
 export { RehabTrigger } from './models/rehab-trigger';
 export { UserAccessRequest } from './models/user-access-request';
+export { UpdateContactRole } from './models/update-contact-role';
+export { User } from './models/user';
 export { UserContext } from './models/user-context';
 export { UserProfile } from './models/user-profile';
 export { UserRegistration } from './models/user-registration';
+export { UserRole } from './models/user-role';
+export { UsersSearchRequest } from './models/users-search-request';
+export { UserType } from './models/user-type';

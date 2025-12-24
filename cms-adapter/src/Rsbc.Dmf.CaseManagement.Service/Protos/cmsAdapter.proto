@@ -779,6 +779,11 @@ message CssReply {
 
 service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
+  rpc SearchContacts (UsersSearchRequest) returns (SystemUsersSearchReply);
+  rpc UpdateContact (Contact) returns (ResultStatusReply);
+  rpc UpdateContactRole(UpdateContactRoleRequest) returns (ResultStatusReply);
+  rpc GetContactRoles(GetContactRolesRequest) returns (GetContactRolesStatusReply);
+  rpc GetCurrentLoginUser (GetCurrentLoginUserRequest) returns (GetCurrentLoginUserReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);
   rpc SetEmail(UserSetEmailRequest) returns (ResultStatusReply);
   rpc UpdateEmail(UserSetEmailRequest) returns (ResultStatusReply);
@@ -905,6 +910,10 @@ message UsersSearchRequest {
     string externalSystem = 2;
     string externalSystemUserId = 3;
     UserType userType = 4;
+    string firstName = 5;
+    string lastName = 6;
+    bool unauthorizedOnly = 7;
+    int32 activeUser = 8;
 }
 
 message UsersSearchReply {
@@ -1023,6 +1032,88 @@ message ResultStatusReply {
 
 
 // END UserManager
+////////////////////////
+
+////////////////////////
+// START PortalPartnerUserManager 
+
+service PortalPartnerUserManager {
+  rpc Search (UsersSearchRequest) returns (UsersSearchReply);
+  rpc SearchContacts (UsersSearchRequest) returns (SystemUsersSearchReply);
+  rpc UpdateContact (Contact) returns (ResultStatusReply);
+  rpc UpdateContactRole(UpdateContactRoleRequest) returns (ResultStatusReply);
+  rpc GetContactRoles(GetContactRolesRequest) returns (GetContactRolesStatusReply);
+  rpc GetCurrentLoginUser (GetCurrentLoginUserRequest) returns (GetCurrentLoginUserReply);
+}
+
+  message Contact {
+        string FirstName =1;
+        string SecondGivenName = 2;
+        string ThirdGivenName =3;
+        string LastName = 16;
+        string AddressLine1 = 4;
+        string AddressLine2 = 5;
+        string AddressLine3 = 6;
+        string City = 7;
+        string Province = 8;
+        string Country = 9;
+        string PostCode =10;
+        string PhoneNumber = 11;
+        string CellNumber = 12;
+        string Email  = 13;
+        google.protobuf.Timestamp ExpiryDate = 14;
+        google.protobuf.Timestamp EffectiveDate =15;
+        string Domain = 17;
+        string DFWebuserId = 18;
+        repeated ContactRoles UserRoles = 19;
+        bool Authorized =20;
+        string Id = 21;
+        string UserName = 22;
+        bool Active = 23;
+        string modifiedBy = 24;
+        repeated AuditDetails AuditDetails = 25;
+}
+message ContactRoles {
+    string name = 1;
+    string description = 2;
+    string id = 3;
+}
+message AuditDetails {
+    string entryId = 1;
+    google.protobuf.Timestamp entryDate = 2;
+    string description = 3;
+}
+message GetContactRolesStatusReply{
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    repeated ContactRoles role = 10;
+}
+message UpdateContactRoleRequest{
+    string contactId = 1;
+    string roleId = 2;
+    bool addRole = 3;
+    string ModifiedBy = 4;
+}
+
+message GetContactRolesRequest {
+    // no fields needed
+}
+
+message GetCurrentLoginUserRequest{
+    string userId = 1;
+}
+
+message GetCurrentLoginUserReply{
+    repeated string userRoles = 1;
+}
+
+message SystemUsersSearchReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    repeated Contact user = 10;
+}
+
+  // END PortalPartnerUserManager 
 ////////////////////////
 // START CallbackManager
 

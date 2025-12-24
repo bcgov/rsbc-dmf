@@ -1,0 +1,112 @@
+/* ----- Layout Containers ----- */
+
+.admin {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  padding-top: 32px;
+  flex-wrap: wrap;
+}
+
+.user-details {
+  padding-bottom: 50px;
+}
+
+.admin-input {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+.input-width {
+  padding-top: 10px;
+  width: 100%;
+}
+
+/* ----- Form Labels ----- */
+
+.form-label {
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 10px;
+  margin-bottom: 10px !important;
+}
+
+/* ----- Radio Button Styling ----- */
+
+.admin-radio {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-radio .mdc-form-field {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+.admin-radio .mat-mdc-radio-button {
+  margin-left: 0 !important;
+}
+
+/* Legacy override for material radio buttons using ::ng-deep */
+::ng-deep .mat-mdc-radio-button .mdc-form-field {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+::ng-deep .mat-mdc-radio-button {
+  margin-left: 0 !important;
+}
+
+/* ----- Submit Button Wrapper ----- */
+
+.submitButtonContainer {
+  display: flex;
+  gap: 24px;
+  padding-top: 24px;
+}
+
+.mat-mdc-row,
+.mat-mdc-header-row {
+  height: 48px !important;
+}
+
+.mat-mdc-cell,
+.mat-mdc-header-cell {
+  display: table-cell !important;    
+  vertical-align: middle !important; 
+  padding: 0 16px !important;
+  width: 200px;
+}
+
+.mat-mdc-cell .mdc-data-table__cell-content,
+.mat-mdc-header-cell .mdc-data-table__cell-content {
+  display: flex !important;
+  align-items: center !important;
+  height: 100%;
+}
+
+
+.details-button {
+  width: 100%;        /* button fills its column */
+  min-width: 60px;
+  padding: 20px!important;
+}
+
+.table-padding {
+  padding-bottom: 10px;
+}
+
+.search-results {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+.no-results {
+  margin-bottom: 10px;
+  color: #666;
+  font-size: 14px;
+}

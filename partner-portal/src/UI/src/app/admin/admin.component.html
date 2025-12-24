@@ -1,0 +1,160 @@
+<div class="container" *ngIf="showAdminDetails != true">
+  <div class="admin">
+    <div class="list user-details" style="min-width: 720px; flex-basis: 60%">
+      <h2>User Details</h2>
+      <div class="admin-input">
+        <div>
+          <label class="form-label">Given Name</label>
+          <div>
+            <mat-form-field appearance="outline" class="input-width">
+              <input
+                matInput
+                name="givenName"
+                [(ngModel)]="adminSearch.givenName"
+                placeholder="Given Name"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="admin-input">
+        <div>
+          <label class="form-label">Surname</label>
+          <div>
+            <mat-form-field appearance="outline" class="input-width">
+              <input
+                matInput
+                name="Surname"
+                [(ngModel)]="adminSearch.surname"
+                placeholder="Surname"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="admin-input">
+        <div>
+          <label class="form-label">User ID</label>
+          <div>
+            <mat-form-field appearance="outline" class="input-width">
+              <input
+                matInput
+                name="userID"
+                [(ngModel)]="adminSearch.userId"
+                placeholder="User ID"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="admin-input">
+        <div>
+          <label class="form-label">Unauthorized Only:</label>
+          <mat-checkbox
+            [(ngModel)]="adminSearch.unauthorizedOnly"
+            color="primary"
+          ></mat-checkbox>
+        </div>
+      </div>
+
+      <div class="admin-input">
+        <div>
+          <mat-radio-group
+            [(ngModel)]="adminSearch.activeUser"
+            color="primary"
+            class="admin-radio"
+          >
+            <mat-radio-button value="-1">All Users</mat-radio-button>
+            <mat-radio-button value="1">Active</mat-radio-button>
+            <mat-radio-button value="0">Inactive</mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div>
+        <div>
+          <div class="submitButtonContainer">
+            <button mat-flat-button (click)="getUsers()" class="primaryButton">
+              Submit
+            </button>
+            <button mat-flat-button class="primaryButton">Export</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ngx-spinner bdColor="rgba(0, 0, 0, 0.4)"
+             size="medium"
+             color="#fff"
+              type="ball-clip-rotate"
+             [fullScreen]="true"
+             name="main">
+</ngx-spinner>
+    <div class="search-results">
+    <div class="list" style="min-width: 720px; flex-basis: 60%">
+      <h2>Search Results</h2>
+    </div>
+    <div class="table-padding" *ngIf="users && users.length > 0">
+      <mat-table [dataSource]="users" class="mat-elevation-z8 ">
+        <ng-container matColumnDef="active">
+          <th mat-header-cell *matHeaderCellDef>Active</th>
+          <td mat-cell *matCellDef="let element">
+            <b>{{ element.active }} </b>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="lastName">
+          <th mat-header-cell *matHeaderCellDef>Surname</th>
+          <td mat-cell *matCellDef="let element">
+            <b>{{ element.lastName }} </b>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="firstName">
+          <th mat-header-cell *matHeaderCellDef>Given Name</th>
+          <td mat-cell *matCellDef="let element">
+            <b>{{ element.firstName }}</b>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="identityId">
+          <th mat-header-cell *matHeaderCellDef>User ID</th>
+          <td mat-cell *matCellDef="let element">
+            <b>{{ element.userName }}</b>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="domain">
+          <th mat-header-cell *matHeaderCellDef>Domain</th>
+          <td mat-cell *matCellDef="let element">
+            <b>{{ element.domain }}</b>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="roles">
+          <th mat-header-cell *matHeaderCellDef>Roles</th>
+          <td mat-cell *matCellDef="let element">
+            <b>{{ getRolesAsString(element.roles) }}</b>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="details">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              mat-flat-button
+              class="details-button"
+              color="primary"
+              (click)="viewUserDetails(element)"
+            >
+              {{element.authorized != true ? "approve" : "details"}}
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="userColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: userColumns"></tr>
+      </mat-table>
+    </div>
+    <div></div>
+    <div class="no-results"  *ngIf="!users || users.length == 0">No results found.</div>
+  </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="showAdminDetails == true">
+  <app-admin-details [user]="userDetails" (backToDashboard)="hideAdminDetails()"></app-admin-details>
+</div>
+
+

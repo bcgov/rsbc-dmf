@@ -1,0 +1,163 @@
+  .admin{
+    display: flex; 
+    flex-direction: row; 
+    gap: 32px;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    flex-wrap: wrap;
+  }
+  .user-details{
+    padding-bottom: 0px
+  }
+
+  .form-label {
+    font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 10px;;
+    margin-bottom: 10px !important;
+
+  }
+
+.admin-input{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+  }
+
+.input-width{
+    padding-top: 10px;
+    width:100%;
+  }
+
+.admin-radio  .mdc-form-field{
+      padding-left: 0 !important;
+  margin-left: 0 !important;
+
+}
+.admin-radio .mat-mdc-radio-button {
+  margin-left: 0 !important;
+}
+
+.admin-radio{
+    display: flex; 
+    flex-direction: column;
+}
+
+::ng-deep .mat-mdc-radio-button .mdc-form-field {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+::ng-deep .mat-mdc-radio-button {
+  margin-left: 0 !important;
+}
+
+.submitButtonRow {
+  width: 100%;
+}
+
+.submitButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding-top: 24px;
+}
+
+
+.user-details-row{
+  display: flex;
+  flex-wrap: wrap;   
+  gap: 20px;
+  width: 100%;
+}
+
+.user-details-container{
+  padding: 40px;
+}
+
+.admin-details-input {
+  flex: 0 0 calc(20% - 20px); 
+  min-width: 200px;           
+}
+
+mat-card {
+  width: 100%;
+}
+  .table-padding{
+    padding: 24px;
+  }
+
+
+
+.roles-table {
+  width: 100%;
+}
+
+.user-role-column{
+  width: 300px;
+  text-align: center;
+}
+.user-role-action-column{
+  width: 600px;
+  text-align: right;
+}
+
+.table-wrapper {
+  width: 100%;
+  padding-bottom: 70px;
+}
+
+
+
+/* Optional: specific column widths */
+.mat-column-entryId {
+  width: 20%;
+  border-left: none;
+  border-right: none;
+}
+
+.mat-column-entryDate {
+  width: 20%;
+  border-left: none;
+  border-right: none;
+}
+
+.mat-column-description {
+  width: 60%;
+    border-left: none;
+  border-right: none;
+}
+
+.mat-column-roleId {
+  width: 20%;
+  border-left: none;
+  border-right: none;
+}
+
+.mat-column-action{
+  width: 20%;
+  border-left: none;
+  border-right: none;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.details-button{
+  background-color: #003366;
+  color: white;
+}
+
+.success-snackbar {
+  background-color: #4caf50; /* Material green */
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.success-snackbar .mat-simple-snackbar-action {
+  color: #e8f5e9;
+}

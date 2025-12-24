@@ -7,5 +7,6 @@ export { DocumentService } from './services/document.service';
 export { DocumentTypeService } from './services/document-type.service';
 export { DriverService } from './services/driver.service';
 export { ProfileService } from './services/profile.service';
+export { PortalUserService } from './services/portal-user.service';
 export { RemedialService } from './services/remedial.service';
 export { UserAccessService } from './services/user-access.service';
