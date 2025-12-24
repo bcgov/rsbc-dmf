@@ -44,11 +44,11 @@ export class UserAccessRequestComponent {
       addressThirdLine: [''],
       city: ['', [Validators.required]],
       province: ['', [Validators.required]],
-      country : ['', [Validators.required]],
+      country: ['', [Validators.required]],
       postalCode: ['', [Validators.required]],
       phoneNumber: [''],
       cellPhoneNumber: [''],
-      emailAddress:['']
+      emailAddress: ['']
     });
   }
 
@@ -60,7 +60,14 @@ export class UserAccessRequestComponent {
         next: (response) => {
           console.log('User access request submitted successfully:', response);
           // show a brief confirmation to the user
-          this.snackBar.open('User access request submitted successfully', 'Close', { duration: 5000 });
+          this.snackBar.open('User access request submitted successfully. Plaese wait till the User Role is granded by ADMIN', 'Close',
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              duration: 5000
+            });
+
+          // #TODO Need to check the user role and navigate accordingly
 
           // Navigate to the search Page
           this.router.navigate(['/search']);
@@ -69,7 +76,13 @@ export class UserAccessRequestComponent {
         error: (error) => {
           console.error('Error submitting user access request:', error);
           // optionally surface the error to the user
-          this.snackBar.open('Error submitting user access request', 'Close', { duration: 5000 });
+          this.snackBar.open('Error submitting user access request', 'Close',
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              duration: 5000
+
+            });
         }
       });
     } else {
