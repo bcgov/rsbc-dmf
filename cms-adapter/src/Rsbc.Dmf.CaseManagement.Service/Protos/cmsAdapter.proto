@@ -791,6 +791,66 @@ service UserManager {
   rpc UpdateLogin(UpdateLoginRequest) returns (ResultStatusReply);
   rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
   rpc GetPractitionerContact(PractitionerRequest) returns (PractitionerReply);
+  // Partner Portal user access
+  rpc CreateUserContact (UserContactRequest) returns (UserContactReply); 
+  rpc GetUserContact(GetUserContactRequest) returns (GetUserContactReply);
+  rpc SetUserContactLogin(SetUserContactLoginRequest) returns (SetUserContactLoginReply);
+  rpc PartnerPortalLogin(PartnerPortalLoginRequest) returns (PartnerPortalLoginReply);
+  rpc PartnerPortalSearch (PartnerPortalUserSearchRequest) returns (PartnerPortalUserSearchReply);
+
+}
+
+message GetUserContactRequest{
+    string externalSystemUserId = 1;
+}
+
+message GetUserContactReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    UserContact contact = 3;
+}
+
+message SetUserContactLoginRequest {
+    string loginId = 1;
+    string contactId = 2;
+}
+
+message SetUserContactLoginReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    bool hasContact = 3;
+}
+
+message UserContactRequest{
+    string externalSystem = 1;
+    string externalSystemUserId = 2;
+    UserContact contact = 10;
+}
+
+message UserContactReply{
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    string contactId = 3;
+}
+
+message UserContact{
+    string givenName = 1;
+    string secondGivenName = 2;
+    string thirdGivenName = 3;
+    string surname = 4;
+    string addressFirstLine = 5;
+    string addressSecondLine = 6;
+    string addressThirdLine = 7;
+    string city =8;
+    string province = 9;
+    string country = 10;
+    string postalCode = 11;
+    string phoneNumber = 12;
+    string cellPhoneNumber = 13;
+    string emailAddress= 14;
+    string externalSystem = 15;
+    string externalSystemUserId = 16;
+    string contactId = 17;
 }
 
 message PractitionerReply{
@@ -844,6 +904,7 @@ message UpdateLoginRequest {
     FullAddress address = 7;
 }
 
+
 message UsersSearchRequest {
     string userId = 1;
     string externalSystem = 2;
@@ -865,6 +926,33 @@ message GetDriversReply {
     ResultStatus resultStatus = 1;
     string errorDetail = 2;
     repeated Driver items = 10;
+}
+
+message PartnerPortalLoginRequest{
+    string externalSystemUserId = 1;
+    string externalSystem = 2;
+    string firstName = 3;
+    string lastName = 4;
+}
+
+message PartnerPortalLoginReply{
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    string userId = 3;
+    repeated string loginIds = 4;
+}
+
+message PartnerPortalUserSearchRequest {
+     string userId = 1;
+    string externalSystem = 2;
+    string externalSystemUserId = 3;
+}
+
+message PartnerPortalUserSearchReply{
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    repeated UserContact user = 10;
+
 }
 
 message UserLoginRequest {
@@ -924,6 +1012,7 @@ message DriverProfile {
 enum UserType {
     MedicalPractitionerUserType = 0;
     DriverUserType = 1;
+    PartnerPortalUserType = 2;
 }
 
 message IdListRequest {
