@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using Rsbc.Dmf.PartnerPortal.Api.ViewModels.Interfaces;
+﻿using Rsbc.Dmf.PartnerPortal.Api.ViewModels.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
