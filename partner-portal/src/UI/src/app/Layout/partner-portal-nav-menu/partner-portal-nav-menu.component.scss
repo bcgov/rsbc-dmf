@@ -38,6 +38,13 @@
       div.gethelp > div > a:hover {
         background-color: #F2F2F2;
       }
+
+      div.nav-option:hover{
+        background-color: rgb(96, 134, 199);
+      }
+      div.selected-nav-option{
+        background-color:rgb(76, 109, 168);
+      }
   
       a {
         font-family: "BC Sans", sans-serif;

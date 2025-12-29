@@ -98,5 +98,16 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             actualClinicAssignment.Clinic.Id.ShouldBe(newMedicalPractitioner.ClinicAssignments.First().Clinic.Id);
             actualClinicAssignment.Clinic.Name.ShouldNotBeNull();
         }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanCreateUserContact ()
+        {
+            var contactId = "Test_ContactId";
+            var loginId = "TEST_LoginId";
+            //var system = "bcsc";
+            var result = await userManager.SetUserContactLogin(Guid.Parse(loginId), Guid.Parse(contactId));
+
+            result.ShouldBeTrue();
+        }
     }
 }

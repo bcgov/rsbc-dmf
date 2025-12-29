@@ -16,7 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { DateAdapter, provideNativeDateAdapter } from '@angular/material/core';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { User, UserRole } from '@app/shared/api/models';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { MatSnackBar } from '@angular/material/snack-bar';

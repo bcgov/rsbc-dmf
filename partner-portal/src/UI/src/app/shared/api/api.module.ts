@@ -13,6 +13,7 @@ import { DocumentService } from './services/document.service';
 import { DocumentTypeService } from './services/document-type.service';
 import { DriverService } from './services/driver.service';
 import { PortalUserService } from './services/portal-user.service';
+import { ProfileService } from './services/profile.service';
 import { RemedialService } from './services/remedial.service';
 
 /**
@@ -32,6 +33,7 @@ import { RemedialService } from './services/remedial.service';
     DocumentTypeService,
     DriverService,
     PortalUserService,
+    ProfileService,
     RemedialService,
     ApiConfiguration
   ],

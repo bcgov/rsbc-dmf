@@ -27,6 +27,8 @@ export { RehabTrigger } from './models/rehab-trigger';
 export { UpdateContactRole } from './models/update-contact-role';
 export { User } from './models/user';
 export { UserContext } from './models/user-context';
+export { UserProfile } from './models/user-profile';
+export { UserRegistration } from './models/user-registration';
 export { UserRole } from './models/user-role';
 export { UsersSearchRequest } from './models/users-search-request';
 export { UserType } from './models/user-type';
