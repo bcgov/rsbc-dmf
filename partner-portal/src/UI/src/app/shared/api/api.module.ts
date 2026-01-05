@@ -12,9 +12,10 @@ import { ConfigService } from './services/config.service';
 import { DocumentService } from './services/document.service';
 import { DocumentTypeService } from './services/document-type.service';
 import { DriverService } from './services/driver.service';
-import { PortalUserService } from './services/portal-user.service';
 import { ProfileService } from './services/profile.service';
+import { PortalUserService } from './services/portal-user.service';
 import { RemedialService } from './services/remedial.service';
+import { UserAccessService } from './services/user-access.service';
 
 /**
  * Module that provides all services and configuration.
@@ -35,6 +36,7 @@ import { RemedialService } from './services/remedial.service';
     PortalUserService,
     ProfileService,
     RemedialService,
+    UserAccessService,
     ApiConfiguration
   ],
 })

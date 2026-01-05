@@ -261,6 +261,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         #endregion Practitioner
 
+
         public bool IsDriverAuthorized(string userId, Guid driverId)
         {
             var loggedInDriver = dynamicsContext.dfp_logins
@@ -272,6 +273,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             return loggedInDriver != default;
         }
+
 
         public async Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request)
         {

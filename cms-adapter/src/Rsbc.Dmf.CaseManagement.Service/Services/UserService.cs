@@ -148,6 +148,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
         }
 
+
+
         // same as UpdateEmail but for medical practitioners
         public async override Task<ResultStatusReply> SetEmail(UserSetEmailRequest request, ServerCallContext context)
         {

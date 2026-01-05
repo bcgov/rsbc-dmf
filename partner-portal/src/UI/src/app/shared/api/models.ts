@@ -24,6 +24,7 @@ export { OkResult } from './models/ok-result';
 export { PreferredTime } from './models/preferred-time';
 export { ProblemDetails } from './models/problem-details';
 export { RehabTrigger } from './models/rehab-trigger';
+export { UserAccessRequest } from './models/user-access-request';
 export { UpdateContactRole } from './models/update-contact-role';
 export { User } from './models/user';
 export { UserContext } from './models/user-context';

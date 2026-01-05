@@ -93,10 +93,7 @@ public class UserService : IUserService
         if (isRegisterPath) return user;
 
         var loginResponse = await userManager.PartnerPortalLoginAsync(loginRequest);
-        if (loginResponse.ResultStatus == ResultStatus.Fail)
-        {
-            throw new Exception(loginResponse.ErrorDetail);
-        }
+        if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
 
         var searchResults = await userManager.PartnerPortalSearchAsync(new PartnerPortalUserSearchRequest { UserId = loginResponse.UserId});
         if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
