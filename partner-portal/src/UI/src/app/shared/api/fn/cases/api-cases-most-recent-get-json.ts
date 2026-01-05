@@ -9,11 +9,13 @@ import { RequestBuilder } from '../../request-builder';
 import { CaseDetail } from '../../models/case-detail';
 
 export interface ApiCasesMostRecentGet$Json$Params {
+  programArea?: string;
 }
 
 export function apiCasesMostRecentGet$Json(http: HttpClient, rootUrl: string, params?: ApiCasesMostRecentGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDetail>> {
   const rb = new RequestBuilder(rootUrl, apiCasesMostRecentGet$Json.PATH, 'get');
   if (params) {
+    rb.query('programArea', params.programArea, {});
   }
 
   return http.request(

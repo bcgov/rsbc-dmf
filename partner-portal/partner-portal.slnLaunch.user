@@ -1,0 +1,19 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "..\\document-storage-adapter\\src\\Pssg.DocumentStorageAdapter.Client\\Pssg.DocumentStorageAdapter.Client.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\API\\partner-portal.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\cms-adapter\\src\\Rsbc.Dmf.CaseManagement.Service\\Rsbc.Dmf.CaseManagement.Service.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

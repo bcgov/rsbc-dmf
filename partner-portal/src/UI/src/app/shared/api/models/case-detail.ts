@@ -16,10 +16,13 @@ export interface CaseDetail {
   driverId?: string | null;
   eligibleLicenseClass?: string | null;
   idCode?: string | null;
+  isInterlock?: boolean;
+  isRehab?: boolean;
   lastActivityDate?: string;
   latestDecision?: string | null;
   openedDate?: string;
   outstandingDocuments?: number;
+  priority?: string | null;
   showOnPortals?: boolean;
   status?: string | null;
   title?: string | null;

@@ -6,6 +6,7 @@ import {
   DocumentService,
   DocumentTypeService,
   DriverService,
+  PortalUserService,
   RemedialService,
   //ProfileService,
 } from '../../api/services';
@@ -22,12 +23,13 @@ export class CaseManagementService {
     private documentTypeService: DocumentTypeService,
     private callbackService: CallbackService,
     private commentsService: CommentsService,
-    private remedialService: RemedialService
+    private remedialService: RemedialService,
+    private portalUserService: PortalUserService
   ) { }
 
   // Case
-  public getMostRecentCase() {
-    return this.casesService.apiCasesMostRecentGet$Json();
+  public getMostRecentCase(params: Parameters<CasesService['apiCasesMostRecentGet$Json']>[0]) {
+    return this.casesService.apiCasesMostRecentGet$Json(params);
   }
 
   public getClosedCases(
@@ -73,9 +75,9 @@ export class CaseManagementService {
 
   // Search 
   public searchByDriver(
-    params: Parameters<DriverService['apiDriverInfoDriverLicenceNumberGet$Json']>[0]
+    params: Parameters<DriverService['apiDriverInfoDriverLicenceNumberSurCodeGet$Json']>[0]
   ) {
-    return this.driverService.apiDriverInfoDriverLicenceNumberGet$Json(params);
+    return this.driverService.apiDriverInfoDriverLicenceNumberSurCodeGet$Json(params);
   }
 
 
@@ -112,5 +114,37 @@ export class CaseManagementService {
   ) {
     return this.remedialService.apiRemedialGetRehabTriggersGet$Json(params);
   }
-  
+
+
+  //User Service
+
+  public getUsers(
+    params: Parameters<PortalUserService['apiPortalUserGetUsersPost$Json']>[0]
+  ) {
+    return this.portalUserService.apiPortalUserGetUsersPost$Json(params)
+  }
+
+  public updatePortalUser(
+    params: Parameters<PortalUserService['apiPortalUserUpdateUserPost$Json']>[0]
+  ) {
+    return this.portalUserService.apiPortalUserUpdateUserPost$Json(params)
+  }
+
+    public getContactRoles(
+    params: Parameters<PortalUserService['apiPortalUserGetContactRolesGet$Json']>[0]
+  ) {
+    return this.portalUserService.apiPortalUserGetContactRolesGet$Json(params)
+  }
+
+  public updateContactRoles(
+    params: Parameters<PortalUserService['apiPortalUserUpdateContactRolesPost']>[0]
+  ) {
+    return this.portalUserService.apiPortalUserUpdateContactRolesPost(params)
+  }
+
+  public exportUsers(
+    params: Parameters<PortalUserService['apiPortalUserExportUserPost$Json']>[0]
+  ) {
+    return this.portalUserService.apiPortalUserExportUserPost$Json(params)
+  }
 }

@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-
 /* Provide sufficient contrast against white background */
 :root {
   // Mobile max width
@@ -403,3 +402,9 @@ body {
     position: absolute;
     color: #003366;
   }
+
+.mat-calendar-table,
+.mat-calendar-table td {
+  border: none !important;
+  border-collapse: separate !important;
+}

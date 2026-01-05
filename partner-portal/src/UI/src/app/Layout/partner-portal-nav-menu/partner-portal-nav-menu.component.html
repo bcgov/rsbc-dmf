@@ -2,8 +2,11 @@
   <div class="container">
     <mat-toolbar class="top-nav">
       <div style="display: flex; justify-content: space-between; width: 100%">
-        <div>
+        <div [ngClass]="{ 'selected-nav-option': currentRoute == '/search', 'nav-option': currentRoute != '/search' }">
           <a routerLinkActive="active" [routerLink]="'/search'">Search</a>
+        </div>
+        <div [ngClass]="{ 'selected-nav-option': currentRoute == '/admin', 'nav-option': currentRoute != '/admin' }">
+          <a routerLinkActive="active" *ngIf="!hideAdminTab" [routerLink]="'/admin'">User Administration</a>
         </div>
         <div class="gethelp">
           <div>

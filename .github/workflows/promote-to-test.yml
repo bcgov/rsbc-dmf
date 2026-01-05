@@ -1,0 +1,813 @@
+name: Promote Services to Test Environment
+
+# --- TRIGGERS -----------------------------------------------------------------------
+on:
+    workflow_dispatch:
+        inputs:
+            source_tag:
+                description: "The source tag to promote (e.g., latest, or a specific tag)"
+                required: false
+                default: "latest"
+            target_tag:
+                description: "The target tag to promote to (e.g., test)"
+                required: false
+                default: "test"
+            service:
+                description: "Select service to promote"
+                required: true
+                type: choice
+                options:
+                    - cms-adapter
+                    - medical-portal-api
+                    - medical-portal-ui
+                    - document-storage-adapter
+                    - document-triage-service
+                    - icbc-adapter
+                    - landing-page
+                    - oauth-server
+                    - phsa-adapter
+                    - legacy-adapter
+                    - bcmail-adapter
+                    - driver-portal-api
+                    - driver-portal-ui
+                    - partner-portal-api
+                    - partner-portal-ui
+                    - scheduler-service
+
+# --- ENVIRONMENT VARIABLES ---------------------------------------------------------
+env:
+    IMAGE_REGISTRY: ${{ vars.PROMOTE_OCP4_REGISTRY }}
+    NAMESPACE: ${{ secrets.PROMOTE_OCP4_NAMESPACE }}
+    SOURCE_TAG: ${{ github.event.inputs.source_tag }}
+    TARGET_TAG: ${{ github.event.inputs.target_tag }}
+    BACKUP_TAG: "test-backup"
+
+# --- JOBS ---------------------------------------------------------------------------
+jobs:
+    # Job 1: CMS Adapter
+    promote-cms-adapter:
+        name: Promote CMS Adapter to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'cms-adapter' }}
+        env:
+            IMAGE_NAME: "cms-adapter"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "CMS Adapter promotion successful!"
+                  else
+                    echo "::error::CMS Adapter promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 2: Medical Portal API
+    promote-medical-portal-api:
+        name: Promote Medical Portal API to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'medical-portal-api' }}
+        env:
+            IMAGE_NAME: "medical-portal-api"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Medical Portal API promotion successful!"
+                  else
+                    echo "::error::Medical Portal API promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 3: Medical Portal UI
+    promote-medical-portal-ui:
+        name: Promote Medical Portal UI to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'medical-portal-ui' }}
+        env:
+            IMAGE_NAME: "medical-portal-ui"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Medical Portal UI promotion successful!"
+                  else
+                    echo "::error::Medical Portal UI promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 4: Document Storage Adapter
+    promote-document-storage-adapter:
+        name: Promote Document Storage Adapter to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'document-storage-adapter' }}
+        env:
+            IMAGE_NAME: "document-storage-adapter"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Document Storage Adapter promotion successful!"
+                  else
+                    echo "::error::Document Storage Adapter promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 5: Document Triage Service
+    promote-document-triage-service:
+        name: Promote Document Triage Service to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'document-triage-service' }}
+        env:
+            IMAGE_NAME: "document-triage-service"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Document Triage Service promotion successful!"
+                  else
+                    echo "::error::Document Triage Service promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 6: ICBC Adapter
+    promote-icbc-adapter:
+        name: Promote ICBC Adapter to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'icbc-adapter' }}
+        env:
+            IMAGE_NAME: "icbc-adapter"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "ICBC Adapter promotion successful!"
+                  else
+                    echo "::error::ICBC Adapter promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 7: Landing Page
+    promote-landing-page:
+        name: Promote Landing Page to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'landing-page' }}
+        env:
+            IMAGE_NAME: "landing-page"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Landing Page promotion successful!"
+                  else
+                    echo "::error::Landing Page promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 8: OAuth Server
+    promote-oauth-server:
+        name: Promote OAuth Server to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'oauth-server' }}
+        env:
+            IMAGE_NAME: "oauth-server"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "OAuth Server promotion successful!"
+                  else
+                    echo "::error::OAuth Server promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 9: PHSA Adapter
+    promote-phsa-adapter:
+        name: Promote PHSA Adapter to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'phsa-adapter' }}
+        env:
+            IMAGE_NAME: "phsa-adapter"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "PHSA Adapter promotion successful!"
+                  else
+                    echo "::error::PHSA Adapter promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 10: Legacy Adapter
+    promote-legacy-adapter:
+        name: Promote Legacy Adapter to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'legacy-adapter' }}
+        env:
+            IMAGE_NAME: "legacy-adapter"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Legacy Adapter promotion successful!"
+                  else
+                    echo "::error::Legacy Adapter promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 11: BCMail Adapter
+    promote-bcmail-adapter:
+        name: Promote BCMail Adapter to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'bcmail-adapter' }}
+        env:
+            IMAGE_NAME: "bcmail-adapter"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "BCMail Adapter promotion successful!"
+                  else
+                    echo "::error::BCMail Adapter promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 12: Driver Portal API
+    promote-driver-portal-api:
+        name: Promote Driver Portal API to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'driver-portal-api' }}
+        env:
+            IMAGE_NAME: "driver-portal-api"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Driver Portal API promotion successful!"
+                  else
+                    echo "::error::Driver Portal API promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 13: Driver Portal UI
+    promote-driver-portal-ui:
+        name: Promote Driver Portal UI to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'driver-portal-ui' }}
+        env:
+            IMAGE_NAME: "driver-portal-ui"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Driver Portal UI promotion successful!"
+                  else
+                    echo "::error::Driver Portal UI promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 14: Partner Portal API
+    promote-partner-portal-api:
+        name: Promote Partner Portal API to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'partner-portal-api' }}
+        env:
+            IMAGE_NAME: "partner-portal-api"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Partner Portal API promotion successful!"
+                  else
+                    echo "::error::Partner Portal API promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 15: Partner Portal UI
+    promote-partner-portal-ui:
+        name: Promote Partner Portal UI to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'partner-portal-ui' }}
+        env:
+            IMAGE_NAME: "partner-portal-ui"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Partner Portal UI promotion successful!"
+                  else
+                    echo "::error::Partner Portal UI promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 16: Scheduler Service
+    promote-scheduler-service:
+        name: Promote Scheduler Service to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'scheduler-service' }}
+        env:
+            IMAGE_NAME: "scheduler-service"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Scheduler Service promotion successful!"
+                  else
+                    echo "::error::Scheduler Service promotion failed - digests don't match"
+                    exit 1
+                  fi

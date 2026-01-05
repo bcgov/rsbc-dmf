@@ -23,11 +23,11 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenseNumber, bool allComments);
 
-        Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, EntityState entityState);
+        Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, EntityState entityState, string? programArea);
 
         Task<CaseDetail> GetCaseDetail(string caseId);
 
-        Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId);
+        Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId, string? programArea);
 
         Task<CaseDetail> GetCaseByIdCode(string IdCode);
 
@@ -47,6 +47,8 @@ namespace Rsbc.Dmf.CaseManagement
         Task<IEnumerable<Driver>> GetDrivers();
 
         Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
+
+        Task<IEnumerable<Driver>> GetDriverByIdAndSurCode(string licenseNumber, string surCode);
 
         /// <summary>
         /// Create a Legacy Candidate
@@ -126,6 +128,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<ResultStatusReply> CreateRehabTrigger(CreateCaseRequest caseCreateRequest);
         Task<IEnumerable<IgnitionInterlockDetails>> GetIgnitionInterlockDetails(Guid driverId);
         Task<IEnumerable<RehabTriggerDetails>> GetRehabTriggerDetails(Guid driverId);
+        Task<CaseDetail> GetMostRecentRemedialCaseDetail(Guid driverId);
 
     }
 }

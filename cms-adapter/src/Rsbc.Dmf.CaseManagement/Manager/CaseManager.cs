@@ -743,6 +743,16 @@ namespace Rsbc.Dmf.CaseManagement
             return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_driverid == Guid.Parse(id)).ToList();
         }
 
+        public IEnumerable<dfp_driver> GetDriverObjectsByIdAndSurCode(string licensenumber, string surCode)
+        {
+            //return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber && d.dfp_surname == surCode).ToList();
+            string truncatedSurCode = string.IsNullOrEmpty(surCode) ? string.Empty : surCode.Substring(0, Math.Min(3, surCode.Length));
+
+            return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
+                .Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber && d.dfp_surname.StartsWith(truncatedSurCode))
+                .ToList();
+        }
+
         public async Task<IEnumerable<Driver>> GetDriverByLicenseNumber(string licensenumber)
         {
             List<Driver> result = new List<Driver>();
@@ -778,6 +788,27 @@ namespace Rsbc.Dmf.CaseManagement
                     DriverLicenseNumber = item.dfp_licensenumber,
                     Surname = item.dfp_PersonId?.lastname,
                     GivenName = item.dfp_PersonId?.firstname
+                };
+                result.Add(d);
+            }
+
+            return result;
+        }
+
+        public async Task<IEnumerable<Driver>> GetDriverByIdAndSurCode(string licenseNumber, string surCode)
+        {
+            List<Driver> result = new List<Driver>();
+
+            var @drivers = GetDriverObjectsByIdAndSurCode(licenseNumber, surCode);
+
+            foreach (var item in @drivers)
+            {
+                Driver d = new Driver()
+                {
+                    Id = item.dfp_driverid.ToString(),
+                    DriverLicenseNumber = item.dfp_licensenumber,
+                    Surname = item.dfp_PersonId?.lastname,
+                    BirthDate = item.dfp_PersonId?.birthdate ?? default(DateTime),
                 };
                 result.Add(d);
             }
@@ -834,13 +865,26 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="driverId"></param>
         /// <param name="activeStatus"></param>
         /// <returns>IEnumerable<CaseDetail></returns>
-        public async Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, EntityState activeStatus)
+        public async Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, EntityState activeStatus, string? programArea)
         {
             var result = new List<CaseDetail>();
 
             try
             {
-                var cases = dynamicsContext.incidents.Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)activeStatus);
+                var casesQuery = dynamicsContext.incidents.Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)activeStatus);
+
+                // Apply program area filtering if provided
+                if (!string.IsNullOrEmpty(programArea))
+                {
+                    casesQuery = casesQuery.Where(i => i.dfp_programarea == TranslateProgramArea(programArea));
+                }
+                else
+                {
+                    casesQuery = casesQuery.Where(i => i.dfp_programarea != TranslateProgramArea("Remedial"));
+                }
+
+                var cases = casesQuery.ToList();
+                //var cases = dynamicsContext.incidents.Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)activeStatus);
                 if (cases != null)
                 {
                     var mostRecentProcessingDate = GetDpsProcessingDate();
@@ -922,16 +966,81 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="driverId"></param>
         /// <returns></returns>
-        public async Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId)
+        public async Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId, string? programArea)
         {
             CaseDetail result = null;
 
             try
             {
-                var fetchedCase = dynamicsContext.incidents.Where(i => i.dfp_DriverId.dfp_driverid == driverId && i.dfp_showonportals == true)
-                    .OrderByDescending(x => x.createdon).FirstOrDefault();
+                var fetchedCaseQuery = dynamicsContext.incidents
+                    .Where(i => i.dfp_DriverId.dfp_driverid == driverId && i.dfp_showonportals == true);
+
+                if (!string.IsNullOrEmpty(programArea))
+                {
+                    fetchedCaseQuery = fetchedCaseQuery.Where(i => i.dfp_programarea == TranslateProgramArea(programArea));
+                }
+                else
+                {
+                    fetchedCaseQuery = fetchedCaseQuery.Where(i => i.dfp_programarea != TranslateProgramArea("Remedial"));
+                }
+
+                    var fetchedCase = fetchedCaseQuery.OrderByDescending(x => x.createdon).FirstOrDefault();
 
                 if(fetchedCase != null)
+                {
+                    result = await _caseMapper.Map(fetchedCase);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, $"Error getting driver {driverId}");
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// Translate the Program Type
+        /// </summary>
+        /// <param name="programArea"></param>
+        /// <returns></returns>
+        private int TranslateProgramArea(string? programArea)
+        {
+            var statusMap = new Dictionary<string, int>()
+            {
+                { "DMF", 100000000 },
+                { "Remedial", 100000001 },
+                { "DIP", 100000002 },
+            };
+
+            if (statusMap.ContainsKey(programArea))
+            {
+                return statusMap[programArea];
+            }
+            else
+            {
+                return statusMap["Unknown"];
+            }
+        }
+
+
+        /// <summary>
+        /// GetMostRecentCaseDetail
+        /// </summary>
+        /// <param name="driverId"></param>
+        /// <returns></returns>
+        public async Task<CaseDetail> GetMostRecentRemedialCaseDetail(Guid driverId)
+        {
+            CaseDetail result = null;
+
+            try
+            {
+                var fetchedCase = dynamicsContext.incidents
+                    .Where(i => i.dfp_DriverId.dfp_driverid == driverId && i.dfp_showonportals == true && i.dfp_programarea == 100000001)
+                    .OrderByDescending(x => x.createdon).FirstOrDefault();
+
+                if (fetchedCase != null)
                 {
                     result = await _caseMapper.Map(fetchedCase);
                 }
@@ -3697,6 +3806,7 @@ namespace Rsbc.Dmf.CaseManagement
                 return "Unknown";
             }
         }
+
 
         /// <summary>
         /// Translate the Dynamics Priority (status reason) field to text

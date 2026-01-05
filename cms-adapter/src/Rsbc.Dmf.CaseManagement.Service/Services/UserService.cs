@@ -148,6 +148,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
         }
 
+
+
         // same as UpdateEmail but for medical practitioners
         public async override Task<ResultStatusReply> SetEmail(UserSetEmailRequest request, ServerCallContext context)
         {
@@ -184,6 +186,77 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return result;
         }
+
+        public async override Task<GetUserContactReply> GetUserContact(GetUserContactRequest request, ServerCallContext context)
+        {
+
+            var reply = new GetUserContactReply();
+            try
+            {
+
+                var getContact = await _userManager.GetUserContact(new CaseManagement.GetUserContactRequest { externalSystemUserId = request.ExternalSystemUserId });
+                if (getContact?.contact == null)
+                {
+                    reply.ResultStatus = ResultStatus.Fail; // or NotFound if you have such a status
+                    reply.ErrorDetail = "Contact not found";
+                    return reply;
+                }
+
+                reply.Contact = new UserContact
+                   {
+                       ContactId = getContact.contact.Id ?? string.Empty,
+                       GivenName = getContact.contact.GivenName ?? string.Empty,
+                       SecondGivenName = getContact.contact.SecondGivenName ?? string.Empty,
+                       ThirdGivenName = getContact.contact.ThirdGivenName ?? string.Empty,
+                       Surname = getContact.contact.SurName ?? string.Empty,
+                       AddressFirstLine = getContact.contact.AddressFirstLine ?? string.Empty,
+                       AddressSecondLine = getContact.contact.AddressSecondLine ?? string.Empty,
+                       AddressThirdLine = getContact.contact.AddressThirdLine ?? string.Empty,
+                       City = getContact.contact.City ?? string.Empty,
+                       Province = getContact.contact.Province ?? string.Empty,
+                       Country = getContact.contact.Country ?? string.Empty,
+                       PostalCode = getContact.contact.PostalCode ?? string.Empty,
+                       EmailAddress = getContact.contact.EmailAddress ?? string.Empty,
+                       PhoneNumber = getContact.contact.PhoneNumber ?? string.Empty,
+                       CellPhoneNumber = getContact.contact.CellPhoneNumber ?? string.Empty,
+
+                };
+                reply.ResultStatus = ResultStatus.Success;
+
+            }
+            catch (Exception ex)
+            {
+
+                
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+        public async override Task<SetUserContactLoginReply> SetUserContactLogin(SetUserContactLoginRequest request, ServerCallContext context)
+        {
+            var result = new SetUserContactLoginReply();
+
+            try
+            {
+                Guid? contactId = null;
+                if (request.ContactId != string.Empty)
+                {
+                    contactId = Guid.Parse(request.ContactId);
+                }
+                result.HasContact = await _userManager.SetUserContactLogin(Guid.Parse(request.LoginId), contactId);
+                result.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
+            }
+
+            return result;
+        }
+
 
         public async override Task<ResultStatusReply> UpdateLogin(UpdateLoginRequest request, ServerCallContext context)
         {
@@ -222,5 +295,111 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return result;
         }
+
+
+        // Partner Portal
+
+
+        public async override Task<PartnerPortalLoginReply> PartnerPortalLogin(PartnerPortalLoginRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var loginRequest = new CaseManagement.PartnerPortalLoginRequest()
+                {
+                    contact = new CaseManagement.UserContact()
+                    {  
+                        ExternalSystem = request.ExternalSystem,
+                        ExternalSystemUserId = request.ExternalSystemUserId,
+                    }
+                };
+                
+
+                var loginResult = await _userManager.PartnerPortalLoginUser(loginRequest);
+                if (loginResult == null)
+                {
+                    return new PartnerPortalLoginReply
+                    {
+                        ResultStatus = ResultStatus.Fail,
+                        ErrorDetail = "Login not found for ExternalSystem/ExternalSystemUserId"
+                    };
+                }
+                var userLoginReply = new PartnerPortalLoginReply { ResultStatus = ResultStatus.Success };
+                userLoginReply.UserId = loginResult.Userid;
+                if (loginResult.LoginIds?.Count > 0)
+                {
+                    userLoginReply.LoginIds.AddRange(loginResult.LoginIds);
+                }
+                return userLoginReply;
+
+            }
+
+            catch (Exception e)
+            {
+                return new PartnerPortalLoginReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
+            }
+        }
+
+
+        public async override Task<PartnerPortalUserSearchReply> PartnerPortalSearch(PartnerPortalUserSearchRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var managerRequest = new CaseManagement.PartnerPortalSearchRequest
+                {
+                    ByExternalUserId = string.IsNullOrEmpty(request.ExternalSystemUserId) ? null : (request.ExternalSystemUserId, request.ExternalSystem),
+                    ByUserId = request.UserId
+                };
+
+                var partnerResults = await _userManager.PartnerPortalSearchUsers(managerRequest);
+                var users = partnerResults.Items
+                    .Select((CaseManagement.UserContact u) => new UserContact
+                    {
+                        ContactId = u.Id ?? string.Empty,
+                        GivenName = u.GivenName ?? string.Empty,
+                        Surname = u.SurName ?? string.Empty,
+                        ExternalSystem = u.ExternalSystem ?? string.Empty,
+                        ExternalSystemUserId = u.ExternalSystemUserId ?? string.Empty
+                    });
+
+                return new PartnerPortalUserSearchReply
+                {
+                    ResultStatus = ResultStatus.Success,
+                    User = { users }
+                };
+            }
+            catch (Exception e)
+            {
+                return new PartnerPortalUserSearchReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
+            }
+        }
+
+        public async override Task<UserContactReply> CreateUserContact(UserContactRequest request, ServerCallContext context)
+        {
+            var reply = new UserContactReply();
+
+            try
+            {
+                var userAccessRequest = _mapper.Map<CaseManagement.UserContact>(request.Contact);
+                var result = await _userManager.CreateUserContact(userAccessRequest);
+                if (result != null && result.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                    reply.ContactId = result.contactId;
+                }
+                else
+                {
+                    reply.ResultStatus = ResultStatus.Fail;
+                    reply.ErrorDetail = result?.ErrorDetail ?? "CreateUserContact failed";
+                }
+            }
+            catch (Exception ex)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = ex.Message;
+            }
+
+            return reply;
+        }
+
     }
 }

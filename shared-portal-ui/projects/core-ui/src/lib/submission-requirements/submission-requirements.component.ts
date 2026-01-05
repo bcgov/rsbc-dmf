@@ -72,6 +72,7 @@ export class SharedSubmissionRequirementsComponent implements OnInit {
   @Input() apiConfig!: ApiConfiguration;
   @Input() caseManagementService: any;
   @Input()  portal!: PortalsEnum;
+  @Input() programArea: string | null = null;
 
   constructor(
     private _http: HttpClient,

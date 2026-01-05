@@ -805,6 +805,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 Owner = "Team - Remedial Intake", // Remedial Intake Agent
                                 SubmittalStatus = "Uploaded",
                                 Queue = assign ?? string.Empty,
+                                Origin = origin ?? string.Empty,
                             };
 
                             // 24/4/17 Set submittal status to "Issued" for letter out.

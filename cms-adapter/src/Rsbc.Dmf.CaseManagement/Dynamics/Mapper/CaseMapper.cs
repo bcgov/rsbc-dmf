@@ -85,6 +85,13 @@ namespace Rsbc.Dmf.CaseManagement
             result.LastName = @case.dfp_DriverId?.dfp_PersonId?.lastname;
             result.MiddleName = @case.dfp_DriverId?.dfp_PersonId?.middlename;
             result.showOnPortals = @case.dfp_showonportals.GetValueOrDefault();
+            result.IsRehab = @case.dfp_rehab.GetValueOrDefault();
+            result.IsInterlock = @case.dfp_interlock.GetValueOrDefault();
+
+            if(@case.prioritycode != null)
+            {
+                result.Priority = TranslatePriorityCode(@case.prioritycode);
+            }
 
             if (@case.dfp_dfcmscasesequencenumber == null)
             {
@@ -119,8 +126,20 @@ namespace Rsbc.Dmf.CaseManagement
             // case assignment
             if (@case._owningteam_value.HasValue)
             {
+                // Case assigned to a team
                 await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.owningteam));
-                result.AssigneeTitle = @case.owningteam.name;
+                result.AssigneeTitle = @case.owningteam?.name ?? "Unknown Team";
+            }
+            else if (@case._owninguser_value.HasValue)
+            {
+                // Case assigned to a system user
+                _dynamicsContext.LoadProperty(@case, nameof(incident.owninguser));
+                result.AssigneeTitle = @case.owninguser?.fullname ?? "Assigned User";
+               
+            }
+            else
+            {
+                result.AssigneeTitle = "Unassigned";
             }
 
             // get the medical conditions.
@@ -247,6 +266,27 @@ namespace Rsbc.Dmf.CaseManagement
                     break;
             }
             return result;
+        }
+
+       
+        private string TranslatePriorityCode(int? optionSetValue)
+        {
+            var statusMap = new Dictionary<int, string>()
+            {
+                { 1, "Critical Review" },
+                { 2, "Regular" },
+                { 3, "Urgent" },
+                { 4, "Expedited" },
+            };
+
+            if (optionSetValue != null && statusMap.ContainsKey(optionSetValue.Value))
+            {
+                return statusMap[optionSetValue.Value];
+            }
+            else
+            {
+                return "Regular";
+            }
         }
 
 

@@ -16,27 +16,27 @@
                 </div>
                 <div style="flex:1">
                     <div class="caseDetailRow">
-                        <div>
+                        <div style="flex: 1;">
                             <label>Assignment Date</label>
                             <div>
                                 <b>{{rehabDetail.assignmentDate | date:'yyyy-MM-dd'}}</b>
                             </div>
                         </div>
 
-                        <div>
+                        <div style="flex: 1;">
                             <label>Client Type</label>
                             <div>
                                 <b>{{rehabDetail.clientType}}</b>
                             </div>
                         </div>
 
-                        <div>
+                        <div style="flex: 1;">
                             <label>Rehab Activity</label>
                             <div>
                                 <b>{{rehabDetail.rehabActivity}}</b>
                             </div>
                         </div>
-                        <div>
+                        <div style="flex: 1;">
                             <label>Client Paid?</label>
                             <div>
                                 <b>{{rehabDetail.clientPaid}}</b>
@@ -45,23 +45,26 @@
                     </div>
                     <div class="caseDetailRow caseborder"
                         *ngIf="rehabDetail.rehabId && isExpanded?.[rehabDetail.rehabId]">
-                        <div>
+                        <div style="flex: 1;">
                             <label>Stream</label>
                             <div>
                                 <b>{{rehabDetail.stream}}</b>
                             </div>
                         </div>
-                        <div>
+                        <div style="flex: 1;">
                             <label>Decision</label>
                             <div>
                                 <b>{{rehabDetail.decision}}</b>
                             </div>
                         </div>
-                        <div>
+                        <div style="flex: 1;">
                             <label>Decision Date</label>
                             <div>
                                 <b>{{rehabDetail.decisionDate | date:'yyyy-MM-dd'}}</b>
                             </div>
+                        </div>
+                         <div style="flex: 1;">
+                            <label></label>
                         </div>
                     </div>
 

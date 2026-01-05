@@ -1,5 +1,6 @@
 ﻿using Microsoft.OData.Client;
 using Microsoft.OData.Edm;
+using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
@@ -22,6 +23,11 @@ namespace Rsbc.Dmf.CaseManagement
         Task<bool> UpdateLogin(UpdateLoginRequest request);
         bool IsDriverAuthorized(string userId, Guid driverId);
         Task<PractitionerReply> GetPractitionerContact(PractitionerRequest request);
+        Task<UserContactReply> CreateUserContact(UserContact request);
+        Task<PartnerPortalLoginResponse> PartnerPortalLoginUser(PartnerPortalLoginRequest request);
+        Task<PartnerPortalSearchResponse> PartnerPortalSearchUsers(PartnerPortalSearchRequest request);
+        Task<bool> SetUserContactLogin(Guid loginId, Guid? contactId);
+        Task<GetUserContactReply> GetUserContact(GetUserContactRequest request);
     }
 
     public class UpdateLoginRequest
@@ -67,6 +73,7 @@ namespace Rsbc.Dmf.CaseManagement
         public User User { get; set; }
     }
 
+
     public class LoginUserResponse
     {
         // NOTE this really should be named LoginId
@@ -87,11 +94,13 @@ namespace Rsbc.Dmf.CaseManagement
         public string Email { get; set; }
         public string DriverId { get; set; }
 
-        public string[] Roles { get; set;}
+        public string[] Roles { get; set; }
+
+
     }
 
     public class MedicalPractitionerUser : User
-    {   
+    {
         public IEnumerable<ClinicAssignment> ClinicAssignments { get; set; }
     }
 
@@ -125,6 +134,70 @@ namespace Rsbc.Dmf.CaseManagement
         public string Email { get; set; } = string.Empty;
         public string ClinicName { get; set; } = string.Empty;
         public string Role { get; set; } = string.Empty;
+    }
+
+    public class PartnerPortalLoginRequest
+    {
+       public UserContact contact { get; set; }
+
+    }
+
+    public class PartnerPortalLoginResponse
+    {
+        public string Userid { get; set; }
+        public List<string> LoginIds { get; set; }
+    }
+
+    public class PartnerPortalSearchRequest
+    {
+        public string ByUserId { get; set; }
+        public (string externalUserId, string externalSystem)? ByExternalUserId { get; set; }
+    }
+
+    public class PartnerPortalSearchResponse
+    {
+        public IEnumerable<UserContact> Items { get; set; }
+    }
+
+    public class GetUserContactRequest
+    {
+       public string externalSystemUserId { get; set; }
+    }
+
+
+
+    public class GetUserContactReply
+    {
+        public UserContact contact { get; set; }
+    }
+
+    public class UserContact
+    {
+        public string Id { get; set; }
+        public string ExternalSystem { get; set; }
+        public string ExternalSystemUserId { get; set; }
+        public string GivenName { get; set; }
+        public string SecondGivenName { get; set; }
+        public string ThirdGivenName { get; set; }
+        public string SurName { get; set; }
+        public string AddressFirstLine { get; set; }
+        public string AddressSecondLine { get; set; }
+        public string AddressThirdLine { get; set; }
+        public string City { get; set; }
+        public string Province { get; set; }
+        public string Country { get; set; }
+        public string PostalCode { get; set; }
+        public string PhoneNumber { get; set; }
+        public string CellPhoneNumber { get; set; }
+        public string EmailAddress { get; set; }
+       
+    }
+
+    public class UserContactReply
+    {
+        public string contactId { get; set; }
+        public bool Success { get; set; }
+        public string ErrorDetail { get; set; }
     }
 
     #endregion Model
@@ -188,6 +261,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         #endregion Practitioner
 
+
         public bool IsDriverAuthorized(string userId, Guid driverId)
         {
             var loggedInDriver = dynamicsContext.dfp_logins
@@ -199,6 +273,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             return loggedInDriver != default;
         }
+
 
         public async Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request)
         {
@@ -497,11 +572,233 @@ namespace Rsbc.Dmf.CaseManagement
             return loginUserResponse;
         }
 
+        public async Task<PartnerPortalLoginResponse> PartnerPortalLoginUser(PartnerPortalLoginRequest request)
+        {
+            var loginType = ParseExternalSystem(request.contact.ExternalSystem);
+            var loginId = request.contact.ExternalSystemUserId;
+
+            var logins = dynamicsContext.dfp_logins
+                .Expand(c => c.dfp_Person)
+                .Where(l => l.dfp_userid == loginId && l.dfp_type == (int)loginType).ToList();
+
+
+            var login = logins.SingleOrDefault();
+
+            if (login == null)
+            {
+                return null;
+            }
+
+            var loginUserResponse = new PartnerPortalLoginResponse { Userid = login.dfp_loginid.ToString() };
+            loginUserResponse.LoginIds = logins.Select(l => l.dfp_loginid.ToString()).ToList();
+            return loginUserResponse;
+
+        }
+
+        public async Task<PartnerPortalSearchResponse> PartnerPortalSearchUsers(PartnerPortalSearchRequest request)
+        {
+            IQueryable<dfp_login> query = dynamicsContext.dfp_logins
+                  .Expand(l => l.dfp_Person)
+                  .Where(l => l.statecode == (int)EntityState.Active);
+
+            if (!string.IsNullOrEmpty(request.ByUserId))
+            {
+                if (Guid.TryParse(request.ByUserId, out Guid loginGuid))
+                {
+                    query = query.Where(l => l.dfp_loginid == loginGuid);
+                }
+                else
+                {
+                    query = query.Where(l => l.dfp_userid == request.ByUserId);
+                }
+            }
+
+            if (request.ByExternalUserId.HasValue)
+                query = query.Where(l => l.dfp_userid == request.ByExternalUserId.Value.externalUserId &&
+                                         l.dfp_type == (int)ParseExternalSystem(request.ByExternalUserId.Value.externalSystem));
+
+            var users = (await ((DataServiceQuery<dfp_login>)query).GetAllPagesAsync()).ToArray();
+
+            dynamicsContext.DetachAll();
+
+            var mappedUsers = users.Select(u => new UserContact
+            {
+                Id = u.dfp_loginid.ToString(),
+                GivenName = u.dfp_Person?.firstname,
+                SurName = u.dfp_Person?.lastname,
+                EmailAddress = u.dfp_Person?.emailaddress1,
+                ExternalSystem = u.dfp_type.HasValue ? ((LoginType)u.dfp_type).ToString() : null,
+                ExternalSystemUserId = u.dfp_userid
+            }).ToArray();
+
+            return new PartnerPortalSearchResponse
+            {
+                Items = mappedUsers
+            };
+
+        }
+
+        
+        public async Task<UserContactReply> CreateUserContact(UserContact request)
+        {
+
+            if (request == null)
+            {
+                return new UserContactReply
+                {
+                    Success = false,
+                    ErrorDetail = "UserAccessRequest is null"
+                };
+            }
+
+            try
+            {
+                // Map UserAccessRequest to Dynamics contact fields
+                var newContact = new contact
+                {
+                    contactid = Guid.NewGuid(),
+                    bcgov_userid = request.ExternalSystemUserId,
+                    firstname = request.GivenName,
+                    middlename = request.SecondGivenName,
+                    bcgov_thirdgivenname = request.ThirdGivenName,
+                    lastname = request.SurName,
+                    address1_line1 = request.AddressFirstLine,
+                    address1_line2 = request.AddressSecondLine,
+                    address1_line3 = request.AddressThirdLine,
+                    address1_city = request.City,
+                    address1_stateorprovince = request.Province,
+                    address1_country = request.Country,
+                    address1_postalcode = request.PostalCode,
+                    address1_telephone1 = request.PhoneNumber,
+                    mobilephone = request.CellPhoneNumber,
+                    emailaddress1 = request.EmailAddress,
+                   
+                };
+                dynamicsContext.AddTocontacts(newContact);
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.DetachAll();
+
+                return new UserContactReply
+                {
+                    contactId = newContact.contactid.ToString(),
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+             
+                var detail = ex.Message;
+                if (ex.InnerException != null) detail += " | " + ex.InnerException.Message;
+
+                return new UserContactReply
+                {
+                    Success = false,
+                    ErrorDetail = detail
+                };
+            }
+        }
+
+        public async Task<GetUserContactReply> GetUserContact(GetUserContactRequest request)
+        {
+
+                contact = dynamicsContext.contacts
+                .Where(c => c.bcgov_userid == request.externalSystemUserId || c.externaluseridentifier == request.externalSystemUserId)
+                .SingleOrDefault();
+            
+
+            if (contact != null)
+            {
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.contactid));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.firstname));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.middlename));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.bcgov_thirdgivenname));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.lastname));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.emailaddress1));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_line1));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_line2));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_line3));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_city));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_stateorprovince));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_country));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.address1_postalcode));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.mobilephone));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.telephone1));
+                return new GetUserContactReply
+                {
+                    contact = new UserContact
+                    {
+                        Id = contact.contactid.ToString(),
+                        GivenName = contact.firstname,
+                        SecondGivenName = contact.middlename,
+                        ThirdGivenName = contact.bcgov_thirdgivenname,
+                        SurName = contact.lastname,
+                        EmailAddress = contact.emailaddress1,
+                        AddressFirstLine = contact.address1_line1,
+                        AddressSecondLine = contact.address1_line2,
+                        AddressThirdLine = contact.address1_line3,
+                        City = contact.address1_city,
+                        Province = contact.address1_stateorprovince,
+                        Country = contact.address1_country,
+                        PostalCode = contact.address1_postalcode,
+                        CellPhoneNumber = contact.mobilephone,
+                        PhoneNumber = contact.telephone1,
+                        ExternalSystemUserId = contact.bcgov_userid
+                    }
+                };
+            }
+
+            return new GetUserContactReply();
+        }
+
+
+        public async Task<bool> SetUserContactLogin(Guid loginId, Guid? contactId)
+        {
+            dfp_login login;
+            try
+            {
+                login = dynamicsContext.dfp_logins
+                    .Expand(l => l.dfp_Person)
+                    .Where(l => l.dfp_loginid == loginId)
+                    .FirstOrDefault();
+            } 
+            catch (Exception)
+            {
+               login = null;
+            }
+
+            // login must exist
+            if (login == null)
+            {
+                var contact = dynamicsContext.contacts
+                .Where(x => x.contactid == contactId.Value)
+                .FirstOrDefault();
+
+                if (contact == null)
+                {
+                    return false;
+                }
+
+                // Create Login
+                //var loginType = ParseExternalSystem(request.User.ExternalSystem);
+            
+                login = CreateLogin(contact.bcgov_userid, LoginType.IDIR);
+
+                // Create or replace the link
+                dynamicsContext.SetLink(login, nameof(dfp_login.dfp_Person), contact);
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.Detach(contact);
+            }
+
+            return true;
+        }
+
         private LoginType ParseExternalSystem(string externalSystem) => externalSystem.ToLowerInvariant() switch
         {
             "bcsc" => LoginType.Bcsc,
             "bceid" => LoginType.Bceid,
-            "idir" => LoginType.Idir,
+            "azure-idir" => LoginType.IDIR,
+            "msEntra" => LoginType.MsEntra,
+            
             _ => throw new NotImplementedException(externalSystem)
         };
 
@@ -525,7 +822,8 @@ namespace Rsbc.Dmf.CaseManagement
     {
         Bcsc = 100000000,
         Bceid = 100000001,
-        Idir = 100000002
+        IDIR = 100000002,
+        MsEntra = 100000004
     }
 
     internal enum ProviderRole

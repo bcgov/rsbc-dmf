@@ -6,6 +6,7 @@ using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.IcbcAdapter;
 using Rsbc.Dmf.PartnerPortal.Api.ViewModels;
+using System.Data;
 using System.Linq.Expressions;
 
 namespace Rsbc.Dmf.PartnerPortal.Api
@@ -20,7 +21,17 @@ namespace Rsbc.Dmf.PartnerPortal.Api
             _logger = loggingFactory.CreateLogger<MappingProfile>();
 
             CreateMap<Timestamp, DateTimeOffset>()
-                .ConvertUsing(src => src.ToDateTimeOffset());
+     .ConvertUsing(src => src.ToDateTimeOffset());
+
+            CreateMap<Timestamp?, DateTimeOffset?>()
+                .ConvertUsing(src => src == null ? (DateTimeOffset?)null : src.ToDateTimeOffset());
+
+            // .NET → Protobuf (THIS WAS MISSING)
+            CreateMap<DateTimeOffset, Timestamp>()
+                .ConvertUsing(src => Timestamp.FromDateTimeOffset(src));
+
+            CreateMap<DateTimeOffset?, Timestamp>()
+                .ConvertUsing(src => src.HasValue ? Timestamp.FromDateTimeOffset(src.Value) : null);
 
             CreateMap<LegacyDocument, ViewModels.Document>()
                 .ForMember(dest => dest.ImportDate, opt => opt.MapFrom(src => ImportDateConverter(src)))
@@ -61,6 +72,70 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                     .ForMember(dest => dest.ClientPaid, opt => opt.MapFrom(src => src.ClientPaid))
                     .ForMember(dest => dest.Stream, opt => opt.MapFrom(src => src.Stream))
                     .ForMember(dest => dest.Decision, opt => opt.MapFrom(src => src.Decision));
+            CreateMap<Contact, ViewModels.User>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.AddressLine1, opt => opt.MapFrom(src => src.AddressLine1))
+                .ForMember(dest => dest.AddressLine2, opt => opt.MapFrom(src => src.AddressLine2))
+                .ForMember(dest => dest.AddressLine3, opt => opt.MapFrom(src => src.AddressLine3))
+                .ForMember(dest => dest.PostCode, opt => opt.MapFrom(src => src.PostCode))
+                .ForMember(dest => dest.Province, opt => opt.MapFrom(src => src.Province))
+                .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
+                .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+                .ForMember(dest => dest.SecondGivenName, opt => opt.MapFrom(src => src.SecondGivenName))
+                .ForMember(dest => dest.ThirdGivenName, opt => opt.MapFrom(src => src.ThirdGivenName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+                .ForMember(dest => dest.CellNumber, opt => opt.MapFrom(src => src.CellNumber))
+                .ForMember(dest => dest.Domain, opt => opt.MapFrom(src => src.Domain))
+                .ForMember(dest => dest.DFWebuserId, opt => opt.MapFrom(src => src.DFWebuserId))
+                .ForMember(dest => dest.Authorized, opt => opt.MapFrom(src => src.Authorized))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
+                .ForMember(dest => dest.Active, opt => opt.MapFrom(src => src.Active))
+                .ForMember(dest => dest.ExpiryDate,opt => opt.MapFrom(src =>src.ExpiryDate == null? (DateTimeOffset?)null : src.ExpiryDate.ToDateTimeOffset()))
+                .ForMember(dest => dest.Roles,
+                    opt => opt.MapFrom(src => src.UserRoles.ToList() ?? new List<ContactRoles>()));
+
+
+            CreateMap<ContactRoles, UserRole>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.RoleID, opt => opt.MapFrom(src => src.Description));
+
+            CreateMap<AuditDetails, AuditDetail>();
+            CreateMap<AuditDetail, AuditDetails>();
+
+            CreateMap<ViewModels.User, Contact>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.AddressLine1, opt => opt.MapFrom(src => src.AddressLine1))
+            .ForMember(dest => dest.AddressLine2, opt => opt.MapFrom(src => src.AddressLine2))
+            .ForMember(dest => dest.AddressLine3, opt => opt.MapFrom(src => src.AddressLine3))
+            .ForMember(dest => dest.PostCode, opt => opt.MapFrom(src => src.PostCode))
+            .ForMember(dest => dest.Province, opt => opt.MapFrom(src => src.Province))
+            .ForMember(dest => dest.Country, opt => opt.MapFrom(src => src.Country))
+            .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.City))
+            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.FirstName))
+            .ForMember(dest => dest.SecondGivenName, opt => opt.MapFrom(src => src.SecondGivenName))
+            .ForMember(dest => dest.ThirdGivenName, opt => opt.MapFrom(src => src.ThirdGivenName))
+            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+            .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber))
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email)) // Reverse of your original mapping
+            .ForMember(dest => dest.Domain, opt => opt.MapFrom(src => src.Domain))
+            .ForMember(dest => dest.DFWebuserId, opt => opt.MapFrom(src => src.DFWebuserId))
+            .ForMember(
+        dest => dest.ExpiryDate,
+        opt => opt.MapFrom(src =>
+            src.ExpiryDate.HasValue
+                ? Timestamp.FromDateTimeOffset(src.ExpiryDate.Value)
+                : new Timestamp() // Protobuf-safe default
+        )
+    )
+            // Authorized is usually computed, so you may skip or ignore
+            .ForMember(dest => dest.Authorized, opt => opt.Ignore())
+            .ForMember(dest => dest.UserRoles, opt => opt.MapFrom(src => src.Roles));
+
+            CreateMap<UserRole, ContactRoles>();
+
 
         }
 

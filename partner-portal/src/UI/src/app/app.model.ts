@@ -27,3 +27,11 @@ export enum CommentOrigin{
   'System' = 'System',
   'User' = 'User'
 }
+
+export class AdminSearch{
+  givenName? : string;
+  surname?: string;
+  userId?: string;
+  unauthorizedOnly?: boolean;
+  activeUser?: number;
+}

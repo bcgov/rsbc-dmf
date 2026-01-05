@@ -68,6 +68,8 @@ service CaseManager {
 
   rpc GetDriverById (DriverIdRequest) returns (GetDriversReply);
 
+  rpc GetDriverByIdAndSurCode (DriverRequest) returns (GetDriversReply);
+
   rpc GetLegacyDocument (LegacyDocumentRequest) returns (GetLegacyDocumentReply);
 
   // Get a token given a secret.
@@ -126,11 +128,14 @@ service CaseManager {
   // Update Non Comply documents
   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
 
+  // Remedial Case Details
+  rpc GetMostRecentRemedialCaseDetail (DriverIdRequest) returns (GetCaseDetailReply);
+
   // Get Rehab Trigger by driver license number
   rpc GetRehabTriggerDetails(DriverIdRequest) returns (RehabTriggerReply);
 
-   // Get Ignition Interlock by driver license number
-   rpc GetIgnitionInterlockDetails(DriverIdRequest) returns (IgnitionInterlockReply);
+  // Get Ignition Interlock by driver license number
+  rpc GetIgnitionInterlockDetails(DriverIdRequest) returns (IgnitionInterlockReply);
 }
 
 // sync with EntityState enum in Rsbc.Dmf.CaseManagement\Dynamics\DynamicsContext.cs
@@ -161,10 +166,20 @@ message UpdateDriverRequest{
 
 message DriverIdRequest {
     string id = 1;
+    CaseFilterRequest caseFilter = 2;
+}
+
+message CaseFilterRequest {
+    string programArea = 1;
 }
 
 message DriverLicenseRequest {
 	string driverLicenseNumber = 1;
+}
+
+message DriverRequest {
+    string driverLicenseNumber = 1;
+    string surCode = 2;
 }
 
 message CaseIdRequest {
@@ -174,6 +189,7 @@ message CaseIdRequest {
 message CaseStatusRequest {
 	string driverId = 1;
 	EntityState status = 2;
+    CaseFilterRequest caseFilter = 3;
 }
 
 enum OriginRestrictions {
@@ -300,6 +316,11 @@ message CaseDetail {
     google.protobuf.Timestamp latestComplianceDate = 24;
     repeated MedicalConditionItem medicalConditions = 25;
     bool ShowOnPortals = 26;
+    bool isRehab = 27;
+    bool isInterlock = 28;
+    string priority = 29;
+
+
 }
 
 message CreateStatusReply {	
@@ -758,6 +779,11 @@ message CssReply {
 
 service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
+  rpc SearchContacts (UsersSearchRequest) returns (SystemUsersSearchReply);
+  rpc UpdateContact (Contact) returns (ResultStatusReply);
+  rpc UpdateContactRole(UpdateContactRoleRequest) returns (ResultStatusReply);
+  rpc GetContactRoles(GetContactRolesRequest) returns (GetContactRolesStatusReply);
+  rpc GetCurrentLoginUser (GetCurrentLoginUserRequest) returns (GetCurrentLoginUserReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);
   rpc SetEmail(UserSetEmailRequest) returns (ResultStatusReply);
   rpc UpdateEmail(UserSetEmailRequest) returns (ResultStatusReply);
@@ -765,6 +791,66 @@ service UserManager {
   rpc UpdateLogin(UpdateLoginRequest) returns (ResultStatusReply);
   rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
   rpc GetPractitionerContact(PractitionerRequest) returns (PractitionerReply);
+  // Partner Portal user access
+  rpc CreateUserContact (UserContactRequest) returns (UserContactReply); 
+  rpc GetUserContact(GetUserContactRequest) returns (GetUserContactReply);
+  rpc SetUserContactLogin(SetUserContactLoginRequest) returns (SetUserContactLoginReply);
+  rpc PartnerPortalLogin(PartnerPortalLoginRequest) returns (PartnerPortalLoginReply);
+  rpc PartnerPortalSearch (PartnerPortalUserSearchRequest) returns (PartnerPortalUserSearchReply);
+
+}
+
+message GetUserContactRequest{
+    string externalSystemUserId = 1;
+}
+
+message GetUserContactReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    UserContact contact = 3;
+}
+
+message SetUserContactLoginRequest {
+    string loginId = 1;
+    string contactId = 2;
+}
+
+message SetUserContactLoginReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    bool hasContact = 3;
+}
+
+message UserContactRequest{
+    string externalSystem = 1;
+    string externalSystemUserId = 2;
+    UserContact contact = 10;
+}
+
+message UserContactReply{
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    string contactId = 3;
+}
+
+message UserContact{
+    string givenName = 1;
+    string secondGivenName = 2;
+    string thirdGivenName = 3;
+    string surname = 4;
+    string addressFirstLine = 5;
+    string addressSecondLine = 6;
+    string addressThirdLine = 7;
+    string city =8;
+    string province = 9;
+    string country = 10;
+    string postalCode = 11;
+    string phoneNumber = 12;
+    string cellPhoneNumber = 13;
+    string emailAddress= 14;
+    string externalSystem = 15;
+    string externalSystemUserId = 16;
+    string contactId = 17;
 }
 
 message PractitionerReply{
@@ -818,11 +904,16 @@ message UpdateLoginRequest {
     FullAddress address = 7;
 }
 
+
 message UsersSearchRequest {
     string userId = 1;
     string externalSystem = 2;
     string externalSystemUserId = 3;
     UserType userType = 4;
+    string firstName = 5;
+    string lastName = 6;
+    bool unauthorizedOnly = 7;
+    int32 activeUser = 8;
 }
 
 message UsersSearchReply {
@@ -835,6 +926,33 @@ message GetDriversReply {
     ResultStatus resultStatus = 1;
     string errorDetail = 2;
     repeated Driver items = 10;
+}
+
+message PartnerPortalLoginRequest{
+    string externalSystemUserId = 1;
+    string externalSystem = 2;
+    string firstName = 3;
+    string lastName = 4;
+}
+
+message PartnerPortalLoginReply{
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    string userId = 3;
+    repeated string loginIds = 4;
+}
+
+message PartnerPortalUserSearchRequest {
+     string userId = 1;
+    string externalSystem = 2;
+    string externalSystemUserId = 3;
+}
+
+message PartnerPortalUserSearchReply{
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    repeated UserContact user = 10;
+
 }
 
 message UserLoginRequest {
@@ -894,6 +1012,7 @@ message DriverProfile {
 enum UserType {
     MedicalPractitionerUserType = 0;
     DriverUserType = 1;
+    PartnerPortalUserType = 2;
 }
 
 message IdListRequest {
@@ -913,6 +1032,88 @@ message ResultStatusReply {
 
 
 // END UserManager
+////////////////////////
+
+////////////////////////
+// START PortalPartnerUserManager 
+
+service PortalPartnerUserManager {
+  rpc Search (UsersSearchRequest) returns (UsersSearchReply);
+  rpc SearchContacts (UsersSearchRequest) returns (SystemUsersSearchReply);
+  rpc UpdateContact (Contact) returns (ResultStatusReply);
+  rpc UpdateContactRole(UpdateContactRoleRequest) returns (ResultStatusReply);
+  rpc GetContactRoles(GetContactRolesRequest) returns (GetContactRolesStatusReply);
+  rpc GetCurrentLoginUser (GetCurrentLoginUserRequest) returns (GetCurrentLoginUserReply);
+}
+
+  message Contact {
+        string FirstName =1;
+        string SecondGivenName = 2;
+        string ThirdGivenName =3;
+        string LastName = 16;
+        string AddressLine1 = 4;
+        string AddressLine2 = 5;
+        string AddressLine3 = 6;
+        string City = 7;
+        string Province = 8;
+        string Country = 9;
+        string PostCode =10;
+        string PhoneNumber = 11;
+        string CellNumber = 12;
+        string Email  = 13;
+        google.protobuf.Timestamp ExpiryDate = 14;
+        google.protobuf.Timestamp EffectiveDate =15;
+        string Domain = 17;
+        string DFWebuserId = 18;
+        repeated ContactRoles UserRoles = 19;
+        bool Authorized =20;
+        string Id = 21;
+        string UserName = 22;
+        bool Active = 23;
+        string modifiedBy = 24;
+        repeated AuditDetails AuditDetails = 25;
+}
+message ContactRoles {
+    string name = 1;
+    string description = 2;
+    string id = 3;
+}
+message AuditDetails {
+    string entryId = 1;
+    google.protobuf.Timestamp entryDate = 2;
+    string description = 3;
+}
+message GetContactRolesStatusReply{
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    repeated ContactRoles role = 10;
+}
+message UpdateContactRoleRequest{
+    string contactId = 1;
+    string roleId = 2;
+    bool addRole = 3;
+    string ModifiedBy = 4;
+}
+
+message GetContactRolesRequest {
+    // no fields needed
+}
+
+message GetCurrentLoginUserRequest{
+    string userId = 1;
+}
+
+message GetCurrentLoginUserReply{
+    repeated string userRoles = 1;
+}
+
+message SystemUsersSearchReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    repeated Contact user = 10;
+}
+
+  // END PortalPartnerUserManager 
 ////////////////////////
 // START CallbackManager
 
