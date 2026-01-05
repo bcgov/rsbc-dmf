@@ -21,6 +21,11 @@ export class PartnerPortalNavMenuComponent {
   hideAdminTab: boolean = true;
 
   ngOnInit() {
+    this.authService.hasUserAccess().then((hasAccess) => {
+      if(hasAccess ==false){
+       window.location.href = '/assets/unauthorized.html';
+      }
+    });
     this.authService.hasAdminAccess().then((hasAccess) => {
       this.hideAdminTab = !hasAccess;
     });
