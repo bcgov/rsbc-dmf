@@ -1,9 +1,4 @@
-const { env } = require('process');
-
-//const target1 = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_HTTPS_PORT}` :
-//  env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'http://localhost:8080';
-
-const target = 'http://localhost:8080/';
+const target = 'http://127.0.0.1:8080/';
 
 const PROXY_CONFIG = [
   {
@@ -15,10 +10,10 @@ const PROXY_CONFIG = [
     },
   },
   {
-    context: ['/patner-portal/api'],
+    context: ['/partner-portal/api'], 
     target: target,
     pathRewrite: {
-      '^/partner-portal': '',
+      '^/partner-portal': '', 
     },
     secure: false,
     headers: {

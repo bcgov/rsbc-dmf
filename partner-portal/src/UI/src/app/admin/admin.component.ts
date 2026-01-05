@@ -86,6 +86,28 @@ export class AdminComponent {
       });
   }
 
+  exportUsers(){
+    this.spinner.show('main');
+    this.caseManagementService.exportUsers( { body: this.users } )
+      .subscribe({
+        next: (response: Blob | MediaSource) => { 
+          console.log('Export initiated', response);
+          const url = window.URL.createObjectURL(response);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'partner-portal-users-' + new Date().toISOString().split('T')[0] + '.csv'; // filename fallback
+      a.click();
+
+      window.URL.revokeObjectURL(url);
+          this.spinner.hide('main');
+        },
+        error: () => {
+          this.spinner.hide('main');
+        }
+      });
+  }
+
   viewUserDetails(element: User){
     this.userDetails = element;
     this.showAdminDetails = true;

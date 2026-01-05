@@ -9,6 +9,10 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { apiPortalUserExportUserPost$Json } from '../fn/portal-user/api-portal-user-export-user-post-json';
+import { ApiPortalUserExportUserPost$Json$Params } from '../fn/portal-user/api-portal-user-export-user-post-json';
+import { apiPortalUserExportUserPost$Plain } from '../fn/portal-user/api-portal-user-export-user-post-plain';
+import { ApiPortalUserExportUserPost$Plain$Params } from '../fn/portal-user/api-portal-user-export-user-post-plain';
 import { apiPortalUserGetContactRolesGet$Json } from '../fn/portal-user/api-portal-user-get-contact-roles-get-json';
 import { ApiPortalUserGetContactRolesGet$Json$Params } from '../fn/portal-user/api-portal-user-get-contact-roles-get-json';
 import { apiPortalUserGetContactRolesGet$Plain } from '../fn/portal-user/api-portal-user-get-contact-roles-get-plain';
@@ -246,6 +250,53 @@ export class PortalUserService extends BaseService {
   apiPortalUserGetCurrentLoginDetailsGet$Json(params?: ApiPortalUserGetCurrentLoginDetailsGet$Json$Params, context?: HttpContext): Observable<Array<string>> {
     return this.apiPortalUserGetCurrentLoginDetailsGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<string>>): Array<string> => r.body)
+    );
+  }
+
+  /** Path part for operation `apiPortalUserExportUserPost()` */
+  static readonly ApiPortalUserExportUserPostPath = '/api/PortalUser/exportUser';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiPortalUserExportUserPost$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiPortalUserExportUserPost$Plain$Response(params?: ApiPortalUserExportUserPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    return apiPortalUserExportUserPost$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiPortalUserExportUserPost$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiPortalUserExportUserPost$Plain(params?: ApiPortalUserExportUserPost$Plain$Params, context?: HttpContext): Observable<Blob> {
+    return this.apiPortalUserExportUserPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiPortalUserExportUserPost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiPortalUserExportUserPost$Json$Response(params?: ApiPortalUserExportUserPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Blob>> {
+    return apiPortalUserExportUserPost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiPortalUserExportUserPost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiPortalUserExportUserPost$Json(params?: ApiPortalUserExportUserPost$Json$Params, context?: HttpContext): Observable<Blob> {
+    return this.apiPortalUserExportUserPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Blob>): Blob => r.body)
     );
   }
 

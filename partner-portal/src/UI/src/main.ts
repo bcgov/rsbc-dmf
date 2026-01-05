@@ -35,7 +35,7 @@ bootstrapApplication(AppComponent, {
       },
       deps: [PlatformLocation],
     },
-     AuthGuard,
+     AuthGuard
   ],
 }).catch((err) => console.error(err));
 
