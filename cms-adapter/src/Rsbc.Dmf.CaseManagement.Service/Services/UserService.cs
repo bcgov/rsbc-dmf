@@ -205,8 +205,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.Contact = new UserContact
                    {
                        ContactId = getContact.contact.Id ?? string.Empty,
-                       //ExternalSystem = getContact.contact.ExternalSystem ?? string.Empty,
-                       //ExternalSystemUserId = getContact.contact.ExternalSystemUserId ?? string.Empty,
                        GivenName = getContact.contact.GivenName ?? string.Empty,
                        SecondGivenName = getContact.contact.SecondGivenName ?? string.Empty,
                        ThirdGivenName = getContact.contact.ThirdGivenName ?? string.Empty,

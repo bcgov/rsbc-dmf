@@ -20,6 +20,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         private readonly UserManager.UserManagerClient _userManagerClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
         private readonly IUserService _userService;
+        private readonly IExportService _exportService;
         private readonly IMapper _mapper;
         private readonly ILogger<PortalUserController> _logger;
 
@@ -34,7 +35,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             ILoggerFactory loggerFactory,
             ICachedIcbcAdapterClient icbcAdapterClient,
             ILogger<PortalUserController> logger,
-            PortalPartnerUserManager.PortalPartnerUserManagerClient portalPartnerUserManagerClient
+            PortalPartnerUserManager.PortalPartnerUserManagerClient portalPartnerUserManagerClient,
+            IExportService exportService
         )
         {
             _cmsAdapterClient = cmsAdapterClient;
@@ -43,6 +45,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             _mapper = mapper;
             _userManagerClient = userManagerClient;
             _portalPartnerUserManagerClient = portalPartnerUserManagerClient;
+            _exportService = exportService;
             _logger = logger;
 
         }
@@ -151,7 +154,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Errorupdating contact role.");
+                _logger.LogError(ex, "Error updating contact role.");
                 throw ex;
             }
 
@@ -168,7 +171,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             try
             {
 
-                var userId = (await _userService.GetCurrentUserContext()).DisplayName;
+                var userId = (await _userService.GetCurrentUserContext()).UserId;
                 var request = new GetCurrentLoginUserRequest {
                     UserId = userId
                 };
@@ -181,6 +184,30 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                 _logger.LogError(ex, "Error getting current user.");
                 throw ex;
             }
+
+        }
+
+
+        [HttpPost("exportUser")]
+        [ProducesResponseType(typeof(FileContentResult), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName(nameof(ExportUsers))]
+        public async Task<ActionResult> ExportUsers([FromBody] IEnumerable<ViewModels.User> user)
+        {
+
+            try
+            {
+                var csv = _exportService.ExportToExcel(user);
+                return File(csv, "text/csv", "partner-portal-users-"+DateTime.Today + ".csv");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error Exporting users.");
+                return Ok();
+                
+            }
+
 
         }
     }

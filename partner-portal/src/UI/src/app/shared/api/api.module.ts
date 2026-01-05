@@ -33,8 +33,8 @@ import { UserAccessService } from './services/user-access.service';
     DocumentService,
     DocumentTypeService,
     DriverService,
-    ProfileService,
     PortalUserService,
+    ProfileService,
     RemedialService,
     UserAccessService,
     ApiConfiguration

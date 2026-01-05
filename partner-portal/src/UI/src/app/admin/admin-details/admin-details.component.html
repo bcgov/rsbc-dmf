@@ -44,7 +44,7 @@
             <div class="admin-details-input">
               <label class="form-label">Expiry Date</label>
               <div>
-                <mat-form-field appearance="outline" class="input-width">
+                <mat-form-field class="input-width">
                   <input
                     matInput
                     [matDatepicker]="picker"
@@ -375,3 +375,15 @@
   name="main"
 >
 </ngx-spinner>
+<mat-form-field class="input-width">
+                  <input
+                    matInput
+                    [matDatepicker]="picker"
+                    name="expiryDate"
+                  />
+                  <mat-datepicker-toggle
+                    matIconSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>

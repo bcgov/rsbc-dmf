@@ -242,7 +242,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             var auditDetail = new bcgov_portalauditdetails
             {
-                bcgov_description = "User Assigned " + portalRole.bcgov_name + " Roll",
+                bcgov_description = "User Assigned " + portalRole.bcgov_name + " Role",
                 bcgov_entryid = modifiedBy
             };
             dynamicsContext.AddObject("bcgov_portalauditdetailses", auditDetail);

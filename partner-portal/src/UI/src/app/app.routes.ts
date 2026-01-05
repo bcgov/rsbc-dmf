@@ -34,5 +34,10 @@ export const routes: Routes = [
       { path: 'driverDetails', component: DriverDetailsComponent },
     ],
   },
+  {
+    path: '',
+    canActivate: [AdminAuthGuard, AuthGuard],
+    children: [{ path: 'admin', component: AdminComponent }],
+  },
       { path: 'userAccess', component: UserAccessRequestComponent },
 ];
