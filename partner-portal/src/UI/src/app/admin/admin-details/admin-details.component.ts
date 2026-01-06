@@ -117,11 +117,16 @@ export class AdminDetailsComponent {
 
   authorizeUser() {
     console.log('authorizing user');
-    this.user.effectiveDate = new Date().toISOString();
-          this.user.authorized = true;
-          this.updateUser();
-          this.user.roles = [this.adminRoles.find(r => r.name === 'USER')!];
-          this.cdr.detectChanges();
+    const today = new Date();
+    var expiryDate = new Date(today);
+    
+    expiryDate.setFullYear(today.getFullYear() + 1);
+    this.user.effectiveDate = today.toISOString();
+    this.user.expiryDate = expiryDate.toISOString();
+    this.user.authorized = true;
+    this.updateUser();
+    this.user.roles = [this.adminRoles.find(r => r.name === 'USER')!];
+    this.cdr.detectChanges();
   }
 
   updateRoles(role: UserRole, addRole: boolean) {
