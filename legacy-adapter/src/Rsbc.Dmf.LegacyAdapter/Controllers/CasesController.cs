@@ -767,7 +767,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             "250",                             
                             "180", // 2024-03-01 Added letter out, as all letter outs received from DPS are remedial.
                             // Added new codes for DPS remediation 10-07-2025
-                            "111", "126", "127", "128", "181", "215", "217"
+                            "111", "126", "127", "128", "181", "215", "217", "320"
                             };
 
                     var documentTypeindex = Array.IndexOf(documentTypeCodes, documentTypeCode);
@@ -802,7 +802,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 ValidationMethod = validationMethod ?? string.Empty,
                                 ValidationPrevious = validationPrevious ?? string.Empty,
                                 Priority = "Regular",
-                                Owner = "Team - Remedial Intake", // Remedial Intake Agent
+                                Owner = "Remedial Intake",
                                 SubmittalStatus = "Uploaded",
                                 Queue = assign ?? string.Empty,
                                 Origin = origin ?? string.Empty,
@@ -818,8 +818,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             if (documentTypeCode == "210")
                             {
                                 remedialDocument.SubmittalStatus = "Uploaded";
-                                remedialDocument.Priority = "Critical review";
-                                remedialDocument.Owner = "Team - DIP Team Lead";
+                                remedialDocument.Priority = "Critical Review";
+                                remedialDocument.Owner = "DIP Team Lead";
 
                             }
 
