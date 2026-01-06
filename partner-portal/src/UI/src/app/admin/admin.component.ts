@@ -11,7 +11,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTableModule } from '@angular/material/table';
 import { AdminSearch } from '../app.model';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
-import { User } from '@app/shared/api/models';
+import { User, UserType } from '@app/shared/api/models';
 import { AdminDetailsComponent } from './admin-details/admin-details.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -68,7 +68,8 @@ export class AdminComponent {
       lastName: this.adminSearch.surname,
       unauthorizedOnly:this.adminSearch.unauthorizedOnly,
       userId: this.adminSearch.userId,
-      activeUser: this.adminSearch.activeUser
+      activeUser: this.adminSearch.activeUser,
+      userType: UserType.$2 // Partner Portal Users
     }
 
     this.caseManagementService

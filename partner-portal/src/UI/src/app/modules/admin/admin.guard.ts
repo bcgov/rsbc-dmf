@@ -35,4 +35,9 @@ export class AdminAuthGuard implements CanActivate {
     const roles = await firstValueFrom(this.userService.getCurrentLoginDetails());
     return roles.some(x => x.includes('Admin'));
   }
+
+  async hasUserAccess(): Promise<boolean> {
+    const roles = await firstValueFrom(this.userService.getCurrentLoginDetails());
+    return roles.some(x => x.includes('User'));
+  }
 }
