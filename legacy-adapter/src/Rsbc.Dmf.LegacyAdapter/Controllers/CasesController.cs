@@ -767,7 +767,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             "250",                             
                             "180", // 2024-03-01 Added letter out, as all letter outs received from DPS are remedial.
                             // Added new codes for DPS remediation 10-07-2025
-                            "111", "126", "127", "128", "181", "215", "217", "320"
+                            "111", "126", "127", "128", "181", "215", "217", "320", "340"
                             };
 
                     var documentTypeindex = Array.IndexOf(documentTypeCodes, documentTypeCode);
