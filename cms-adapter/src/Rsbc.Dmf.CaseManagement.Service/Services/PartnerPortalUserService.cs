@@ -32,7 +32,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     LastName = request.LastName.Trim(),
                     ByUserId = request.UserId.Trim(),
                     ActiveUser = request.ActiveUser,
-                    UnauthorizedOnly = request.UnauthorizedOnly
+                    UnauthorizedOnly = request.UnauthorizedOnly,
+                    PortalType = request.UserType == UserType.PartnerPortalUserType ? Rsbc.Dmf.CaseManagement.PortalType.PartnerPortal : null
+
                 })).Select(u =>
                 {
                     var contact = new Contact

@@ -29,6 +29,7 @@ namespace Rsbc.Dmf.CaseManagement
         public bool? UnauthorizedOnly { get; set; }
         public int? ActiveUser { get; set; }
         public string ByUserId { get; set; }
+        public PortalType? PortalType { get; set; }
     }
 
 
@@ -128,7 +129,10 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     query = query.Where(u => u.dfp_Person.bcgov_activeinportal == true);
                 }
-
+                if (request.PortalType.HasValue)
+                {
+                    query = query.Where(u => u.dfp_portaltype == (int)request.PortalType);
+                }
 
                 var users = (await ((DataServiceQuery<dfp_login>)query).GetAllPagesAsync()).ToArray();
 

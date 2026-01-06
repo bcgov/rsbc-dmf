@@ -109,9 +109,6 @@ mat-card {
   padding-bottom: 70px;
 }
 
-
-
-/* Optional: specific column widths */
 .mat-column-entryId {
   width: 20%;
   border-left: none;
@@ -160,4 +157,8 @@ mat-card {
 
 .success-snackbar .mat-simple-snackbar-action {
   color: #e8f5e9;
+}
+
+.admin-details-input-text{
+  padding-top: 25px;
 }

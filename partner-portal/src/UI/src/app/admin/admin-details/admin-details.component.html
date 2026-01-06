@@ -19,32 +19,26 @@
           <div class="user-details-row">
             <div class="admin-details-input">
               <label class="form-label">DFWeb User ID</label>
-              <div>
+              <div class="admin-details-input-text">
                 {{ user.dfWebuserId }}
               </div>
             </div>
-            <!-- <div class="admin-details-input">
-              <label class="form-label">User ID</label>
-              <div>
-                {{ user.userId }}
-              </div>
-            </div> -->
             <div class="admin-details-input">
               <label class="form-label">Directory</label>
-              <div>
+              <div class="admin-details-input-text">
                 {{ user.domain }}
               </div>
             </div>
             <div class="admin-details-input">
               <label class="form-label">Effective Date</label>
-              <div>
+              <div class="admin-details-input-text">
                 {{ formatDate(user.effectiveDate) }}
               </div>
             </div>
             <div class="admin-details-input">
               <label class="form-label">Expiry Date</label>
               <div>
-                <mat-form-field class="input-width">
+                <mat-form-field appearance="outline" class="input-width">
                   <input
                     matInput
                     [matDatepicker]="picker"
@@ -375,15 +369,3 @@
   name="main"
 >
 </ngx-spinner>
-<mat-form-field class="input-width">
-                  <input
-                    matInput
-                    [matDatepicker]="picker"
-                    name="expiryDate"
-                  />
-                  <mat-datepicker-toggle
-                    matIconSuffix
-                    [for]="picker"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
