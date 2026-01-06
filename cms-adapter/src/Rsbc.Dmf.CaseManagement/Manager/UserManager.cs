@@ -63,6 +63,11 @@ namespace Rsbc.Dmf.CaseManagement
         Driver
     }
 
+    public enum PortalType
+    {
+        PartnerPortal = 100000000
+    }
+
     public class SearchUsersResponse
     {
         public IEnumerable<User> Items { get; set; }
