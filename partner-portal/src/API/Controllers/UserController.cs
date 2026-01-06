@@ -162,7 +162,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 
 
         [HttpGet("getCurrentLoginDetails")]
-        [ProducesResponseType(typeof(IEnumerable<string>), 200)]
+        [ProducesResponseType(typeof(CurrentLoginDetails), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(GetCurrentLoginDetails))]
@@ -170,13 +170,18 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         {
             try
             {
-
                 var userId = (await _userService.GetCurrentUserContext()).UserId;
-                var request = new GetCurrentLoginUserRequest {
+                var request = new GetCurrentLoginUserRequest
+                {
                     UserId = userId
                 };
                 var loginDetails = await _portalPartnerUserManagerClient.GetCurrentLoginUserAsync(request);
-                var result = loginDetails.UserRoles;
+                var result = new CurrentLoginDetails
+                {
+                    UserRoles = loginDetails.UserRoles.ToList(),
+                    ExpiryDate = loginDetails.ExpiryDate?.ToDateTime() ?? new DateTime()
+                };
+
                 return Json(result);
             }
             catch (Exception ex)
@@ -184,8 +189,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                 _logger.LogError(ex, "Error getting current user.");
                 throw ex;
             }
-
-        }
+        } 
 
 
         [HttpPost("exportUser")]

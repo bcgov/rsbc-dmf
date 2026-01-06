@@ -79,6 +79,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class CurrentLoginUser
     {
+        public DateTime? ExpiryDate { get; set; }
         public List<string> UserRoles { get; set; }
     }
 
@@ -405,6 +406,7 @@ namespace Rsbc.Dmf.CaseManagement
         public async Task<CurrentLoginUser> GetCurrentLoginUser(string userId)
         {
             var login = dynamicsContext.dfp_logins
+                .Expand(x=> x.dfp_Person)
                 .Where(l => l.dfp_userid == userId)
                 .FirstOrDefault();
 
@@ -416,6 +418,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             return new CurrentLoginUser
             {
+                ExpiryDate = login.dfp_Person.bcgov_expirydate?.DateTime,
                 UserRoles = roleAssignments.Select(r => r.bcgov_PortalRole?.bcgov_name).ToList()
             };
         }

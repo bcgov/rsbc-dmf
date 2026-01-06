@@ -13,7 +13,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './partner-portal-nav-menu.component.scss',
 })
 export class PartnerPortalNavMenuComponent {
-  constructor(public authService: AdminAuthGuard, private router: Router) {}
+  constructor(
+    public authService: AdminAuthGuard,
+    private router: Router,
+  ) {}
 
   get currentRoute(): string {
     return this.router.url;
@@ -22,10 +25,16 @@ export class PartnerPortalNavMenuComponent {
 
   ngOnInit() {
     this.authService.hasUserAccess().then((hasAccess) => {
-      if(hasAccess ==false){
-       window.location.href = '/assets/unauthorized.html';
+      if (hasAccess == false) {
+        window.location.href = '/assets/unauthorized.html';
       }
     });
+    this.authService.hasUserExpired().then((isExpired) => {
+      if (isExpired) {
+        window.location.href = '/assets/userExpired.html';
+      }
+    });
+
     this.authService.hasAdminAccess().then((hasAccess) => {
       this.hideAdminTab = !hasAccess;
     });
