@@ -78,5 +78,11 @@ namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels
         public string Description { get; set; }
         public string EntryId { get; set; }
     }
+
+    public class CurrentLoginDetails
+    {
+        public List<string> UserRoles { get; set; }
+        public DateTime? ExpiryDate { get; set; }
+    }
 }
 

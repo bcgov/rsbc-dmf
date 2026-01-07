@@ -813,6 +813,7 @@ message GetUserContactReply {
 message SetUserContactLoginRequest {
     string loginId = 1;
     string contactId = 2;
+    string loginType = 3;
 }
 
 message SetUserContactLoginReply {
@@ -1105,6 +1106,7 @@ message GetCurrentLoginUserRequest{
 
 message GetCurrentLoginUserReply{
     repeated string userRoles = 1;
+    google.protobuf.Timestamp expiryDate = 2;
 }
 
 message SystemUsersSearchReply {

@@ -26,7 +26,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<UserContactReply> CreateUserContact(UserContact request);
         Task<PartnerPortalLoginResponse> PartnerPortalLoginUser(PartnerPortalLoginRequest request);
         Task<PartnerPortalSearchResponse> PartnerPortalSearchUsers(PartnerPortalSearchRequest request);
-        Task<bool> SetUserContactLogin(Guid loginId, Guid? contactId);
+        Task<bool> SetUserContactLogin(Guid loginId, Guid? contactId, string loginType);
         Task<GetUserContactReply> GetUserContact(GetUserContactRequest request);
     }
 
@@ -540,7 +540,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (login == null)
             {
-                login = CreateLogin(loginId, loginType);
+                login = CreateLogin(loginId, loginType, null);
             }
 
             if (request.User is DriverUser driver)
@@ -756,7 +756,7 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-        public async Task<bool> SetUserContactLogin(Guid loginId, Guid? contactId)
+        public async Task<bool> SetUserContactLogin(Guid loginId, Guid? contactId, string LoginType)
         {
             dfp_login login;
             try
@@ -785,8 +785,11 @@ namespace Rsbc.Dmf.CaseManagement
 
                 // Create Login
                 //var loginType = ParseExternalSystem(request.User.ExternalSystem);
-            
-                login = CreateLogin(contact.bcgov_userid, LoginType.IDIR);
+
+                var loginType = ParseExternalSystem(LoginType);
+                var portalType = PortalType.PartnerPortal;
+
+                login = CreateLogin(contact.bcgov_userid, loginType, portalType);
 
                 // Create or replace the link
                 dynamicsContext.SetLink(login, nameof(dfp_login.dfp_Person), contact);
@@ -808,13 +811,14 @@ namespace Rsbc.Dmf.CaseManagement
         };
 
         // first time login
-        private dfp_login CreateLogin(string userId, LoginType? loginType)
+        private dfp_login CreateLogin(string userId, LoginType? loginType, PortalType? portalType)
         {
             var login = new dfp_login
             {
                 dfp_loginid = Guid.NewGuid(),
                 dfp_userid = userId,
-                dfp_type = (int?)loginType
+                dfp_type = (int?)loginType,
+                dfp_portaltype = (int?)portalType,
             };
             dynamicsContext.AddTodfp_logins(login);
             dynamicsContext.SaveChanges();
@@ -823,7 +827,7 @@ namespace Rsbc.Dmf.CaseManagement
         }
     }
 
-    internal enum LoginType
+    public enum LoginType
     {
         Bcsc = 100000000,
         Bceid = 100000001,
