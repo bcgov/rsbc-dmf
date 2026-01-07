@@ -813,6 +813,7 @@ message GetUserContactReply {
 message SetUserContactLoginRequest {
     string loginId = 1;
     string contactId = 2;
+    string loginType = 3;
 }
 
 message SetUserContactLoginReply {

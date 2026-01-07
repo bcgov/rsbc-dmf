@@ -103,11 +103,12 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task CanCreateUserContact ()
         {
             var contactId = "Test_ContactId";
-            var loginId = "TEST_LoginId";
+            var loginId = "TEST_LoginId";                                                                                                               
+            var loginType = "IDIR";                                                                                                                                                                                 
             //var system = "bcsc";
-            var result = await userManager.SetUserContactLogin(Guid.Parse(loginId), Guid.Parse(contactId));
+            var result = await userManager.SetUserContactLogin(Guid.Parse(loginId), Guid.Parse(contactId), loginType);
 
-            result.ShouldBeTrue();
+            result.ShouldBeTrue();                                                                                                              
         }
     }
 }
