@@ -106,6 +106,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(l => l.dfp_Person.bcgov_contact_bcgov_portalroleassignment_Person)
                 .Expand(l => l.dfp_Person.bcgov_contact_bcgov_portalroleassignment_Person.Select(p => p.bcgov_PortalRole)).Where(l => l.dfp_Person != null);
 
+                var now = DateTimeOffset.UtcNow;
                 if (!string.IsNullOrEmpty(request.FirstName))
                 {
                     query = query.Where(u => u.dfp_Person.firstname.Contains(request.FirstName));
@@ -124,11 +125,11 @@ namespace Rsbc.Dmf.CaseManagement
                 }
                 if (request.ActiveUser == 0)
                 {
-                    query = query.Where(u => u.dfp_Person.bcgov_activeinportal != true);
+                    query = query.Where(u => u.dfp_Person.bcgov_expirydate == null || u.dfp_Person.bcgov_expirydate < now);
                 }
                 if (request.ActiveUser == 1)
                 {
-                    query = query.Where(u => u.dfp_Person.bcgov_activeinportal == true);
+                    query = query.Where(u => u.dfp_Person.bcgov_expirydate != null &&  u.dfp_Person.bcgov_expirydate >= now);
                 }
                 if (request.PortalType.HasValue)
                 {
@@ -160,7 +161,7 @@ namespace Rsbc.Dmf.CaseManagement
                     var portalUser = new PortalUser
                     {
                         Id = user.dfp_Person?.contactid,
-                        Active = (user.dfp_Person?.bcgov_expirydate == null || DateTimeOffset.Now < user?.dfp_Person?.bcgov_expirydate) && DateTimeOffset.Now > user?.dfp_Person?.bcgov_effectivedate,
+                        Active = (user.dfp_Person?.bcgov_expirydate != null && DateTimeOffset.Now < user?.dfp_Person?.bcgov_expirydate),
                         Authorized = user.dfp_Person?.bcgov_approvalstatus == 931490001,
                         AddressLine1 = user.dfp_Person?.address1_line1,
                         AddressLine2 = user.dfp_Person?.address1_line2,
