@@ -31,6 +31,7 @@ import { apiPortalUserUpdateUserPost$Json } from '../fn/portal-user/api-portal-u
 import { ApiPortalUserUpdateUserPost$Json$Params } from '../fn/portal-user/api-portal-user-update-user-post-json';
 import { apiPortalUserUpdateUserPost$Plain } from '../fn/portal-user/api-portal-user-update-user-post-plain';
 import { ApiPortalUserUpdateUserPost$Plain$Params } from '../fn/portal-user/api-portal-user-update-user-post-plain';
+import { CurrentLoginDetails } from '../models/current-login-details';
 import { User } from '../models/user';
 import { UserRole } from '../models/user-role';
 
@@ -215,7 +216,7 @@ export class PortalUserService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiPortalUserGetCurrentLoginDetailsGet$Plain$Response(params?: ApiPortalUserGetCurrentLoginDetailsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
+  apiPortalUserGetCurrentLoginDetailsGet$Plain$Response(params?: ApiPortalUserGetCurrentLoginDetailsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CurrentLoginDetails>> {
     return apiPortalUserGetCurrentLoginDetailsGet$Plain(this.http, this.rootUrl, params, context);
   }
 
@@ -225,9 +226,9 @@ export class PortalUserService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiPortalUserGetCurrentLoginDetailsGet$Plain(params?: ApiPortalUserGetCurrentLoginDetailsGet$Plain$Params, context?: HttpContext): Observable<Array<string>> {
+  apiPortalUserGetCurrentLoginDetailsGet$Plain(params?: ApiPortalUserGetCurrentLoginDetailsGet$Plain$Params, context?: HttpContext): Observable<CurrentLoginDetails> {
     return this.apiPortalUserGetCurrentLoginDetailsGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<string>>): Array<string> => r.body)
+      map((r: StrictHttpResponse<CurrentLoginDetails>): CurrentLoginDetails => r.body)
     );
   }
 
@@ -237,7 +238,7 @@ export class PortalUserService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiPortalUserGetCurrentLoginDetailsGet$Json$Response(params?: ApiPortalUserGetCurrentLoginDetailsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
+  apiPortalUserGetCurrentLoginDetailsGet$Json$Response(params?: ApiPortalUserGetCurrentLoginDetailsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CurrentLoginDetails>> {
     return apiPortalUserGetCurrentLoginDetailsGet$Json(this.http, this.rootUrl, params, context);
   }
 
@@ -247,9 +248,9 @@ export class PortalUserService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiPortalUserGetCurrentLoginDetailsGet$Json(params?: ApiPortalUserGetCurrentLoginDetailsGet$Json$Params, context?: HttpContext): Observable<Array<string>> {
+  apiPortalUserGetCurrentLoginDetailsGet$Json(params?: ApiPortalUserGetCurrentLoginDetailsGet$Json$Params, context?: HttpContext): Observable<CurrentLoginDetails> {
     return this.apiPortalUserGetCurrentLoginDetailsGet$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<string>>): Array<string> => r.body)
+      map((r: StrictHttpResponse<CurrentLoginDetails>): CurrentLoginDetails => r.body)
     );
   }
 

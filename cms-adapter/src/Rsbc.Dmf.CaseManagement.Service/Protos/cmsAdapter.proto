@@ -1105,6 +1105,7 @@ message GetCurrentLoginUserRequest{
 
 message GetCurrentLoginUserReply{
     repeated string userRoles = 1;
+    google.protobuf.Timestamp expiryDate = 2;
 }
 
 message SystemUsersSearchReply {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DriverService } from '../api/services';
-import { Driver, UserContext } from '../api/models';
+import { CurrentLoginDetails, Driver, UserContext } from '../api/models';
 import { Observable } from 'rxjs';
 import { SESSION_STORAGE_KEYS } from '@app/app.model';
 import {
@@ -34,7 +34,7 @@ export class UserService {
     sessionStorage.setItem(SESSION_STORAGE_KEYS.DRIVER, JSON.stringify(driver));
   }
 
-  public getCurrentLoginDetails(): Observable<string[]>{
+  public getCurrentLoginDetails(): Observable<CurrentLoginDetails>{
     return this.userService.apiPortalUserGetCurrentLoginDetailsGet$Json();
   }
 

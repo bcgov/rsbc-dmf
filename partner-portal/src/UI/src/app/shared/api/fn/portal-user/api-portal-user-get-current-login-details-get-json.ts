@@ -6,11 +6,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { CurrentLoginDetails } from '../../models/current-login-details';
 
 export interface ApiPortalUserGetCurrentLoginDetailsGet$Json$Params {
 }
 
-export function apiPortalUserGetCurrentLoginDetailsGet$Json(http: HttpClient, rootUrl: string, params?: ApiPortalUserGetCurrentLoginDetailsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<string>>> {
+export function apiPortalUserGetCurrentLoginDetailsGet$Json(http: HttpClient, rootUrl: string, params?: ApiPortalUserGetCurrentLoginDetailsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CurrentLoginDetails>> {
   const rb = new RequestBuilder(rootUrl, apiPortalUserGetCurrentLoginDetailsGet$Json.PATH, 'get');
   if (params) {
   }
@@ -20,7 +21,7 @@ export function apiPortalUserGetCurrentLoginDetailsGet$Json(http: HttpClient, ro
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<string>>;
+      return r as StrictHttpResponse<CurrentLoginDetails>;
     })
   );
 }
