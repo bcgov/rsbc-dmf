@@ -126,6 +126,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             var userLoginRequest = new SetUserContactLoginRequest();
             userLoginRequest.LoginId = profile.UserId;
             userLoginRequest.ContactId = createContactReply.ContactId;
+            userLoginRequest.LoginType = profile.IdentityProvider;
             var setUserContactLoginReply = await _userManagerClient.SetUserContactLoginAsync(userLoginRequest);
             if (setUserContactLoginReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
             {

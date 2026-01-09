@@ -245,7 +245,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 {
                     contactId = Guid.Parse(request.ContactId);
                 }
-                result.HasContact = await _userManager.SetUserContactLogin(Guid.Parse(request.LoginId), contactId);
+                result.HasContact = await _userManager.SetUserContactLogin(Guid.Parse(request.LoginId), contactId, request.LoginType);
                 result.ResultStatus = ResultStatus.Success;
             }
             catch (Exception ex)
