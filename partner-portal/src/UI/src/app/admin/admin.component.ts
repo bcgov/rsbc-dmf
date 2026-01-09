@@ -50,13 +50,14 @@ export class AdminComponent {
   showAdminDetails: boolean = false;
   userDetails: User = {} as User;
   authorizeUser: boolean = false;
+  activeUser: string = '-1';
   constructor(
     private caseManagementService: CaseManagementService,
     private spinner: NgxSpinnerService){
   }
 
   ngOnInit(){
-    this.adminSearch.activeUser = -1;
+    this.adminSearch.activeUser = '-1';
   }
 
   getUsers(){
@@ -133,5 +134,6 @@ export class AdminComponent {
   clearData(){
     this.users = [] as User[];
     this.adminSearch = new AdminSearch();
+    this.adminSearch.activeUser = '-1';
   }
 }

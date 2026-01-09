@@ -3,7 +3,7 @@
     "Name": "New Profile",
     "Projects": [
       {
-        "Path": "..\\document-storage-adapter\\src\\Pssg.DocumentStorageAdapter.Client\\Pssg.DocumentStorageAdapter.Client.csproj",
+        "Path": "..\\cms-adapter\\src\\Rsbc.Dmf.CaseManagement.Service\\Rsbc.Dmf.CaseManagement.Service.csproj",
         "Action": "Start"
       },
       {
@@ -11,7 +11,11 @@
         "Action": "Start"
       },
       {
-        "Path": "..\\cms-adapter\\src\\Rsbc.Dmf.CaseManagement.Service\\Rsbc.Dmf.CaseManagement.Service.csproj",
+        "Path": "..\\icbc-adapter\\src\\Pssg.Dmf.IcbcAdapter\\Pssg.Dmf.IcbcAdapter.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "..\\document-storage-adapter\\src\\Pssg.DocumentStorageAdapter\\Pssg.DocumentStorageAdapter.csproj",
         "Action": "Start"
       }
     ]
