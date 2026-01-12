@@ -3885,7 +3885,7 @@ namespace Rsbc.Dmf.CaseManagement
                 { "Team - Remedial Intake", 100000004 },
                 { "Remedial Intake", 100000004 },
                 { "Team - DIP Team Lead", 100000003 },
-                { "DIP Team Lead", 100000003 }
+                { "DIP Team lead", 100000003 }
             };
 
             if (queueCode != null && statusMap.ContainsKey(queueCode))
