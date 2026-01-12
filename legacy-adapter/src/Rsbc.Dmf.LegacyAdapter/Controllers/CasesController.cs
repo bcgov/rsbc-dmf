@@ -819,7 +819,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             {
                                 remedialDocument.SubmittalStatus = "Uploaded";
                                 remedialDocument.Priority = "Critical review";
-                                remedialDocument.Owner = "DIP Team Lead";
+                                remedialDocument.Owner = "DIP Team lead";
 
                             }
 
