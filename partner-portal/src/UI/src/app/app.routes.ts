@@ -13,6 +13,7 @@ import { UserAccessRequestComponent } from './user-access-request/user-access-re
 import { AdminComponent } from './admin/admin.component';
 import { AdminDetailsComponent } from './admin/admin-details/admin-details.component';
 import { AdminAuthGuard } from './modules/admin/admin.guard';
+import { RestrictedAccessComponent } from './restricted-access/restricted-access.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'search', pathMatch: 'full' },
@@ -32,6 +33,7 @@ export const routes: Routes = [
       { path: 'caseSearch/:caseId', component: CaseSearchComponent },
       { path: 'getHelp', component: GetHelpComponent },
       { path: 'driverDetails', component: DriverDetailsComponent },
+      { path: 'restrictedAccess', component: RestrictedAccessComponent },
     ],
   },
   {
@@ -39,5 +41,6 @@ export const routes: Routes = [
     canActivate: [AdminAuthGuard, AuthGuard],
     children: [{ path: 'admin', component: AdminComponent }],
   },
-      { path: 'userAccess', component: UserAccessRequestComponent },
+  { path: 'userAccess', component: UserAccessRequestComponent },
+  { path: 'restrictedAccess/:restriction', component: RestrictedAccessComponent },
 ];

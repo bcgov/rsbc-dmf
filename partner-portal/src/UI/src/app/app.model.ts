@@ -33,5 +33,5 @@ export class AdminSearch{
   surname?: string;
   userId?: string;
   unauthorizedOnly?: boolean;
-  activeUser?: number;
+  activeUser?: any;
 }
