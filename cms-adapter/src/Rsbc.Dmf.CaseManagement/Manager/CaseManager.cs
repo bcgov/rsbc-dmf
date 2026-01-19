@@ -3821,6 +3821,7 @@ namespace Rsbc.Dmf.CaseManagement
                 { "Urgent / Immediate",  100000001 },
                 { "Expedited" ,  100000002},
                 { "Critical Review" , 100000003},
+                { "Critical review" , 100000003},
             };
 
             if (priorityCode != null && statusMap.ContainsKey(priorityCode))
@@ -3881,10 +3882,10 @@ namespace Rsbc.Dmf.CaseManagement
                 { "Nurse Case Managers", 100000002 },
                 { "Adjudicators", 100000001 },
                 { "Client Services",100000000 },
-                { "Team - Remedial Intake", 100000004},
-                {"Remedial Intake", 100000004 },
+                { "Team - Remedial Intake", 100000004 },
+                { "Remedial Intake", 100000004 },
                 { "Team - DIP Team Lead", 100000003 },
-                {"DIP Team Lead", 100000003 }
+                { "DIP Team lead", 100000003 }
             };
 
             if (queueCode != null && statusMap.ContainsKey(queueCode))

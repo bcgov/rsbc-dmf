@@ -818,8 +818,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             if (documentTypeCode == "210")
                             {
                                 remedialDocument.SubmittalStatus = "Uploaded";
-                                remedialDocument.Priority = "Critical Review";
-                                remedialDocument.Owner = "DIP Team Lead";
+                                remedialDocument.Priority = "Critical review";
+                                remedialDocument.Owner = "DIP Team lead";
 
                             }
 
