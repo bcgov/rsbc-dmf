@@ -81,15 +81,33 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             var userContactRequest = new GetUserContactRequest();
             userContactRequest.ExternalSystemUserId = profile.UserId;
             var getContactReply = await _userManagerClient.GetUserContactAsync(userContactRequest);
-            if (getContactReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            if (getContactReply.ResultStatus == ResultStatus.Success && getContactReply.Contact != null)
             {
-                // @TODO Can send a warning message that contact exsists
-                _logger.LogInformation($"{nameof(Register)} Success.\n {0}", getContactReply.ErrorDetail);
-                 return StatusCode((int)HttpStatusCode.OK, getContactReply.Contact);
+                // Contact already exists. Link the existing contact to the login (ensure login -> contact association).
+                _logger.LogInformation($"{nameof(Register)}: contact already exists. Linking login to contact (ContactId={getContactReply.Contact.ContactId}).");
+
+                var setUserContactLoginRequest = new SetUserContactLoginRequest
+                {
+                    LoginId = profile.UserId,
+                    ContactId = getContactReply.Contact.ContactId ?? string.Empty,
+                    LoginType = profile.IdentityProvider
+                };
+
+                var setContactLoginReply = await _userManagerClient.SetUserContactLoginAsync(setUserContactLoginRequest);
+
+                if (setContactLoginReply.ResultStatus != ResultStatus.Success)
+                {
+                    _logger.LogError($"{nameof(Register)}: failed linking login to existing contact. {setContactLoginReply.ErrorDetail}");
+                    return StatusCode((int)HttpStatusCode.BadRequest, setContactLoginReply.ErrorDetail);
+                }
+
+                // return existing contact back to caller
+                return StatusCode((int)HttpStatusCode.OK, getContactReply.Contact);
             }
 
+
+
             // Step 2: If contact does not Exists create contact
- 
             var createContactRequest = new UserContactRequest();
             createContactRequest.Contact = new UserContact();
             createContactRequest.Contact.ExternalSystemUserId = profile.UserId;
@@ -134,7 +152,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                 return StatusCode((int)HttpStatusCode.BadRequest, setUserContactLoginReply.ErrorDetail);
             }
 
-            return Ok();
+            return StatusCode((int)HttpStatusCode.OK, getContactReply.Contact);
 
         }
 
