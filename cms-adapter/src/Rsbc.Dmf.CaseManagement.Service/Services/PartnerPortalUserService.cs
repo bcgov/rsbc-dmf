@@ -216,7 +216,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var result = new GetCurrentLoginUserReply();
 
             result.UserRoles.AddRange(userDetails.UserRoles);
-            result.ExpiryDate = Timestamp.FromDateTimeOffset(userDetails.ExpiryDate.Value);
+            result.ExpiryDate = userDetails.ExpiryDate.HasValue ? Timestamp.FromDateTimeOffset(userDetails.ExpiryDate.Value): null;
             return result;
         }
 
