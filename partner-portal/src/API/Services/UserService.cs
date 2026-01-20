@@ -66,7 +66,7 @@ public class UserService : IUserService
             DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName),
             FirstName = user.FindFirstValue(UserClaimTypes.GivenName),
             LastName = user.FindFirstValue(UserClaimTypes.FamilyName),
-            IdentityProvider = user.FindFirstValue(UserClaimTypes.IdentityProvider),
+            IdentityProvider = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
             Email = user.FindFirstValue(ClaimTypes.Email),
             ExternalUserName = user.FindFirstValue(ClaimTypes.Upn),
         });

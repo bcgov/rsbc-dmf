@@ -83,7 +83,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             var getContactReply = await _userManagerClient.GetUserContactAsync(userContactRequest);
             if (getContactReply.ResultStatus == ResultStatus.Success && getContactReply.Contact != null)
             {
-                // Contact already exists. Link the existing contact to the login (ensure login -> contact association).
+                // Contact already exists.
                 _logger.LogInformation($"{nameof(Register)}: contact already exists. Linking login to contact (ContactId={getContactReply.Contact.ContactId}).");
 
                 var setUserContactLoginRequest = new SetUserContactLoginRequest
@@ -100,12 +100,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                     _logger.LogError($"{nameof(Register)}: failed linking login to existing contact. {setContactLoginReply.ErrorDetail}");
                     return StatusCode((int)HttpStatusCode.BadRequest, setContactLoginReply.ErrorDetail);
                 }
-
-                // return existing contact back to caller
                 return StatusCode((int)HttpStatusCode.OK, getContactReply.Contact);
             }
-
-
 
             // Step 2: If contact does not Exists create contact
             var createContactRequest = new UserContactRequest();
