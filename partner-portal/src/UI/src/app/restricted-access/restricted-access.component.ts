@@ -23,8 +23,8 @@ export class RestrictedAccessComponent {
   ngOnInit() {
     this.restriction = this.route.snapshot.paramMap.get('restriction') || '';
     if (this.restriction === 'unauthorizedUser') {
-      this.authService.hasUserAccess().then((hasAccess) => {
-        if (hasAccess == true) {
+      this.authService.getCurrentUser().then((currentUser) => {
+        if (currentUser !== null &&this.authService.hasUserAccess(currentUser) === true) {
           this.router.navigate(['']);
         }
       });
@@ -34,8 +34,8 @@ export class RestrictedAccessComponent {
         'It is currently under review and awaiting approval.',
       ];
     } else if (this.restriction === 'expiredUser') {
-      this.authService.hasUserExpired().then((isExpired) => {
-        if (isExpired == false) {
+      this.authService.getCurrentUser().then((currentUser) => {
+        if (currentUser !== null &&this.authService.hasUserExpired(currentUser) === false) {
           this.router.navigate(['']);
         }
       });
