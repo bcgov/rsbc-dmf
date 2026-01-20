@@ -12,6 +12,7 @@ import { ProfileService } from '@app/shared/api/services';
 import { firstValueFrom } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserService } from '@app/shared/services/user.service';
+import { CurrentLoginDetails } from '@app/shared/api/models';
 
 @Injectable({
   providedIn: 'root',
@@ -36,12 +37,10 @@ export class AuthGuard extends KeycloakAuthGuard {
         this.configService.config.keycloak?.config?.scope ||
         'openid profile email';
       try {
-
         await this.keycloakService.login({
           idpHint: IdentityProvider.IDIR,
           scope: scope,
         });
-
       } catch (error) {
         console.error('Keyclock: Login failed', error);
       }
@@ -61,14 +60,16 @@ export class AuthGuard extends KeycloakAuthGuard {
         //}
       }
 
-      this.hasUserAccess().then((hasAccess) => {
-        if (hasAccess == false) {
+      this.getCurrentUser().then((userDetails) => {
+        if (userDetails == null) {
           this.router.navigate(['restrictedAccess/unauthorizedUser']);
-        }
-      });
-      this.hasUserExpired().then((isExpired) => {
-        if (isExpired) {
-          this.router.navigate(['restrictedAccess/expiredUser']);
+        } else {
+          if (this.hasUserAccess(userDetails) == false) {
+            this.router.navigate(['restrictedAccess/unauthorizedUser']);
+          }
+          if (this.hasUserExpired(userDetails) == true) {
+            this.router.navigate(['restrictedAccess/expiredUser']);
+          }
         }
       });
     }
@@ -77,17 +78,23 @@ export class AuthGuard extends KeycloakAuthGuard {
     return this.authenticated;
   }
 
-  async hasUserAccess(): Promise<boolean> {
-    const userDetails = await firstValueFrom(
-      this.userService.getCurrentLoginDetails(),
-    );
+  async getCurrentUser(): Promise<CurrentLoginDetails | null> {
+    try {
+      const userDetails = await firstValueFrom(
+        this.userService.getCurrentLoginDetails(),
+      );
+      return userDetails;
+    } catch (error) {
+      console.error('Error fetching user details', error);
+      return null;
+    }
+  }
+
+  hasUserAccess(userDetails: CurrentLoginDetails): boolean {
     return userDetails.userRoles?.some((x) => x.includes('User')) ?? false;
   }
 
-  async hasUserExpired(): Promise<boolean> {
-    const userDetails = await firstValueFrom(
-      this.userService.getCurrentLoginDetails(),
-    );
+  hasUserExpired(userDetails: CurrentLoginDetails): boolean {
     return userDetails.expiryDate
       ? new Date(userDetails.expiryDate) < new Date()
       : true;
