@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Pssg.DocumentStorageAdapter;
 using Pssg.Interfaces;
 using Pssg.Interfaces.Icbc.Models;
 using Rsbc.Dmf.CaseManagement.Service;
@@ -28,15 +29,17 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
         private readonly IConfiguration _configuration;
         private readonly ILogger<IcbcAdapterService> _logger;
         private readonly CaseManager.CaseManagerClient _caseManagerClient;
+        private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
         private readonly IIcbcClient _icbcClient;
 
 
-        public IcbcAdapterService(ILogger<IcbcAdapterService> logger, IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IIcbcClient icbcClient)
+        public IcbcAdapterService(ILogger<IcbcAdapterService> logger, IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IIcbcClient icbcClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
         {
             _configuration = configuration;
             _logger = logger;
             _caseManagerClient = caseManagerClient;
             _icbcClient = icbcClient;
+            _documentStorageAdapterClient = documentStorageAdapterClient;
         }
 
         /// <summary>
@@ -134,7 +137,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
         }
 
         /// <summary>
-        /// Process Medical Status Updates
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>
@@ -144,8 +146,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
         {
             var result = new ResultStatusReply();
 
-            var enhancedIcbcUtils = new EnhancedIcbcApiUtils(_configuration, _caseManagerClient, _icbcClient);
-            enhancedIcbcUtils.GetIcbcNotificationsAndUpdateCase().GetAwaiter().GetResult();
+            var icbcNotifactionsUtils = new IcbcNotifactionsUtils(_configuration, _caseManagerClient, _icbcClient, _documentStorageAdapterClient);
+            icbcNotifactionsUtils.GetIcbcNotificationsAndUpdateCase().GetAwaiter().GetResult();
 
             return Task.FromResult(result);
         }
