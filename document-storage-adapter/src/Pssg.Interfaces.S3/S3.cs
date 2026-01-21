@@ -50,18 +50,18 @@ namespace Pssg.Interfaces
             Configuration = configuration;
 
             // check that we have the right settings.
-            if (Configuration["S3Buckets:DEFAULT:ACCESS_KEY"] != null && Configuration["S3Buckets:DEFAULT:SECRET_KEY"] != null &&
-                Configuration["S3Buckets:DEFAULT:SERVICE_URL"] != null && Configuration["S3Buckets:DEFAULT:BUCKET"] != null)
+            if (Configuration["ACCESS_KEY"] != null && Configuration["SECRET_KEY"] != null &&
+                Configuration["SERVICE_URL"] != null && Configuration["BUCKET"] != null)
             {
                 // S3 configuration settings.
-                var accessKey = Configuration["S3Buckets:DEFAULT:ACCESS_KEY"];
-                var secretKey = Configuration["S3Buckets:DEFAULT:SECRET_KEY"];
-                Bucket = Configuration["S3Buckets:DEFAULT:BUCKET"];
+                var accessKey = Configuration["ACCESS_KEY"];
+                var secretKey = Configuration["SECRET_KEY"];
+                Bucket = Configuration["BUCKET"];
                 AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 
                 var config = new AmazonS3Config
                 {
-                    ServiceURL = Configuration["S3Buckets:DEFAULT:SERVICE_URL"],
+                    ServiceURL = Configuration["SERVICE_URL"],
                     ForcePathStyle = true
                 };
 
@@ -82,18 +82,17 @@ namespace Pssg.Interfaces
             Configuration = configuration;
 
             // check that we have the right settings.
-            if (Configuration[$"S3Buckets:{bucketKey}:ACCESS_KEY"] != null && Configuration[$"S3Buckets:{bucketKey}:SECRET_KEY"] != null &&
-                Configuration[$"S3Buckets:{bucketKey}:SERVICE_URL"] != null && Configuration[$"S3Buckets:{bucketKey}:BUCKET"] != null)
+            if (bucketKey == "ICBC_NOTIFICATIONS_BUCKET")
             {
                 // S3 configuration settings.
-                var accessKey = Configuration[$"S3Buckets:{bucketKey}:ACCESS_KEY"];
-                var secretKey = Configuration[$"S3Buckets:{bucketKey}:SECRET_KEY"];
-                Bucket = Configuration[$"S3Buckets:{bucketKey}:BUCKET"];
+                var accessKey = "AKIA417A86B6B1A85DC6";
+                var secretKey = "V5PVXZ9/CWlkUhoEXMEqT/T5RgNlQy6CFMAmNRjV";
+                Bucket = "ag-pssg-icbc-2-sfeg-dev-bkt";
                 AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 
                 var config = new AmazonS3Config
                 {
-                    ServiceURL = Configuration[$"S3Buckets:{bucketKey}:SERVICE_URL"],
+                    ServiceURL = "https://ag-pssg-sharedservices.objectstore.gov.bc.ca",
                     ForcePathStyle = true
                 };
 
