@@ -805,7 +805,7 @@ namespace Rsbc.Dmf.CaseManagement
             "bcsc" => LoginType.Bcsc,
             "bceid" => LoginType.Bceid,
             "azure-idir" => LoginType.IDIR,
-            "msEntra" => LoginType.MsEntra,
+            "icbc" => LoginType.MsEntra,
             
             _ => throw new NotImplementedException(externalSystem)
         };
