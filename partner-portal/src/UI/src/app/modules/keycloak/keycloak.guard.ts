@@ -91,7 +91,7 @@ export class AuthGuard extends KeycloakAuthGuard {
   }
 
   hasUserAccess(userDetails: CurrentLoginDetails): boolean {
-    return userDetails.userRoles?.some((x) => x.includes('User')) ?? false;
+    return (userDetails.userRoles?.length != null && userDetails.userRoles.length > 0);
   }
 
   hasUserExpired(userDetails: CurrentLoginDetails): boolean {
