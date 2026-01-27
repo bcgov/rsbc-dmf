@@ -85,9 +85,9 @@ namespace Pssg.Interfaces
             if (bucketKey == "ICBC_NOTIFICATIONS_BUCKET")
             {
                 // S3 configuration settings.
-                var accessKey = "AKIA417A86B6B1A85DC6";
-                var secretKey = "V5PVXZ9/CWlkUhoEXMEqT/T5RgNlQy6CFMAmNRjV";
-                Bucket = "ag-pssg-icbc-2-sfeg-dev-bkt";
+                var accessKey = Configuration["bucket_access_key_id"];b
+                var secretKey = Configuration["bucket_access_secret_key"];
+                Bucket = Configuration["bucket_name"];
                 AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 
                 var config = new AmazonS3Config
