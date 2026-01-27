@@ -21,6 +21,7 @@ using static Rsbc.Dmf.IcbcAdapter.EnhancedIcbcApiUtils;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using Pssg.DocumentStorageAdapter;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -31,7 +32,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         FlatFileUtils flatFileUtils;
         private IIcbcClient IcbcClient { get; set; }
         CaseManager.CaseManagerClient CaseManagerClient { get; set; }
+        DocumentStorageAdapter.DocumentStorageAdapterClient DocumentStorageAdapterClient { get; set; }
+
         EnhancedIcbcApiUtils enhancedIcbcApiUtils;
+        IcbcNotifactionsUtils icbcNotifactionsUtils;
         private const string FileBase64 = "MDEyMzQ1NjcwMTIzNDU2NzJTTUlUSEVORSAgICAgICAgICAgICAgICAgICAgICAgICAgIE1DQ0MgIDE5OTYtMDItMjYgICAgICAgICAgMjAxNy0wNS0wMzIwMTctMDUtMDMxNTAwMjAyNS0wNi0xMQ0KOTg3NjU0MzI5ODc2NTQzMjNHUkFZICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEZDQ0MgIDE5NjYtMDEtMDQgICAgICAgICAgMjAxMy0wNy0xOTIwMjUtMDMtMjAxNTAwMjAyNS0wNi0xMQ0KMTkyODM3NDYxOTI4Mzc0NjFBUkNISUJBTERFTlkgICAgICAgICAgICAgICAgICAgICAgIE1BRE1JTjE5OTktMDQtMjAyMDI5LTA0LTIwMjAyNC0wOC0yODIwMTktMDUtMTkxMzYwMjAyNS0wNi0xMQ0KNTY0NzM4Mjk1NjQ3MzgyOTJST0JCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1BRE1JTjE5OTktMDctMDEyMDI2LTA3LTAxMjAyMS0wOS0wOTIwMjQtMDEtMTYxNTAwMjAyNS0wNi0xMQ0KMTEyMjMzNDQxMTIyMzM0NDJNT09SRVNZICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1BRE1JTjIwMDQtMDctMTUgICAgICAgICAgMjAyMi0wNS0yNTIwMjAtMTItMDUxMDAwMjAyNS0wNi0xMQ0K";
 
         /// <summary>
@@ -95,13 +99,16 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
                 var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                 CaseManagerClient = new CaseManager.CaseManagerClient(channel);
+                DocumentStorageAdapterClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(channel);
             }
 
             flatFileUtils = new FlatFileUtils(Configuration, CaseManagerClient);
 
             enhancedIcbcApiUtils = new EnhancedIcbcApiUtils(Configuration, CaseManagerClient,null);
+            icbcNotifactionsUtils = new IcbcNotifactionsUtils(Configuration, CaseManagerClient, null, DocumentStorageAdapterClient);
 
-            
+
+
         }
 
         public static IFormFile CreateTestFile()
@@ -324,7 +331,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public async Task ParseNotifacationFailPassAsync()
         {
-           var testRecords= await enhancedIcbcApiUtils.ParseIcbcNotication(CreateTestFile());
+           var testRecords= await icbcNotifactionsUtils.ParseIcbcNotication(CreateTestFile());
 
             Assert.Equal("01234567", testRecords[0].LNUM);
             Assert.Equal("012345672", testRecords[0].CLNO);

@@ -46,7 +46,7 @@ namespace Pssg.Interfaces
 
         public S3(IConfiguration configuration)
         {
-            
+
             Configuration = configuration;
 
             // check that we have the right settings.
@@ -73,6 +73,37 @@ namespace Pssg.Interfaces
             }
         }
 
+        public S3(IConfiguration configuration, string bucketKey)
+        {
+            if (bucketKey == null)
+            {
+                bucketKey = "DEFAULT";
+            }
+            Configuration = configuration;
+
+            // check that we have the right settings.
+            if (bucketKey == "ICBC_NOTIFICATIONS_BUCKET")
+            {
+                // S3 configuration settings.
+                var accessKey = Configuration["bucket_access_key_id"];
+                var secretKey = Configuration["bucket_access_secret_key"];
+                Bucket = Configuration["bucket_name"];
+                AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+
+                var config = new AmazonS3Config
+                {
+                    ServiceURL = "https://ag-pssg-sharedservices.objectstore.gov.bc.ca",
+                    ForcePathStyle = true
+                };
+
+                S3Client = new AmazonS3Client(credentials, config);
+            }
+            else
+            {
+                S3Client = null;
+            }
+        }
+
         public string OdataUri { get; set; }
         public string ServerAppIdUri { get; set; }
         public string WebName { get; set; }
@@ -82,6 +113,10 @@ namespace Pssg.Interfaces
 
         private string GetPrefix(string listTitle, string folderName)
         {
+            if(listTitle == "" && folderName == "")
+            {
+                return "";
+            }
             var prefix = $"{listTitle}/{folderName}/";
             return prefix;
         }
@@ -149,6 +184,7 @@ namespace Pssg.Interfaces
         public async Task<List<FileDetailsList>> GetFileDetailsListInFolder(string listTitle, string folderName,
             string documentType)
         {
+
             // return early if S3 is disabled.
             if (!IsValid()) return null;
 
@@ -159,32 +195,39 @@ namespace Pssg.Interfaces
             var request = new ListObjectsV2Request
             {
                 BucketName = Bucket,
-                Prefix = prefix
             };
-
-            var response = await S3Client.ListObjectsV2Async(request);
-            var fileDetailsList = new List<FileDetailsList>();
-
-            foreach (var o in response.S3Objects)
+            try
             {
-                var fdl = new FileDetailsList();
-                fdl.Length = o.Size.ToString();
-                fdl.ServerRelativeUrl = o.Key;
-                fdl.Name = o.Key.Substring(o.Key.LastIndexOf("/") + 1);
-                var fileDoctypeEnd = fdl.Name.IndexOf("__");
-                if (fileDoctypeEnd > -1)
-                {
-                    var fileDoctype = fdl.Name.Substring(0, fileDoctypeEnd);
-                    fdl.DocumentType = documentType;
-                }
+                var response = await S3Client.ListObjectsV2Async(request);
+                var fileDetailsList = new List<FileDetailsList>();
 
-                if (documentType == null || fdl.DocumentType == documentType)
+                foreach (var o in response.S3Objects)
                 {
-                    fileDetailsList.Add(fdl);
+                    var fdl = new FileDetailsList();
+                    fdl.Length = o.Size.ToString();
+                    fdl.ServerRelativeUrl = o.Key;
+                    fdl.Name = o.Key.Substring(o.Key.LastIndexOf("/") + 1);
+                    var fileDoctypeEnd = fdl.Name.IndexOf("__");
+                    if (fileDoctypeEnd > -1)
+                    {
+                        var fileDoctype = fdl.Name.Substring(0, fileDoctypeEnd);
+                        fdl.DocumentType = documentType;
+                    }
+
+                    if (documentType == null || documentType == "" || fdl.DocumentType == documentType)
+                    {
+                        fileDetailsList.Add(fdl);
+                    }
                 }
+                return fileDetailsList;
+            }
+            catch(Exception ex)
+            {
+                var x = ex;
+                return null;
             }
 
-            return fileDetailsList;
+            
         }
 
         public string RemoveInvalidCharacters(string filename)
@@ -626,6 +669,7 @@ namespace Pssg.Interfaces
             try
             {
                 var deleteResult = await S3Client.DeleteObjectAsync(deleteRequest);
+                return true;
             }
             catch (Exception)
             {
@@ -638,6 +682,7 @@ namespace Pssg.Interfaces
         public async Task<bool> DeleteFile(string serverRelativeUrl)
         {
             var strings = serverRelativeUrl.Split("/");
+            if (strings.Length == 1) return await DeleteFile("", "", strings[0]);
             if (strings.Length == 4) return await DeleteFile(strings[1], strings[2], strings[3]);
 
             return false;
