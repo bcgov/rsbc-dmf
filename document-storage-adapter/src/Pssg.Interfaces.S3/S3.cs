@@ -85,14 +85,15 @@ namespace Pssg.Interfaces
             if (bucketKey == "ICBC_NOTIFICATIONS_BUCKET")
             {
                 // S3 configuration settings.
-                var accessKey = Configuration["bucket_access_key_id"];
-                var secretKey = Configuration["bucket_access_secret_key"];
-                Bucket = Configuration["bucket_name"];
+                var accessKey = Configuration["BUCKET_ACCESS_KEY_ID"];
+                var secretKey = Configuration["BUCKET_ACCESS_SECRET_KEY"];
+                Bucket = Configuration["BUCKET_NAME"];
+
                 AWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
 
                 var config = new AmazonS3Config
                 {
-                    ServiceURL = "https://ag-pssg-sharedservices.objectstore.gov.bc.ca",
+                    ServiceURL = Configuration["BUCKET_ENDPOINT"],
                     ForcePathStyle = true
                 };
 
