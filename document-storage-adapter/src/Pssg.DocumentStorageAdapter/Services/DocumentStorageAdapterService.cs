@@ -43,10 +43,10 @@ namespace Pssg.DocumentStorageAdapter.Services
 
             var logFolder = WordSanitizer.Sanitize(request.FolderName);
 
-            
+
 
             var _S3 = new S3(_configuration);
-            
+
             var listTitle = _S3.GetDocumentListTitle(request.EntityName);
 
             CreateDocumentLibraryIfMissing(listTitle, GetDocumentTemplateUrlPart(request.EntityName));
@@ -118,7 +118,7 @@ namespace Pssg.DocumentStorageAdapter.Services
             return Task.FromResult(result);
         }
 
-        
+
 
         private string GetDocumentTemplateUrlPart(string entityName)
         {
@@ -189,11 +189,75 @@ namespace Pssg.DocumentStorageAdapter.Services
             return Task.FromResult(result);
         }
 
+        public override Task<DownloadFolderReply> DownloadFolder(DownloadFolderRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var result = new DownloadFolderReply();
+                var files = FolderFiles(new FolderFilesRequest { EntityId = request.EntityId, EntityName = request.EntityName, DocumentType = request.DocumentType, FolderName = request.FolderName, BucketConfigName = request.BucketConfigName }, context);
+                var relativeUrls = files.Result.Files.Select(x => x.ServerRelativeUrl).ToList();
+                relativeUrls.ForEach(url =>
+                {
+                    result.Files.Add(DownloadFile(new DownloadFileRequest { ServerRelativeUrl = url, BucketConfigName = request.BucketConfigName}, context).Result);
+                }
+                );
+                result.ResultStatus = ResultStatus.Success;
+                return Task.FromResult(result);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "ERROR in deleting files");
+                var result = new DownloadFolderReply { ResultStatus = ResultStatus.Fail };
+                return Task.FromResult(result);
+            }
+        }
+
+        public override Task<DeleteFilesInFolderReply> DeleteFilesInFolder(DeleteFilesInFolderRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var result = new DeleteFilesInFolderReply { ResultStatus = ResultStatus.Success };
+                var files = FolderFiles(new FolderFilesRequest { EntityId = request.EntityId, EntityName = request.EntityName, DocumentType = request.DocumentType, FolderName = request.FolderName, BucketConfigName = request.BucketConfigName }, context);
+                var relativeUrls = files.Result.Files.Select(x => x.ServerRelativeUrl).ToList();
+                var _S3 = new S3(_configuration);
+
+                if (request.BucketConfigName != "")
+                {
+                    _S3 = new S3(_configuration, request.BucketConfigName);
+                }
+
+                    result.ResultStatus = ResultStatus.Success;
+                relativeUrls.ForEach(url =>
+                {
+                    var success = _S3.DeleteFile(url).GetAwaiter().GetResult();
+                    if (!success)
+                    {
+                        result.ResultStatus = ResultStatus.Fail;
+                    }
+
+                }
+                );
+                return Task.FromResult(result);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "ERROR in deleting files");
+                var result = new DeleteFilesInFolderReply { ResultStatus = ResultStatus.Fail };
+                return Task.FromResult(result);
+
+            }
+        }
+
         public override Task<DownloadFileReply> DownloadFile(DownloadFileRequest request, ServerCallContext context)
         {
             var result = new DownloadFileReply();
             var logUrl = WordSanitizer.Sanitize(request.ServerRelativeUrl);
             var _S3 = new S3(_configuration);
+
+            if (request.BucketConfigName != "")
+            {
+                _S3 = new S3(_configuration, request.BucketConfigName);
+            }
 
             string fileName = request.ServerRelativeUrl;
             if (fileName.StartsWith("https://"))
@@ -264,7 +328,12 @@ namespace Pssg.DocumentStorageAdapter.Services
 
             // Get the file details list in folder
             List<S3.FileDetailsList> fileDetailsList = null;
-            var _S3 = new S3(_configuration);
+            S3 _S3 = new S3(_configuration);
+            if(request.BucketConfigName != "")
+            {
+                _S3 = new S3(_configuration, "ICBC_NOTIFICATIONS_BUCKET");
+            }
+
             try
             {
                 fileDetailsList = _S3
@@ -279,14 +348,16 @@ namespace Pssg.DocumentStorageAdapter.Services
                         // Sharepoint API responds with dates in UTC format
                         var utcFormat = DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal;
                         DateTime parsedCreateDate, parsedLastModified;
-                        DateTime.TryParse(item.TimeCreated, CultureInfo.InvariantCulture, utcFormat,
-                            out parsedCreateDate);
-                        DateTime.TryParse(item.TimeLastModified, CultureInfo.InvariantCulture, utcFormat,
-                            out parsedLastModified);
+
+                        DateTime.TryParse(item.TimeCreated, CultureInfo.InvariantCulture, utcFormat, out parsedCreateDate);
+                        DateTime.TryParse(item.TimeLastModified, CultureInfo.InvariantCulture, utcFormat, out parsedLastModified);
+
+                        parsedCreateDate = DateTime.SpecifyKind(parsedCreateDate, DateTimeKind.Utc);
+                        parsedLastModified = DateTime.SpecifyKind(parsedLastModified, DateTimeKind.Utc);
 
                         var newItem = new FileSystemItem
                         {
-                            DocumentType = item.DocumentType,
+                            DocumentType = item.DocumentType ?? string.Empty,
                             Name = item.Name,
                             ServerRelativeUrl = item.ServerRelativeUrl,
                             Size = int.Parse(item.Length),
@@ -306,7 +377,7 @@ namespace Pssg.DocumentStorageAdapter.Services
                 result.ErrorDetail = "Error getting SharePoint File List";
                 Log.Error(e, result.ErrorDetail);
             }
-            
+
 
             return Task.FromResult(result);
         }
@@ -365,7 +436,7 @@ namespace Pssg.DocumentStorageAdapter.Services
                 result.ErrorDetail = $"ERROR in getting truncated filename {logFileName} for folder {logFolderName}";
                 Log.Error(e, result.ErrorDetail);
             }
-            
+
 
             return Task.FromResult(result);
         }

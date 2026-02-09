@@ -77,7 +77,7 @@ public class UserService : IUserService
         logger.LogDebug("Processing login {0}", user.Identity.Name);
         logger.LogDebug(" claims:\n{0}", string.Join(",\n", user.Claims.Select(c => $"{c.Type}: {c.Value}")));
 
-        var loginRequest = new PartnerPortalLoginRequest
+var loginRequest = new PartnerPortalLoginRequest
         {
 
             ExternalSystem = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),

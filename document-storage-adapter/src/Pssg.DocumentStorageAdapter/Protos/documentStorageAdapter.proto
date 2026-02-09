@@ -18,6 +18,11 @@ service DocumentStorageAdapter {
   // Download File
   rpc DownloadFile (DownloadFileRequest) returns (DownloadFileReply);
 
+  // Download Folder
+  rpc DownloadFolder (DownloadFolderRequest) returns (DownloadFolderReply);
+
+  rpc DeleteFilesInFolder (DeleteFilesInFolderRequest) returns (DeleteFilesInFolderReply);
+
   // File Exists
   rpc FileExists (FileExistsRequest) returns (FileExistsReply);
 
@@ -70,12 +75,18 @@ message DeleteFileReply {
 
 message DownloadFileRequest {
     string serverRelativeUrl = 1;
+    string BucketConfigName = 2;
 }
 
 message DownloadFileReply {
     bytes data = 1;
     ResultStatus resultStatus = 2;
     string errorDetail = 3;
+}
+
+message DownloadFolderReply {
+    repeated DownloadFileReply files = 1;
+    ResultStatus resultStatus = 2;
 }
 
 message FileExistsRequest {
@@ -107,6 +118,27 @@ message FolderFilesRequest {
     string entityName = 2;
     string documentType = 3;
     string folderName = 4;
+    string bucketConfigName = 5;
+}
+
+message DownloadFolderRequest{
+    string entityId = 1;
+    string entityName = 2;
+    string documentType = 3;
+    string folderName = 4;
+    string BucketConfigName =5;
+}
+
+message DeleteFilesInFolderRequest{
+    string entityId = 1;
+    string entityName = 2;
+    string documentType = 3;
+    string folderName = 4;
+    string BucketConfigName =5;
+}
+
+message DeleteFilesInFolderReply{
+    ResultStatus resultStatus = 1;
 }
 
 // collection of files
