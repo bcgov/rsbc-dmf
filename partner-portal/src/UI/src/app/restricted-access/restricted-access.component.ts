@@ -30,8 +30,7 @@ export class RestrictedAccessComponent {
       });
       this.messageHeader = 'Request Submitted';
       this.messageContent = [
-        'Your request has been submitted successfully.',
-        'It is currently under review and awaiting approval.',
+        'Access request has been submitted - Approval Pending',
       ];
     } else if (this.restriction === 'expiredUser') {
       this.authService.getCurrentUser().then((currentUser) => {
@@ -41,8 +40,7 @@ export class RestrictedAccessComponent {
       });
       this.messageHeader = 'Access Restricted';
       this.messageContent = [
-        'Your access has expired.',
-        'Please contact the system administrator.',
+        'User profile has expired, please contact your system administrator to make changes',
       ];
     }
   }
