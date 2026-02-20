@@ -745,14 +745,70 @@ namespace Rsbc.Dmf.CaseManagement
 
         public IEnumerable<dfp_driver> GetDriverObjectsByIdAndSurCode(string licensenumber, string surCode)
         {
-            //return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber && d.dfp_surname == surCode).ToList();
-            string truncatedSurCode = string.IsNullOrEmpty(surCode) ? string.Empty : surCode.Substring(0, Math.Min(3, surCode.Length));
+            if (string.IsNullOrEmpty(licensenumber)) {
+                return null;
+            }
 
-            return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
-                .Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber && d.dfp_surname.StartsWith(truncatedSurCode))
-                .ToList();
+            // First, get all drivers with the license number (server-side query)
+            var driversWithLicense = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
+                .Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber)
+                .ToList(); // This executes the query and brings data to client
+
+            if (string.IsNullOrEmpty(surCode))
+            {
+                return driversWithLicense;
+            }
+            // Clean surCode by removing special characters
+            string cleanedSurCode = RemoveSpecialCharacters(surCode);
+
+            string searchPattern;
+            if (cleanedSurCode.Length > 3)
+            {
+                // Condition 1: If surcode > 3, search by first 3 characters
+                searchPattern = cleanedSurCode.Substring(0, 3);
+            }
+            else if (cleanedSurCode.Length < 3)
+            {
+                // Condition 2: If surcode < 3, only return results if driver's surname is also < 3 characters
+                return driversWithLicense.Where(d =>
+                {
+                    if (string.IsNullOrEmpty(d.dfp_surname))
+                        return false;
+
+                    string cleanedDbSurname = RemoveSpecialCharacters(d.dfp_surname);
+
+                    // Only match if both search term and driver surname are < 3 characters and match exactly
+                    return cleanedDbSurname.Length < 3 &&
+                           cleanedDbSurname.Equals(cleanedSurCode, StringComparison.OrdinalIgnoreCase);
+                }).ToList();
+            }
+            else
+            {
+                // Condition 3: If surcode = 3, use full cleaned surcode
+                searchPattern = cleanedSurCode;
+            }
+
+
+            return driversWithLicense.Where(d =>
+            {
+                if (string.IsNullOrEmpty(d.dfp_surname))
+                    return false;
+
+                string cleanedDbSurname = RemoveSpecialCharacters(d.dfp_surname);
+                return cleanedDbSurname.StartsWith(searchPattern, StringComparison.OrdinalIgnoreCase);
+            }).ToList();
         }
 
+        /// <summary>
+        /// Removes special characters from surname, keeping only alphanumeric characters
+        /// </summary>
+        private string RemoveSpecialCharacters(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return string.Empty;
+
+            return System.Text.RegularExpressions.Regex.Replace(input, @"[^a-zA-Z0-9]", "").ToUpper();
+        }
         public async Task<IEnumerable<Driver>> GetDriverByLicenseNumber(string licensenumber)
         {
             List<Driver> result = new List<Driver>();

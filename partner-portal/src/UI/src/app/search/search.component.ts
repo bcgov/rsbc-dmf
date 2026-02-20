@@ -22,7 +22,8 @@ import { UserService } from '@app/shared/services/user.service';
     ReactiveFormsModule,
     MatFormField,
     MatInput,
-    MatButton
+    MatButton, 
+    MatError
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
@@ -32,6 +33,8 @@ export class SearchComponent {
   idCode = '';
   noResults: boolean = false;
   surcode = '';
+  searchAttempted: boolean = false;
+  searchExecuted: boolean = false;
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -40,6 +43,14 @@ export class SearchComponent {
   ) { }
 
   search() {
+    this.searchAttempted = true;
+    
+    // Check if form is valid before making API call
+    if (!this.driverLicenceNumber?.trim() || !this.surcode?.trim()) {
+      return;
+    }
+    
+    this.searchExecuted = true;
     this.noResults = false;
     
     // Ensure surcode is not empty - use a default value if empty
