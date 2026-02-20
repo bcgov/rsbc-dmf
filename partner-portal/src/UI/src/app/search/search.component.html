@@ -26,10 +26,13 @@
                   <label class="form-label">SUR</label>
                   <div>
                     <mat-form-field appearance="outline" class="input-width">
-                     <input matInput name="surCode" [(ngModel)]="surcode" required
+                     <input matInput name="surCode" #surCodeControl="ngModel" [(ngModel)]="surcode" required maxlength="3"
                         placeholder="Sur Code" />
-                      <mat-error *ngIf="searchAttempted && searchForm.controls['surCode']?.hasError('required')">
+                      <mat-error *ngIf="searchAttempted && surCodeControl.errors?.['required']">
                         SUR Code is required
+                      </mat-error>
+                      <mat-error *ngIf="searchAttempted && surcode && surcode.length > 3">
+                        SUR Code must be 3 characters or less
                       </mat-error>
                     </mat-form-field>
                   </div>

@@ -745,14 +745,58 @@ namespace Rsbc.Dmf.CaseManagement
 
         public IEnumerable<dfp_driver> GetDriverObjectsByIdAndSurCode(string licensenumber, string surCode)
         {
-            //return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber && d.dfp_surname == surCode).ToList();
-            string truncatedSurCode = string.IsNullOrEmpty(surCode) ? string.Empty : surCode.Substring(0, Math.Min(3, surCode.Length));
+            if (string.IsNullOrEmpty(licensenumber)) {
+                return null;
+            }
 
-            return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
-                .Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber && d.dfp_surname.StartsWith(truncatedSurCode))
-                .ToList();
+            // First, get all drivers with the license number (server-side query)
+            var driversWithLicense = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
+                .Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber)
+                .ToList(); // This executes the query and brings data to client
+
+            if (string.IsNullOrEmpty(surCode))
+            {
+                return driversWithLicense;
+            }
+
+            // Clean surCode by removing special characters
+            string cleanedSurCode = RemoveSpecialCharacters(surCode);
+
+            // Determine the search pattern based on cleaned surCode length
+            string searchPattern;
+            if (cleanedSurCode.Length > 3)
+            {
+                searchPattern = cleanedSurCode.Substring(0, 3);
+            }
+            else
+            {
+                searchPattern = cleanedSurCode;
+            }
+
+            // Now filter on the client side using LINQ to Objects
+            return driversWithLicense.Where(d =>
+            {
+                if (string.IsNullOrEmpty(d.dfp_surname))
+                    return false;
+
+                string cleanedDbSurname = RemoveSpecialCharacters(d.dfp_surname);
+                return cleanedDbSurname.StartsWith(searchPattern, StringComparison.OrdinalIgnoreCase);
+            }).ToList();
         }
 
+        /// <summary>
+        /// Removes special characters from surname, keeping only alphanumeric characters
+        ///
+        /// </summary>
+        /// <param name="input">The input string to clean</param>
+        /// <returns>String with special characters removed</returns>
+        private string RemoveSpecialCharacters(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return string.Empty;
+
+            return System.Text.RegularExpressions.Regex.Replace(input, @"[^a-zA-Z0-9]", "").ToUpper();
+        }
         public async Task<IEnumerable<Driver>> GetDriverByLicenseNumber(string licensenumber)
         {
             List<Driver> result = new List<Driver>();
