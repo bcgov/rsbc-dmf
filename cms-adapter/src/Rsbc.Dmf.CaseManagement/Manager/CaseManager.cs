@@ -758,22 +758,37 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 return driversWithLicense;
             }
-
             // Clean surCode by removing special characters
             string cleanedSurCode = RemoveSpecialCharacters(surCode);
 
-            // Determine the search pattern based on cleaned surCode length
             string searchPattern;
             if (cleanedSurCode.Length > 3)
             {
+                // Condition 1: If surcode > 3, search by first 3 characters
                 searchPattern = cleanedSurCode.Substring(0, 3);
+            }
+            else if (cleanedSurCode.Length < 3)
+            {
+                // Condition 2: If surcode < 3, only return results if driver's surname is also < 3 characters
+                return driversWithLicense.Where(d =>
+                {
+                    if (string.IsNullOrEmpty(d.dfp_surname))
+                        return false;
+
+                    string cleanedDbSurname = RemoveSpecialCharacters(d.dfp_surname);
+
+                    // Only match if both search term and driver surname are < 3 characters and match exactly
+                    return cleanedDbSurname.Length < 3 &&
+                           cleanedDbSurname.Equals(cleanedSurCode, StringComparison.OrdinalIgnoreCase);
+                }).ToList();
             }
             else
             {
+                // Condition 3: If surcode = 3, use full cleaned surcode
                 searchPattern = cleanedSurCode;
             }
 
-            // Now filter on the client side using LINQ to Objects
+
             return driversWithLicense.Where(d =>
             {
                 if (string.IsNullOrEmpty(d.dfp_surname))
@@ -786,10 +801,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         /// <summary>
         /// Removes special characters from surname, keeping only alphanumeric characters
-        ///
         /// </summary>
-        /// <param name="input">The input string to clean</param>
-        /// <returns>String with special characters removed</returns>
         private string RemoveSpecialCharacters(string input)
         {
             if (string.IsNullOrEmpty(input))
