@@ -81,7 +81,8 @@ message DownloadFileRequest {
 message DownloadFileReply {
     bytes data = 1;
     ResultStatus resultStatus = 2;
-    string errorDetail = 3;
+    string serverRelativeUrl = 3;
+    string errorDetail = 4;
 }
 
 message DownloadFolderReply {
@@ -134,7 +135,8 @@ message DeleteFilesInFolderRequest{
     string entityName = 2;
     string documentType = 3;
     string folderName = 4;
-    string BucketConfigName =5;
+    string bucketConfigName =5;
+    repeated string serverRelativeUrl = 6;
 }
 
 message DeleteFilesInFolderReply{
