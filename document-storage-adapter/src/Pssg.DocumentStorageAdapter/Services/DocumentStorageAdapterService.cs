@@ -217,8 +217,7 @@ namespace Pssg.DocumentStorageAdapter.Services
             try
             {
                 var result = new DeleteFilesInFolderReply { ResultStatus = ResultStatus.Success };
-                var files = FolderFiles(new FolderFilesRequest { EntityId = request.EntityId, EntityName = request.EntityName, DocumentType = request.DocumentType, FolderName = request.FolderName, BucketConfigName = request.BucketConfigName }, context);
-                var relativeUrls = files.Result.Files.Select(x => x.ServerRelativeUrl).ToList();
+                var relativeUrls = request.ServerRelativeUrl.ToList();
                 var _S3 = new S3(_configuration);
 
                 if (request.BucketConfigName != "")
@@ -226,7 +225,7 @@ namespace Pssg.DocumentStorageAdapter.Services
                     _S3 = new S3(_configuration, request.BucketConfigName);
                 }
 
-                    result.ResultStatus = ResultStatus.Success;
+                result.ResultStatus = ResultStatus.Success;
                 relativeUrls.ForEach(url =>
                 {
                     var success = _S3.DeleteFile(url).GetAwaiter().GetResult();
@@ -272,6 +271,7 @@ namespace Pssg.DocumentStorageAdapter.Services
 
                 if (data != null)
                 {
+                    result.ServerRelativeUrl = request.ServerRelativeUrl;
                     result.ResultStatus = ResultStatus.Success;
                     result.Data = ByteString.CopyFrom(data);
                 }

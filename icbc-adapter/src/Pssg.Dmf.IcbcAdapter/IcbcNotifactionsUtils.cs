@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf.Collections;
+using Google.Protobuf.WellKnownTypes;
 using Hangfire.Console;
 using Hangfire.Server;
 using Microsoft.AspNetCore.Http;
@@ -39,43 +40,54 @@ namespace Rsbc.Dmf.IcbcAdapter
 
         public async Task GetIcbcNotificationsAndUpdateCase()
         {
-            var notificationFile = await GetIcbcNotifications();
-            if (notificationFile != null)
+            var notifactions = await GetIcbcNotifications();
+            if (notifactions.NotificationFiles?.Count > 0)
             {
-                foreach (var notification in notificationFile)
+                foreach (var notification in notifactions.NotificationFiles)
                 {
 
                     var cases = await ParseIcbcNotication(notification);
 
                     await CreateOrUpdateCases(cases);
                 }
-                await RemoveFilesFromIcbcS3Bucket();
+                await RemoveFilesFromIcbcS3Bucket(notifactions.ServerRelativeUrl);
             }
 
         }
 
         internal async Task CreateOrUpdateCases(List<DRVILS> cases)
         {
-            foreach (DRVILS dmf_case in cases)
+            try
             {
-                var caseToCreate = new CreateCaseRequest()
+                foreach (DRVILS dmf_case in cases)
                 {
-                    DriverLicenseNumber = dmf_case.LNUM,
-                    CaseTypeCode = "REM",
-                    TriggerType = dmf_case.CAND_CAUSE_CD,
-                    Owner = "Remedial"
-                };
+                    var caseToCreate = new CreateCaseRequest()
+                    {
+                        DriverLicenseNumber = dmf_case.LNUM,
+                        CaseTypeCode = "REM",
+                        TriggerType = dmf_case.CAND_CAUSE_CD,
+                        Owner = "Remedial"
+                    };
 
-                 await _caseManagerClient.CreateCaseAsync(caseToCreate);
+                    await _caseManagerClient.CreateCaseAsync(caseToCreate);
+                }
+                Log.Logger.Information($"Successfully added {cases.Count} cases ");
             }
+            catch (Exception ex)
+            {
+                Log.Logger.Error("Error creating/updating cases: " + ex.Message);
+            }
+            
 
         }
 
-        public async Task RemoveFilesFromIcbcS3Bucket()
+        public async Task RemoveFilesFromIcbcS3Bucket(IEnumerable<string> ServerRelativeUrl)
         {
             Log.Logger.Information("Removing files from icbc S3 bucket");
-            var result = await _documentStorageAdapterClient.DeleteFilesInFolderAsync(new DeleteFilesInFolderRequest { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET" });
-            if(result.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+            var request = new DeleteFilesInFolderRequest { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET" };
+            request.ServerRelativeUrl.AddRange(ServerRelativeUrl);
+            var result = await _documentStorageAdapterClient.DeleteFilesInFolderAsync(request);
+            if (result.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
                 Log.Logger.Information("Successfully Removed files from icbc S3 bucket");
             }
@@ -145,9 +157,10 @@ namespace Rsbc.Dmf.IcbcAdapter
             return errors;
         }
 
-        private async Task<List<IFormFile>> GetIcbcNotifications()
+        private async Task<IcbcNotificationsFileResult> GetIcbcNotifications()
         {
-            var result = new List<IFormFile>();
+            var result = new IcbcNotificationsFileResult();
+            result.NotificationFiles = new List<IFormFile>();
             var files = await _documentStorageAdapterClient.DownloadFolderAsync(
             new DownloadFolderRequest { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET" });
             Log.Logger.Information("Fetching ICBC Notifications dat file..");
@@ -157,13 +170,14 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
                     var stream = new MemoryStream(fileBytes.Data.ToByteArray());
 
-                    result.Add(new FormFile(stream, 0, stream.Length, "file", "ICBC_Notifactions")
+                    result.NotificationFiles.Add(new FormFile(stream, 0, stream.Length, "file", "ICBC_Notifactions")
                     {
                         Headers = new HeaderDictionary(),
                         ContentType = "application/octet-stream"
                     });
-
                 }
+                result.ServerRelativeUrl = files.Files.Select(x=> x.ServerRelativeUrl);
+                Log.Logger.Information($"Successfully Fetched {result.NotificationFiles.Count} files from icbc S3 bucket");
                 return result;
             }
             else
