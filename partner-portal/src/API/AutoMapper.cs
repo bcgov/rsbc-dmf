@@ -43,12 +43,13 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                 .AfterMap((src, dest) => dest.DecisionDate = dest.DecisionDate == DateTimeOffset.MinValue ? null : dest.DecisionDate)
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.Service.DocumentSubType, ViewModels.DocumentSubType>();
-            CreateMap<CaseManagement.Service.Callback, ViewModels.Callback>()
+            CreateMap<CaseManagement.Service.Callback, ViewModels.Callback>()   
                 .ForMember(dest => dest.Topic, opt => opt.MapFrom(src => src.Subject));
             CreateMap<DriverInfoReply, ViewModels.Driver>()
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Surname))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.GivenName))
-                .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
+                .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => ConvertBirthDateString(src.BirthDate)))
+                .ForMember(dest => dest.LicenceExpiryDate, opt => opt.MapFrom(src => ConvertDateString(src.LicenceExpiryDate)))
                 .ForMember(dest => dest.Sex, opt => opt.MapFrom(src => src.Sex))
                 .ForMember(dest => dest.AddressLine1, opt => opt.MapFrom(src => src.AddressLine1))
                 .ForMember(dest => dest.LicenceClass, opt => opt.MapFrom(src => src.LicenceClass))
@@ -202,6 +203,24 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                                   .Select(code => code.Trim())
                                   .Where(code => !string.IsNullOrEmpty(code))
                                   .ToList();
+        }
+
+        private DateTimeOffset? ConvertBirthDateString(string birthDateString)
+        {
+            return ConvertDateString(birthDateString);
+        }
+
+        private DateTimeOffset? ConvertDateString(string dateString)
+        {
+            if (string.IsNullOrEmpty(dateString))
+                return null;
+
+            if (DateTime.TryParse(dateString, out DateTime date))
+            {
+                return new DateTimeOffset(date);
+            }
+
+            return null;
         }
 
 
