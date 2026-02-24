@@ -743,21 +743,29 @@ namespace Rsbc.Dmf.CaseManagement
             return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_driverid == Guid.Parse(id)).ToList();
         }
 
+        /// <summary>
+        /// GetDriverObjectsByIdAndSurCode
+        /// </summary>
+        /// <param name="licensenumber"></param>
+        /// <param name="surCode"></param>
+        /// <returns></returns>
         public IEnumerable<dfp_driver> GetDriverObjectsByIdAndSurCode(string licensenumber, string surCode)
         {
-            if (string.IsNullOrEmpty(licensenumber)) {
+            if (string.IsNullOrEmpty(licensenumber))
+            {
                 return null;
             }
 
-            // First, get all drivers with the license number (server-side query)
+            // First, get all drivers with the license number
             var driversWithLicense = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
                 .Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber)
-                .ToList(); // This executes the query and brings data to client
+                .ToList(); 
 
             if (string.IsNullOrEmpty(surCode))
             {
                 return driversWithLicense;
             }
+
             // Clean surCode by removing special characters
             string cleanedSurCode = RemoveSpecialCharacters(surCode);
 
@@ -772,10 +780,10 @@ namespace Rsbc.Dmf.CaseManagement
                 // Condition 2: If surcode < 3, only return results if driver's surname is also < 3 characters
                 return driversWithLicense.Where(d =>
                 {
-                    if (string.IsNullOrEmpty(d.dfp_surname))
+                    if (string.IsNullOrEmpty(d.dfp_PersonId?.lastname))
                         return false;
 
-                    string cleanedDbSurname = RemoveSpecialCharacters(d.dfp_surname);
+                    string cleanedDbSurname = RemoveSpecialCharacters(d.dfp_PersonId.lastname);
 
                     // Only match if both search term and driver surname are < 3 characters and match exactly
                     return cleanedDbSurname.Length < 3 &&
@@ -788,13 +796,13 @@ namespace Rsbc.Dmf.CaseManagement
                 searchPattern = cleanedSurCode;
             }
 
-
             return driversWithLicense.Where(d =>
             {
-                if (string.IsNullOrEmpty(d.dfp_surname))
+                // Get surname from person table (dfp_PersonId.lastname) instead of driver table
+                if (string.IsNullOrEmpty(d.dfp_PersonId?.lastname))
                     return false;
 
-                string cleanedDbSurname = RemoveSpecialCharacters(d.dfp_surname);
+                string cleanedDbSurname = RemoveSpecialCharacters(d.dfp_PersonId.lastname);
                 return cleanedDbSurname.StartsWith(searchPattern, StringComparison.OrdinalIgnoreCase);
             }).ToList();
         }

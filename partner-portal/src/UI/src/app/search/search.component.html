@@ -14,9 +14,9 @@
                   <label class="form-label">Driver's Licence Number</label>
                   <div>
                     <mat-form-field appearance="outline" class="input-width">
-                      <input matInput name="driverLicenseNumber" [(ngModel)]="driverLicenceNumber" required
+                      <input matInput name="driverLicenseNumber" #driverLicenseControl="ngModel" [(ngModel)]="driverLicenceNumber" required
                         placeholder="Driver Licence Number" />
-                      <mat-error *ngIf="searchAttempted && searchForm.controls['driverLicenseNumber']?.hasError('required')">
+                      <mat-error *ngIf="driverSearchAttempted && searchForm.controls['driverLicenseNumber']?.hasError('required')">
                         DL is required
                       </mat-error>
                     </mat-form-field>
@@ -28,17 +28,17 @@
                     <mat-form-field appearance="outline" class="input-width">
                      <input matInput name="surCode" #surCodeControl="ngModel" [(ngModel)]="surcode" required maxlength="3"
                         placeholder="Sur Code" />
-                      <mat-error *ngIf="searchAttempted && surCodeControl.errors?.['required']">
+                      <mat-error *ngIf="driverSearchAttempted && surCodeControl.errors?.['required']">
                         SUR Code is required
                       </mat-error>
-                      <mat-error *ngIf="searchAttempted && surcode && surcode.length > 3">
+                      <mat-error *ngIf="driverSearchAttempted && surcode && surcode.length > 3">
                         SUR Code must be 3 characters or less
                       </mat-error>
                     </mat-form-field>
                   </div>
                 </div>
                 <div style="padding-top: 20px;">
-                  <button mat-flat-button class="primaryButton" (click)="search()">Search</button>
+                  <button type="button" mat-flat-button class="primaryButton" (click)="search(driverLicenseControl, surCodeControl)">Search</button>
                 </div>
               </div>
 
@@ -51,12 +51,29 @@
                   <label class="form-label">Case Id</label>
                   <div>
                     <mat-form-field appearance="outline" class="input-width">
-                      <input matInput name="caseId" [(ngModel)]="idCode" placeholder="Case Id" />
+                      <input matInput name="caseId" #caseIdControl="ngModel" [(ngModel)]="idCode" required placeholder="Case Id" />
+                      <mat-error *ngIf="caseSearchAttempted && caseIdControl.errors?.['required']">
+                        Case Id is required
+                      </mat-error>
                     </mat-form-field>
                   </div>
                 </div>
                 <div>
-                  <button mat-flat-button class="primaryButton" (click)="searchByCaseId()">Search</button>
+                  <label class="form-label">SUR</label>
+                  <div>
+                    <mat-form-field appearance="outline" class="input-width">
+                      <input matInput name="caseSurCode" #caseSurCodeControl="ngModel" [(ngModel)]="caseSurCode" required maxlength="3" placeholder="Sur Code" />
+                      <mat-error *ngIf="caseSearchAttempted && caseSurCodeControl.errors?.['required']">
+                        SUR Code is required
+                      </mat-error>
+                      <mat-error *ngIf="caseSearchAttempted && caseSurCode && caseSurCode.length > 3">
+                        SUR Code must be 3 characters or less
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div style="padding-top: 20px;">
+                  <button type="button" mat-flat-button class="primaryButton" (click)="searchByCaseId(caseIdControl, caseSurCodeControl)">Search</button>
                 </div>
                 <div style="padding-top: 10px;">
                   <span>
