@@ -1740,25 +1740,65 @@ namespace Rsbc.Dmf.CaseManagement.Service
             try
             {
 
+                var caseTypeCode = string.IsNullOrWhiteSpace(request.CaseTypeCode)
+                    ? "REM"
+                    : request.CaseTypeCode;
+
                 var caseCreateRequest = new CaseManagement.CreateCaseRequest()
                 {
                     CaseId = request.CaseId,
                     DriverLicenseNumber = request.DriverLicenseNumber,
-                    TriggerType =request.TriggerType,
-                    Owner = request.Owner
+                    CaseTypeCode = caseTypeCode,
+                    TriggerType = request.TriggerType,
+                    Owner = request.Owner,
+
                 };
 
+                Rsbc.Dmf.CaseManagement.CaseDetail activeRemedialCase = null;
+                if (!string.IsNullOrEmpty(request.DriverLicenseNumber) &&
+                    string.Equals(caseTypeCode, "REM", StringComparison.OrdinalIgnoreCase))
+                {
+                    var drivers = await _caseManager.GetDriverByLicenseNumber(request.DriverLicenseNumber);
+                    var driver = drivers.FirstOrDefault();
+                    if (driver != null && Guid.TryParse(driver.Id, out var driverId))
+                    {
+                        var cases = await _caseManager.GetCases(driverId, Dynamics.EntityState.Active, "Remedial");
+                        activeRemedialCase = cases
+                            ?.OrderByDescending(c => c.OpenedDate)
+                            .FirstOrDefault();
+                    }
+                }
+
+                if (activeRemedialCase != null)
+                {
+                    caseCreateRequest.CaseId = activeRemedialCase.CaseId;
+
+                    if (!string.IsNullOrEmpty(caseCreateRequest.TriggerType))
+                    {
+                        await _caseManager.CreateRehabTrigger(caseCreateRequest);
+                        await CreateRehabTriggerBringForward(activeRemedialCase.CaseId, caseCreateRequest.TriggerType);
+                    }
+
+                    reply.ResultStatus = ResultStatus.Success;
+                    return reply;
+                }
+
+                if (string.Equals(caseTypeCode, "REM", StringComparison.OrdinalIgnoreCase) &&
+                    string.IsNullOrWhiteSpace(caseCreateRequest.Owner))
+                {
+                    caseCreateRequest.Owner = "Pending Rehab Review";
+                }
 
                 var createDriver = await _caseManager.CreateCase(caseCreateRequest);
                 caseCreateRequest.CaseId = createDriver?.Id;
 
-                if(caseCreateRequest.TriggerType != null)
+                if (!string.IsNullOrEmpty(caseCreateRequest.TriggerType))
                 {
                     await _caseManager.CreateRehabTrigger(caseCreateRequest);
+                    await CreateRehabTriggerBringForward(caseCreateRequest.CaseId, caseCreateRequest.TriggerType);
                 }
-                
 
-                   reply.ResultStatus = ResultStatus.Success;
+                reply.ResultStatus = ResultStatus.Success;
             }
 
             catch(Exception e) 
@@ -1769,6 +1809,27 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
 
             return reply;
+        }
+
+        private async Task CreateRehabTriggerBringForward(string caseId, string triggerType)
+        {
+            if (string.IsNullOrEmpty(caseId))
+            {
+                return;
+            }
+
+            var subject = $"A new Rehab Trigger ({triggerType} notification has been received on driver)";
+            var description = $"An {triggerType} notification has been added to the driver from ICBC";
+
+            var bringForwardRequest = new CaseManagement.BringForwardRequest
+            {
+                CaseId = caseId,
+                Subject = subject,
+                Description = description,
+                Priority = CaseManagement.CallbackPriority.Normal
+            };
+
+            await _caseManager.CreateBringForward(bringForwardRequest);
         }
 
         // Updates the case flags, and potentially link the bcgov_documenturl data and pdf file documents, if the S3 info is provided 
