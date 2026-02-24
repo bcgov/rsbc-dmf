@@ -56,6 +56,17 @@
                   </div>
                 </div>
                 <div>
+                  <label class="form-label">SUR</label>
+                  <div>
+                    <mat-form-field appearance="outline" class="input-width">
+                      <input matInput name="caseSurCode" [(ngModel)]="caseSurCode" maxlength="3" placeholder="Sur Code" />
+                      <mat-error *ngIf="searchAttempted && caseSurCode && caseSurCode.length > 3">
+                        SUR Code must be 3 characters or less
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div style="padding-top: 20px;">
                   <button mat-flat-button class="primaryButton" (click)="searchByCaseId()">Search</button>
                 </div>
                 <div style="padding-top: 10px;">

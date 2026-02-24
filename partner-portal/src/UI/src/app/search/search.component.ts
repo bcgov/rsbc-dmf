@@ -31,6 +31,7 @@ import { UserService } from '@app/shared/services/user.service';
 export class SearchComponent {
   driverLicenceNumber = '';
   idCode = '';
+  caseSurCode = '';
   noResults: boolean = false;
   surcode = '';
   searchAttempted: boolean = false;
@@ -81,7 +82,10 @@ export class SearchComponent {
     this.caseManagementService.searchByCaseId({idCode: this.idCode})
     .subscribe({
       next: (caseDetails) => {
-        this.router.navigate(['/caseSearch', this.idCode as string], {state: caseDetails});
+        this.router.navigate(['/caseSearch', this.idCode as string], {
+          state: caseDetails,
+          queryParams: { surcode: this.caseSurCode?.trim() }
+        });
       },
       error: (error) => {
         this.noResults = true;
