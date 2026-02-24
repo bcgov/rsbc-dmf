@@ -136,7 +136,7 @@ export class DriverSearchComponent implements OnInit {
   }
 
   onTabChange(event: MatTabChangeEvent) {
-    if (event.index === 6) {
+    if (event.tab.textLabel === 'Comments') {
       this.openCommentsDialog();
     }
   }
