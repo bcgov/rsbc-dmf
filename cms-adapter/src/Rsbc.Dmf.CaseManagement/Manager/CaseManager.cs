@@ -1000,26 +1000,110 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public async Task<CaseDetail> GetCaseByIdCode(string idCode)
+        //public async Task<CaseDetail> GetCaseByIdCode(string idCode)
+        //{
+        //    CaseDetail result = null;
+
+        //    try
+        //    {
+        //        var @case = dynamicsContext.incidents
+        //            .Expand(i => i.dfp_DriverId)
+        //            .Where(i => i.ticketnumber == idCode)
+        //            .Where(i => i.statuscode != (int)StatusCodeOptionSet.Sent)
+        //            .FirstOrDefault();
+
+        //        if (@case != null)
+        //        {
+        //            return await _caseMapper.Map(@case);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Logger.Error(ex, $"Error getting case {idCode}");
+        //    }
+
+        //    return result;
+        //}
+
+        public async Task<CaseDetail> GetCaseByIdCode(string idCode, string surname)
         {
             CaseDetail result = null;
 
             try
             {
-                var @case = dynamicsContext.incidents
+                var caseQuery = dynamicsContext.incidents
                     .Expand(i => i.dfp_DriverId)
+                    .Expand(i => i.dfp_DriverId.dfp_PersonId)
                     .Where(i => i.ticketnumber == idCode)
-                    .Where(i => i.statuscode != (int)StatusCodeOptionSet.Sent)
-                    .FirstOrDefault();
+                    .Where(i => i.statuscode != (int)StatusCodeOptionSet.Sent);
 
-                if (@case != null)
+                // Get all cases matching the idCode first
+                var cases = caseQuery.ToList();
+
+                if (cases != null && cases.Any())
                 {
-                    return await _caseMapper.Map(@case);
+                    incident selectedCase = null;
+
+                    if (!string.IsNullOrEmpty(surname))
+                    {
+                        // Clean surname by removing special characters
+                        string cleanedSurname = RemoveSpecialCharacters(surname);
+
+                        string searchPattern = null;
+                        if (cleanedSurname.Length > 3)
+                        {
+                            // Condition 1: If surname > 3, search by first 3 characters
+                            searchPattern = cleanedSurname.Substring(0, 3);
+                        }
+                        else if (cleanedSurname.Length < 3)
+                        {
+                            // Condition 2: If surname < 3, only return results if driver's surname is also < 3 characters
+                            selectedCase = cases.Where(c =>
+                            {
+                                if (string.IsNullOrEmpty(c.dfp_DriverId?.dfp_PersonId?.lastname))
+                                    return false;
+
+                                string cleanedDbSurname = RemoveSpecialCharacters(c.dfp_DriverId.dfp_PersonId.lastname);
+
+                                // Only match if both search term and driver surname are < 3 characters and match exactly
+                                return cleanedDbSurname.Length < 3 &&
+                                       cleanedDbSurname.Equals(cleanedSurname, StringComparison.OrdinalIgnoreCase);
+                            }).FirstOrDefault();
+                        }
+                        else
+                        {
+                            // Condition 3: If surname = 3, use full cleaned surname
+                            searchPattern = cleanedSurname;
+                        }
+
+                        // For conditions 1 and 3, filter using StartsWith
+                        if (selectedCase == null && (cleanedSurname.Length >= 3))
+                        {
+                            selectedCase = cases.Where(c =>
+                            {
+                                if (string.IsNullOrEmpty(c.dfp_DriverId?.dfp_PersonId?.lastname))
+                                    return false;
+
+                                string cleanedDbSurname = RemoveSpecialCharacters(c.dfp_DriverId.dfp_PersonId.lastname);
+                                return cleanedDbSurname.StartsWith(searchPattern, StringComparison.OrdinalIgnoreCase);
+                            }).FirstOrDefault();
+                        }
+                    }
+                    else
+                    {
+                        // If no surname provided, take the first case (existing behavior)
+                        selectedCase = cases.FirstOrDefault();
+                    }
+
+                    if (selectedCase != null)
+                    {
+                        result = await _caseMapper.Map(selectedCase);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                Log.Logger.Error(ex, $"Error getting case {idCode}");
+                Log.Logger.Error(ex, $"Error getting case {idCode} with surname {surname}");
             }
 
             return result;

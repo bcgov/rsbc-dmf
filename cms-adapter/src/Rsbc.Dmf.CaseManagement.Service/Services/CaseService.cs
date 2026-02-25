@@ -673,7 +673,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             try
             {
-                var c = await _caseManager.GetCaseByIdCode(request.IdCode);
+                var c = await _caseManager.GetCaseByIdCode(request.IdCode, request.SurCode);
                 if (c != null)
                 {
                     reply.Item = _mapper.Map<CaseDetail>(c);

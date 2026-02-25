@@ -131,12 +131,12 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             return Json(result);
         }
 
-        [HttpGet("search/{idCode}")]
+        [HttpGet("search/{idCode}/{surCode}")]
         [ProducesResponseType(typeof(CaseSearch), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("SearchCaseByIdCode")]
-        public async Task<ActionResult> SearchCaseByIdCode([FromRoute] string idCode)
+        public async Task<ActionResult> SearchCaseByIdCode([FromRoute] string idCode, [FromRoute] string surCode)
         {
             var profile = _userService.GetDriverInfo();
 
@@ -148,7 +148,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             }
 
             // get case by id code
-            var getCaseByIdCodeRequest = new GetCaseByIdCodeRequest { IdCode = idCode };
+            var getCaseByIdCodeRequest = new GetCaseByIdCodeRequest { IdCode = idCode, SurCode = surCode};
             var @case = await _cmsAdapterClient.GetCaseByIdCodeAsync(getCaseByIdCodeRequest);
             if (@case?.Item?.CaseId == null)
             {
