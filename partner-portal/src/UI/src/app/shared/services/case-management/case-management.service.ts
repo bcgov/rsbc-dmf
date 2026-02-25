@@ -82,9 +82,9 @@ export class CaseManagementService {
 
 
   public searchByCaseId(
-    params: Parameters<CasesService['apiCasesSearchIdCodeGet$Json']>[0]
+    params: Parameters<CasesService['apiCasesSearchIdCodeSurCodeGet$Json']>[0]
   ) {
-    return this.casesService.apiCasesSearchIdCodeGet$Json(params);
+    return this.casesService.apiCasesSearchIdCodeSurCodeGet$Json(params);
   }
 
   // Comments

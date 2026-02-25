@@ -88,13 +88,17 @@ export class SearchComponent {
       return;
     }
 
+    const effectiveCaseSurCode = this.caseSurCode.trim();
     this.noResults = false;
-    this.caseManagementService.searchByCaseId({idCode: this.idCode})
+    this.caseManagementService.searchByCaseId({
+      idCode: this.idCode,
+      surCode: effectiveCaseSurCode
+    })
     .subscribe({
       next: (caseDetails) => {
         this.router.navigate(['/caseSearch', this.idCode as string], {
           state: caseDetails,
-          queryParams: { surcode: this.caseSurCode?.trim() }
+          queryParams: { surcode: effectiveCaseSurCode }
         });
       },
       error: (error) => {
