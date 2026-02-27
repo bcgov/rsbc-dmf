@@ -786,7 +786,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task CanGetCaseByIdCode()
         {
             var IdCode = _configuration["ICBC_TEST_IDCODE"];
-            var c = await _caseManager.GetCaseByIdCode(IdCode);
+            var surCode = _configuration["TEST_SURCODE"];
+            var c = await _caseManager.GetCaseByIdCode(IdCode, surCode);
             Assert.NotNull(c);
         }
 

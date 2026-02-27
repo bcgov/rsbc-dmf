@@ -63,7 +63,11 @@ export class CaseSearchComponent implements OnInit{
   
 
   searchByCaseId(){
-    this.caseManagementService.searchByCaseId({idCode: this.caseId() as string})
+    const surCode = this.route.snapshot.queryParams['surcode'] as string;
+    this.caseManagementService.searchByCaseId({
+      idCode: this.caseId() as string,
+      surCode: surCode
+    })
     .subscribe({
       next: (caseDetails) => {
         this.caseDetails = caseDetails
