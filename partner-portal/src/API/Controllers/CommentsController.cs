@@ -60,6 +60,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             return Json(result);
         }
 
+    
         [HttpPost("create")]
         [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
@@ -68,44 +69,47 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         public async Task<IActionResult> CreateComment([FromBody] CommentRequest commentRequest)
         {
             var profile = await _userService.GetCurrentUserContext();
-
             var user = _userService.GetDriverInfo();
-            // security check
+
             var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = user.DriverId });
-            if (mostRecentCaseReply.ResultStatus != ResultStatus.Success)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, mostRecentCaseReply.ErrorDetail ?? $"{nameof(CreateComment)} security failed.");
-            }
 
             var comment = new LegacyComment();
-
-
-
             comment.CommentText = commentRequest.CommentText ?? string.Empty;
             comment.CommentDate = DateTime.UtcNow.ToTimestamp();
-            comment.CaseId = mostRecentCaseReply.Item.CaseId;
             comment.CommentTypeCode = "W";
             comment.Origin = "User";
             comment.UserId = profile.DisplayName;
-
-            comment.Driver = new CaseManagement.Service.Driver();
-
-            comment.Driver.DriverLicenseNumber = user.DriverLicenseNumber;
-            comment.Driver.Surname = user.LastName?? string.Empty;
             comment.SignatureName = profile.DisplayName;
 
+            comment.Driver = new CaseManagement.Service.Driver();
+            comment.Driver.DriverLicenseNumber = user.DriverLicenseNumber;
+            comment.Driver.Surname = user.LastName ?? string.Empty;
 
-
-            // create Comment
-            var reply = _commentManagerClient.AddCaseComment(comment);
-            if (reply.ResultStatus != ResultStatus.Success)
+            // Check if we have a valid case to attach the comment to
+            if (mostRecentCaseReply.ResultStatus == ResultStatus.Success && !string.IsNullOrEmpty(mostRecentCaseReply.Item?.CaseId))
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(comment)} failed.");
+                // Create comment on case
+                comment.CaseId = mostRecentCaseReply.Item.CaseId;
+                var reply = _commentManagerClient.AddCaseComment(comment);
+
+                if (reply.ResultStatus != ResultStatus.Success)
+                {
+                    return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(CreateComment)} failed to create case comment.");
+                }
             }
             else
             {
-                return Ok();
+                // No case found, create comment directly on driver
+                comment.CaseId = string.Empty;
+                var reply = _commentManagerClient.AddCaseComment(comment);
+
+                if (reply.ResultStatus != ResultStatus.Success)
+                {
+                    return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(CreateComment)} failed to create driver comment.");
+                }
             }
+
+            return Ok();
         }
 
     }

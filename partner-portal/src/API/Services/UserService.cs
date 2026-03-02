@@ -63,7 +63,7 @@ public class UserService : IUserService
         return await Task.FromResult(new UserContext
         {
             UserId = userId,
-            DisplayName = user.FindFirstValue(ClaimTypes.Name),
+            DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName),
             FirstName = user.FindFirstValue(ClaimTypes.GivenName),
             LastName = user.FindFirstValue(ClaimTypes.Surname),
             IdentityProvider = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
