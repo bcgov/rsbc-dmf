@@ -274,6 +274,7 @@ namespace Pssg.DocumentStorageAdapter.Services
                     result.ServerRelativeUrl = request.ServerRelativeUrl;
                     result.ResultStatus = ResultStatus.Success;
                     result.Data = ByteString.CopyFrom(data);
+                    result.FileName = fileName;
                 }
                 else
                 {

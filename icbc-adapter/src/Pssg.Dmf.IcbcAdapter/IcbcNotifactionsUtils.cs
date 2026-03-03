@@ -163,7 +163,8 @@ namespace Rsbc.Dmf.IcbcAdapter
             result.NotificationFiles = new List<IFormFile>();
             var files = await _documentStorageAdapterClient.DownloadFolderAsync(
             new DownloadFolderRequest { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET" });
-            Log.Logger.Information("Fetching ICBC Notifications dat file..");
+            var fileNames = files.Files.Select(f => f.FileName).ToList();
+            Log.Logger.Information("Fetching ICBC Notifications dat file(s):" + string.Join(",", fileNames));
             if (files.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
                 foreach (var fileBytes in files.Files)
