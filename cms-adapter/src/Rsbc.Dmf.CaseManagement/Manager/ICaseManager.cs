@@ -29,7 +29,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId, string? programArea);
 
-        Task<CaseDetail> GetCaseByIdCode(string IdCode);
+        Task<CaseDetail> GetCaseByIdCode(string IdCode, string surCode);
 
         Task<LegacyComment> GetComment(string commentId);
 

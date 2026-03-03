@@ -8,14 +8,16 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CaseSearch } from '../../models/case-search';
 
-export interface ApiCasesSearchIdCodeGet$Json$Params {
+export interface ApiCasesSearchIdCodeSurCodeGet$Json$Params {
   idCode: string;
+  surCode: string;
 }
 
-export function apiCasesSearchIdCodeGet$Json(http: HttpClient, rootUrl: string, params: ApiCasesSearchIdCodeGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseSearch>> {
-  const rb = new RequestBuilder(rootUrl, apiCasesSearchIdCodeGet$Json.PATH, 'get');
+export function apiCasesSearchIdCodeSurCodeGet$Json(http: HttpClient, rootUrl: string, params: ApiCasesSearchIdCodeSurCodeGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseSearch>> {
+  const rb = new RequestBuilder(rootUrl, apiCasesSearchIdCodeSurCodeGet$Json.PATH, 'get');
   if (params) {
     rb.path('idCode', params.idCode, {});
+    rb.path('surCode', params.surCode, {});
   }
 
   return http.request(
@@ -28,4 +30,4 @@ export function apiCasesSearchIdCodeGet$Json(http: HttpClient, rootUrl: string, 
   );
 }
 
-apiCasesSearchIdCodeGet$Json.PATH = '/api/Cases/search/{idCode}';
+apiCasesSearchIdCodeSurCodeGet$Json.PATH = '/api/Cases/search/{idCode}/{surCode}';

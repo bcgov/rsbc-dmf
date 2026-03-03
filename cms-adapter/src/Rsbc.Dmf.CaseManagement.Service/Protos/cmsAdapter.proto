@@ -346,6 +346,7 @@ message SearchReply {
 
 message GetCaseByIdCodeRequest {
     string idCode= 1;
+    string surCode = 2;
 }
 
 message EmptyRequest {	

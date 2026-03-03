@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatError } from '@angular/material/form-field';
@@ -22,7 +22,8 @@ import { UserService } from '@app/shared/services/user.service';
     ReactiveFormsModule,
     MatFormField,
     MatInput,
-    MatButton
+    MatButton, 
+    MatError
   ],
   templateUrl: './search.component.html',
   styleUrl: './search.component.scss',
@@ -30,8 +31,12 @@ import { UserService } from '@app/shared/services/user.service';
 export class SearchComponent {
   driverLicenceNumber = '';
   idCode = '';
+  caseSurCode = '';
   noResults: boolean = false;
   surcode = '';
+  driverSearchAttempted: boolean = false;
+  caseSearchAttempted: boolean = false;
+  searchExecuted: boolean = false;
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -39,7 +44,17 @@ export class SearchComponent {
     private userService: UserService
   ) { }
 
-  search() {
+  search(driverLicenseControl: NgModel, surCodeControl: NgModel) {
+    this.driverSearchAttempted = true;
+    driverLicenseControl.control.markAsTouched();
+    surCodeControl.control.markAsTouched();
+    
+    // Check if form is valid before making API call
+    if (!this.driverLicenceNumber?.trim() || !this.surcode?.trim()) {
+      return;
+    }
+    
+    this.searchExecuted = true;
     this.noResults = false;
     
     // Ensure surcode is not empty - use a default value if empty
@@ -65,12 +80,26 @@ export class SearchComponent {
   }
 
 
-  searchByCaseId(){
+  searchByCaseId(caseIdControl: NgModel, caseSurCodeControl: NgModel){
+    this.caseSearchAttempted = true;
+    caseIdControl.control.markAsTouched();
+    caseSurCodeControl.control.markAsTouched();
+    if (!this.idCode?.trim() || !this.caseSurCode?.trim()) {
+      return;
+    }
+
+    const effectiveCaseSurCode = this.caseSurCode.trim();
     this.noResults = false;
-    this.caseManagementService.searchByCaseId({idCode: this.idCode})
+    this.caseManagementService.searchByCaseId({
+      idCode: this.idCode,
+      surCode: effectiveCaseSurCode
+    })
     .subscribe({
       next: (caseDetails) => {
-        this.router.navigate(['/caseSearch', this.idCode as string], {state: caseDetails});
+        this.router.navigate(['/caseSearch', this.idCode as string], {
+          state: caseDetails,
+          queryParams: { surcode: effectiveCaseSurCode }
+        });
       },
       error: (error) => {
         this.noResults = true;
