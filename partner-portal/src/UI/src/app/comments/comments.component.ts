@@ -7,6 +7,7 @@ import { MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/materia
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { TextFieldModule } from '@angular/cdk/text-field';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { UserService } from '@app/shared/services/user.service';
 import { Comment } from '@app/shared/api/models';
@@ -29,6 +30,7 @@ import { MatTooltipModule} from '@angular/material/tooltip';
     MatFormFieldModule,
     MatInputModule,
     MatError,
+    TextFieldModule,
   ],
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.scss',
