@@ -22,15 +22,16 @@
   }
 
   .inlineCommentActions {
+    padding: 12px;
     display: flex;
     justify-content: flex-end;
-    gap: 8px;
+    gap: 12px;
   }
 
   .primaryButton {
     border-width: 0px;
     width: 123px;
-    height: 49px;
+    height: 40px;
     font-family: "BC Sans Bold", "BC Sans", sans-serif;
     font-weight: 700;
     font-style: normal;
@@ -43,7 +44,7 @@
   .cancelButton {
     border-width: 0px;
     width: 123px;
-    height: 48px;
+    height: 40px;
     font-family: "BC Sans", sans-serif;
     font-weight: 400;
     font-style: normal;
