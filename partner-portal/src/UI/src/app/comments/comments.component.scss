@@ -12,6 +12,34 @@
     border-bottom: solid 1px gray;
   }
 
+  .inlineCommentContainer {
+    padding: 12px;
+    border-bottom: solid 1px gray;
+  }
+
+  .inlineCommentField {
+    width: 100%;
+  }
+
+  .inlineCommentActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .primaryButton {
+    border-width: 0px;
+    width: 123px;
+    height: 49px;
+    font-family: "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+    letter-spacing: 1px;
+    color: #f2f2f2;
+    background-color: #003366;
+  }
+
   .cancelButton {
     border-width: 0px;
     width: 123px;
