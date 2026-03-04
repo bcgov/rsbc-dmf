@@ -8,7 +8,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Pssg.SharedUtils;
+using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Model;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -1751,7 +1753,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     CaseTypeCode = caseTypeCode,
                     TriggerType = request.TriggerType,
                     Owner = request.Owner,
-
+                    DriverSurname = request.DriverSurname,
+                    DriverGivenName = request.DriverGivenName,
+                    DriverDateOfBirth = request.DriverDateOfBirth?.ToDateTime(),
                 };
 
                 Rsbc.Dmf.CaseManagement.CaseDetail activeRemedialCase = null;
@@ -1790,15 +1794,23 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 }
 
                 var createDriver = await _caseManager.CreateCase(caseCreateRequest);
-                caseCreateRequest.CaseId = createDriver?.Id;
 
-                if (!string.IsNullOrEmpty(caseCreateRequest.TriggerType))
+                if (createDriver.Success)
                 {
-                    await _caseManager.CreateRehabTrigger(caseCreateRequest);
-                    await CreateRehabTriggerBringForward(caseCreateRequest.CaseId, caseCreateRequest.TriggerType);
-                }
+                    caseCreateRequest.CaseId = createDriver?.Id;
 
-                reply.ResultStatus = ResultStatus.Success;
+                    if (!string.IsNullOrEmpty(caseCreateRequest.TriggerType))
+                    {
+                        await _caseManager.CreateRehabTrigger(caseCreateRequest);
+                        await CreateRehabTriggerBringForward(caseCreateRequest.CaseId, caseCreateRequest.TriggerType);
+                    }
+
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ResultStatus = ResultStatus.Fail;
+                }
             }
 
             catch(Exception e) 
