@@ -3676,6 +3676,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             //return case Id in response
             ResultStatusReply result = new ResultStatusReply();
+            result.Success = true;
 
             dfp_driver driver;
 
@@ -3791,6 +3792,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             catch (Exception e)
             {
+                result.Success = false;
                 Log.Logger.Error(e, $"CandidateCreate ERROR CREATING INCIDENT - " + e.Message);
             }
 
@@ -3810,18 +3812,13 @@ namespace Rsbc.Dmf.CaseManagement
                     await dynamicsContext.SaveChangesAsync();
                 }
 
-
             }
             catch (Exception e)
             {
+                result.Success = false;
                 Log.Logger.Error(e, " Candidate Create  {source} ERROR set link incident - driver  " + e.Message);
             }
-
-
             dynamicsContext.DetachAll();
-
-
-
 
             return result;
         }
