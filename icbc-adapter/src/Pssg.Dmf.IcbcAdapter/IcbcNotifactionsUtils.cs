@@ -66,12 +66,16 @@ namespace Rsbc.Dmf.IcbcAdapter
                         DriverLicenseNumber = dmf_case.LNUM,
                         CaseTypeCode = "REM",
                         TriggerType = dmf_case.CAND_CAUSE_CD,
-                        Owner = "Remedial"
+                        Owner = "Remedial",
+                        DriverDateOfBirth = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Parse(dmf_case.BIRTH_DT), DateTimeKind.Utc)),
+                        DriverSurname = dmf_case.SURNAME
                     };
 
                     await _caseManagerClient.CreateCaseAsync(caseToCreate);
                 }
-                Log.Logger.Information($"Successfully added {cases.Count} cases ");
+
+               
+                Log.Logger.Information($"Successfully proccessed {cases.Count} cases see cms logs for more details");
             }
             catch (Exception ex)
             {
@@ -163,7 +167,8 @@ namespace Rsbc.Dmf.IcbcAdapter
             result.NotificationFiles = new List<IFormFile>();
             var files = await _documentStorageAdapterClient.DownloadFolderAsync(
             new DownloadFolderRequest { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET" });
-            Log.Logger.Information("Fetching ICBC Notifications dat file..");
+            var fileNames = files.Files.Select(f => f.FileName).ToList();
+            Log.Logger.Information("Fetching ICBC Notifications dat file(s):" + string.Join(",", fileNames));
             if (files.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
                 foreach (var fileBytes in files.Files)
