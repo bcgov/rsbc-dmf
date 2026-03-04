@@ -522,6 +522,9 @@ message CreateCaseRequest {
     string SubmittalStatus = 6;
     string CaseTypeCode = 7;
     string TriggerType = 8;
+    string DriverGivenName = 9;
+    string DriverSurname =10;
+    google.protobuf.Timestamp DriverDateOfBirth = 11;
 }
 
 message UpdateCaseRequest{
