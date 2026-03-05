@@ -181,16 +181,16 @@
         }}</ng-template>
     </mat-step>
     <mat-step state="circle">
-      <ng-template matStepLabel>Open Pending Submission</ng-template>
+      <ng-template matStepLabel>{{ programArea === 'Remedial' ? 'Open Pending Review' : 'Open Pending Submission' }}</ng-template>
     </mat-step>
     <mat-step state="circle">
       <ng-template matStepLabel>Under Review</ng-template>
     </mat-step>
     <mat-step state="circle">
-      <ng-template matStepLabel>Decision rendered</ng-template>
+      <ng-template matStepLabel>{{ programArea === 'Remedial' ? 'Reviewed' : 'Decision rendered' }}</ng-template>
     </mat-step>
     <mat-step state="circle">
-      <ng-template matStepLabel>Resolved</ng-template>
+      <ng-template matStepLabel>{{ programArea === 'Remedial' ? 'Closed' : 'Resolved' }}</ng-template>
     </mat-step>
     <!-- Icon overrides. -->
     <ng-template matStepperIcon="edit">
