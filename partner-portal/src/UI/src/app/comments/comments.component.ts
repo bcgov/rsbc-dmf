@@ -1,21 +1,23 @@
 import { DatePipe, NgFor, NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnInit, Inject, inject } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
+import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { TextFieldModule } from '@angular/cdk/text-field';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { UserService } from '@app/shared/services/user.service';
 import { Comment } from '@app/shared/api/models';
 import { CommentOrigin } from '@app/app.model';
-import { AddCommentsComponent } from './add-comments/add-comments.component';
 import { MatTooltipModule} from '@angular/material/tooltip';
 @Component({
   selector: 'app-comments',
   standalone: true,
   imports: [
     MatDialogContent, 
-    MatDialogActions, 
     MatButtonModule, 
     MatIconModule, 
     MatCardModule, 
@@ -23,8 +25,12 @@ import { MatTooltipModule} from '@angular/material/tooltip';
     NgIf, 
     MatDialogClose, 
     DatePipe, 
-    AddCommentsComponent,
     MatTooltipModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatError,
+    TextFieldModule,
   ],
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.scss',
@@ -32,14 +38,17 @@ import { MatTooltipModule} from '@angular/material/tooltip';
 })
 export class CommentsComponent implements OnInit {
   CommentOrigin = CommentOrigin;
-  readonly dialog = inject(MatDialog);
 
   filterBy: CommentOrigin | null = null; 
+  isAddingComment = false;
 
   isExpanded: Record<string, boolean> = {};
   pageSize = 10;
   filteredComments : Comment[] | null = [];
   _allcommentRequest: Comment[] = [];
+  commentsForm = this.fb.group({
+    commentText: ['', Validators.compose([Validators.required, Validators.maxLength(2000)])],
+  });
 
   // Get Driver details
   driverDetails = this.userService.getCachedriver();
@@ -47,7 +56,8 @@ export class CommentsComponent implements OnInit {
    constructor(
     private dialogRef: MatDialogRef<CommentsComponent>,
     private caseManagementService: CaseManagementService,
-    private userService: UserService
+    private userService: UserService,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit(): void {
@@ -95,25 +105,33 @@ export class CommentsComponent implements OnInit {
     this.filterBy = CommentOrigin.System; 
     this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, this.pageSize);
   }
+  
   addComment(){
-    const dialogRef = this.dialog.open(AddCommentsComponent, {
-      height: '300px',
-      width: '275px',
-      position: {
-        bottom: '200px',
-        right: '60px',
-      },
-    });
-    dialogRef.afterClosed()  
-    .subscribe({
-      next:() => {
-      let driverId = this.driverDetails.id;
-      if(driverId != null){
-        this.getComments(driverId);
-      }   
-      }   
-    });
+    this.isAddingComment = !this.isAddingComment;
+    if (!this.isAddingComment) {
+      this.commentsForm.reset();
+    }
+  }
 
+  saveComment() {
+    if (this.commentsForm.invalid) {
+      this.commentsForm.markAllAsTouched();
+      return;
+    }
+
+    const comment = {
+      commentText: this.commentsForm.value.commentText,
+    };
+
+    this.caseManagementService.addComments({ body: comment }).subscribe(() => {
+      this.commentsForm.reset();
+      this.isAddingComment = false;
+
+      const driverId = this.driverDetails.id;
+      if (driverId != null) {
+        this.getComments(driverId);
+      }
+    });
   }
 
   viewMore() {
