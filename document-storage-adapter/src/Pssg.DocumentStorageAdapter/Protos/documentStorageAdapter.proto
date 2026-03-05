@@ -83,6 +83,7 @@ message DownloadFileReply {
     ResultStatus resultStatus = 2;
     string serverRelativeUrl = 3;
     string errorDetail = 4;
+    string fileName = 5;
 }
 
 message DownloadFolderReply {
