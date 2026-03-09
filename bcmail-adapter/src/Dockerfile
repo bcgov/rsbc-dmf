@@ -6,7 +6,7 @@ ARG BUILD_ID
 ARG BUILD_VERSION
 USER 0
 
-RUN apt-get -y update && apt install -y libgdiplus
+RUN apt-get -y update && apt-get -y upgrade && apt install -y libgdiplus
 RUN ln -s /usr/lib/libgdiplus.so /lib/x86_64-linux-gnu/libgdiplus.so
 RUN apt-get install -y --no-install-recommends zlib1g fontconfig libfreetype6 libx11-6 libxext6 libxrender1 wget gdebi
 
