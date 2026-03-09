@@ -23,7 +23,8 @@ ENV NODE_ENV=production
 COPY package*.json ./
 RUN npm install -g npm@11.4.1 && \
     npm ci --omit=dev && \
-    npx playwright install chromium --with-deps
+    npx playwright install chromium --with-deps && \
+    apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
 # Copy built application and static assets
 COPY --from=build /app/dist ./dist
