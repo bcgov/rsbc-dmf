@@ -5,6 +5,7 @@ import { PartnerPortalHeaderComponent } from './Layout/partner-portal-header/par
 import { PartnerPortalNavMenuComponent } from './Layout/partner-portal-nav-menu/partner-portal-nav-menu.component';
 import { Router, RouterOutlet } from '@angular/router';
 import { ProfileService } from './shared/api/services';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,7 @@ import { ProfileService } from './shared/api/services';
     PartnerPortalHeaderComponent,
     PartnerPortalNavMenuComponent,
     RouterOutlet,
+    NgxSpinnerModule,
   ],
 })
 export class AppComponent implements OnInit
