@@ -113,15 +113,44 @@ namespace Rsbc.Dmf.CaseManagement
                 result.DmerType = TranslateDmerTypeRaw(@case.dfp_dmertype);
             }
 
+            // Add logic for both DMF case and remedial cases to determine the stage and status of the case.
+
             _dynamicsContext.LoadProperty(@case, nameof(incident.stageid_processstage));
 
-            var bpf = _dynamicsContext.dfp_dmfcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == @case.incidentid).FirstOrDefault();
+            // Check if this is a Remedial case (program area = 100000001)
+            bool isRemedialCase = @case.dfp_programarea == 100000001;
 
-            if (bpf != null)
+            if (isRemedialCase)
             {
-                _dynamicsContext.LoadProperty(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
-                result.Status = bpf.activestageid?.stagename;
+                // For Remedial cases, use dfp_remedialcasebusinessprocessflows
+                var remedialBpf = _dynamicsContext.dfp_remedialcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == @case.incidentid).FirstOrDefault();
+
+                if (remedialBpf != null)
+                {
+                    _dynamicsContext.LoadProperty(remedialBpf, nameof(dfp_remedialcasebusinessprocessflow.activestageid));
+                    result.Status = remedialBpf.activestageid?.stagename;
+                }
             }
+            else
+            {
+                // For other cases, use the existing logic with dfp_dmfcasebusinessprocessflows
+                var bpf = _dynamicsContext.dfp_dmfcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == @case.incidentid).FirstOrDefault();
+
+                if (bpf != null)
+                {
+                    _dynamicsContext.LoadProperty(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
+                    result.Status = bpf.activestageid?.stagename;
+                }
+            }
+
+            //var bpf = _dynamicsContext.dfp_dmfcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == @case.incidentid).FirstOrDefault();
+
+            //if (bpf != null)
+            //{
+            //    _dynamicsContext.LoadProperty(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
+            //    result.Status = bpf.activestageid?.stagename;
+            //}
+
 
             // case assignment
             if (@case._owningteam_value.HasValue)

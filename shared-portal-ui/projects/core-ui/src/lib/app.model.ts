@@ -7,6 +7,16 @@ export enum CaseStageEnum {
   'Closed' = 'Closed',
 }
 
+export enum RemedialCaseStageEnum {
+  'Opened' = 'Opened',
+  'OpenPendingReview' = 'Open - Pending Review',
+  'UnderReview' = 'Under Review', 
+  'Reviewed' = 'Reviewed',
+  'Closed' = 'Closed',
+
+
+}
+
 export enum SubmittalStatusEnum {
   'OpenRequired' = 'Open-Required',
   'Issued' = 'Issued',
