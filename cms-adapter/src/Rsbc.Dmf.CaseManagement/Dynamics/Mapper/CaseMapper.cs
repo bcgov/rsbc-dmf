@@ -143,15 +143,7 @@ namespace Rsbc.Dmf.CaseManagement
                 }
             }
 
-            //var bpf = _dynamicsContext.dfp_dmfcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == @case.incidentid).FirstOrDefault();
-
-            //if (bpf != null)
-            //{
-            //    _dynamicsContext.LoadProperty(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
-            //    result.Status = bpf.activestageid?.stagename;
-            //}
-
-
+         
             // case assignment
             if (@case._owningteam_value.HasValue)
             {
