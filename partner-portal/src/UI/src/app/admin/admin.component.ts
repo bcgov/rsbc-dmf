@@ -63,13 +63,14 @@ export class AdminComponent {
   getUsers(){
     this.spinner.show('main');
     this.noResults = false;
+    const awaitingApprovalSelected = this.adminSearch.activeUser === '2';
     var userSearch =  {
       externalSystemUserId: this.adminSearch.userId,
       firstName: this.adminSearch.givenName,
       lastName: this.adminSearch.surname,
-      unauthorizedOnly:this.adminSearch.unauthorizedOnly,
+      unauthorizedOnly: this.adminSearch.unauthorizedOnly || awaitingApprovalSelected,
       userId: this.adminSearch.userId,
-      activeUser: this.adminSearch.activeUser,
+      activeUser: awaitingApprovalSelected ? '-1' : this.adminSearch.activeUser,
       userType: UserType.$2 // Partner Portal Users
     }
 
@@ -86,6 +87,26 @@ export class AdminComponent {
           console.error('error', error);
         }
       });
+  }
+
+  onActiveUserChange(value: string): void {
+    if (value === '2') {
+      this.adminSearch.unauthorizedOnly = true;
+      return;
+    }
+
+    this.adminSearch.unauthorizedOnly = false;
+  }
+
+  onUnauthorizedOnlyChange(value: boolean): void {
+    if (value) {
+      this.adminSearch.activeUser = '2';
+      return;
+    }
+
+    if (this.adminSearch.activeUser === '2') {
+      this.adminSearch.activeUser = '-1';
+    }
   }
 
   exportUsers(){
