@@ -1,163 +1,142 @@
 <div class="container">
   <div class="list ">
     <h2>Letters To Driver</h2>
-  <div class="submissions">
-    <div>
-      <p>
-        The Letters to Driver tab displays all the letters that RSBC has sent to
-        you about this case. You can download these letters.
-      </p>
-      <p>
-        Find out more about how to report if a letter is not addressed to you or
-        how to submit an appeal.
-      </p>
-      @if(portal===PortalsEnum.DriverPortal){
+    <div class="submissions">
+      <div>
+        <p>
+          The Letters to Driver tab displays all the letters that RSBC has sent to
+          you about this case. You can download these letters.
+        </p>
+        <p>
+          Find out more about how to report if a letter is not addressed to you or
+          how to submit an appeal.
+        </p>
+        @if(portal===PortalsEnum.DriverPortal){
         <p>
           See <a routerLink="/getAssistance">Get Assistance</a>.
         </p>
-      }
-    </div>
-    @if(portal===PortalsEnum.DriverPortal){
+        }
+      </div>
+      @if(portal===PortalsEnum.DriverPortal){
       <div>
         <app-shared-quick-links [portal]="PortalsEnum.DriverPortal"></app-shared-quick-links>
       </div>
-    }
+      }
 
-    @if(portal===PortalsEnum.MedicalPortal){
+      @if(portal===PortalsEnum.MedicalPortal){
       <div>
         <app-shared-quick-links [portal]="PortalsEnum.MedicalPortal"></app-shared-quick-links>
       </div>
-    }
+      }
 
-    @if(portal===PortalsEnum.PartnerPortal){
+      @if(portal===PortalsEnum.PartnerPortal){
       <div>
         <app-shared-quick-links [portal]="PortalsEnum.PartnerPortal"></app-shared-quick-links>
       </div>
-    }
-   
-  </div>
+      }
 
-  <div class="list">
-    <div>
-      <mat-card
-        *ngFor="let letter of filteredDocuments"
-        [ngClass]="{
+    </div>
+
+    <div class="list">
+      <div>
+        <mat-card *ngFor="let letter of filteredDocuments" [ngClass]="{
           open: letter.documentId  && isExpanded[letter.documentId]
-        }"
-      >
-        <mat-card-content class="closedCaseContent">
-          <div style="text-align: center">
-            <mat-icon
-              (click)="toggleIsExpandable(letter.documentId)"
-              class="expandedIcon"
-            >
-              expand_circle_down
-            </mat-icon>
-          </div>
-          <div style="display: flex; flex-direction: column">
-            <div class="case-details-border">&nbsp;</div>
-            <div>&nbsp;</div>
-          </div>
-          <div style="flex: 1">
-            <div class="caseDetailRow">
-              <div>
-                <label>Created Date </label>
+        }">
+          <mat-card-content class="closedCaseContent">
+            <div style="text-align: center">
+              <mat-icon (click)="toggleIsExpandable(letter.documentId)" class="expandedIcon">
+                expand_circle_down
+              </mat-icon>
+            </div>
+            <div style="display: flex; flex-direction: column">
+              <div class="case-details-border">&nbsp;</div>
+              <div>&nbsp;</div>
+            </div>
+            <div style="flex: 1">
+              <div class="caseDetailRow">
                 <div>
-                  <b>{{ letter.createDate | date : "longDate" }}</b>
+                  <label>Created Date </label>
+                  <div>
+                    <b>{{ letter.createDate | date : "longDate" }}</b>
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <label>Letter Topic</label>
                 <div>
-                  <b>
-                    {{ letter.documentType }}
-                    @if(letter?.documentSubType) { -
-                    {{ letter?.documentSubType }}
-                    }
-                  </b>
-                  
-                  @if(letter?.errorMessage) {
+                  <label>Letter Topic</label>
+                  <div>
+                    <b>
+                      {{ letter.documentType }}
+                      @if(letter?.documentSubType) { -
+                      {{ letter?.documentSubType }}
+                      }
+                    </b>
+
+                    @if(letter?.errorMessage) {
                     <div></div>
                     <div style="color: red">{{ letter?.errorMessage }}</div>
-                  }
+                    }
+                  </div>
                 </div>
-              </div>
-              <div>
                 <div>
-                    <button 
-                    *ngIf="!letter?.errorMessage"
-                  mat-flat-button
-                  class="primaryButton"
-                  (click)="downloadLetters(letter?.documentId)"
-                >
-                  Download
-                </button>
+                  <div>
+                    <button *ngIf="!letter?.errorMessage" mat-flat-button class="primaryButton"
+                      [disabled]="portal === PortalsEnum.PartnerPortal" (click)="downloadLetters(letter?.documentId)">
+                      Download
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div
-              class="caseDetailRow"
-              *ngIf="letter.documentId && isExpanded?.[letter.documentId]"
-              style="
+              <div class="caseDetailRow" *ngIf="letter.documentId && isExpanded?.[letter.documentId]" style="
                 border-top: 2px solid gray;
                 padding-top: 20px;
                 padding-bottom: 20px;
-              "
-            >
-              <div>
-                <label>Case Type</label>
+              ">
                 <div>
-                  <b>{{ letter.caseType }}</b>
+                  <label>Case Type</label>
+                  <div>
+                    <b>{{ letter.caseType }}</b>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <label>Case Id</label>
                 <div>
-                  <b>{{ letter.idCode }}</b>
+                  <label>Case Id</label>
+                  <div>
+                    <b>{{ letter.idCode }}</b>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <label>Description</label>
                 <div>
-                  <b>{{ letter.description }}</b>
+                  <label>Description</label>
+                  <div>
+                    <b>{{ letter.description }}</b>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div *ngIf="!isLoading && letterOutDocuments?.length === 0">
+        <mat-card>
+          <mat-card-content>
+            <b>No Letters found for this case</b>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
-    <div *ngIf="!isLoading && letterOutDocuments?.length === 0">
-      <mat-card>
-        <mat-card-content>
-          <b>No Letters found for this case</b>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
 
-  <div
-    class="numberOfItems"
-    *ngIf="
+    <div class="numberOfItems" *ngIf="
     letterOutDocuments &&
     letterOutDocuments.length > 0 &&
       filteredDocuments &&
       filteredDocuments.length > 0
-    "
-  >
-    Showing {{ filteredDocuments.length }} of
-    {{ letterOutDocuments.length }} records
-    <br />
-    <a
-      *ngIf="filteredDocuments.length < letterOutDocuments.length"
-      (click)="viewMore()"
-      class="viewMore"
-      ><b style="color: #003366">View more records</b>
-      <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a
-    >
-  </div>
+    ">
+      Showing {{ filteredDocuments.length }} of
+      {{ letterOutDocuments.length }} records
+      <br />
+      <a *ngIf="filteredDocuments.length < letterOutDocuments.length" (click)="viewMore()" class="viewMore"><b
+          style="color: #003366">View more records</b>
+        <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a>
+    </div>
 
   </div>
 </div>
