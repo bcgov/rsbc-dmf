@@ -52,6 +52,7 @@
           <label class="form-label">Unauthorized Only:</label>
           <mat-checkbox
             [(ngModel)]="adminSearch.unauthorizedOnly"
+            (ngModelChange)="onUnauthorizedOnlyChange($event)"
             color="primary"
           ></mat-checkbox>
         </div>
@@ -61,12 +62,14 @@
         <div>
           <mat-radio-group
             [(ngModel)]="adminSearch.activeUser"
+            (ngModelChange)="onActiveUserChange($event)"
             color="primary"
             class="admin-radio"
           >
             <mat-radio-button value="-1">All Users</mat-radio-button>
             <mat-radio-button value="1">Active</mat-radio-button>
             <mat-radio-button value="0">Inactive</mat-radio-button>
+            <mat-radio-button value="2">Awaiting Approval</mat-radio-button>
           </mat-radio-group>
         </div>
       </div>

@@ -11,6 +11,7 @@ import { environment } from './environments/environment';
 import { BearerTokenInterceptor } from '@shared/core-ui';
 import { provideKeycloak } from './app/modules/keycloak/keycloak.provider';
 import { AuthGuard } from '@app/modules/keycloak/keycloak.guard';
+import { spinnerInterceptor } from './app/shared/interceptors/spinner.interceptor';
 
 
 bootstrapApplication(AppComponent, {
@@ -22,7 +23,7 @@ bootstrapApplication(AppComponent, {
       BrowserAnimationsModule,
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
     ),
-    provideHttpClient(withInterceptors([BearerTokenInterceptor])),
+    provideHttpClient(withInterceptors([BearerTokenInterceptor, spinnerInterceptor])),
     {
       provide: APP_BASE_HREF,
       useFactory: (s: PlatformLocation) => {

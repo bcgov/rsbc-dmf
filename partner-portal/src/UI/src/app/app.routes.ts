@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { DriverSearchComponent } from './driver-search/driver-search.component';
 import { SearchComponent } from './search/search.component';
-import { RemedialComponent } from './remedial/remedial.component';
 import { AssistDriverComponent } from './assist-driver/assist-driver.component';
 import { CaseSearchComponent } from './case-search/case-search.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
@@ -22,7 +21,6 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'search', component: SearchComponent },
-      { path: 'remedial', component: RemedialComponent },
       {
         path: 'driverSearch/:driverLicenceNumber',
         component: DriverSearchComponent,

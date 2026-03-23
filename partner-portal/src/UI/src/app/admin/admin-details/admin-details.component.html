@@ -42,6 +42,7 @@
                   <input
                     matInput
                     [matDatepicker]="picker"
+                    [min]="effectiveDateAsDate"
                     name="expiryDate"
                     [(ngModel)]="user.expiryDate"
                   />

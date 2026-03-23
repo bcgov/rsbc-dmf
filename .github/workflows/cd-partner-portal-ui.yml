@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - 'partner-portal/src/UI/**'
+      - 'shared-portal-ui/**'
       - '.github/workflows/cd-partner-portal-ui.yml'
 env:
   IMAGE_NAME: partner-portal-ui

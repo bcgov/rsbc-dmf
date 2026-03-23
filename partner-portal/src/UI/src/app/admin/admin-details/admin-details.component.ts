@@ -53,6 +53,10 @@ export class AdminDetailsComponent {
   noResults: boolean = false;
   buttonDisabled: boolean = false;
 
+  get effectiveDateAsDate(): Date | null {
+    return this.user.effectiveDate ? new Date(this.user.effectiveDate) : null;
+  }
+
   get expiryDateAsDate(): Date {
     return this.user.expiryDate ? new Date(this.user.expiryDate) : new Date();
   }

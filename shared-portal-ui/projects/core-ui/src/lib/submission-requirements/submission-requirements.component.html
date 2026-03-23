@@ -31,6 +31,7 @@
         <button
           mat-flat-button
           class="primaryButton"
+          [disabled]="portal === PortalsEnum.PartnerPortal"
           (click)="openUploadFile()"
         >
           Upload File
@@ -118,7 +119,7 @@
               mat-flat-button
               class="primaryButton"
               (click)="fileUpload()"
-              [disabled]="!confirmed.checked"
+              [disabled]="portal === PortalsEnum.PartnerPortal || !confirmed.checked"
             >
               Upload File
             </button>
@@ -185,6 +186,7 @@
                 mat-flat-button
                 class="primaryButton"
                 routerLink="/lettersToDriver"
+                [disabled]="portal === PortalsEnum.PartnerPortal"
               >
                 View Letter
               </button>

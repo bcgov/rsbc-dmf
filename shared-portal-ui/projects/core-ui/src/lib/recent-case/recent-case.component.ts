@@ -8,7 +8,7 @@ import { DatePipe, NgClass, NgIf } from '@angular/common';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
-import { CaseStageEnum } from '../app.model';
+import { CaseStageEnum, RemedialCaseStageEnum } from '../app.model';
 import{PortalsEnum} from '../app.model';
 
 @Component({
@@ -80,36 +80,71 @@ export class RecentCaseComponent implements OnInit {
       });
   }
 
+    private setSelectedIndexByStatus(status: string): void {
+    const isRemedial = (this.programArea ?? '').toLowerCase() === 'remedial';
+
+    if (isRemedial) {
+      if (status === RemedialCaseStageEnum.Opened) this.selectedIndex = 0;
+      if (status === RemedialCaseStageEnum.OpenPendingReview) this.selectedIndex = 1;
+      if (status === RemedialCaseStageEnum.UnderReview) this.selectedIndex = 2;
+      if (status === RemedialCaseStageEnum.Reviewed) this.selectedIndex = 3;
+      if (status === RemedialCaseStageEnum.Closed) this.selectedIndex = 4;
+      return;
+    }
+
+    if (status === CaseStageEnum.Opened) this.selectedIndex = 0;
+    if (status === CaseStageEnum.OpenPendingSubmission) this.selectedIndex = 1;
+    if (status === CaseStageEnum.UnderReview) this.selectedIndex = 2;
+    if (status === CaseStageEnum.FileEndTasks) this.selectedIndex = 3;
+    if (status === CaseStageEnum.IntakeValidation) this.selectedIndex = 4;
+    if (status === CaseStageEnum.Closed) this.selectedIndex = 5;
+  }
+
   public ngOnInit(): void {
     this.caseManagementService
-      .getMostRecentCase({programArea: this.programArea})
-      .subscribe((recentCase: any) => {
-        this.caseDetails = recentCase;
-        if (recentCase.status === CaseStageEnum.Opened) {
-          this.selectedIndex = 0;
+      .getMostRecentCase({ programArea: this.programArea })
+      .subscribe(
+        (recentCase: any) => {
+          this.caseDetails = recentCase;
+          this.setSelectedIndexByStatus(recentCase.status);
+          this.hasActiveCase = true;
+        },
+        (_error: any) => {
+          this.hasActiveCase = false;
         }
-        if (recentCase.status === CaseStageEnum.OpenPendingSubmission) {
-          this.selectedIndex = 1;
-        }
-        if (recentCase.status === CaseStageEnum.UnderReview) {
-          this.selectedIndex = 2;
-        }
-        if (recentCase.status === CaseStageEnum.FileEndTasks) {
-          this.selectedIndex = 3;
-        }
-        if (recentCase.status === CaseStageEnum.IntakeValidation) {
-          this.selectedIndex = 4;
-        }
-        if (recentCase.status === CaseStageEnum.Closed) {
-          this.selectedIndex = 5;
-        }
-        this.hasActiveCase = true;
-      },
-      (error: any) => {
-        this.hasActiveCase = false;
-      }
       );
   }
+
+  // public ngOnInit(): void {
+  //   this.caseManagementService
+  //     .getMostRecentCase({programArea: this.programArea})
+  //     .subscribe((recentCase: any) => {
+  //       this.caseDetails = recentCase;
+  //       if (recentCase.status === CaseStageEnum.Opened) {
+  //         this.selectedIndex = 0;
+  //       }
+  //       if (recentCase.status === CaseStageEnum.OpenPendingSubmission) {
+  //         this.selectedIndex = 1;
+  //       }
+  //       if (recentCase.status === CaseStageEnum.UnderReview) {
+  //         this.selectedIndex = 2;
+  //       }
+  //       if (recentCase.status === CaseStageEnum.FileEndTasks) {
+  //         this.selectedIndex = 3;
+  //       }
+  //       if (recentCase.status === CaseStageEnum.IntakeValidation) {
+  //         this.selectedIndex = 4;
+  //       }
+  //       if (recentCase.status === CaseStageEnum.Closed) {
+  //         this.selectedIndex = 5;
+  //       }
+  //       this.hasActiveCase = true;
+  //     },
+  //     (error: any) => {
+  //       this.hasActiveCase = false;
+  //     }
+  //     );
+  // }
 
 
   // partner Portal
