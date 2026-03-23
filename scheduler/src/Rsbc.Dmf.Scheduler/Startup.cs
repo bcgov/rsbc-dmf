@@ -508,31 +508,31 @@ namespace Rsbc.Dmf.Scheduler
                     var cmsClient = serviceScope.ServiceProvider.GetService<CaseManagerClient>();
                     var bcmailClient = serviceScope.ServiceProvider.GetService<BcMailAdapterClient>();
 
-                    if (Configuration["FEATURE:ENABLE_SEND_MEDICAL_UPDATES"] == "true")
+                    if (Configuration["FEATURE_ENABLE_SEND_MEDICAL_UPDATES"] == "true")
                     {
                         RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendMedicalUpdates(null), Cron.Daily(3));
                     }
-                    if (Configuration["FEATURE:ENABLE_SEND_MEDICAL_UPDATES_DRY_RUN"] == "true")
+                    if (Configuration["FEATURE_ENABLE_SEND_MEDICAL_UPDATES_DRY_RUN"] == "true")
                     { 
                         RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendMedicalUpdatesDryRun(null), Cron.Never);
                     }
-                    if (Configuration["FEATURE:ENABLE_RESOLVE_RESOLVE_CASE_STATUS"] == "true")
+                    if (Configuration["FEATURE_ENABLE_RESOLVE_RESOLVE_CASE_STATUS"] == "true")
                     {
                         RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).ResolveCaseStatus(null), Cron.Daily(4));
                     }
-                    if (Configuration["FEATURE:ENABLE_UPDATE_NON_COMPLY_DOCUMENT"] == "true")
+                    if (Configuration["FEATURE_ENABLE_UPDATE_NON_COMPLY_DOCUMENT"] == "true")
                     {
                         RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateNonComplyDocuments(null), Cron.Daily(3));
                     }
-                    if (Configuration["FEATURE:ENABLE_UPDATE_BIRTH_DATE"] == "true")
+                    if (Configuration["FEATURE_ENABLE_UPDATE_BIRTH_DATE"] == "true")
                     {
                         RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateBirthdate(null), Cron.Never);
                     }
-                    if (Configuration["FEATURE:ENABLE_SEND_TO_BC_MAIL"] == "true")
+                    if (Configuration["FEATURE_ENABLE_SEND_TO_BC_MAIL"] == "true")
                     {
                         RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendToBcMail(null), Cron.Daily(10));
                     }
-                    if (Configuration["FEATURE:ENABLE_GET_ICBC_NOTIFICATIONS"] == "true")
+                    if (Configuration["FEATURE_ENABLE_GET_ICBC_NOTIFICATIONS"] == "true")
                     {
                         RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).GetIcbcNotifications(null), Cron.MinuteInterval(5));
                     }
