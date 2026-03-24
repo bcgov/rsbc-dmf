@@ -267,6 +267,18 @@ namespace Rsbc.Dmf.CaseManagement
                     case 100000002:
                         result.AssigneeTitle = "Case Manager Group";
                         break;
+                    case 100000004:
+                        result.AssigneeTitle = "Remedial intake group";
+                        break;
+                    case 100000005:
+                        result.AssigneeTitle = "Remedial Adjudicator Group";
+                        break;
+                    case 100000006:
+                        result.AssigneeTitle = "Remedial Adjudication Technician Group";
+                        break;
+                    case 100000007:
+                        result.AssigneeTitle = "DIP Adjudicator Group";
+                        break;
                     case 100000003:
                         result.AssigneeTitle = "Other";
                         break;
