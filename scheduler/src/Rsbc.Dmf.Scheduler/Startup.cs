@@ -41,6 +41,8 @@ using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using static Rsbc.Dmf.BcMailAdapter.BcMailAdapter;
 using static Rsbc.Dmf.Scheduler.ScheduledJobs;
 using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
+using Google.Protobuf.WellKnownTypes;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Rsbc.Dmf.Scheduler
 {
@@ -65,24 +67,24 @@ namespace Rsbc.Dmf.Scheduler
 
         private IConfiguration Configuration { get; }
         private IWebHostEnvironment _env;
-       // private readonly ScheduledJobs schedulerJobClient;
+        // private readonly ScheduledJobs schedulerJobClient;
         private readonly IcbcAdapterClient icbcAdapterClient;
         private readonly BcMailAdapterClient bcMailAdapterClient;
         private readonly CaseManagerClient caseManagerClient;
         private readonly ScheduledJobs schedulerJobClient;
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the RunTime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-           
+
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders =
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
-            
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "default",
@@ -92,7 +94,7 @@ namespace Rsbc.Dmf.Scheduler
                                         .AllowAnyHeader()
                                         .AllowAnyMethod();
                                   });
-            });            
+            });
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
@@ -110,7 +112,7 @@ namespace Rsbc.Dmf.Scheduler
 
                 }).AddJwtBearer(o =>
                 {
-                    o.SaveToken = true;                   
+                    o.SaveToken = true;
                     o.RequireHttpsMetadata = false;
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -122,23 +124,24 @@ namespace Rsbc.Dmf.Scheduler
                     };
                 });
 
-                
+
             }
             else
             {
                 services.AddSingleton<IAuthorizationHandler, AllowAnonymous>();
             }
-            
+
             services.AddAuthorization();
 
             // basic REST controller for Dynamics.
 
             services.AddProblemDetails(ConfigureProblemDetails)
-                
-            .AddControllers(options => {
+
+            .AddControllers(options =>
+            {
                 if (_env.IsDevelopment())
                 {
-                    options.Filters.Add(new AllowAnonymousFilter());                    
+                    options.Filters.Add(new AllowAnonymousFilter());
                 }
 
 
@@ -146,7 +149,7 @@ namespace Rsbc.Dmf.Scheduler
                 options.EnableEndpointRouting = false;
 
 
-                })
+            })
             .AddNewtonsoftJson(opts =>
             {
                 opts.SerializerSettings.Formatting = Formatting.Indented;
@@ -168,8 +171,8 @@ namespace Rsbc.Dmf.Scheduler
             services.AddGrpc(options =>
             {
                 options.EnableDetailedErrors = true;
-                options.MaxReceiveMessageSize = null; 
-                options.MaxSendMessageSize = null; 
+                options.MaxReceiveMessageSize = null;
+                options.MaxSendMessageSize = null;
             });
 
             if (!string.IsNullOrEmpty(Configuration["ENABLE_HANGFIRE_JOBS"]))
@@ -181,7 +184,7 @@ namespace Rsbc.Dmf.Scheduler
 
             services.AddEndpointsApiExplorer();
 
-          
+
 
             // health checks. 
             services.AddHealthChecks()
@@ -194,7 +197,7 @@ namespace Rsbc.Dmf.Scheduler
             if (!string.IsNullOrEmpty(cmsAdapterURI))
             {
                 var httpClientHandler = new HttpClientHandler();
-               
+
                 if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
                                           // This allows you to use OpenShift self-signed certificates for testing.
                 {
@@ -229,7 +232,7 @@ namespace Rsbc.Dmf.Scheduler
                         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
                     }
 
-                   
+
                 }
 
                 var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
@@ -252,7 +255,7 @@ namespace Rsbc.Dmf.Scheduler
                 }
 
                 var httpClient = new HttpClient(httpClientHandler)
-                {                    
+                {
                     Timeout = TimeSpan.FromMinutes(90) // jobs must finish within 1.5 hrs
                 };
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
@@ -305,7 +308,7 @@ namespace Rsbc.Dmf.Scheduler
                     Timeout = TimeSpan.FromMinutes(90) // jobs must finish within 1.5 hrs
                 };
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
-                
+
 
                 if (!string.IsNullOrEmpty(Configuration["BCMAIL_ADAPTER_JWT_SECRET"]))
                 {
@@ -334,9 +337,9 @@ namespace Rsbc.Dmf.Scheduler
 
             }
 
-           
-                services.AddTransient(_ => new ScheduledJobs(Configuration, schedulerJobClient, icbcAdapterClient, caseManagerClient, bcMailAdapterClient));
-            
+
+            services.AddTransient(_ => new ScheduledJobs(Configuration, schedulerJobClient, icbcAdapterClient, caseManagerClient, bcMailAdapterClient));
+
         }
 
 
@@ -364,10 +367,10 @@ namespace Rsbc.Dmf.Scheduler
             options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        // This method gets called by the RunTime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-           
+
             app.UseProblemDetails();
 
             app.UseForwardedHeaders();
@@ -404,7 +407,7 @@ namespace Rsbc.Dmf.Scheduler
                 SetupHangfireJobs(app);
             }
 
-            
+
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -420,7 +423,7 @@ namespace Rsbc.Dmf.Scheduler
                 // Exclude all checks and return a 200-Ok.
                 Predicate = _ => false
             });
-            
+
 
             // the only endpoint for this service is Hangfire.
 
@@ -448,7 +451,7 @@ namespace Rsbc.Dmf.Scheduler
                 if (!string.IsNullOrEmpty(Configuration["SPLUNK_CHANNEL"]))
                     fields.CustomFieldList.Add(new CustomField("channel", Configuration["SPLUNK_CHANNEL"]));
                 var splunkUri = new Uri(Configuration["SPLUNK_COLLECTOR_URL"]);
-                
+
                 // Fix for bad SSL issues 
 
                 Log.Logger = new LoggerConfiguration()
@@ -507,20 +510,99 @@ namespace Rsbc.Dmf.Scheduler
                     var icbcClient = serviceScope.ServiceProvider.GetService<IcbcAdapterClient>();
                     var cmsClient = serviceScope.ServiceProvider.GetService<CaseManagerClient>();
                     var bcmailClient = serviceScope.ServiceProvider.GetService<BcMailAdapterClient>();
-                                        
-                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendMedicalUpdates(null), Cron.Daily(3));
 
-                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendMedicalUpdatesDryRun(null), Cron.Never);
 
-                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).ResolveCaseStatus(null), Cron.Daily(4));
 
-                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateNonComplyDocuments(null), Cron.Daily(3));
+                    // SendMedicalUpdates
+                    if (Configuration["Scheduler:SendMedicalUpdates:Enabled"] != "false")
+                    {
+                        RecurringJob.AddOrUpdate(
+                            () => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient)
+                                .SendMedicalUpdates(null),
+                            int.TryParse(Configuration["Scheduler:SendMedicalUpdates:Hour"], out var hour)
+                                ? Cron.Daily(hour)
+                                : Cron.Daily(3)
+                        );
+                        Log.Logger.Information($"HANGFIRE SCHEDULER STARTED: Send Medical Updates scheduled at {hour}:00");
+                    }
 
-                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateBirthdate(null), Cron.Never);
+                    // SendMedicalUpdatesDryRun
+                    if (Configuration["Scheduler:SendMedicalUpdatesDryRun:Enabled"] != "false")
+                    {
+                        RecurringJob.AddOrUpdate(
+                            () => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient)
+                                .SendMedicalUpdatesDryRun(null),
+                            int.TryParse(Configuration["Scheduler:SendMedicalUpdatesDryRun:Hour"], out var hourDryRun)
+                                ? Cron.Daily(hourDryRun)
+                                : Cron.Daily(1)
+                        );
+                        Log.Logger.Information($"HANGFIRE SCHEDULER STARTED: Send Medical Updates Dry Run at {hourDryRun}:00");
+                    }
 
-                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendToBcMail(null), Cron.Daily(10));
-                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).GetIcbcNotifications(null), Cron.MinuteInterval(5));
+                    // ResolveCaseStatus
+                    if (Configuration["Scheduler:ResolveCaseStatus:Enabled"] != "false")
+                    {
+                        RecurringJob.AddOrUpdate(
+                            () => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient)
+                                .ResolveCaseStatus(null),
+                            int.TryParse(Configuration["Scheduler:ResolveCaseStatus:Hour"], out var hourResolve)
+                                ? Cron.Daily(hourResolve)
+                                : Cron.Daily(4)
+                        );
+                        Log.Logger.Information($"HANGFIRE SCHEDULER STARTED: Resolve Case Status at {hourResolve}:00");
+                    }
 
+                    // UpdateNonComplyDocuments
+                    if (Configuration["Scheduler:UpdateNonComplyDocuments:Enabled"] != "false" && Configuration["Scheduler:UpdateNonComplyDocuments:Hour"] != null)
+                    {
+                        RecurringJob.AddOrUpdate(
+                            () => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient)
+                                .UpdateNonComplyDocuments(null),
+                            int.TryParse(Configuration["Scheduler:UpdateNonComplyDocuments:Hour"], out var hourNonComply)
+                                ? Cron.Daily(hourNonComply)
+                                : Cron.Daily(3)
+                        );
+                        Log.Logger.Information($"HANGFIRE SCHEDULER STARTED: Update Non Comply Document at {hourNonComply}:00");
+                    }
+
+                    // UpdateBirthDate
+                    if (Configuration["Scheduler:UpdateBirthDate:Enabled"] != "false" && Configuration["Scheduler:UpdateBirthDate:Hour"] != null)
+                    {
+                        RecurringJob.AddOrUpdate(
+                            () => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient)
+                                .UpdateBirthdate(null),
+                            int.TryParse(Configuration["Scheduler:UpdateBirthDate:Hour"], out var hourBirth)
+                                ? Cron.Daily(hourBirth)
+                                : Cron.Daily(9)
+                        );
+                        Log.Logger.Information($"HANGFIRE SCHEDULER STARTED: Update Birth Date at {hourBirth}:00");
+                    }
+
+                    // SendToBcMail
+                    if (Configuration["Scheduler:SendToBcMail:Enabled"] != "false")
+                    {
+                        RecurringJob.AddOrUpdate(
+                            () => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient)
+                                .SendToBcMail(null),
+                            int.TryParse(Configuration["Scheduler:SendToBcMail:Hour"], out var hourBCMail)
+                                ? Cron.Daily(hourBCMail)
+                                : Cron.Daily(10)
+                        );
+                        Log.Logger.Information($"HANGFIRE SCHEDULER STARTED: Send to BC Mails at {hourBCMail}:00");
+                    }
+
+                    // GetIcbcNotifications
+                    if (Configuration["Scheduler:GetIcbcNotifications:Enabled"] != "false")
+                    {
+                        RecurringJob.AddOrUpdate(
+                            () => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient)
+                                .GetIcbcNotifications(null),
+                            int.TryParse(Configuration["Scheduler:GetIcbcNotifications:Hour"], out var hourICBC)
+                                ? Cron.Daily(hourICBC)
+                                : Cron.Daily(8)
+                        );
+                        Log.Logger.Information($"HANGFIRE SCHEDULER STARTED: Get ICBC Notifications at {hourICBC}:00");
+                    }
 
                     Log.Logger.Information("Hangfire jobs setup.");
                 }
@@ -535,7 +617,7 @@ namespace Rsbc.Dmf.Scheduler
         }
     }
 
-    
 
 
-}
+
+    }
