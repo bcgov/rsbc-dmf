@@ -30,6 +30,8 @@ on:
                     - bcmail-adapter
                     - driver-portal-api
                     - driver-portal-ui
+                    - partner-portal-api
+                    - partner-portal-ui
                     - scheduler-service
 
 # --- ENVIRONMENT VARIABLES ---------------------------------------------------------
@@ -666,7 +668,103 @@ jobs:
                     exit 1
                   fi
 
-    # Job 14: Scheduler Service
+    # Job 14: Partner Portal API
+    promote-partner-portal-api:
+        name: Promote Partner Portal API to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'partner-portal-api' }}
+        env:
+            IMAGE_NAME: "partner-portal-api"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Partner Portal API promotion successful!"
+                  else
+                    echo "::error::Partner Portal API promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 15: Partner Portal UI
+    promote-partner-portal-ui:
+        name: Promote Partner Portal UI to ${{ github.event.inputs.target_tag }}
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.service == 'partner-portal-ui' }}
+        env:
+            IMAGE_NAME: "partner-portal-ui"
+
+        steps:
+            - name: Install OpenShift CLI
+              run: |
+                  curl -LO "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/openshift-client-linux.tar.gz"
+                  tar -xzf openshift-client-linux.tar.gz
+                  sudo mv oc /usr/local/bin/
+            - name: Login to OpenShift
+              run: |
+                  oc login --token="${{ secrets.PROMOTE_OCP4_TOKEN }}" --server="${{ secrets.PROMOTE_OPENSHIFT_SERVER }}"
+            - name: Get source digest
+              id: get_source_digest
+              run: |
+                  SOURCE_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "source_digest=$SOURCE_DIGEST" >> $GITHUB_OUTPUT
+            - name: Get target digest (for backup)
+              id: get_target_digest
+              run: |
+                  TARGET_DIGEST=$(oc get istag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}')
+                  echo "target_digest=$TARGET_DIGEST" >> $GITHUB_OUTPUT
+            - name: Backup Current Target Image
+              if: steps.get_target_digest.outputs.target_digest != ''
+              run: |
+                  echo "Backing up current '${{ env.TARGET_TAG }}' image to '${{ env.BACKUP_TAG }}' by digest..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_target_digest.outputs.target_digest }} ${{ env.IMAGE_NAME }}:${{ env.BACKUP_TAG }} --reference
+            - name: Promote source to target
+              run: |
+                  echo "Promoting '${{ env.SOURCE_TAG }}' to '${{ env.TARGET_TAG }}' by digest for image '${{ env.IMAGE_NAME }}'..."
+                  oc tag ${{ env.IMAGE_NAME }}@${{ steps.get_source_digest.outputs.source_digest }} ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} --reference
+            - name: Validate Promotion
+              run: |
+                  sleep 5
+                  SOURCE_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.SOURCE_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  TARGET_SHA=$(oc get imagestreamtag ${{ env.IMAGE_NAME }}:${{ env.TARGET_TAG }} -n ${{ env.NAMESPACE }} -o jsonpath='{.image.metadata.name}' | sed 's/.*@//')
+                  if [[ "$SOURCE_SHA" == "$TARGET_SHA" ]]; then
+                    echo "Partner Portal UI promotion successful!"
+                  else
+                    echo "::error::Partner Portal UI promotion failed - digests don't match"
+                    exit 1
+                  fi
+
+    # Job 16: Scheduler Service
     promote-scheduler-service:
         name: Promote Scheduler Service to ${{ github.event.inputs.target_tag }}
         runs-on: ubuntu-latest
