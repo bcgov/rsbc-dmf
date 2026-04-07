@@ -63,8 +63,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
                         var cacheExpiration = int.Parse(_configuration["ICBC_DL_CACHE_EXPIRATION"] ?? "30");
                         var options = new MemoryCacheEntryOptions
                         {
-                            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(30),
-                            SlidingExpiration = TimeSpan.FromSeconds(30), 
+                            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(cacheExpiration),
+                            SlidingExpiration = TimeSpan.FromSeconds(cacheExpiration), 
                             Priority = CacheItemPriority.Normal
                         };
 
