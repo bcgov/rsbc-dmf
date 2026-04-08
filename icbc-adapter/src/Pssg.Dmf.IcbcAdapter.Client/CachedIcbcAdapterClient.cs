@@ -97,6 +97,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
         }
     }
 
+
     public class BaseCacheService
     {
         protected string GetHashKey(string name, string key)
