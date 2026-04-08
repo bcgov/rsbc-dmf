@@ -60,7 +60,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
                     if (reply != null && reply.ResultStatus == ResultStatus.Success)
                     {
                         // Set cache with expiration time - configurable cache duration
-                        var cacheExpiration = int.Parse(_configuration["ICBC_DL_CACHE_EXPIRATION"] ?? "30");
+                        var cacheExpiration = int.Parse(_configuration["ICBC_DL_CACHE_EXPIRATION_SECONDS"] ?? "30");
                         var options = new MemoryCacheEntryOptions
                         {
                             AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(cacheExpiration),
@@ -96,6 +96,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
             _cacheService.Dispose();
         }
     }
+
 
     public class BaseCacheService
     {
