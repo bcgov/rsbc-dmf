@@ -1,9 +1,9 @@
 import { DatePipe, NgFor, NgIf } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogClose, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatError, MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -13,6 +13,8 @@ import { UserService } from '@app/shared/services/user.service';
 import { Comment } from '@app/shared/api/models';
 import { CommentOrigin } from '@app/app.model';
 import { MatTooltipModule} from '@angular/material/tooltip';
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 @Component({
   selector: 'app-comments',
   standalone: true,
@@ -41,17 +43,18 @@ export class CommentsComponent implements OnInit {
 
   filterBy: CommentOrigin | null = null; 
   isAddingComment = false;
+  isLoadingComments = false;
 
   isExpanded: Record<string, boolean> = {};
   pageSize = 10;
-  filteredComments : Comment[] | null = [];
+  visibleCount = this.pageSize;
+  filteredComments : Comment[] = [];
+  filteredCommentsCount = 0;
   _allcommentRequest: Comment[] = [];
+  currentDriverId: string | null = null;
   commentsForm = this.fb.group({
     commentText: ['', Validators.compose([Validators.required, Validators.maxLength(2000)])],
   });
-
-  // Get Driver details
-  driverDetails = this.userService.getCachedriver();
  
    constructor(
     private dialogRef: MatDialogRef<CommentsComponent>,
@@ -60,20 +63,27 @@ export class CommentsComponent implements OnInit {
     private fb: FormBuilder
   ) { }
 
+  readonly dialogDriverId = inject(MAT_DIALOG_DATA, { optional: true }) as string | null;
+
   ngOnInit(): void {
-    if (this.driverDetails.id) {
-      this.getComments(this.driverDetails.id as string)
-    }
-    else {
+    const cachedDriverId = this.userService.getCachedriver()?.id ?? null;
+    this.currentDriverId = this.dialogDriverId || cachedDriverId;
+
+    if (this.currentDriverId) {
+      this.getComments(this.currentDriverId);
+    } else {
       console.log('No Comments for this user')
     }
 
   }
 
   @Input() set allComments(comments: Comment[]) {
-    if (comments)
+    if (comments) {
       this._allcommentRequest = comments;
-      this.filteredComments = this._allcommentRequest.slice(0, this.pageSize);
+    }
+
+    this.visibleCount = this.pageSize;
+    this.applyFilter();
   }
 
   get allComments() {
@@ -81,29 +91,46 @@ export class CommentsComponent implements OnInit {
   }
 
   get allCommentsLength() {
-    return this.allComments.filter((c) => !this.filterBy || c.origin === this.filterBy).length;
+    return this.filteredCommentsCount;
   }
 
   getComments(driverId: string) {
-    this.caseManagementService.getComments(driverId).subscribe((comments: any) => {
-      this._allcommentRequest = comments;
-      this.filteredComments = this._allcommentRequest?.slice(0, this.pageSize);
+    if (!driverId) {
+      this._allcommentRequest = [];
+      this.applyFilter();
+      return;
+    }
+
+    this.isLoadingComments = true;
+    this.caseManagementService.getComments(driverId).pipe(
+      catchError((error) => {
+        console.error('Unable to load comments:', error);
+        return of([] as Comment[]);
+      })
+    ).subscribe((comments: Comment[]) => {
+      this._allcommentRequest = comments ?? [];
+      this.visibleCount = this.pageSize;
+      this.applyFilter();
+      this.isLoadingComments = false;
     });
   }
 
   filterByAllComments(){
     this.filterBy = null;
-    this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, this.pageSize);
+    this.visibleCount = this.pageSize;
+    this.applyFilter();
    }
 
   filterByUser(){
    this.filterBy = CommentOrigin.User;
-   this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, this.pageSize);
+   this.visibleCount = this.pageSize;
+   this.applyFilter();
   }
  
   filterBySystem(){
     this.filterBy = CommentOrigin.System; 
-    this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, this.pageSize);
+    this.visibleCount = this.pageSize;
+    this.applyFilter();
   }
   
   addComment(){
@@ -127,7 +154,7 @@ export class CommentsComponent implements OnInit {
       this.commentsForm.reset();
       this.isAddingComment = false;
 
-      const driverId = this.driverDetails.id;
+      const driverId = this.currentDriverId;
       if (driverId != null) {
         this.getComments(driverId);
       }
@@ -135,9 +162,22 @@ export class CommentsComponent implements OnInit {
   }
 
   viewMore() {
-    const pageSize = (this.filteredComments?.length ?? 0) + this.pageSize;
+    this.visibleCount = this.filteredComments.length + this.pageSize;
+    this.applyFilter();
+  }
 
-    this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, pageSize);
+  trackByCommentId(index: number, comment: Comment) {
+    return comment.commentId ?? index;
+  }
+
+  private applyFilter() {
+    const source = this._allcommentRequest ?? [];
+    const filtered = this.filterBy
+      ? source.filter((c) => c.origin === this.filterBy)
+      : source;
+
+    this.filteredCommentsCount = filtered.length;
+    this.filteredComments = filtered.slice(0, this.visibleCount);
   }
   
   toggleIsExpandable(id?: string | null) {
