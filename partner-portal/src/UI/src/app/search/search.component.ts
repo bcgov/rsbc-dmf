@@ -10,6 +10,7 @@ import { CaseSearch } from '@app/shared/api/models';
 import { DriverService } from '@app/shared/api/services';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { UserService } from '@app/shared/services/user.service';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -34,6 +35,7 @@ export class SearchComponent {
   caseSurCode = '';
   noResults: boolean = false;
   surcode = '';
+  isSearching = false;
   driverSearchAttempted: boolean = false;
   caseSearchAttempted: boolean = false;
   searchExecuted: boolean = false;
@@ -48,28 +50,37 @@ export class SearchComponent {
     this.driverSearchAttempted = true;
     driverLicenseControl.control.markAsTouched();
     surCodeControl.control.markAsTouched();
-    
-    // Check if form is valid before making API call
-    if (!this.driverLicenceNumber?.trim() || !this.surcode?.trim()) {
+
+    if (this.isSearching) {
       return;
     }
+
+    const normalizedDriverLicenceNumber = this.driverLicenceNumber?.trim();
+    const normalizedSurcode = this.surcode?.trim().toUpperCase();
+    
+    // Check if form is valid before making API call
+    if (!normalizedDriverLicenceNumber || !normalizedSurcode) {
+      return;
+    }
+
+    this.driverLicenceNumber = normalizedDriverLicenceNumber;
+    this.surcode = normalizedSurcode;
     
     this.searchExecuted = true;
     this.noResults = false;
-    
-    // Ensure surcode is not empty - use a default value if empty
-    const effectiveSurcode = this.surcode?.trim();
+    this.isSearching = true;
 
     this.caseManagementService
       .searchByDriver({ 
-        driverLicenceNumber: this.driverLicenceNumber,
-        surCode: effectiveSurcode
+        driverLicenceNumber: normalizedDriverLicenceNumber,
+        surCode: normalizedSurcode
       })
+      .pipe(finalize(() => (this.isSearching = false)))
       .subscribe({
         next: (driver) => {
           this.userService.setCacheDriver(driver);
-          this.router.navigate(['/driverSearch', this.driverLicenceNumber as string], {
-            queryParams: { surcode: this.surcode }
+          this.router.navigate(['/driverSearch', normalizedDriverLicenceNumber as string], {
+            queryParams: { surcode: normalizedSurcode }
           });
         },
         error: (error) => {

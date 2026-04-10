@@ -99,10 +99,8 @@ export class DriverSearchComponent implements OnInit {
     if (this.driverDetails.id) {
       this.getClosedCases(this.driverDetails.id as string);
     } else {
-      console.log('No user profile');
+      this.search();
     }
-
-  this.search();
   }
 
   getClosedCases(driverId: string) {
@@ -116,13 +114,26 @@ export class DriverSearchComponent implements OnInit {
 
 
   search() {
+    const normalizedDriverLicenceNumber = (this.driverLicenceNumber || '').trim();
+    const normalizedSurcode = (this.surcode || '').trim().toUpperCase();
+
+    if (!normalizedDriverLicenceNumber || !normalizedSurcode) {
+      return;
+    }
+
+    this.driverLicenceNumber = normalizedDriverLicenceNumber;
+    this.surcode = normalizedSurcode;
+
     this.caseManagementService
-      .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber,
-        surCode: this.surcode })
+      .searchByDriver({ driverLicenceNumber: normalizedDriverLicenceNumber,
+        surCode: normalizedSurcode })
       .subscribe({
         next: (driver) => {
           this.userService.setCacheDriver(driver);
           this.driverDetails = driver;
+          if (driver?.id) {
+            this.getClosedCases(driver.id);
+          }
         },
         error: (error) => {
          
