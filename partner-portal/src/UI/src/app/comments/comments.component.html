@@ -36,7 +36,7 @@
       </mat-form-field>
       <div class="inlineCommentActions">
         <button class="cancelButton" mat-flat-button (click)="addComment()">Cancel</button>
-        <button class="primaryButton" mat-flat-button (click)="saveComment()">Add</button>
+        <button class="primaryButton" mat-flat-button [disabled]="commentsForm.invalid || isSavingComment || !currentDriverId" (click)="saveComment()">{{ isSavingComment ? 'Adding...' : 'Add' }}</button>
       </div>
     </div>
   }
