@@ -106,7 +106,7 @@ export class CommentsComponent implements OnInit {
     this.caseManagementService.getComments(driverId).pipe(
       catchError((error) => {
         console.error('Unable to load comments:', error);
-        return of([] as Comment[]);
+        return of(this._allcommentRequest);
       }),
       finalize(() => {
         this.isLoadingComments = false;
