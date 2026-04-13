@@ -14,7 +14,7 @@ import { Comment } from '@app/shared/api/models';
 import { CommentOrigin } from '@app/app.model';
 import { MatTooltipModule} from '@angular/material/tooltip';
 import { of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
 @Component({
   selector: 'app-comments',
   standalone: true,
@@ -44,6 +44,7 @@ export class CommentsComponent implements OnInit {
   filterBy: CommentOrigin | null = null; 
   isAddingComment = false;
   isLoadingComments = false;
+  isSavingComment = false;
 
   isExpanded: Record<string, boolean> = {};
   pageSize = 10;
@@ -105,13 +106,15 @@ export class CommentsComponent implements OnInit {
     this.caseManagementService.getComments(driverId).pipe(
       catchError((error) => {
         console.error('Unable to load comments:', error);
-        return of([] as Comment[]);
+        return of(this._allcommentRequest);
+      }),
+      finalize(() => {
+        this.isLoadingComments = false;
       })
     ).subscribe((comments: Comment[]) => {
       this._allcommentRequest = comments ?? [];
       this.visibleCount = this.pageSize;
       this.applyFilter();
-      this.isLoadingComments = false;
     });
   }
 
@@ -141,22 +144,41 @@ export class CommentsComponent implements OnInit {
   }
 
   saveComment() {
+    if (this.isSavingComment) {
+      return;
+    }
+
+    const driverId = this.currentDriverId;
+    if (!driverId) {
+      console.error('Unable to add comment: missing driver id.');
+      return;
+    }
+
+    const trimmedCommentText = this.commentsForm.controls.commentText.value?.trim() ?? '';
+    this.commentsForm.controls.commentText.setValue(trimmedCommentText);
+
     if (this.commentsForm.invalid) {
       this.commentsForm.markAllAsTouched();
       return;
     }
 
     const comment = {
-      commentText: this.commentsForm.value.commentText,
+      commentText: trimmedCommentText,
     };
 
-    this.caseManagementService.addComments({ body: comment }).subscribe(() => {
-      this.commentsForm.reset();
-      this.isAddingComment = false;
-
-      const driverId = this.currentDriverId;
-      if (driverId != null) {
+    this.isSavingComment = true;
+    this.caseManagementService.addComments({ body: comment }).pipe(
+      finalize(() => {
+        this.isSavingComment = false;
+      })
+    ).subscribe({
+      next: () => {
+        this.commentsForm.reset();
+        this.isAddingComment = false;
         this.getComments(driverId);
+      },
+      error: (error) => {
+        console.error('Unable to add comment:', error);
       }
     });
   }
