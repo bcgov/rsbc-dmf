@@ -153,6 +153,11 @@ export class DriverSearchComponent implements OnInit {
   }
 
   openCommentsDialog() {
+    const driverId = this.driverDetails?.id ?? this.userService.getCachedriver()?.id;
+    if (!driverId) {
+      return;
+    }
+
     const dialogRef = this.dialog.open(CommentsComponent, {
       height: '730px',
       width: '400px',
@@ -160,7 +165,7 @@ export class DriverSearchComponent implements OnInit {
         bottom: '8px',
         right: '8px',
       },
-      data: this.driverDetails.id,
+      data: driverId,
     });
 
     dialogRef.afterClosed().subscribe((result) => {
