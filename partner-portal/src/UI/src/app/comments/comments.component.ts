@@ -67,8 +67,8 @@ export class CommentsComponent implements OnInit {
   readonly dialogDriverId = inject(MAT_DIALOG_DATA, { optional: true }) as string | null;
 
   ngOnInit(): void {
-    const cachedDriverId = this.userService.getCachedriver()?.id ?? null;
-    this.currentDriverId = this.dialogDriverId || cachedDriverId;
+    // Prioritize passed dialogDriverId, fall back to cache
+    this.currentDriverId = this.dialogDriverId ?? this.userService.getCachedriver()?.id ?? null;
 
     if (this.currentDriverId) {
       this.getComments(this.currentDriverId);
