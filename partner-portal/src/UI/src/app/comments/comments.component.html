@@ -57,9 +57,16 @@
 </div>
 
 <mat-dialog-content class="mat-typography">
-  <div *ngIf="!isLoadingComments && allComments.length === 0" style="padding: 12px 0;">
-    No Comments for this driver
-  </div>
+  @if(isLoadingComments) {
+    <div style="display: flex; align-items: center; justify-content: center; padding: 24px 12px;">
+      <p style="margin: 0; color: #666; font-size: 16px;">Loading Comments...</p>
+    </div>
+  }
+  @if(!isLoadingComments && allComments.length === 0) {
+    <div style="padding: 12px 0;">
+      No Comments for this driver
+    </div>
+  }
 
   <mat-card *ngFor = "let comments of filteredComments; trackBy: trackByCommentId" style="margin-bottom: 12px;">
     <mat-card-content>
