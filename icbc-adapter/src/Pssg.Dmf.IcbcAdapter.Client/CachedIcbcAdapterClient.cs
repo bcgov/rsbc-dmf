@@ -8,7 +8,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
 {
     public interface ICachedIcbcAdapterClient
     {
-        Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request);
+        Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request, bool forceRefresh = false);
     }
 
     public class CachedIcbcAdapterClient : BaseCacheService, ICachedIcbcAdapterClient, IDisposable
@@ -26,7 +26,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
             _configuration = configuration;
         }
 
-        public async Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request)
+        public async Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request, bool forceRefresh = false)
         {
             DriverInfoReply reply = null;
 
@@ -52,7 +52,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
             try
             {
                 var key = GetHashKey(nameof(IcbcAdapterClient.GetDriverInfo), request.DriverLicence);
-                if (!_cacheService.TryGetValue(key, out reply))
+                if (forceRefresh)
+                {
+                    _cacheService.Remove(key);
+                    _logger.LogInformation($"Force refresh requested for driver licence: {request.DriverLicence}");
+                }
+
+                if (forceRefresh || !_cacheService.TryGetValue(key, out reply))
                 {
                     _logger.LogInformation($"Cache miss for driver licence: {request.DriverLicence}");
                     reply = await _icbcAdapterClient.GetDriverInfoAsync(request);
