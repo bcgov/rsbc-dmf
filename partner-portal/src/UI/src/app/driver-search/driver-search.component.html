@@ -24,7 +24,7 @@
 </div>
 
 <div class="container">
-  <mat-tab-group animationDuration="0ms" (selectedTabChange)="onTabChange($event)">
+  <mat-tab-group animationDuration="0ms">
     <mat-tab label="Driver Details">
       <app-driver-details></app-driver-details>
     </mat-tab>
@@ -185,7 +185,10 @@
     <mat-tab label="Rehab Interlock">
       <app-rehab-interlock></app-rehab-interlock>
     </mat-tab>
-     <mat-tab label="Comments">
+     <mat-tab>
+      <ng-template mat-tab-label>
+        <span (click)="openCommentsDialog()">Comments</span>
+      </ng-template>
       <!-- Comments tab content - dialog will open on tab selection -->
       <div style="padding: 20px; text-align: center;">
         <p>Comments for the Driver.</p>

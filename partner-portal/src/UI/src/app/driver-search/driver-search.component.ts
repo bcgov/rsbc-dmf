@@ -146,12 +146,7 @@ export class DriverSearchComponent implements OnInit {
     if (id) this.isExpanded[id] = !this.isExpanded[id];
   }
 
-  onTabChange(event: MatTabChangeEvent) {
-    if (event.tab.textLabel === 'Comments') {
-      this.openCommentsDialog();
-    }
-  }
-
+ 
   openCommentsDialog() {
     const driverId = this.driverDetails?.id ?? this.userService.getCachedriver()?.id;
     if (!driverId) {
