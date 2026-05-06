@@ -51,7 +51,6 @@ namespace Pssg.Interfaces.Icbc.Services
         public async Task<string> RefreshTokenAsync()
         {
             var tokenEndpoint = _configuration["ICBC_OAUTH2_TOKEN_ENDPOINT"];
-            // https://wsgw.dev.jag.gov.bc.ca/icbc-npe-dev-oauth2-token*
             var clientId = _configuration["ICBC_OAUTH2_CLIENT_ID"];
             var clientSecret = _configuration["ICBC_OAUTH2_CLIENT_SECRET"];
             var scope = _configuration["ICBC_OAUTH2_SCOPE"] ?? "icbc_api";
