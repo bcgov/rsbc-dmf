@@ -197,7 +197,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         public void TestGetDriverHistory()
         {
             if (Configuration["ICBC_TEST_DL"] != null)
+
             {
+                var DriverLicenseNumber = Configuration["ICBC_TEST_DL"];
                 CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
                 Assert.NotNull(client);
             }

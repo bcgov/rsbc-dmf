@@ -106,8 +106,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             }
             else if (hasLegacyConfig)
             {
-                // Use legacy authentication
-                return new IcbcClient(Configuration);
+                return new EnhancedIcbcClient(Configuration);
             }
             else
             {
