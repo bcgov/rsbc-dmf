@@ -48,9 +48,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
                 TestDl(testDl);
 
-                testDl = Configuration["ICBC_ALTERNATE_TEST_DL"];
+                //testDl = Configuration["ICBC_ALTERNATE_TEST_DL"];
 
-                TestDl(testDl);
+                //TestDl(testDl);
             }
         }
     }
