@@ -322,8 +322,8 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             if (!hasLegacyConfig && !hasOAuth2Config)
             {
-                Log.Logger.Warning("No ICBC configuration found. Skipping ICBC client registration.");
-                return;
+                Log.Logger.Error("No ICBC configuration found. ICBC client registration failed.");
+                throw new InvalidOperationException("No ICBC configuration found. Either provide OAuth2 configuration (ICBC_SERVICE_URI_OAUTH) or legacy configuration (ICBC_SERVICE_URI).");
             }
 
             // Check if OAuth2 is enabled - Default to true (OAuth2)
@@ -335,7 +335,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
                 if (!hasOAuth2Config)
                 {
-                    Log.Logger.Warning("OAuth2 authentication is enabled but ICBC_SERVICE_URI_OAUTH is not configured. Falling back to legacy authentication if available.");
+                    Log.Logger.Error("OAuth2 authentication is enabled but ICBC_SERVICE_URI_OAUTH is not configured. Falling back to legacy authentication if available.");
                     useOAuth2 = false;
                 }
             }
