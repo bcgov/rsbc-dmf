@@ -9,7 +9,7 @@ namespace Pssg.Unit.Tests.Interfaces.Icbc
 {
     public class OAuth2TokenServiceIntegrationTest
     {
-        [Fact]
+        [Fact(Skip = "No service is found for URI specified in the request")]
         public async Task CanRetrieveToken_UsingUserSecrets()
         {
             // Arrange
