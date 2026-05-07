@@ -1,18 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Pssg.Interfaces;
+using Pssg.Interfaces.Icbc.Models;
+using Pssg.Interfaces.Icbc.ViewModels;
+using Pssg.Interfaces.IcbcModels;
+using Pssg.Interfaces.ViewModelExtensions;
+using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.IcbcAdapter.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Rsbc.Dmf.IcbcAdapter.ViewModels;
-using Pssg.Interfaces;
-using Pssg.Interfaces.Icbc.Models;
-using Pssg.Interfaces.Icbc.ViewModels;
-using Pssg.Interfaces.ViewModelExtensions;
-using Microsoft.AspNetCore.Authorization;
-using Rsbc.Dmf.CaseManagement.Service;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -24,14 +25,14 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<DriverHistoryController> _logger;
-        private readonly IcbcClient icbcClient;
+        private readonly IIcbcClient _icbcClient;
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
 
-        public TestController(ILogger<DriverHistoryController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient)
+        public TestController(ILogger<DriverHistoryController> logger, IConfiguration configuration, IIcbcClient icbcClient, CaseManager.CaseManagerClient cmsAdapterClient)
         {
             _configuration = configuration;
             _logger = logger;
-            icbcClient = new IcbcClient(configuration);
+            _icbcClient = icbcClient;
             _cmsAdapterClient = cmsAdapterClient;
         }
 
@@ -46,9 +47,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                      nameof(DefaultApiConventions.Get))]
         public ActionResult CreateCandidate (string dlNumber)
         {
-            
-            var IcbcClient = new IcbcClient(_configuration);
-            CLNT client = IcbcClient.GetDriverHistory(dlNumber);
+            CLNT client = _icbcClient.GetDriverHistory(dlNumber);
 
             LegacyCandidateRequest lcr = new LegacyCandidateRequest()
             {

@@ -1,5 +1,3 @@
-
-
 using FileHelpers;
 using Microsoft.Extensions.Configuration;
 using Rsbc.Dmf.IcbcAdapter;
@@ -40,24 +38,18 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
         /// <summary>
         /// Setup the test
-        /// </summary>        
+        /// </summary>    
         public EnhancedApiTest()
         {
             Configuration = new ConfigurationBuilder()
-                // The following line is the only reason we have a project reference for the icbc adapter in this test project
-                // If you were to use this code on a different project simply add user secrets as appropriate to match the environment / secret variables below.
-                .AddUserSecrets<Startup>() // Add secrets from the service.
-                .AddEnvironmentVariables()
-                .Build();
-            // create a new case manager client.
-            if (Configuration["ICBC_SERVICE_URI"] != null)
-            {
-                IcbcClient = new EnhancedIcbcClient(Configuration);
-            }
-            else
-            {
-                IcbcClient = IcbcHelper.CreateMock();
-            }
+           // The following line is the only reason we have a project reference for the icbc adapter in this test project
+           // If you were to use this code on a different project simply add user secrets as appropriate to match the environment / secret variables below.
+           .AddUserSecrets<Startup>() // Add secrets from the service.
+         .AddEnvironmentVariables()
+             .Build();
+
+            // Setup ICBC client with OAuth2 support
+            IcbcClient = SetupIcbcClient();
 
             string cmsAdapterURI = Configuration["CMS_ADAPTER_URI"];
 
@@ -69,10 +61,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             else
             {
                 var httpClientHandler = new HttpClientHandler();
-                // Return `true` to allow certificates that are untrusted/invalid                    
-                    httpClientHandler.ServerCertificateCustomValidationCallback =
-                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                
+                // Return `true` to allow certificates that are untrusted/invalid      
+                httpClientHandler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
                 var httpClient = new HttpClient(httpClientHandler);
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
@@ -104,11 +96,36 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
             flatFileUtils = new FlatFileUtils(Configuration, CaseManagerClient);
 
-            enhancedIcbcApiUtils = new EnhancedIcbcApiUtils(Configuration, CaseManagerClient,null);
-            icbcNotifactionsUtils = new IcbcNotifactionsUtils(Configuration, CaseManagerClient, null, DocumentStorageAdapterClient);
+            enhancedIcbcApiUtils = new EnhancedIcbcApiUtils(Configuration, CaseManagerClient, IcbcClient);
+            icbcNotifactionsUtils = new IcbcNotifactionsUtils(Configuration, CaseManagerClient, IcbcClient, DocumentStorageAdapterClient);
+        }
 
+        /// <summary>
+        /// Setup ICBC client based on configuration (OAuth2 or legacy)
+        /// </summary>
+        /// <returns></returns>
+        private IIcbcClient SetupIcbcClient()
+        {
+            // Check if OAuth2 is enabled and properly configured
+            bool useOAuth2 = Configuration.GetValue<bool>("ICBC_USE_OAUTH2", true);
+            bool hasOAuth2Config = !string.IsNullOrEmpty(Configuration["ICBC_OAUTH2_TOKEN_ENDPOINT"]);
+            bool hasLegacyConfig = !string.IsNullOrEmpty(Configuration["ICBC_SERVICE_URI"]);
 
-
+            if (useOAuth2 && hasOAuth2Config)
+            {
+                // Use OAuth2 Enhanced ICBC client with mock token service for testing
+                return IcbcHelper.CreateMockEnhancedClient(Configuration);
+            }
+            else if (hasLegacyConfig)
+            {
+                // Use legacy Enhanced ICBC client
+                return new EnhancedIcbcClient(Configuration);
+            }
+            else
+            {
+                // Use mock client if no real configuration is available
+                return IcbcHelper.CreateMock();
+            }
         }
 
         public static IFormFile CreateTestFile()
@@ -179,11 +196,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public void TestGetDriverHistory()
         {
-            if(Configuration["ICBC_TEST_DL"] != null)
+            if (Configuration["ICBC_TEST_DL"] != null)
+
             {
+                var DriverLicenseNumber = Configuration["ICBC_TEST_DL"];
                 CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
                 Assert.NotNull(client);
-            }           
+            }
         }
 
         [Fact]
@@ -198,10 +217,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                     DlNumber = Configuration["ICBC_TEST_DL"],
                     LastName = "EXP", //client.INAM.SURN ?? string.Empty,
                     MedicalDisposition = "P",
-                    MedicalIssueDate = new DateTimeOffset (2023, 1, 13, 0,0,0, TimeSpan.Zero ) //enhancedIcbcApiUtils.GetMedicalIssueDate(client)
+                    MedicalIssueDate = new DateTimeOffset(2023, 1, 13, 0, 0, 0, TimeSpan.Zero) //enhancedIcbcApiUtils.GetMedicalIssueDate(client)
                 };
                 string result = IcbcClient.SendMedicalUpdate(update);
-                
+
                 Assert.NotNull(result);
             }
 
@@ -213,7 +232,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
             if (Configuration["ICBC_TEST_DL"] != null)
             {
-               CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
+                CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
 
                 var update = new Pssg.Interfaces.IcbcModels.IcbcMedicalUpdate()
                 {
@@ -250,7 +269,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             var engine = new FileHelperEngine<NewDriver>();
             string sampleData = "2222222022222224EXPERIMENTAL_______________________2012-01-011M2002-02-012004-01-011998-01-012002-04-042002-04-040100";
             var records = engine.ReadString(sampleData);
-            Assert.Equal(records[0].LicenseNumber, sampleData.Substring(0,7));
+            Assert.Equal(records[0].LicenseNumber, sampleData.Substring(0, 7));
         }
 
         [Fact]
@@ -261,7 +280,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             var records = engine.ReadString(sampleData);
             Assert.Equal(records[0].LicenseNumber, sampleData.Substring(0, 7));
         }
-        
+
         [Fact]
         public void FlatCandidateListTest()
         {
@@ -272,7 +291,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 ClientNumber = String.Empty,
             };
             var result = CaseManagerClient.ProcessLegacyCandidate(lcr);
-            Assert.NotNull(result);            
+            Assert.NotNull(result);
         }
 
         [Fact]
@@ -284,7 +303,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             SearchReply searchReply = new SearchReply();
             var testCase = new DmerCase() { Driver = new Driver() { Surname = "TEST" } };
             testCase.Decisions.Add(
-                new DecisionItem () { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.FitToDrive  });
+         new DecisionItem() { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.FitToDrive });
             searchReply.Items.Add(testCase);
             var medicalUpdateData = f.GetMedicalUpdateData(searchReply);
             // should be P for Pass
@@ -300,7 +319,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             SearchReply searchReply = new SearchReply();
             var testCase = new DmerCase() { Driver = new Driver() { Surname = "TEST" } };
             testCase.Decisions.Add(
-                new DecisionItem() { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.UnfitToDrive });
+            new DecisionItem() { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.UnfitToDrive });
             searchReply.Items.Add(testCase);
             var medicalUpdateData = f.GetMedicalUpdateData(searchReply);
             // should be J for Adjudication
@@ -318,10 +337,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             var testCase = new DmerCase() { Driver = new Driver() { Surname = "TEST" } };
 
             testCase.Decisions.Add(
-                new DecisionItem() { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddDays(-1)), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.UnfitToDrive });
+             new DecisionItem() { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddDays(-1)), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.UnfitToDrive });
 
             testCase.Decisions.Add(
-                new DecisionItem() { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.FitToDrive });
+          new DecisionItem() { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.FitToDrive });
             searchReply.Items.Add(testCase);
             var medicalUpdateData = f.GetMedicalUpdateData(searchReply);
             // should be P for Pass, as the Pass Decision is after the Fail.
@@ -331,7 +350,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public async Task ParseNotifacationFailPassAsync()
         {
-           var testRecords= await icbcNotifactionsUtils.ParseIcbcNotication(CreateTestFile());
+            var testRecords = await icbcNotifactionsUtils.ParseIcbcNotication(CreateTestFile());
 
             Assert.Equal("01234567", testRecords[0].LNUM);
             Assert.Equal("012345672", testRecords[0].CLNO);
@@ -346,6 +365,5 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             Assert.Equal("500", testRecords[0].LIC_CLASS);
             Assert.Equal("2025-06-11", testRecords[0].CAND_SENT_DT);
         }
-
     }
 }

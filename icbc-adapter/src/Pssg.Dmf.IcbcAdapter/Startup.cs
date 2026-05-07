@@ -38,6 +38,7 @@ using Pssg.Interfaces;
 using Newtonsoft.Json.Serialization;
 using Rsbc.Dmf.IcbcAdapter.BackgroundWorkItem;
 using Pssg.DocumentStorageAdapter;
+using Pssg.Interfaces.Icbc.Services;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -75,7 +76,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 options.ForwardedHeaders =
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
-            
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: "default",
@@ -85,7 +86,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                                         .AllowAnyHeader()
                                         .AllowAnyMethod();
                                   });
-            });            
+            });
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
@@ -105,7 +106,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 }).AddJwtBearer(o =>
                 {
-                    o.SaveToken = true;                   
+                    o.SaveToken = true;
                     o.RequireHttpsMetadata = false;
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -117,7 +118,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     };
                 });
 
-                
+
             }
             else
             {
@@ -132,11 +133,12 @@ namespace Rsbc.Dmf.IcbcAdapter
             // basic REST controller for Dynamics.
 
             services.AddProblemDetails(ConfigureProblemDetails)
-                
-            .AddControllers(options => {
+
+            .AddControllers(options =>
+            {
                 if (_env.IsDevelopment())
                 {
-                    options.Filters.Add(new AllowAnonymousFilter());                    
+                    options.Filters.Add(new AllowAnonymousFilter());
                 }
 
 
@@ -144,7 +146,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 options.EnableEndpointRouting = false;
 
 
-                })
+            })
             .AddNewtonsoftJson(opts =>
             {
                 opts.SerializerSettings.Formatting = Formatting.Indented;
@@ -164,13 +166,13 @@ namespace Rsbc.Dmf.IcbcAdapter
             //new ServerErrorExceptionFilterAttribute());
 
             services.AddGrpc(options =>
-            {                
+            {
                 options.EnableDetailedErrors = true;
-                options.MaxReceiveMessageSize = null; 
-                options.MaxSendMessageSize = null; 
+                options.MaxReceiveMessageSize = null;
+                options.MaxSendMessageSize = null;
             });
 
-            
+
 
             services.AddEndpointsApiExplorer();
 
@@ -205,18 +207,20 @@ namespace Rsbc.Dmf.IcbcAdapter
                     c.OperationFilter<AuthenticationRequirementsOperationFilter>();
 
                 }
-                
+
             });
 
             // health checks. 
             services.AddHealthChecks()
                 .AddCheck("icbc-adapter", () => HealthCheckResult.Healthy("OK"));
-            // add ICBC client
-            if (Configuration["ICBC_SERVICE_URI"] != null)
-            {
-                IIcbcClient icbcClient = new EnhancedIcbcClient(Configuration);
-                services.AddTransient(_ => icbcClient);
-            }
+
+            // add ICBC client  with OAuth2 and Legacy authentication support
+            ConfigureIcbcClients(services);
+            //if (Configuration["ICBC_SERVICE_URI"] != null)
+            //{
+            //    IIcbcClient icbcClient = new EnhancedIcbcClient(Configuration);
+            //    services.AddTransient(_ => icbcClient);
+            //}
 
             // Add Document Storage Adapter 
 
@@ -273,8 +277,8 @@ namespace Rsbc.Dmf.IcbcAdapter
                         HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
                 }
 
-                var httpClient = new HttpClient(httpClientHandler) 
-                { 
+                var httpClient = new HttpClient(httpClientHandler)
+                {
                     Timeout = TimeSpan.FromMinutes(90)
                 };
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
@@ -306,6 +310,73 @@ namespace Rsbc.Dmf.IcbcAdapter
 
         }
 
+        /// <summary>
+        /// Configure ICBC Clients with OAuth2 and Legacy authentication support
+        /// </summary>
+        /// <param name="services"></param>
+        private void ConfigureIcbcClients(IServiceCollection services)
+        {
+            // Check if any ICBC configuration is present
+            bool hasLegacyConfig = !string.IsNullOrEmpty(Configuration["ICBC_SERVICE_URI"]);
+            bool hasOAuth2Config = !string.IsNullOrEmpty(Configuration["ICBC_SERVICE_URI_OAUTH"]);
+
+            if (!hasLegacyConfig && !hasOAuth2Config)
+            {
+                Log.Logger.Error("No ICBC configuration found. ICBC client registration failed.");
+                throw new InvalidOperationException("No ICBC configuration found. Either provide OAuth2 configuration (ICBC_SERVICE_URI_OAUTH) or legacy configuration (ICBC_SERVICE_URI).");
+            }
+
+            // Check if OAuth2 is enabled - Default to true (OAuth2)
+            bool useOAuth2 = Configuration.GetValue<bool>("ICBC_USE_OAUTH2", true);
+
+            Log.Logger.Information($"ICBC Authentication Method: {(useOAuth2 ? "OAuth2" : "Legacy")}");
+
+            if (useOAuth2)
+            {
+                if (!hasOAuth2Config)
+                {
+                    Log.Logger.Error("OAuth2 authentication is enabled but ICBC_SERVICE_URI_OAUTH is not configured. Falling back to legacy authentication if available.");
+                    useOAuth2 = false;
+                }
+            }
+
+            if (useOAuth2 && hasOAuth2Config)
+            {
+                // Register OAuth2TokenService for OAuth2 authentication
+                services.AddHttpClient<OAuth2TokenService>();
+                services.AddTransient<IOAuth2TokenService, OAuth2TokenService>();
+
+                // Register EnhancedIcbcClient with OAuth2 support
+                services.AddTransient<IIcbcClient>(provider =>
+                {
+                    var config = provider.GetRequiredService<IConfiguration>();
+                    var tokenService = provider.GetRequiredService<IOAuth2TokenService>();
+                    return new EnhancedIcbcClient(config, tokenService);
+                });
+
+                Log.Logger.Information("Enhanced ICBC client registered with OAuth2 authentication");
+            }
+            else if (hasLegacyConfig)
+            {
+                // Register EnhancedIcbcClient with legacy authentication only
+                services.AddTransient<IIcbcClient>(provider =>
+                {
+                    var config = provider.GetRequiredService<IConfiguration>();
+                    return new EnhancedIcbcClient(config);
+                });
+
+                Log.Logger.Information("Enhanced ICBC client registered with legacy authentication");
+            }
+            else
+            {
+                throw new InvalidOperationException("No valid ICBC configuration found. Either provide OAuth2 configuration (ICBC_SERVICE_URI_OAUTH) or legacy configuration (ICBC_SERVICE_URI).");
+            }
+        }
+
+
+
+
+
         private void ConfigureProblemDetails(Hellang.Middleware.ProblemDetails.ProblemDetailsOptions options)
         {
             // Only include exception details in a development environment. There's really no nee
@@ -332,8 +403,9 @@ namespace Rsbc.Dmf.IcbcAdapter
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (!env.IsProduction()) {
-                
+            if (!env.IsProduction())
+            {
+
                 //app.UseDeveloperExceptionPage();
 
                 app.UseSwagger();
@@ -362,9 +434,6 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
 #endif
 
-      
-            
-
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -379,7 +448,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 // Exclude all checks and return a 200-Ok.
                 Predicate = _ => false
             });
-            
+
 
             app.UseEndpoints(endpoints =>
             {
@@ -394,7 +463,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 endpoints.MapControllers();
 
-                
+
             });
 
             app.UseSerilogRequestLogging(
@@ -421,7 +490,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 if (!string.IsNullOrEmpty(Configuration["SPLUNK_CHANNEL"]))
                     fields.CustomFieldList.Add(new CustomField("channel", Configuration["SPLUNK_CHANNEL"]));
                 var splunkUri = new Uri(Configuration["SPLUNK_COLLECTOR_URL"]);
-                
+
                 // Fix for bad SSL issues 
 
                 Log.Logger = new LoggerConfiguration()
@@ -455,25 +524,25 @@ namespace Rsbc.Dmf.IcbcAdapter
             SelfLog.Enable(Console.Error);
         }
 
-       
-        }
-    }
 
-    /// <summary>
-    /// Helper filter for Swagger authentication
-    /// </summary>
-    public class AuthenticationRequirementsOperationFilter : IOperationFilter
+    }
+}
+
+/// <summary>
+/// Helper filter for Swagger authentication
+/// </summary>
+public class AuthenticationRequirementsOperationFilter : IOperationFilter
+{
+    public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        if (operation.Security == null)
+            operation.Security = new List<OpenApiSecurityRequirement>();
+
+
+        var scheme = new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" } };
+        operation.Security.Add(new OpenApiSecurityRequirement
         {
-            if (operation.Security == null)
-                operation.Security = new List<OpenApiSecurityRequirement>();
-
-
-            var scheme = new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" } };
-            operation.Security.Add(new OpenApiSecurityRequirement
-            {
-                [scheme] = new List<string>()
-            });
-        }
+            [scheme] = new List<string>()
+        });
     }
+}
