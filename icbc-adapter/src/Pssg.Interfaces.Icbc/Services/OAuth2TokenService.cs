@@ -74,11 +74,15 @@ namespace Pssg.Interfaces.Icbc.Services
             try
             {
                 var response = await _httpClient.PostAsync(tokenEndpoint, requestContent);
-                response.EnsureSuccessStatusCode();
-
                 var responseContent = await response.Content.ReadAsStringAsync();
-                var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent);
 
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError("Token endpoint returned {StatusCode}: {Content}", response.StatusCode, responseContent);
+                    throw new Exception($"Token endpoint error: {response.StatusCode} - {responseContent}");
+                }
+
+                var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent);
                 _cachedToken = tokenResponse.AccessToken;
                 _tokenExpiry = DateTime.UtcNow.AddSeconds(tokenResponse.ExpiresIn);
 
@@ -88,7 +92,7 @@ namespace Pssg.Interfaces.Icbc.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to acquire OAuth2 token");
-                throw;
+                throw ex;
             }
         }
 
