@@ -54,7 +54,6 @@ namespace Pssg.Interfaces.Icbc.Services
             var tokenEndpoint = _configuration["ICBC_OAUTH2_TOKEN_ENDPOINT"];
             var clientId = _configuration["ICBC_OAUTH2_CLIENT_ID"];
             var clientSecret = _configuration["ICBC_OAUTH2_CLIENT_SECRET"];
-            var scope = _configuration["ICBC_OAUTH2_SCOPE"] ?? "app";
 
             if (string.IsNullOrEmpty(tokenEndpoint) || string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
             {
@@ -67,7 +66,7 @@ namespace Pssg.Interfaces.Icbc.Services
                 new("grant_type", "client_credentials"),
                 new("client_id", clientId),
                 new("client_secret", clientSecret),
-                new("scope", "app") // Adjust scope as needed
+                new("scope", "app") 
             };
 
             var requestContent = new FormUrlEncodedContent(tokenRequest);
