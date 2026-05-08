@@ -1,11 +1,12 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Pssg.Interfaces.Icbc.Services
 {
@@ -53,7 +54,7 @@ namespace Pssg.Interfaces.Icbc.Services
             var tokenEndpoint = _configuration["ICBC_OAUTH2_TOKEN_ENDPOINT"];
             var clientId = _configuration["ICBC_OAUTH2_CLIENT_ID"];
             var clientSecret = _configuration["ICBC_OAUTH2_CLIENT_SECRET"];
-            var scope = _configuration["ICBC_OAUTH2_SCOPE"] ?? "icbc_api";
+            var scope = _configuration["ICBC_OAUTH2_SCOPE"] ?? "app";
 
             if (string.IsNullOrEmpty(tokenEndpoint) || string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
             {
@@ -66,7 +67,7 @@ namespace Pssg.Interfaces.Icbc.Services
                 new("grant_type", "client_credentials"),
                 new("client_id", clientId),
                 new("client_secret", clientSecret),
-                new("scope", "icbc_api") // Adjust scope as needed
+                new("scope", "app") // Adjust scope as needed
             };
 
             var requestContent = new FormUrlEncodedContent(tokenRequest);
@@ -82,7 +83,7 @@ namespace Pssg.Interfaces.Icbc.Services
                     throw new Exception($"Token endpoint error: {response.StatusCode} - {responseContent}");
                 }
 
-                var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent);
+                var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent,new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 _cachedToken = tokenResponse.AccessToken;
                 _tokenExpiry = DateTime.UtcNow.AddSeconds(tokenResponse.ExpiresIn);
 
@@ -92,7 +93,7 @@ namespace Pssg.Interfaces.Icbc.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to acquire OAuth2 token");
-                throw ex;
+                throw;
             }
         }
 
@@ -101,9 +102,17 @@ namespace Pssg.Interfaces.Icbc.Services
         /// </summary>
         private class TokenResponse
         {
+
+            [JsonPropertyName("access_token")]
             public string AccessToken { get; set; }
+
+            [JsonPropertyName("expires_in")]
             public int ExpiresIn { get; set; }
+
+            [JsonPropertyName("token_type")]
             public string TokenType { get; set; }
+
+            [JsonPropertyName("scope")]
             public string Scope { get; set; }
         }
     }
