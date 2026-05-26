@@ -811,7 +811,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             // 24/4/17 Set submittal status to "Issued" for letter out.
                             if (documentTypeCode == "180")
                             {
-                                remedialDocument.SubmittalStatus = "Issued";  
+                                remedialDocument.SubmittalStatus = "Issued";
+                                remedialDocument.Owner = "Client Services";
                             }
 
                             // For Document type HRDIR High Risk Driving Incident Report
