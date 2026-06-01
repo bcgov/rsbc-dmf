@@ -12,5 +12,10 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Model
         /// The text body of the comment.
         /// </summary
         public string CommentText { get; set; }
+
+        /// <summary>
+        /// Driver identifier for loading/creating comments in searched-driver context.
+        /// </summary>
+        public string DriverId { get; set; }
     }
 }
