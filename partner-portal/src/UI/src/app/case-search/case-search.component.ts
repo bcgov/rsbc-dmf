@@ -14,6 +14,7 @@ import { CommentsComponent } from '@app/comments/comments.component';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ApiConfiguration } from '@app/shared/api/api-configuration';
+import { UserService } from '@app/shared/services/user.service';
 
 @Component({
   selector: 'app-case-search',
@@ -54,7 +55,8 @@ export class CaseSearchComponent implements OnInit{
 
     public caseManagementService: CaseManagementService,
     public apiConfiguration: ApiConfiguration,
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
+    private userService: UserService
   ) {}
     
   ngOnInit(): void {
@@ -82,12 +84,20 @@ export class CaseSearchComponent implements OnInit{
   dialogRef? : MatDialogRef<CommentsComponent, any>
 
   openCommentsDialog(width?:string) {
+    const driverId = this.caseDetails?.driverId ?? this.userService.getCachedriver()?.id;
+   if (!driverId) {
+    return;
+   }
+
    this.dialogRef = this.dialog.open(CommentsComponent, {
       height: '730px',
       width: '400px',
       position: {
         bottom: '8px',
         right: '8px',
+      },
+      data: {
+        driverId,
       },
     });
 

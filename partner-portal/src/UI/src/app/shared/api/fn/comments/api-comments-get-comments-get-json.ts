@@ -9,11 +9,13 @@ import { RequestBuilder } from '../../request-builder';
 import { Comment } from '../../models/comment';
 
 export interface ApiCommentsGetCommentsGet$Json$Params {
+  driverId: string;
 }
 
 export function apiCommentsGetCommentsGet$Json(http: HttpClient, rootUrl: string, params?: ApiCommentsGetCommentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Comment>>> {
   const rb = new RequestBuilder(rootUrl, apiCommentsGetCommentsGet$Json.PATH, 'get');
   if (params) {
+    rb.query('driverId', params.driverId, {});
   }
 
   return http.request(

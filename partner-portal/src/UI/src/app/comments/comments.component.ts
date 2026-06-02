@@ -15,6 +15,11 @@ import { CommentOrigin } from '@app/app.model';
 import { MatTooltipModule} from '@angular/material/tooltip';
 import { of } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
+
+interface CommentsDialogData {
+  driverId: string;
+}
+
 @Component({
   selector: 'app-comments',
   standalone: true,
@@ -64,11 +69,15 @@ export class CommentsComponent implements OnInit {
     private fb: FormBuilder
   ) { }
 
-  readonly dialogDriverId = inject(MAT_DIALOG_DATA, { optional: true }) as string | null;
+  readonly dialogData = inject(MAT_DIALOG_DATA, { optional: true }) as string | CommentsDialogData | null;
 
   ngOnInit(): void {
-    // Prioritize passed dialogDriverId, fall back to cache
-    this.currentDriverId = this.dialogDriverId ?? this.userService.getCachedriver()?.id ?? null;
+    const cachedDriver = this.userService.getCachedriver();
+    if (typeof this.dialogData === 'string') {
+      this.currentDriverId = this.dialogData;
+    } else {
+      this.currentDriverId = this.dialogData?.driverId ?? cachedDriver?.id ?? null;
+    }
 
     if (this.currentDriverId) {
       this.getComments(this.currentDriverId);
@@ -103,7 +112,7 @@ export class CommentsComponent implements OnInit {
     }
 
     this.isLoadingComments = true;
-    this.caseManagementService.getComments(driverId).pipe(
+    this.caseManagementService.getComments({ driverId }).pipe(
       catchError((error) => {
         console.error('Unable to load comments:', error);
         return of(this._allcommentRequest);
@@ -164,6 +173,7 @@ export class CommentsComponent implements OnInit {
 
     const comment = {
       commentText: trimmedCommentText,
+      driverId,
     };
 
     this.isSavingComment = true;

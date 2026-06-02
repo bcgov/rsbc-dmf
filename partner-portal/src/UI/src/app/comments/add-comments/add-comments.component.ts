@@ -8,6 +8,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
+import { UserService } from '@app/shared/services/user.service';
 
 @Component({
   selector: 'app-add-comments',
@@ -22,7 +23,8 @@ export class AddCommentsComponent {
     private caseManagementService: CaseManagementService,
     private fb: FormBuilder,
     private _snackBar: MatSnackBar,
-    private dialogRef: MatDialogRef<AddCommentsComponent>
+    private dialogRef: MatDialogRef<AddCommentsComponent>,
+    private userService: UserService
   ) { }
 
   commentsForm = this.fb.group({
@@ -30,8 +32,21 @@ export class AddCommentsComponent {
   })
 
   AddComment(){   
+    const cachedDriver = this.userService.getCachedriver();
+    const driverId = cachedDriver?.id;
+
+    if (!driverId) {
+      this._snackBar.open('Unable to add comment for this driver context', 'Close', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 5000,
+      });
+      return;
+    }
+
     const comment: any = {
-      commentText : this.commentsForm.value.commentText
+      commentText : this.commentsForm.value.commentText,
+      driverId,
     }
      this.caseManagementService.addComments({body: comment}).subscribe(() => {
        this.commentsForm.reset();

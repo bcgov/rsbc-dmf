@@ -160,7 +160,9 @@ export class DriverSearchComponent implements OnInit {
         bottom: '8px',
         right: '8px',
       },
-      data: driverId,
+      data: {
+        driverId,
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

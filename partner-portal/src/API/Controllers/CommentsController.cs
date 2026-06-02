@@ -39,13 +39,16 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(GetCaseComments))]
-        public async Task<ActionResult> GetCaseComments()
+        public async Task<ActionResult> GetCaseComments([FromQuery] string driverId)
         {
             var result = new List<ViewModels.Comment>();
 
-            var profile = _userService.GetDriverInfo();
+            if (string.IsNullOrWhiteSpace(driverId))
+            {
+                return BadRequest("DriverId is required.");
+            }
 
-            var commentsRequest = new DriverIdRequest {Id = profile.DriverId};
+            var commentsRequest = new DriverIdRequest {Id = driverId};
             var getComments = _commentManagerClient.GetCommentOnDriver(commentsRequest);
 
             if (getComments?.ResultStatus == ResultStatus.Success)
@@ -68,10 +71,30 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         [ActionName(nameof(CreateComment))]
         public async Task<IActionResult> CreateComment([FromBody] CommentRequest commentRequest)
         {
-            var profile = await _userService.GetCurrentUserContext();
-            var user = _userService.GetDriverInfo();
+            if (commentRequest == null || string.IsNullOrWhiteSpace(commentRequest.DriverId))
+            {
+                return BadRequest("DriverId is required.");
+            }
 
-            var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = user.DriverId });
+            var profile = await _userService.GetCurrentUserContext();
+            var searchedDriver = _userService.GetDriverInfo();
+
+            var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = commentRequest.DriverId });
+
+            var resolvedDriverLicenseNumber =
+                searchedDriver?.DriverId == commentRequest.DriverId
+                    ? searchedDriver.DriverLicenseNumber
+                    : null;
+
+            if (string.IsNullOrWhiteSpace(resolvedDriverLicenseNumber))
+            {
+                resolvedDriverLicenseNumber = mostRecentCaseReply?.Item?.DriverLicenseNumber;
+            }
+
+            if (string.IsNullOrWhiteSpace(resolvedDriverLicenseNumber))
+            {
+                return BadRequest("Unable to resolve DriverLicenseNumber for the supplied DriverId.");
+            }
 
             var comment = new LegacyComment();
             comment.CommentText = commentRequest.CommentText ?? string.Empty;
@@ -82,8 +105,9 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             comment.SignatureName = profile.DisplayName;
 
             comment.Driver = new CaseManagement.Service.Driver();
-            comment.Driver.DriverLicenseNumber = user.DriverLicenseNumber;
-            comment.Driver.Surname = user.LastName ?? string.Empty;
+            comment.Driver.Id = commentRequest.DriverId;
+            comment.Driver.DriverLicenseNumber = resolvedDriverLicenseNumber;
+            comment.Driver.Surname = searchedDriver.LastName ?? string.Empty;
 
             // Check if we have a valid case to attach the comment to
             if (mostRecentCaseReply.ResultStatus == ResultStatus.Success && !string.IsNullOrEmpty(mostRecentCaseReply.Item?.CaseId))
