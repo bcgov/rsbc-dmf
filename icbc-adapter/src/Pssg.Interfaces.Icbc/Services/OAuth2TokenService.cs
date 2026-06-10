@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Pssg.Interfaces.Icbc.Services
@@ -20,6 +21,7 @@ namespace Pssg.Interfaces.Icbc.Services
         private readonly ILogger<OAuth2TokenService> _logger;
         private string _cachedToken;
         private DateTime _tokenExpiry;
+        private readonly SemaphoreSlim _tokenRefreshLock = new(1, 1);
 
 
         public OAuth2TokenService(HttpClient httpClient, IConfiguration configuration, ILogger<OAuth2TokenService> logger)
@@ -36,7 +38,7 @@ namespace Pssg.Interfaces.Icbc.Services
         /// <returns>Valid access token</returns>
         public async Task<string> GetAccessTokenAsync()
         {
-            if (!string.IsNullOrEmpty(_cachedToken) && DateTime.UtcNow < _tokenExpiry.AddMinutes(-5))
+            if (IsCachedTokenValid())
             {
                 return _cachedToken;
             }
@@ -51,6 +53,14 @@ namespace Pssg.Interfaces.Icbc.Services
         /// <returns>New access token</returns>
         public async Task<string> RefreshTokenAsync()
         {
+            await _tokenRefreshLock.WaitAsync();
+            try
+            {
+                if (IsCachedTokenValid())
+                {
+                    return _cachedToken;
+                }
+
             var tokenEndpoint = _configuration["ICBC_OAUTH2_TOKEN_ENDPOINT"];
             var clientId = _configuration["ICBC_OAUTH2_CLIENT_ID"];
             var clientSecret = _configuration["ICBC_OAUTH2_CLIENT_SECRET"];
@@ -69,7 +79,7 @@ namespace Pssg.Interfaces.Icbc.Services
                 new("scope", "app") 
             };
 
-            var requestContent = new FormUrlEncodedContent(tokenRequest);
+            using var requestContent = new FormUrlEncodedContent(tokenRequest);
 
             try
             {
@@ -82,9 +92,15 @@ namespace Pssg.Interfaces.Icbc.Services
                     throw new Exception($"Token endpoint error: {response.StatusCode} - {responseContent}");
                 }
 
-                var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent,new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                var tokenResponse = JsonSerializer.Deserialize<TokenResponse>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                if (tokenResponse == null || string.IsNullOrWhiteSpace(tokenResponse.AccessToken))
+                {
+                    throw new Exception("Token endpoint returned an invalid token response.");
+                }
+
+                var expiresInSeconds = tokenResponse.ExpiresIn > 0 ? tokenResponse.ExpiresIn : 300;
                 _cachedToken = tokenResponse.AccessToken;
-                _tokenExpiry = DateTime.UtcNow.AddSeconds(tokenResponse.ExpiresIn);
+                _tokenExpiry = DateTime.UtcNow.AddSeconds(expiresInSeconds);
 
                 _logger.LogInformation("Successfully acquired OAuth2 token");
                 return _cachedToken;
@@ -94,6 +110,21 @@ namespace Pssg.Interfaces.Icbc.Services
                 _logger.LogError(ex, "Failed to acquire OAuth2 token");
                 throw;
             }
+            }
+            finally
+            {
+                _tokenRefreshLock.Release();
+            }
+        }
+
+        private bool IsCachedTokenValid()
+        {
+            if (string.IsNullOrEmpty(_cachedToken))
+            {
+                return false;
+            }
+
+            return DateTime.UtcNow < _tokenExpiry.AddSeconds(-30);
         }
 
         /// <summary>

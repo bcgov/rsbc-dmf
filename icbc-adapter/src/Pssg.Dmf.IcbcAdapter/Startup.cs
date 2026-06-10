@@ -343,8 +343,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             if (useOAuth2 && hasOAuth2Config)
             {
                 // Register OAuth2TokenService for OAuth2 authentication
-                services.AddHttpClient<OAuth2TokenService>();
-                services.AddTransient<IOAuth2TokenService, OAuth2TokenService>();
+                services.AddHttpClient<IOAuth2TokenService, OAuth2TokenService>();
 
                 // Register EnhancedIcbcClient with OAuth2 support
                 services.AddTransient<IIcbcClient>(provider =>
