@@ -21,6 +21,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Pssg.Interfaces.IcbcModels;
 using Serilog;
 using Rsbc.Dmf.IcbcAdapter.BackgroundWorkItem;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -65,21 +66,15 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<DriverHistoryController> _logger;
-        private readonly IIcbcClient _icbcClient;
         private readonly IBackgroundTaskQueue _backgroundWorkerQueue;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        private readonly IMemoryCache _cache;
-
-        private readonly CaseManager.CaseManagerClient _caseManagerClient;
-
-        public IcbcController(ILogger<DriverHistoryController> logger, IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IMemoryCache cache, IIcbcClient icbcClient, IBackgroundTaskQueue backgroundTaskQueue)
+        public IcbcController(ILogger<DriverHistoryController> logger, IConfiguration configuration, IServiceScopeFactory serviceScopeFactory, IBackgroundTaskQueue backgroundTaskQueue)
         {
             _configuration = configuration;
             _logger = logger;
-            _icbcClient = icbcClient;
             _backgroundWorkerQueue = backgroundTaskQueue;
-            _caseManagerClient = caseManagerClient;
-            _cache = cache; 
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         /// <summary>
@@ -95,6 +90,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         {
             _backgroundWorkerQueue.QueueBackgroundWorkItem(async token =>
             {
+                using var scope = _serviceScopeFactory.CreateScope();
+                var icbcClient = scope.ServiceProvider.GetRequiredService<IIcbcClient>();
+                var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
+                var cache = scope.ServiceProvider.GetRequiredService<IMemoryCache>();
 
                 //check for duplicates; if there is an existing case then do not create a new one
 
@@ -103,10 +102,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     string medicalType = "";
                     // first check that the item is not in the cache.
                     CLNT data = null;
-                    if (!_cache.TryGetValue(item.DlNumber, out data))
+                    if (!cache.TryGetValue(item.DlNumber, out data))
                     {
                         // get the history from ICBC
-                        data = _icbcClient.GetDriverHistory(item.DlNumber);
+                        data = icbcClient.GetDriverHistory(item.DlNumber);
 
                         // ensure the presentation of the DL matches the calling system.
                         data.DR1MST.LNUM = item.DlNumber;
@@ -120,7 +119,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                                 .SetSlidingExpiration(TimeSpan.FromMinutes(10));
 
                             // Save data in cache.
-                            _cache.Set(item.DlNumber, data, cacheEntryOptions);
+                            cache.Set(item.DlNumber, data, cacheEntryOptions);
                         }
                     }
                     if (data != null && data.DR1MST != null && data.DR1MST.DR1MEDN != null)
@@ -141,7 +140,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                         // determine if there is active cases for driver.
                         var driverLicenseRequest = new DriverLicenseRequest()
                         { DriverLicenseNumber = item.DlNumber };
-                        var activeCaseReply = _caseManagerClient.GetActiveCases(driverLicenseRequest);
+                        var activeCaseReply = caseManagerClient.GetActiveCases(driverLicenseRequest);
 
                         var commentDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow);
                         var commentTypeCode = "C";
@@ -163,15 +162,15 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                                 MedicalType = medicalType
                             };
 
-                            var candidateCreation = _caseManagerClient.ProcessLegacyCandidate(lcr);
+                            var candidateCreation = caseManagerClient.ProcessLegacyCandidate(lcr);
 
                             if (candidateCreation != null)
                             {
-                                var caseId = _caseManagerClient.GetCaseId(lcr.LicenseNumber, lcr.Surname);
+                                var caseId = caseManagerClient.GetCaseId(lcr.LicenseNumber, lcr.Surname);
 
                                 // Create DMER envelope for the case
 
-                                _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
+                                caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
                                 {
                                     CaseId = caseId ?? string.Empty,
                                     Driver = new CaseManagement.Service.Driver()
@@ -189,7 +188,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                                 });
 
                                 // Create Comment
-                                _caseManagerClient.CreateICBCMedicalCandidateComment(new LegacyComment()
+                                caseManagerClient.CreateICBCMedicalCandidateComment(new LegacyComment()
                                 {
                                     CaseId = caseId,
                                     Driver = new CaseManagement.Service.Driver()
@@ -217,7 +216,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                             {
 
                                 // Create a bring forward
-                                _caseManagerClient.CreateBringForward(new BringForwardRequest()
+                                caseManagerClient.CreateBringForward(new BringForwardRequest()
                                 {
                                     CaseId = caseId,
                                     Description = "ICBC",
@@ -228,7 +227,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                                 });
 
                                 // Create Comment
-                                _caseManagerClient.CreateICBCMedicalCandidateComment(new LegacyComment()
+                                caseManagerClient.CreateICBCMedicalCandidateComment(new LegacyComment()
                                 {
                                     CaseId = caseId,
                                     Driver = new CaseManagement.Service.Driver()
@@ -249,12 +248,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                             }
 
                             // Check for an open/required document on the driver.
-                            var documents = _caseManagerClient.GetIcbcDmerEnvelopes(driverLicenseRequest);
+                            var documents = caseManagerClient.GetIcbcDmerEnvelopes(driverLicenseRequest);
                             if (documents.ResultStatus != CaseManagement.Service.ResultStatus.Success ||
                                 documents.Items.Count == 0)
                             {
                                 // add a document requirement.
-                                _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
+                                caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
                                 {
                                     CaseId = caseId ?? string.Empty,
                                     Driver = new CaseManagement.Service.Driver()
