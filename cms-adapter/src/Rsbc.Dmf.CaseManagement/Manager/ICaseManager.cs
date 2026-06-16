@@ -79,6 +79,9 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize, string priority, string assign, int? submittalStatus, string documentType, string documentTypeCode);
 
+
+        Task CreateCaseDocumentUrl(CreateCaseDocumentUrlRequest request);
+
         DateTimeOffset GetDpsProcessingDate();
 
         Task UpdateNonComplyDocuments();

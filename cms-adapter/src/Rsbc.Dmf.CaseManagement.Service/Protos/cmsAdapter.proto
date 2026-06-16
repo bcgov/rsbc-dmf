@@ -95,6 +95,9 @@ service CaseManager {
   //Create a case
   rpc CreateCase(CreateCaseRequest) returns (ResultStatusReply);
 
+ //Create Dmer Case
+  rpc CreateDmerCase(CreateDmerCaseRequest) returns (DmerStatusReply);
+
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
 
@@ -527,6 +530,23 @@ message CreateCaseRequest {
     google.protobuf.Timestamp DriverDateOfBirth = 11;
 }
 
+message CreateDmerCaseRequest {
+    string caseId = 1;
+    int64 SequenceNumber = 2;
+    string driverLicenseNumber = 3;
+    string Priority = 4;
+    string Owner = 5;
+    string SubmittalStatus = 6;
+    string CaseTypeCode = 7;
+    string TriggerType = 8;
+    string DriverGivenName = 9;
+    string DriverSurname =10;
+    string programArea = 11;
+    google.protobuf.Timestamp DriverDateOfBirth = 12;
+    string documentType = 13;
+    string processor = 14;
+    string documentOwner = 15;
+}
 message UpdateCaseRequest{
     string caseId = 1;
     bool isCleanPass = 2;
@@ -1032,6 +1052,16 @@ message IcbcErrorRequest{
 
 message ResultStatusReply {	
     ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+}
+
+message DmerStatusReply{
+    enum DmerResultStatus {
+        FAIL = 0;
+        SUCCESS = 1;
+        EXISTS = 2;
+    }
+    DmerResultStatus resultStatus = 1;
     string errorDetail = 2;
 }
 

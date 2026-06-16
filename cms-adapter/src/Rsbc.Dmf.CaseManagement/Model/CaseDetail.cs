@@ -101,6 +101,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         public string Priority { get; set; }
 
+        public string Owner { get; set; }
+
 
 
 

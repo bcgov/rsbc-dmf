@@ -87,7 +87,7 @@ namespace Rsbc.Dmf.CaseManagement
             result.showOnPortals = @case.dfp_showonportals.GetValueOrDefault();
             result.IsRehab = @case.dfp_rehab.GetValueOrDefault();
             result.IsInterlock = @case.dfp_interlock.GetValueOrDefault();
-
+            result.Owner = @case._ownerid_value?.ToString();
             if(@case.prioritycode != null)
             {
                 result.Priority = TranslatePriorityCode(@case.prioritycode);

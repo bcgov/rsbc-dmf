@@ -261,6 +261,40 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTime BirthDate { get; set; }
     }
 
+    public class CreateDmerCaseRequest
+    {
+        public string CaseId { get; set; }
+
+        public int? SequenceNumber { get; set; }
+
+        public string DriverLicenseNumber { get; set; }
+
+        public string DocumentType { get; set; }
+
+        public string CaseTypeCode { get; set; }
+
+        public string TriggerType { get; set; }
+        public string Owner { get; set; }
+
+        public DateTime? DriverDateOfBirth { get; set; }
+        public string DriverGivenName { get; set; }
+        public string DriverSurname { get; set; }
+        public string ProgramArea { get; set; }
+    }
+
+    public class CreateCaseDocumentUrlRequest
+    {
+        public string CaseId { get; set; } 
+        public string DocumentType { get; set; }
+        public string Processor { get; set; }
+        public string DriverLicenseNumber { get; set; }
+        public string DocumentOwner { get; set; }
+        public DateTime ReceivedDate { get; set; }
+        public int? DocumentOrigin { get; set; }
+        public int? DmerStatus { get; set; }
+        public int? SubmittalStatus { get; set; }
+    }
+
     public class CreateCaseRequest
     {
         public string CaseId { get; set; }
@@ -279,6 +313,7 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTime? DriverDateOfBirth { get; set; }
         public string DriverGivenName { get; set; }
         public string DriverSurname { get; set; }
+        public string ProgramArea { get; set; }
     }
 
 
@@ -1755,6 +1790,10 @@ namespace Rsbc.Dmf.CaseManagement
                     if (result == null)
                     {
                         result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_code == documentTypeCode).FirstOrDefault();
+                    }
+                    if (result == null)
+                    {
+                        result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_name == documentTypeCode).FirstOrDefault();
                     }
                 }
                 catch (Exception ex)
@@ -3667,6 +3706,7 @@ namespace Rsbc.Dmf.CaseManagement
             return Guid.Parse(incidentIdString);
         }
 
+
         /// <summary>
         /// Create Case
         /// </summary>
@@ -3729,6 +3769,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 programArea = TranslateProgramArea("Remedial");
             }
+            programArea = TranslateProgramArea(request.ProgramArea);
             incident newIncident = new incident()
             {
                 // Check the 
@@ -3793,7 +3834,7 @@ namespace Rsbc.Dmf.CaseManagement
             catch (Exception e)
             {
                 result.Success = false;
-                Log.Logger.Error(e, $"CandidateCreate ERROR CREATING INCIDENT - " + e.Message);
+                Log.Logger.Error(e, $"CandidateCreate ERROR CREATING Case - " + e.Message);
             }
 
 
@@ -3865,9 +3906,9 @@ namespace Rsbc.Dmf.CaseManagement
         /// <summary>
         /// Returns a Dynamics Principal that can be used in a set Owner call.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="owner"></param>
         /// <returns></returns>
-        public principal LookupTeam(string name, string validationPrevious)
+        public principal LookupTeam(string owner, string validationPrevious)
         {
             // name can be username IDIR\name or a Team Name like "Adjudicators"
             // this would need to check team first and then the systemuser entity
@@ -3875,9 +3916,9 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                string translatedOwner = TranslateOwner(name);
+                string translatedOwner = TranslateOwner(owner);
 
-                team lookupTeam = dynamicsContext.teams.Where(x => x.name == translatedOwner).FirstOrDefault();
+                team lookupTeam = dynamicsContext.teams.Where(x => x.name == translatedOwner || x.ownerid == Guid.Parse(owner)).FirstOrDefault();
 
                 if (lookupTeam != null)
                 {
@@ -3901,7 +3942,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             catch (Exception e)
             {
-                Log.Error(e, $"LookupOwner {name}");
+                Log.Error(e, $"LookupOwner {owner}");
                 result = null;
             }
 
@@ -5963,6 +6004,109 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        public async Task CreateCaseDocumentUrl(CreateCaseDocumentUrlRequest request)
+        {
+            if (!Guid.TryParse(request.CaseId, out Guid parsedCaseId))
+            {
+                throw new ArgumentException("Invalid caseId", nameof(request.CaseId));
+            }
+
+            var dmerEntity = dynamicsContext.incidents
+                .ByKey(parsedCaseId)
+                .Expand(x => x.bcgov_incident_bcgov_documenturl)
+                .GetValue();
+
+            if (dmerEntity == null)
+            {
+                throw new InvalidOperationException($"Case {request.CaseId} not found.");
+            }
+
+            var documentTypeId = GetDocumentType(null, request.DocumentType, null);
+
+            //await dynamicsContext.LoadPropertyAsync(dmerEntity, nameof(incident.bcgov_incident_bcgov_documenturl));
+            //if (documentTypeId != null)
+            //{
+            //    foreach (var existingDocument in dmerEntity.bcgov_incident_bcgov_documenturl)
+            //    {
+            //        await dynamicsContext.LoadPropertyAsync(existingDocument, nameof(existingDocument.dfp_DocumentTypeID));
+            //        if (existingDocument.statecode == 0
+            //            && existingDocument.dfp_submittalstatus == (int)submittalStatusOptionSet.OpenRequired
+            //            && existingDocument.dfp_DocumentTypeID?.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid)
+            //        {
+            //            return;
+            //        }
+            //    }
+            //}
+
+            //dfp_driver driver = null;
+            //if (dmerEntity._dfp_driverid_value.HasValue)
+            //{
+            //    driver = dynamicsContext.dfp_drivers
+            //        .Where(x => x.dfp_driverid == dmerEntity._dfp_driverid_value.Value)
+            //        .FirstOrDefault();
+            //}
+
+            //if (driver == null && !string.IsNullOrWhiteSpace(driverLicenseNumber))
+            //{
+            //    driver = dynamicsContext.dfp_drivers
+            //        .Where(x => x.dfp_licensenumber == driverLicenseNumber && x.statecode == 0)
+            //        .FirstOrDefault();
+            //}
+
+            var driver = dynamicsContext.dfp_drivers
+                    .Where(x => x.dfp_licensenumber == request.DriverLicenseNumber && x.statecode == 0)
+                    .FirstOrDefault(); ;
+
+            systemuser processorUser = null;
+            if (!string.IsNullOrWhiteSpace(request.Processor))
+            {
+                var processorDomain = request.Processor.StartsWith("IDIR\\", StringComparison.OrdinalIgnoreCase)
+                    ? request.Processor
+                    : $"IDIR\\{request.Processor}";
+                processorUser = dynamicsContext.systemusers
+                    .Where(x => x.domainname == processorDomain)
+                    .FirstOrDefault();
+            }
+
+            var owner = LookupTeam(request.DocumentOwner, request.Processor);
+
+            var newDocument = new bcgov_documenturl
+            {
+                dfp_issuedate = DateTimeOffset.Now,
+                dfp_uploadeddate = DateTimeOffset.Now,
+            };
+
+            dynamicsContext.AddTobcgov_documenturls(newDocument);
+
+            if (documentTypeId != null)
+            {
+                dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+            }
+
+            dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.bcgov_CaseId), dmerEntity);
+
+            if (driver != null)
+            {
+                dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.dfp_DriverId), driver);
+            }
+
+            if (processorUser != null)
+            {
+                dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.dfp_Processor), processorUser);
+            }
+
+            if (owner != null)
+            {
+                dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.ownerid), owner);
+            }
+
+            try { await dynamicsContext.SaveChangesAsync(); }
+            catch(Exception ex)
+            {
+                throw (ex);
+            }
+           
+        }
     }
 
     /// <summary>
