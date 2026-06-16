@@ -143,24 +143,41 @@ namespace Rsbc.Dmf.CaseManagement
                 }
             }
 
-         
-            // case assignment
-            if (@case._owningteam_value.HasValue)
+
+            // case assignment 
+            if (isRemedialCase)
             {
-                // Case assigned to a team
-                await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.owningteam));
-                result.AssigneeTitle = @case.owningteam?.name ?? "Unknown Team";
-            }
-            else if (@case._owninguser_value.HasValue)
-            {
-                // Case assigned to a system user
-                _dynamicsContext.LoadProperty(@case, nameof(incident.owninguser));
-                result.AssigneeTitle = @case.owninguser?.fullname ?? "Assigned User";
-               
+                // For Remedial cases, show only the owning team
+                if (@case._owningteam_value.HasValue)
+                {
+                    await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.owningteam));
+                    result.AssigneeTitle = @case.owningteam?.name ?? "Unknown Team";
+                }
+                else
+                {
+                    result.AssigneeTitle = "Unassigned";
+                }
             }
             else
             {
-                result.AssigneeTitle = "Unassigned";
+                // For DMF Cases
+                if (@case._owningteam_value.HasValue)
+                {
+                    // Case assigned to a team
+                    await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.owningteam));
+                    result.AssigneeTitle = @case.owningteam?.name ?? "Unknown Team";
+                }
+                else if (@case._owninguser_value.HasValue)
+                {
+                    // Case assigned to a system user
+                    _dynamicsContext.LoadProperty(@case, nameof(incident.owninguser));
+                    result.AssigneeTitle = @case.owninguser?.fullname ?? "Assigned User";
+
+                }
+                else
+                {
+                    result.AssigneeTitle = "Unassigned";
+                }
             }
 
             // get the medical conditions.
@@ -249,6 +266,18 @@ namespace Rsbc.Dmf.CaseManagement
                         break;
                     case 100000002:
                         result.AssigneeTitle = "Case Manager Group";
+                        break;
+                    case 100000004:
+                        result.AssigneeTitle = "Remedial intake group";
+                        break;
+                    case 100000005:
+                        result.AssigneeTitle = "Remedial Adjudicator Group";
+                        break;
+                    case 100000006:
+                        result.AssigneeTitle = "Remedial Adjudication Technician Group";
+                        break;
+                    case 100000007:
+                        result.AssigneeTitle = "DIP Adjudicator Group";
                         break;
                     case 100000003:
                         result.AssigneeTitle = "Other";

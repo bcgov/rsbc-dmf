@@ -39,10 +39,20 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 .AddUserSecrets<Startup>() // Add secrets from the service.
                 .AddEnvironmentVariables()
                 .Build();
-            // create a new case manager client.
-            if (Configuration["ICBC_SERVICE_URI"] != null)
+
+            // Setup EnhancedIcbcClient with OAuth2 or mock
+            bool useOAuth2 = Configuration.GetValue<bool>("ICBC_USE_OAUTH2", true);
+            bool hasOAuth2Config = !string.IsNullOrEmpty(Configuration["ICBC_OAUTH2_TOKEN_ENDPOINT"]);
+            bool hasLegacyConfig = !string.IsNullOrEmpty(Configuration["ICBC_SERVICE_URI"]);
+
+            if (useOAuth2 && hasOAuth2Config)
             {
-                IcbcClient = new IcbcClient(Configuration);
+                var mockTokenService = IcbcHelper.CreateMockOAuth2TokenService();
+                IcbcClient = new EnhancedIcbcClient(Configuration, mockTokenService);
+            }
+            else if (hasLegacyConfig)
+            {
+                IcbcClient = new EnhancedIcbcClient(Configuration);
             }
             else
             {

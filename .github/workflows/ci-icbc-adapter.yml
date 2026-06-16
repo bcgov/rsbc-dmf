@@ -57,20 +57,20 @@ jobs:
           mv Pssg.Unit.Tests.Interfaces.Icbc/TestResults/*/* ./CovTestResults/
           head CovTestResults/coverage.opencover.xml      
       
-      - name: Codecov
-        uses: codecov/codecov-action@v2.1.0
-        with:
+      #- name: Codecov
+        #uses: codecov/codecov-action@v2.1.0
+        #with:
           # User defined upload name. Visible in Codecov UI
-          name: DMF-MEDICAL-PORTAL-API
+          #name: DMF-MEDICAL-PORTAL-API
           # Repository upload token - get it from codecov.io. Required only for private repositories
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ${{env.working-directory}}${{env.solution-folder}}CovTestResults/coverage.opencover.xml
+          #token: ${{ secrets.CODECOV_TOKEN }}
+          #file: ${{env.working-directory}}${{env.solution-folder}}CovTestResults/coverage.opencover.xml
           # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
-          flags: unittests
+          #flags: unittests
           # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
-          env_vars: C#
+          #env_vars: C#
           # Specify whether or not CI build should fail if Codecov runs into an error during upload
-          fail_ci_if_error: true
+          #fail_ci_if_error: true
 
       - name: Build image
         run: docker build --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./icbc-adapter/src/Dockerfile --tag $IMAGE_NAME

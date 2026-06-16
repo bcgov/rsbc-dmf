@@ -95,8 +95,8 @@
     <div class="list" style="min-width: 720px; flex-basis: 60%">
       <h2>Search Results</h2>
     </div>
-    <div class="table-padding" *ngIf="users && users.length > 0">
-      <mat-table [dataSource]="users" class="mat-elevation-z8 ">
+    <div class="table-padding" *ngIf="paginatedUsers && paginatedUsers.length > 0">
+      <mat-table [dataSource]="paginatedUsers" class="mat-elevation-z8 ">
         <ng-container matColumnDef="active">
           <th mat-header-cell *matHeaderCellDef>Active</th>
           <td mat-cell *matCellDef="let element">
@@ -149,9 +149,16 @@
         <tr mat-header-row *matHeaderRowDef="userColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: userColumns"></tr>
       </mat-table>
+      <mat-paginator 
+        [length]="totalRecords"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[10, 25, 50]"
+        (page)="onPageChange($event)"
+        aria-label="Select page">
+      </mat-paginator>
     </div>
     <div></div>
-    <div class="no-results"  *ngIf="!users || users.length == 0">No results found.</div>
+    <div class="no-results"  *ngIf="!paginatedUsers || paginatedUsers.length == 0">No results found.</div>
   </div>
   </div>
 </div>

@@ -99,10 +99,8 @@ export class DriverSearchComponent implements OnInit {
     if (this.driverDetails.id) {
       this.getClosedCases(this.driverDetails.id as string);
     } else {
-      console.log('No user profile');
+      this.search();
     }
-
-  this.search();
   }
 
   getClosedCases(driverId: string) {
@@ -116,13 +114,26 @@ export class DriverSearchComponent implements OnInit {
 
 
   search() {
+    const normalizedDriverLicenceNumber = (this.driverLicenceNumber || '').trim();
+    const normalizedSurcode = (this.surcode || '').trim().toUpperCase();
+
+    if (!normalizedDriverLicenceNumber || !normalizedSurcode) {
+      return;
+    }
+
+    this.driverLicenceNumber = normalizedDriverLicenceNumber;
+    this.surcode = normalizedSurcode;
+
     this.caseManagementService
-      .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber,
-        surCode: this.surcode })
+      .searchByDriver({ driverLicenceNumber: normalizedDriverLicenceNumber,
+        surCode: normalizedSurcode })
       .subscribe({
         next: (driver) => {
           this.userService.setCacheDriver(driver);
           this.driverDetails = driver;
+          if (driver?.id) {
+            this.getClosedCases(driver.id);
+          }
         },
         error: (error) => {
          
@@ -135,13 +146,13 @@ export class DriverSearchComponent implements OnInit {
     if (id) this.isExpanded[id] = !this.isExpanded[id];
   }
 
-  onTabChange(event: MatTabChangeEvent) {
-    if (event.tab.textLabel === 'Comments') {
-      this.openCommentsDialog();
-    }
-  }
-
+ 
   openCommentsDialog() {
+    const driverId = this.driverDetails?.id ?? this.userService.getCachedriver()?.id;
+    if (!driverId) {
+      return;
+    }
+
     const dialogRef = this.dialog.open(CommentsComponent, {
       height: '730px',
       width: '400px',
@@ -149,7 +160,9 @@ export class DriverSearchComponent implements OnInit {
         bottom: '8px',
         right: '8px',
       },
-      data: this.driverDetails.id,
+      data: {
+        driverId,
+      },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

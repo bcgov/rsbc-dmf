@@ -38,7 +38,7 @@
                   </div>
                 </div>
                 <div style="padding-top: 20px;">
-                  <button type="button" mat-flat-button class="primaryButton" (click)="search(driverLicenseControl, surCodeControl)">Search</button>
+                  <button type="button" mat-flat-button class="primaryButton" [disabled]="isSearching" (click)="search(driverLicenseControl, surCodeControl)">Search</button>
                 </div>
               </div>
 

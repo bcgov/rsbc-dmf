@@ -10,6 +10,9 @@ using Rsbc.Dmf.CaseManagement.Service;
 using System.Net;
 using System.Net.Http;
 using Rsbc.Dmf.CaseManagement.Helpers;
+using Pssg.Interfaces.Icbc.Services;
+using Moq;
+using Microsoft.Extensions.Logging;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -20,21 +23,14 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            
-            IIcbcClient icbcClient ;
-            Configuration = new ConfigurationBuilder()
-                    .AddUserSecrets<Startup>()
-                    .AddEnvironmentVariables()
-                    .Build();
 
-            if (Configuration["ICBC_SERVICE_URI"] != null)
-            {
-                icbcClient = new IcbcClient(Configuration);
-            }
-            else
-            {
-                icbcClient = IcbcHelper.CreateMock();
-            }
+            Configuration = new ConfigurationBuilder()
+        .AddUserSecrets<Startup>()
+              .AddEnvironmentVariables()
+      .Build();
+
+            // Setup ICBC client with OAuth2 support for testing
+            IIcbcClient icbcClient = SetupIcbcClient();
 
             string cmsAdapterURI = Configuration["CMS_ADAPTER_URI"];
 
@@ -47,9 +43,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             else
             {
                 var httpClientHandler = new HttpClientHandler();
-                // Return `true` to allow certificates that are untrusted/invalid                    
+                // Return `true` to allow certificates that are untrusted/invalid     
                 httpClientHandler.ServerCertificateCustomValidationCallback =
-                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+         HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
                 var httpClient = new HttpClient(httpClientHandler);
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
@@ -80,19 +76,80 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             }
 
             builder
-                .UseSolutionRelativeContentRoot("")
-                .UseEnvironment("Staging")
-                .UseConfiguration(Configuration)
-                //.UseStartup<Startup>()
-                .ConfigureTestServices(
-               
-                    services => {                         
-                        services.AddTransient(_ => caseManagerClient);
-                        services.AddTransient(_ => icbcClient);
-                    });
+           .UseSolutionRelativeContentRoot("")
+            .UseEnvironment("Staging")
+              .UseConfiguration(Configuration)
+            .ConfigureTestServices(services =>
+            {
+                services.AddTransient(_ => caseManagerClient);
+                services.AddTransient(_ => icbcClient);
 
+                // Configure OAuth2 test services if needed
+                ConfigureOAuth2TestServices(services);
+            });
+        }
+
+        private IIcbcClient SetupIcbcClient()
+        {
+            // Check if OAuth2 is enabled for testing
+            bool useOAuth2 = Configuration.GetValue<bool>("ICBC_USE_OAUTH2", true);
+            bool hasOAuth2Config = !string.IsNullOrEmpty(Configuration["ICBC_OAUTH2_TOKEN_ENDPOINT"]);
+            bool hasLegacyConfig = !string.IsNullOrEmpty(Configuration["ICBC_SERVICE_URI"]);
+
+            if (useOAuth2 && hasOAuth2Config)
+            {
+                // Create a mock OAuth2 token service for testing
+                var mockTokenService = CreateMockOAuth2TokenService();
+
+                // Use EnhancedIcbcClient with OAuth2 support
+                return new EnhancedIcbcClient(Configuration, mockTokenService);
+            }
+            else if (hasLegacyConfig)
+            {
+                return new EnhancedIcbcClient(Configuration);
+            }
+            else
+            {
+                // Use mock client if no real configuration is available
+                return IcbcHelper.CreateMock();
+            }
+        }
+
+        private IOAuth2TokenService CreateMockOAuth2TokenService()
+        {
+            var mockTokenService = new Mock<IOAuth2TokenService>();
+
+            // Setup mock to return a test token
+            mockTokenService.Setup(x => x.GetAccessTokenAsync())
+         .ReturnsAsync("test-oauth2-token-123");
+
+            mockTokenService.Setup(x => x.RefreshTokenAsync())
+          .ReturnsAsync("test-oauth2-token-123");
+
+            return mockTokenService.Object;
+        }
+
+        private void ConfigureOAuth2TestServices(IServiceCollection services)
+        {
+            // Check if OAuth2 is being used in tests
+            bool useOAuth2 = Configuration.GetValue<bool>("ICBC_USE_OAUTH2", true);
+
+            if (useOAuth2)
+            {
+                // Add mock OAuth2 token service for testing
+                services.AddSingleton<IOAuth2TokenService>(CreateMockOAuth2TokenService());
+
+                // Add HttpClient for OAuth2TokenService (even though we're mocking it)
+                services.AddHttpClient<OAuth2TokenService>();
+
+                // Add logger for OAuth2TokenService
+                services.AddSingleton<ILogger<OAuth2TokenService>>(provider =>
+                    {
+                        var loggerFactory = provider.GetService<ILoggerFactory>();
+                        return loggerFactory?.CreateLogger<OAuth2TokenService>() ??
+       new Mock<ILogger<OAuth2TokenService>>().Object;
+                    });
+            }
         }
     }
-
-    
 }

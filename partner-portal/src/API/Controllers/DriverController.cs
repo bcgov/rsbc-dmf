@@ -75,7 +75,7 @@ public class DriverController : Controller
         {
             var request = new DriverInfoRequest();
             request.DriverLicence = driverLicenceNumber;
-            var reply = await _icbcAdapterClient.GetDriverInfoAsync(request);
+            var reply = await _icbcAdapterClient.GetDriverInfoAsync(request, forceRefresh: true);
             if (reply.ResultStatus != Rsbc.Dmf.IcbcAdapter.ResultStatus.Success)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(GetHistory)} failed to get driver name.");
@@ -89,7 +89,9 @@ public class DriverController : Controller
             var getDriverReply = _caseManagerClient.GetDriverByIdAndSurCode(driverLicenceRequest);
             if (getDriverReply.ResultStatus != Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success || getDriverReply.Items?.Count == 0)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, getDriverReply.ErrorDetail ?? $"{nameof(GetHistory)} failed to get driver id.");
+                _logger.LogError($"Failed to get icbc driver info details: {0}", getDriverReply.ErrorDetail);
+                return StatusCode((int)HttpStatusCode.InternalServerError, getDriverReply.ErrorDetail ?? "Failed to get ICBC driver info details.");
+                //return StatusCode((int)HttpStatusCode.InternalServerError, getDriverReply.ErrorDetail ?? $"{nameof(GetHistory)} failed to get driver id.");
             }
             result.Id = getDriverReply.Items.First().Id;
 

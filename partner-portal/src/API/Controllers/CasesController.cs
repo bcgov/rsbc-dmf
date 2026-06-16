@@ -176,7 +176,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                     result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
                     var request = new IcbcAdapter.DriverInfoRequest();
                     request.DriverLicence = @case.Item.DriverLicenseNumber;
-                    var driverInfoReply = await _icbcAdapterClient.GetDriverInfoAsync(request);
+                    var driverInfoReply = await _icbcAdapterClient.GetDriverInfoAsync(request, forceRefresh: true);
                     if (driverInfoReply.ResultStatus == Rsbc.Dmf.IcbcAdapter.ResultStatus.Fail)
                     {
                         _logger.LogError($"Failed to get icbc driver info details: {0}", driverInfoReply.ErrorDetail);

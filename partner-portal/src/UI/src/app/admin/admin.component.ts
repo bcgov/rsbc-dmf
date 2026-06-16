@@ -9,6 +9,7 @@ import { MatInput } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { AdminSearch } from '../app.model';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { User, UserType } from '@app/shared/api/models';
@@ -36,6 +37,7 @@ bootstrapApplication(AppComponent, {
       MatCheckboxModule,
       MatRadioModule,
       MatTableModule,
+      MatPaginatorModule,
       AdminDetailsComponent,
       NgxSpinnerModule,
     ],
@@ -45,12 +47,18 @@ bootstrapApplication(AppComponent, {
 export class AdminComponent {
   adminSearch = new AdminSearch();
   noResults: boolean = false;
-  users: User[] = [];
+  allUsers: User[] = [];
+  paginatedUsers: User[] = [];
   userColumns: string[] = ['active', 'lastName', 'firstName', 'identityId', 'domain',  'roles','details'];
   showAdminDetails: boolean = false;
   userDetails: User = {} as User;
   authorizeUser: boolean = false;
   activeUser: string = '-1';
+  
+  // Pagination properties
+  pageSize: number = 10;
+  currentPageIndex: number = 0;
+  totalRecords: number = 0;
   constructor(
     private caseManagementService: CaseManagementService,
     private spinner: NgxSpinnerService){
@@ -78,7 +86,10 @@ export class AdminComponent {
       .getUsers( { body: userSearch } )
       .subscribe({
         next: (users) => {
-          this.users = users;
+          this.allUsers = users;
+          this.totalRecords = users.length;
+          this.currentPageIndex = 0;
+          this.updatePaginatedUsers();
           this.spinner.hide('main');
         },
         error: (error) => {
@@ -109,9 +120,21 @@ export class AdminComponent {
     }
   }
 
+  onPageChange(event: PageEvent): void {
+    this.currentPageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.updatePaginatedUsers();
+  }
+
+  private updatePaginatedUsers(): void {
+    const startIndex = this.currentPageIndex * this.pageSize;
+    const endIndex = Math.min(startIndex + this.pageSize, this.allUsers.length);
+    this.paginatedUsers = this.allUsers.slice(startIndex, endIndex);
+  }
+
   exportUsers(){
     this.spinner.show('main');
-    this.caseManagementService.exportUsers( { body: this.users } )
+    this.caseManagementService.exportUsers( { body: this.allUsers } )
       .subscribe({
         next: (response: Blob | MediaSource) => { 
           console.log('Export initiated', response);
@@ -153,7 +176,10 @@ export class AdminComponent {
   }
 
   clearData(){
-    this.users = [] as User[];
+    this.allUsers = [] as User[];
+    this.paginatedUsers = [] as User[];
+    this.totalRecords = 0;
+    this.currentPageIndex = 0;
     this.adminSearch = new AdminSearch();
     this.adminSearch.activeUser = '-1';
   }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
@@ -7,7 +8,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
 {
     public interface ICachedIcbcAdapterClient
     {
-        Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request);
+        Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request, bool forceRefresh = false);
     }
 
     public class CachedIcbcAdapterClient : BaseCacheService, ICachedIcbcAdapterClient, IDisposable
@@ -25,11 +26,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
             _configuration = configuration;
         }
 
-        public async Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request)
+        public async Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request, bool forceRefresh = false)
         {
             DriverInfoReply reply = null;
 
             // feature flag to return a simple response for ICBC, useful when Dynamics DL do not match ICBC DL
+            // This is used only for the local development
             if (!string.IsNullOrEmpty(_configuration["FEATURES_SIMPLE_ICBC"]))
             {
                 reply = new DriverInfoReply();
@@ -50,11 +52,41 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
             try
             {
                 var key = GetHashKey(nameof(IcbcAdapterClient.GetDriverInfo), request.DriverLicence);
-                if (!_cacheService.TryGetValue(key, out reply))
+                if (forceRefresh)
                 {
-                    reply = await _icbcAdapterClient.GetDriverInfoAsync(request);
-                    _cacheService.Set(key, reply);
+                    _cacheService.Remove(key);
+                    _logger.LogInformation($"Force refresh requested for driver licence: {request.DriverLicence}");
                 }
+
+                if (forceRefresh || !_cacheService.TryGetValue(key, out reply))
+                {
+                    _logger.LogInformation($"Cache miss for driver licence: {request.DriverLicence}");
+                    reply = await _icbcAdapterClient.GetDriverInfoAsync(request);
+
+                    if (reply != null && reply.ResultStatus == ResultStatus.Success)
+                    {
+                        // Set cache with expiration time - configurable cache duration
+                        var cacheExpiration = int.Parse(_configuration["ICBC_DL_CACHE_EXPIRATION_SECONDS"] ?? "30");
+                        var options = new MemoryCacheEntryOptions
+                        {
+                            AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(cacheExpiration),
+                            SlidingExpiration = TimeSpan.FromSeconds(cacheExpiration), 
+                            Priority = CacheItemPriority.Normal
+                        };
+
+                        _cacheService.Set(key, reply, options);
+                        _logger.LogInformation($"Driver info cached for driver licence: {request.DriverLicence}");
+                    }
+                    else
+                    {
+                        _logger.LogError($"Failed to get driver info for licence: {request.DriverLicence}, error: {reply?.ErrorDetail}");
+                    }
+                }
+                else
+                {
+                    _logger.LogInformation($"Cache hit for driver licence: {request.DriverLicence}");
+                }
+
             }
             catch (Exception ex)
             {
@@ -70,6 +102,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
             _cacheService.Dispose();
         }
     }
+
 
     public class BaseCacheService
     {

@@ -66,8 +66,7 @@ export class AuthGuard extends KeycloakAuthGuard {
         } else {
           if (this.hasUserAccess(userDetails) == false) {
             this.router.navigate(['restrictedAccess/unauthorizedUser']);
-          }
-          if (this.hasUserExpired(userDetails) == true) {
+          } else if (this.hasUserExpired(userDetails) == true) {
             this.router.navigate(['restrictedAccess/expiredUser']);
           }
         }
