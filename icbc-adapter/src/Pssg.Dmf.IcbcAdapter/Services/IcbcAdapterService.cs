@@ -152,6 +152,17 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
             return Task.FromResult(result);
         }
 
+        [AllowAnonymous]
+        public override Task<ResultStatusReply> GetDmerNotifications(EmptyRequest request, ServerCallContext context)
+        {
+            var result = new ResultStatusReply();
+
+            var dmerNotifications = new DmerNotifications(_configuration, _caseManagerClient, _icbcClient, _documentStorageAdapterClient);
+            dmerNotifications.GetIcbcNotificationsAndUpdateCase().GetAwaiter().GetResult();
+
+            return Task.FromResult(result);
+        }
+
         public override Task<ResultStatusReply> DryRunMedicalDisposition(EmptyRequest request, ServerCallContext context)
         {
             var result = new ResultStatusReply();

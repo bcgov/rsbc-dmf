@@ -26,6 +26,9 @@ service DocumentStorageAdapter {
   // File Exists
   rpc FileExists (FileExistsRequest) returns (FileExistsReply);
 
+    // Move file from one relative path to another
+    rpc MoveFile (MoveFileRequest) returns (MoveFileReply);
+
   // Upload File
   rpc UploadFile (UploadFileRequest) returns (UploadFileReply);
 
@@ -101,6 +104,18 @@ message FileExistsRequest {
 
 message FileExistsReply {
     FileExistStatus resultStatus = 1;
+    string errorDetail = 2;
+}
+
+message MoveFileRequest {
+    string sourcePath = 1;
+    string destinationpath = 2;
+    string fileName =3;
+    string bucketConfigName = 4;
+}
+
+message MoveFileReply {
+    ResultStatus resultStatus = 1;
     string errorDetail = 2;
 }
 

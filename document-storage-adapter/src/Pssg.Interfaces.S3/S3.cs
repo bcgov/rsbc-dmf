@@ -695,14 +695,140 @@ namespace Pssg.Interfaces
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public async Task<bool> RenameFile(string oldServerRelativeUrl, string newServerRelativeUrl)
+        public async Task<bool> RenameFile(string sourcePath, string destinationPath, string fileName)
         {
-            var result = false;
+            if (!IsValid()) return false;
 
-            // not currently implemented for S3.
+            var destinationKey = destinationPath + "/" + fileName;
+            var sourceKey = sourcePath + "/" + fileName;
 
-            return result;
+            try
+            {
+                var copyRequest = new CopyObjectRequest
+                {
+                    SourceBucket = Bucket,
+                    SourceKey = sourceKey,
+                    DestinationBucket = Bucket,
+                    DestinationKey = destinationKey
+                };
+
+                await S3Client.CopyObjectAsync(copyRequest);
+
+                var deleteRequest = new DeleteObjectRequest
+                {
+                    BucketName = Bucket,
+                    Key = sourceKey
+                };
+
+                await S3Client.DeleteObjectAsync(deleteRequest);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Error(ex,
+                    "Error copying object from {SourceKey} to {DestinationKey} in bucket {Bucket}",
+                    sourceKey,
+                    destinationKey,
+                    Bucket);
+                return false;
+            }
         }
+
+        private async Task<bool> ObjectExists(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                return false;
+            }
+
+            try
+            {
+                var request = new GetObjectMetadataRequest
+                {
+                    BucketName = Bucket,
+                    Key = key
+                };
+
+                await S3Client.GetObjectMetadataAsync(request);
+                return true;
+            }
+            catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+            {
+                return false;
+            }
+        }
+
+        private async Task<List<string>> GetNearbyKeys(string sourceKey, int max)
+        {
+            var separatorIndex = sourceKey.LastIndexOf('/');
+            var prefix = separatorIndex > -1 ? sourceKey.Substring(0, separatorIndex + 1) : string.Empty;
+            var request = new ListObjectsV2Request
+            {
+                BucketName = Bucket,
+                Prefix = prefix,
+                MaxKeys = Math.Max(1, max)
+            };
+
+            var response = await S3Client.ListObjectsV2Async(request);
+            return response.S3Objects.Select(o => o.Key).Take(max).ToList();
+        }
+
+        private static string NormalizeServerRelativeUrl(string serverRelativeUrl)
+        {
+            if (string.IsNullOrWhiteSpace(serverRelativeUrl))
+            {
+                return string.Empty;
+            }
+
+            var value = serverRelativeUrl.Trim();
+
+            if (Uri.TryCreate(value, UriKind.Absolute, out var absoluteUri))
+            {
+                value = absoluteUri.AbsolutePath;
+            }
+
+            var queryIndex = value.IndexOf('?');
+            if (queryIndex >= 0)
+            {
+                value = value.Substring(0, queryIndex);
+            }
+
+            var fragmentIndex = value.IndexOf('#');
+            if (fragmentIndex >= 0)
+            {
+                value = value.Substring(0, fragmentIndex);
+            }
+
+            return Uri.UnescapeDataString(value).Trim().Trim('/');
+        }
+
+        private string ResolveDestinationKey(string sourceKey, string requestedDestination)
+        {
+            var destinationKey = NormalizeServerRelativeUrl(requestedDestination);
+            if (string.IsNullOrWhiteSpace(destinationKey))
+            {
+                return destinationKey;
+            }
+
+            var sourceFileName = Path.GetFileName(sourceKey);
+            if (string.IsNullOrWhiteSpace(sourceFileName))
+            {
+                return destinationKey;
+            }
+
+            var destinationLooksLikeFolder =
+                (requestedDestination ?? string.Empty).Trim().EndsWith("/", StringComparison.Ordinal) ||
+                !Path.GetFileName(destinationKey).Contains(".");
+
+            if (destinationLooksLikeFolder)
+            {
+                return $"{destinationKey.TrimEnd('/')}/{sourceFileName}";
+            }
+
+            return destinationKey;
+        }
+
 
         public class FileSystemItem
         {

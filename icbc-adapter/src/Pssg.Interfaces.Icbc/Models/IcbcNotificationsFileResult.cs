@@ -9,7 +9,6 @@ namespace Pssg.Interfaces.Models
 {
     public class IcbcNotificationsFileResult
     {
-        public List<IFormFile> NotificationFiles { get; set; }
-        public IEnumerable<string> ServerRelativeUrl { get; set; }
+        public Dictionary<string, IFormFile> NotificationFiles { get; set; }
     }
 }
