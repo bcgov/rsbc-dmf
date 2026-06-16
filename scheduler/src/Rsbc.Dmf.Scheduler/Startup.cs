@@ -606,6 +606,20 @@ namespace Rsbc.Dmf.Scheduler
                         Log.Logger.Information($"HANGFIRE SCHEDULER STARTED: Get ICBC Notifications at {hourICBC}:00");
                     }
 
+
+                    // GetIcbcNotifications
+                    if (Configuration["Scheduler:GetDmerNotifications:Enabled"] != "false")
+                    {
+                        RecurringJob.AddOrUpdate(
+                            () => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient)
+                                .GetDmerNotifications(null),
+                            int.TryParse(Configuration["Scheduler:GetDmerNotifications:Hour"], out var hourICBC)
+                                ? Cron.Daily(hourICBC)
+                                : Cron.Daily(8)
+                        );
+                        Log.Logger.Information($"HANGFIRE SCHEDULER STARTED: Get Dmer Notifications at {hourICBC}:00");
+                    }
+
                     Log.Logger.Information("Hangfire jobs setup.");
                 }
             }
