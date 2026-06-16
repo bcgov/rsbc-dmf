@@ -520,6 +520,7 @@ namespace Rsbc.Dmf.Scheduler
 
                     RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendToBcMail(null), Cron.Daily(10));
                     RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).GetIcbcNotifications(null), Cron.MinuteInterval(5));
+                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).GetDmerNotifications(null), Cron.MinuteInterval(5));
 
 
                     Log.Logger.Information("Hangfire jobs setup.");
