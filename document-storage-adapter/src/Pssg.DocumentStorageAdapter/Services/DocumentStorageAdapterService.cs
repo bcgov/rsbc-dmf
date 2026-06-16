@@ -118,6 +118,40 @@ namespace Pssg.DocumentStorageAdapter.Services
             return Task.FromResult(result);
         }
 
+        public override Task<MoveFileReply> MoveFile(MoveFileRequest request, ServerCallContext context)
+        {
+            var result = new MoveFileReply();
+            var logSourceUrl = WordSanitizer.Sanitize(request.SourcePath);
+            var logDestinationUrl = WordSanitizer.Sanitize(request.Destinationpath);
+            var _S3 = new S3(_configuration);
+
+            if (request.BucketConfigName != "")
+            {
+                _S3 = new S3(_configuration, request.BucketConfigName);
+            }
+
+            
+            try
+            {
+                var success = _S3.RenameFile(request.SourcePath, request.Destinationpath, request.FileName)
+                    .GetAwaiter().GetResult();
+
+                if (success)
+                    result.ResultStatus = ResultStatus.Success;
+                else
+                    result.ResultStatus = ResultStatus.Fail;
+            }
+            catch (Exception e)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail =
+                    $"ERROR moving file from {logSourceUrl} to {logDestinationUrl}";
+                Log.Error(e, result.ErrorDetail);
+            }
+
+            return Task.FromResult(result);
+        }
+
 
 
         private string GetDocumentTemplateUrlPart(string entityName)
