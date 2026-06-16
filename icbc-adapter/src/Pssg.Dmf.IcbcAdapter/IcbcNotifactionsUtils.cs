@@ -43,14 +43,14 @@ namespace Rsbc.Dmf.IcbcAdapter
             var notifactions = await GetIcbcNotifications();
             if (notifactions.NotificationFiles?.Count > 0)
             {
-                foreach (var notification in notifactions.NotificationFiles)
+                foreach (var notification in notifactions.NotificationFiles.Values)
                 {
 
                     var cases = await ParseIcbcNotication(notification);
 
                     await CreateOrUpdateCases(cases);
                 }
-                await RemoveFilesFromIcbcS3Bucket(notifactions.ServerRelativeUrl);
+                await RemoveFilesFromIcbcS3Bucket(notifactions.NotificationFiles.Keys);
             }
 
         }
@@ -164,7 +164,7 @@ namespace Rsbc.Dmf.IcbcAdapter
         private async Task<IcbcNotificationsFileResult> GetIcbcNotifications()
         {
             var result = new IcbcNotificationsFileResult();
-            result.NotificationFiles = new List<IFormFile>();
+            result.NotificationFiles = new Dictionary<string, IFormFile>();
             var files = await _documentStorageAdapterClient.DownloadFolderAsync(
             new DownloadFolderRequest { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET" });
             var fileNames = files.Files.Select(f => f.FileName).ToList();
@@ -175,13 +175,12 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
                     var stream = new MemoryStream(fileBytes.Data.ToByteArray());
 
-                    result.NotificationFiles.Add(new FormFile(stream, 0, stream.Length, "file", "ICBC_Notifactions")
+                    result.NotificationFiles[fileBytes.ServerRelativeUrl] = new FormFile(stream, 0, stream.Length, "file", "ICBC_Notifactions")
                     {
                         Headers = new HeaderDictionary(),
                         ContentType = "application/octet-stream"
-                    });
+                    };
                 }
-                result.ServerRelativeUrl = files.Files.Select(x=> x.ServerRelativeUrl);
                 Log.Logger.Information($"Successfully Fetched {result.NotificationFiles.Count} files from icbc S3 bucket");
                 return result;
             }
