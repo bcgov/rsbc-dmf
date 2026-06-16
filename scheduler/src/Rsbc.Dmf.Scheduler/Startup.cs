@@ -578,6 +578,7 @@ namespace Rsbc.Dmf.Scheduler
                         Log.Logger.Information($"HANGFIRE SCHEDULER STARTED: Update Birth Date at {hourBirth}:00");
                     }
 
+
                     // SendToBcMail
                     if (Configuration["Scheduler:SendToBcMail:Enabled"] != "false")
                     {
@@ -590,6 +591,7 @@ namespace Rsbc.Dmf.Scheduler
                         );
                         Log.Logger.Information($"HANGFIRE SCHEDULER STARTED: Send to BC Mails at {hourBCMail}:00");
                     }
+
 
                     // GetIcbcNotifications
                     if (Configuration["Scheduler:GetIcbcNotifications:Enabled"] != "false")
