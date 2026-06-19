@@ -1812,6 +1812,14 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
+        private DateTime GetComplienceDate()
+        {
+            var complienceDays = dynamicsContext.bcgov_configs.Where(config => config.bcgov_group == "Compliance" && config.bcgov_key == "DMER").FirstOrDefault().bcgov_value ?? "0";
+
+            return DateTime.Now.AddDays(int.Parse(complienceDays));
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -3917,8 +3925,10 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 string translatedOwner = TranslateOwner(owner);
+                Guid ownerGuid;
+                bool isGuid = Guid.TryParse(owner, out ownerGuid);
 
-                team lookupTeam = dynamicsContext.teams.Where(x => x.name == translatedOwner || x.ownerid == Guid.Parse(owner)).FirstOrDefault();
+                team lookupTeam = dynamicsContext.teams.Where(x => x.name == translatedOwner || (isGuid && x.ownerid == ownerGuid)).FirstOrDefault();
 
                 if (lookupTeam != null)
                 {
@@ -6023,36 +6033,6 @@ namespace Rsbc.Dmf.CaseManagement
 
             var documentTypeId = GetDocumentType(null, request.DocumentType, null);
 
-            //await dynamicsContext.LoadPropertyAsync(dmerEntity, nameof(incident.bcgov_incident_bcgov_documenturl));
-            //if (documentTypeId != null)
-            //{
-            //    foreach (var existingDocument in dmerEntity.bcgov_incident_bcgov_documenturl)
-            //    {
-            //        await dynamicsContext.LoadPropertyAsync(existingDocument, nameof(existingDocument.dfp_DocumentTypeID));
-            //        if (existingDocument.statecode == 0
-            //            && existingDocument.dfp_submittalstatus == (int)submittalStatusOptionSet.OpenRequired
-            //            && existingDocument.dfp_DocumentTypeID?.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid)
-            //        {
-            //            return;
-            //        }
-            //    }
-            //}
-
-            //dfp_driver driver = null;
-            //if (dmerEntity._dfp_driverid_value.HasValue)
-            //{
-            //    driver = dynamicsContext.dfp_drivers
-            //        .Where(x => x.dfp_driverid == dmerEntity._dfp_driverid_value.Value)
-            //        .FirstOrDefault();
-            //}
-
-            //if (driver == null && !string.IsNullOrWhiteSpace(driverLicenseNumber))
-            //{
-            //    driver = dynamicsContext.dfp_drivers
-            //        .Where(x => x.dfp_licensenumber == driverLicenseNumber && x.statecode == 0)
-            //        .FirstOrDefault();
-            //}
-
             var driver = dynamicsContext.dfp_drivers
                     .Where(x => x.dfp_licensenumber == request.DriverLicenseNumber && x.statecode == 0)
                     .FirstOrDefault(); ;
@@ -6074,6 +6054,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 dfp_issuedate = DateTimeOffset.Now,
                 dfp_uploadeddate = DateTimeOffset.Now,
+                dfp_compliancedate = GetComplienceDate()
             };
 
             dynamicsContext.AddTobcgov_documenturls(newDocument);

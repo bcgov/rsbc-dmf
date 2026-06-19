@@ -1757,7 +1757,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         DocumentType = request.DocumentType,
                         Processor = request.Processor,
                         DriverLicenseNumber = request.DriverLicenseNumber,
-                        DocumentOwner = activeRemedialCase.Owner
+                        DocumentOwner = "Team - Intake"
                     };
 
                     await _caseManager.CreateCaseDocumentUrl(docUrl);
