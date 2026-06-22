@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Pssg.Interfaces;
 using Pssg.Interfaces.Icbc.Models;
 using Pssg.Interfaces.Icbc.ViewModels;
@@ -103,11 +104,14 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
                 result.DriverMasterStatus = data.DR1MST.ToViewModel();
 
+                var responseJson = JsonConvert.SerializeObject(result);
+                _logger.LogDebug("GetHistoryController successful for dl={DriversLicence}. Response JSON: {ResponseJson}", driversLicence, responseJson);
+
                 return Json(result);
             }
             else
             {
-                Serilog.Log.Logger.Error("No response received from ICBC - Network Error");
+                _logger.LogError("GetHistory failed for dl={DriversLicence}. No response received from ICBC - Network Error", driversLicence);
                 return Json(null);
 
                 //

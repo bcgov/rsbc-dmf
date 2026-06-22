@@ -1,5 +1,7 @@
 ﻿using Castle.Core.Logging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -20,6 +22,7 @@ namespace Pssg.Interfaces
     public class EnhancedIcbcClient: IIcbcClient
     {
         private readonly IConfiguration Configuration;
+        private readonly ILogger<EnhancedIcbcClient> _logger;
         private HttpClient _Client;
         private readonly IOAuth2TokenService _tokenService;
 
@@ -41,9 +44,11 @@ namespace Pssg.Interfaces
         /// </summary>
         /// <param name="configuration"></param>
         /// <param name="tokenService"></param>
-        public EnhancedIcbcClient(IConfiguration configuration, IOAuth2TokenService tokenService)
+        /// <param name="logger"></param>
+        public EnhancedIcbcClient(IConfiguration configuration, IOAuth2TokenService tokenService, ILogger<EnhancedIcbcClient> logger = null)
         {
             Configuration = configuration;
+            _logger = logger ?? NullLogger<EnhancedIcbcClient>.Instance;
             _tokenService = tokenService;
             _Client = new HttpClient();
 
@@ -54,9 +59,11 @@ namespace Pssg.Interfaces
         /// Enhanced Icbc Client - Constructor for legacy authentication or when OAuth2TokenService is not available
         /// </summary>
         /// <param name="configuration"></param>
-        public EnhancedIcbcClient(IConfiguration configuration)
+        /// <param name="logger"></param>
+        public EnhancedIcbcClient(IConfiguration configuration, ILogger<EnhancedIcbcClient> logger = null)
         {
             Configuration = configuration;
+            _logger = logger ?? NullLogger<EnhancedIcbcClient>.Instance;
             _tokenService = null;
             _Client = new HttpClient();
 
@@ -75,7 +82,7 @@ namespace Pssg.Interfaces
             if (UseOAuth2Authentication && _tokenService == null)
             {
                 UseOAuth2Authentication = false;
-                Serilog.Log.Warning("OAuth2 was requested but IOAuth2TokenService is not available. Falling back to legacy authentication.");
+                _logger.LogWarning("OAuth2 was requested but IOAuth2TokenService is not available. Falling back to legacy authentication.");
             }
 
             if (UseOAuth2Authentication)
@@ -213,8 +220,17 @@ namespace Pssg.Interfaces
             request.Headers.Add("LoginUserId", "rsbc-icbc-adapter");
 
             var response = _Client.SendAsync(request).GetAwaiter().GetResult();
-            string rawData = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
+            if (!response.IsSuccessStatusCode)
+            {
+                string errorBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                _logger.LogError("ICBC API returned {StatusCode} for GetDriverHistory {ErrorBody}",
+                    response.StatusCode, errorBody);
+                _logger.LogDebug("Failing on the DL GetDriverHistory (dl={DlNumber})", dlNumber);
+                return null;
+            }
+
+            string rawData = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             return ProcessDriverHistoryResponse(rawData, dlNumber);
         }
 
@@ -225,8 +241,17 @@ namespace Pssg.Interfaces
             request.Headers.TryAddWithoutValidation("Accept", "application/json");
 
             var response = _Client.SendAsync(request).GetAwaiter().GetResult();
-            string rawData = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
+            if (!response.IsSuccessStatusCode)
+            {
+                string errorBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                _logger.LogError("ICBC API returned {StatusCode} for GetDriverHistory {ErrorBody}",
+                    response.StatusCode, errorBody);
+                _logger.LogDebug("Failed For (dl={DlNumber})", dlNumber);
+                return null;
+            }
+
+            string rawData = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             return ProcessDriverHistoryResponse(rawData, dlNumber);
         }
 
@@ -240,12 +265,15 @@ namespace Pssg.Interfaces
             }
             catch (Exception e)
             {
-                Serilog.Log.Error($"No response received from ICBC - parsing error on {rawData}");
+                _logger.LogError(e, "Failed to parse ICBC Full tombstone response data: {RawData}", rawData);
+                _logger.LogDebug("Failed to parse ICBC response for dl={DlNumber}.", dlNumber);
                 icbcClient = null;
             }
             ClientResult result = null;
             if (icbcClient != null)
             {
+                _logger.LogDebug("ProcessDriverHistoryResponse - Successfully parsed ICBC response for dl={DlNumber}. Tombstone response data: {RawData}", dlNumber, rawData);
+
                 result = new ClientResult()
                 {
                     CLNT = new CLNT()
