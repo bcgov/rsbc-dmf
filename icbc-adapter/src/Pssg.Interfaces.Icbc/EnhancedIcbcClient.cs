@@ -224,8 +224,9 @@ namespace Pssg.Interfaces
             if (!response.IsSuccessStatusCode)
             {
                 string errorBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                _logger.LogDebug("ICBC API returned {StatusCode} for GetDriverHistory (dl={DlNumber}): {ErrorBody}",
-                    response.StatusCode, dlNumber, errorBody);
+                _logger.LogError("ICBC API returned {StatusCode} for GetDriverHistory {ErrorBody}",
+                    response.StatusCode, errorBody);
+                _logger.LogDebug("Failing on the DL GetDriverHistory (dl={DlNumber})", dlNumber);
                 return null;
             }
 
@@ -244,8 +245,9 @@ namespace Pssg.Interfaces
             if (!response.IsSuccessStatusCode)
             {
                 string errorBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                _logger.LogDebug("ICBC API returned {StatusCode} for GetDriverHistory (dl={DlNumber}): {ErrorBody}",
-                    response.StatusCode, dlNumber, errorBody);
+                _logger.LogError("ICBC API returned {StatusCode} for GetDriverHistory {ErrorBody}",
+                    response.StatusCode, errorBody);
+                _logger.LogDebug("Failed For (dl={DlNumber})", dlNumber);
                 return null;
             }
 
@@ -263,7 +265,8 @@ namespace Pssg.Interfaces
             }
             catch (Exception e)
             {
-                _logger.LogDebug(e, "Failed to parse ICBC response for dl={DlNumber}. Full tombstone response data: {RawData}", dlNumber, rawData);
+                _logger.LogError(e, "Failed to parse ICBC Full tombstone response data: {RawData}", rawData);
+                _logger.LogDebug("Failed to parse ICBC response for dl={DlNumber}.", dlNumber);
                 icbcClient = null;
             }
             ClientResult result = null;
