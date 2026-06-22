@@ -10,7 +10,6 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Model;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Rsbc.Dmf.CaseManagement.Service.DecisionItem.Types;
+using static Rsbc.Dmf.CaseManagement.Service.DmerStatusReply.Types;
 using static Rsbc.Dmf.CaseManagement.Service.PdfDocument.Types;
 
 namespace Rsbc.Dmf.CaseManagement.Service
@@ -1728,6 +1728,97 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+           /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override async Task<DmerStatusReply> CreateDmerCase(CreateDmerCaseRequest request, ServerCallContext context)
+        {
+            var reply = new DmerStatusReply();
+            var subject = "A DMER Candidate was introduced to a Case In Progress";
+            var description = "ICBC";
+
+            try
+            {
+                var caseTypeCode = string.IsNullOrWhiteSpace(request.CaseTypeCode)
+                    ? "REM"
+                    : request.CaseTypeCode;
+
+                var activeRemedialCase = await GetActiveCases(request.DriverLicenseNumber, "DMF");
+                if (activeRemedialCase != null)
+                {
+                    await CreateBringForward(activeRemedialCase.CaseId, request.TriggerType, subject, description);
+
+                    CreateCaseDocumentUrlRequest docUrl = new CreateCaseDocumentUrlRequest
+                    {
+                        CaseId = activeRemedialCase.CaseId,
+                        DocumentType = request.DocumentType,
+                        Processor = request.Processor,
+                        DriverLicenseNumber = request.DriverLicenseNumber,
+                        DocumentOwner = "Team - Intake"
+                    };
+
+                    await _caseManager.CreateCaseDocumentUrl(docUrl);
+
+                    reply.ResultStatus = DmerResultStatus.Exists;
+                    return reply;
+                }
+
+                var caseCreateRequest = new CaseManagement.CreateCaseRequest()
+                {
+                    CaseId = request.CaseId,
+                    DriverLicenseNumber = request.DriverLicenseNumber,
+                    CaseTypeCode = caseTypeCode,
+                    TriggerType = request.TriggerType,
+                    Owner = request.Owner,
+                    DriverSurname = request.DriverSurname,
+                    DriverGivenName = request.DriverGivenName,
+                    DriverDateOfBirth = request.DriverDateOfBirth?.ToDateTime(),
+                    ProgramArea = request.ProgramArea,
+                };
+
+                var createDriver = await _caseManager.CreateCase(caseCreateRequest);
+                if(createDriver.Success)
+                {
+                    caseCreateRequest.CaseId = createDriver?.Id;
+
+                    var documentType = string.IsNullOrWhiteSpace(request.DocumentType)
+                        ? "DMER"
+                        : request.DocumentType;
+                    var documentOwner = string.IsNullOrWhiteSpace(request.DocumentOwner)
+                        ? request.Owner
+                        : request.DocumentOwner;
+
+                    CreateCaseDocumentUrlRequest docUrl = new CreateCaseDocumentUrlRequest
+                    {
+                        CaseId = caseCreateRequest.CaseId,
+                        DocumentType = request.DocumentType,
+                        Processor = request.Processor,
+                        DriverLicenseNumber = request.DriverLicenseNumber,
+                        DocumentOwner = caseCreateRequest.Owner
+                    };
+                    await _caseManager.CreateCaseDocumentUrl(docUrl);
+
+                    reply.ResultStatus = DmerResultStatus.Success;
+                }
+                else
+                {
+                    reply.ResultStatus = DmerResultStatus.Fail;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error occurred while updating case.");
+                reply.ErrorDetail = e.Message;
+                reply.ResultStatus = DmerResultStatus.Fail;
+            }
+
+            return reply;
+        }
+
+
         /// <summary>
         /// 
         /// </summary>
@@ -1737,8 +1828,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
         public async override Task<ResultStatusReply> CreateCase(CreateCaseRequest request, ServerCallContext context)
         {
             var reply = new ResultStatusReply();
+            var subject = $"A new Rehab Trigger ({request.TriggerType} notification has been received on driver)";
+            var description = $"An {request.TriggerType} notification has been added to the driver from ICBC";
 
-             
             try
             {
 
@@ -1760,17 +1852,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                 Rsbc.Dmf.CaseManagement.CaseDetail activeRemedialCase = null;
                 if (!string.IsNullOrEmpty(request.DriverLicenseNumber) &&
-                    string.Equals(caseTypeCode, "REM", StringComparison.OrdinalIgnoreCase))
+                    string.Equals(caseTypeCode, "REM", StringComparison.OrdinalIgnoreCase)|| string.Equals(caseTypeCode, "DMER", StringComparison.OrdinalIgnoreCase))
                 {
-                    var drivers = await _caseManager.GetDriverByLicenseNumber(request.DriverLicenseNumber);
-                    var driver = drivers.FirstOrDefault();
-                    if (driver != null && Guid.TryParse(driver.Id, out var driverId))
-                    {
-                        var cases = await _caseManager.GetCases(driverId, Dynamics.EntityState.Active, "Remedial");
-                        activeRemedialCase = cases
-                            ?.OrderByDescending(c => c.OpenedDate)
-                            .FirstOrDefault();
-                    }
+                    activeRemedialCase = await GetActiveCases(request.DriverLicenseNumber, caseTypeCode);
                 }
 
                 if (activeRemedialCase != null)
@@ -1780,7 +1864,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     if (!string.IsNullOrEmpty(caseCreateRequest.TriggerType))
                     {
                         await _caseManager.CreateRehabTrigger(caseCreateRequest);
-                        await CreateRehabTriggerBringForward(activeRemedialCase.CaseId, caseCreateRequest.TriggerType);
+                        await CreateBringForward(activeRemedialCase.CaseId, caseCreateRequest.TriggerType, subject, description);
                     }
 
                     reply.ResultStatus = ResultStatus.Success;
@@ -1802,7 +1886,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     if (!string.IsNullOrEmpty(caseCreateRequest.TriggerType))
                     {
                         await _caseManager.CreateRehabTrigger(caseCreateRequest);
-                        await CreateRehabTriggerBringForward(caseCreateRequest.CaseId, caseCreateRequest.TriggerType);
+                        await CreateBringForward(caseCreateRequest.CaseId, caseCreateRequest.TriggerType, subject, description);
                     }
 
                     reply.ResultStatus = ResultStatus.Success;
@@ -1823,15 +1907,28 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        private async Task CreateRehabTriggerBringForward(string caseId, string triggerType)
+        private async Task<Rsbc.Dmf.CaseManagement.CaseDetail> GetActiveCases(string driverLicenseNumber, string programArea)
+        {
+            var drivers = await _caseManager.GetDriverByLicenseNumber(driverLicenseNumber);
+                    var driver = drivers.FirstOrDefault();
+                    if (driver != null && Guid.TryParse(driver.Id, out var driverId))
+                    {
+                        var cases = await _caseManager.GetCases(driverId, Dynamics.EntityState.Active, programArea);
+                        return cases
+                            ?.OrderByDescending(c => c.OpenedDate)
+                            .FirstOrDefault();
+                    }
+            return null;
+        }
+        
+        private async Task CreateBringForward(string caseId, string triggerType, string subject, string description)
         {
             if (string.IsNullOrEmpty(caseId))
             {
                 return;
             }
 
-            var subject = $"A new Rehab Trigger ({triggerType} notification has been received on driver)";
-            var description = $"An {triggerType} notification has been added to the driver from ICBC";
+
 
             var bringForwardRequest = new CaseManagement.BringForwardRequest
             {

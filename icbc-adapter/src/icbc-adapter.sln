@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Cli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pssg.Dmf.IcbcAdapter.Client", "Pssg.Dmf.IcbcAdapter.Client\Pssg.Dmf.IcbcAdapter.Client.csproj", "{ED18F291-6998-4F46-A410-D49FBF470689}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pssg.DocumentStorageAdapter.Client", "..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj", "{E119C1A5-A102-733F-8B7A-241C034CCA5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{ED18F291-6998-4F46-A410-D49FBF470689}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED18F291-6998-4F46-A410-D49FBF470689}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED18F291-6998-4F46-A410-D49FBF470689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E119C1A5-A102-733F-8B7A-241C034CCA5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E119C1A5-A102-733F-8B7A-241C034CCA5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E119C1A5-A102-733F-8B7A-241C034CCA5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E119C1A5-A102-733F-8B7A-241C034CCA5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
