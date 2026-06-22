@@ -350,7 +350,8 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
                     var config = provider.GetRequiredService<IConfiguration>();
                     var tokenService = provider.GetRequiredService<IOAuth2TokenService>();
-                    return new EnhancedIcbcClient(config, tokenService);
+                    var logger = provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<EnhancedIcbcClient>>();
+                    return new EnhancedIcbcClient(config, tokenService, logger);
                 });
 
                 Log.Logger.Information("Enhanced ICBC client registered with OAuth2 authentication");
@@ -361,7 +362,8 @@ namespace Rsbc.Dmf.IcbcAdapter
                 services.AddTransient<IIcbcClient>(provider =>
                 {
                     var config = provider.GetRequiredService<IConfiguration>();
-                    return new EnhancedIcbcClient(config);
+                    var logger = provider.GetRequiredService<Microsoft.Extensions.Logging.ILogger<EnhancedIcbcClient>>();
+                    return new EnhancedIcbcClient(config, logger);
                 });
 
                 Log.Logger.Information("Enhanced ICBC client registered with legacy authentication");
