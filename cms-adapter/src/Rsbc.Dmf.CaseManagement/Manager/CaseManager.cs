@@ -3927,8 +3927,18 @@ namespace Rsbc.Dmf.CaseManagement
                 string translatedOwner = TranslateOwner(owner);
                 Guid ownerGuid;
                 bool isGuid = Guid.TryParse(owner, out ownerGuid);
+                team lookupTeam;
 
-                team lookupTeam = dynamicsContext.teams.Where(x => x.name == translatedOwner || (isGuid && x.ownerid == ownerGuid)).FirstOrDefault();
+                if (isGuid)
+                {
+                    lookupTeam = dynamicsContext.teams
+                        .Where(x => x.ownerid == ownerGuid).FirstOrDefault();
+                }
+                else
+                {
+                    lookupTeam = dynamicsContext.teams
+                        .Where(x => x.name == translatedOwner).FirstOrDefault();
+                }
 
                 if (lookupTeam != null)
                 {
