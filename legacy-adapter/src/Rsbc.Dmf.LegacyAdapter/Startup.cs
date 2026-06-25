@@ -1,45 +1,47 @@
-﻿using System;
-using System.Net.Http;
-using System.Text;
+﻿using Grpc.Net.Client;
 using HealthChecks.UI.Client;
+using Hellang.Middleware.ProblemDetails;
+using Hellang.Middleware.ProblemDetails.Mvc;
+using Invio.Extensions.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Org.BouncyCastle.Asn1.Ocsp;
+using Pssg.DocumentStorageAdapter;
+using Pssg.Interfaces;
+using Pssg.Interfaces.Icbc.Services;
+using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Sinks.Splunk;
-using System.Net;
-using Grpc.Net.Client;
-using Rsbc.Dmf.CaseManagement.Service;
-using System.Reflection;
-using System.IO;
-using Pssg.DocumentStorageAdapter;
-using Microsoft.AspNetCore.Authorization;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using System.Linq;
-using Hellang.Middleware.ProblemDetails;
-using Hellang.Middleware.ProblemDetails.Mvc;
-using Pssg.Interfaces;
-using Invio.Extensions.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System.IO.Pipelines;
+using System;
 using System.Buffers;
 using System.Collections;
+using System.IO;
+using System.IO.Pipelines;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
 
 namespace Rsbc.Dmf.LegacyAdapter
@@ -162,11 +164,29 @@ namespace Rsbc.Dmf.LegacyAdapter
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
 
-            // Add ICBC Client
 
-            if (Configuration["ICBC_SERVICE_URI"] != null)
+            // Add ICBC Client
+            bool useOAuth2 = Configuration.GetValue<bool>("ICBC_USE_OAUTH2", true);
+
+            if (useOAuth2 && Configuration["ICBC_SERVICE_URI_OAUTH"] != null)
             {
-                services.AddTransient<IIcbcClient>(_ => new EnhancedIcbcClient(Configuration));
+                // Register OAuth2 token service with its own named HttpClient
+                services.AddHttpClient<IOAuth2TokenService, OAuth2TokenService>();
+
+                // Register ICBC client using the OAuth2-enabled constructor
+                services.AddTransient<IIcbcClient>(provider => new EnhancedIcbcClient(
+                    Configuration,
+                    provider.GetRequiredService<IOAuth2TokenService>(),
+                    provider.GetService<ILogger<EnhancedIcbcClient>>()
+                ));
+            }
+            else if (Configuration["ICBC_SERVICE_URI"] != null)
+            {
+                // Legacy authentication: credentials must be present in configuration
+                services.AddTransient<IIcbcClient>(provider => new EnhancedIcbcClient(
+                    Configuration,
+                    provider.GetService<ILogger<EnhancedIcbcClient>>()
+                ));
             }
 
             // Add Document Storage Adapter
