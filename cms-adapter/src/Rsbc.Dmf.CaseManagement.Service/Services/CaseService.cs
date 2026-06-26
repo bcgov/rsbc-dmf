@@ -1757,7 +1757,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         DocumentType = request.DocumentType,
                         Processor = request.Processor,
                         DriverLicenseNumber = request.DriverLicenseNumber,
-                        DocumentOwner = "Team - Intake"
+                        DocumentOwner = "Team - Intake",
+                        CreatedOn = request.MedicalIssueDate.ToDateTime()
+                        
                     };
 
                     await _caseManager.CreateCaseDocumentUrl(docUrl);
@@ -1797,7 +1799,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         DocumentType = request.DocumentType,
                         Processor = request.Processor,
                         DriverLicenseNumber = request.DriverLicenseNumber,
-                        DocumentOwner = "Team - Intake"
+                        DocumentOwner = "Team - Intake",
+                        CreatedOn = request.MedicalIssueDate.ToDateTime()
                     };
                     await _caseManager.CreateCaseDocumentUrl(docUrl);
 
