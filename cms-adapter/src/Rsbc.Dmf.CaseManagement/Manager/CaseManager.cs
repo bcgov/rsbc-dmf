@@ -293,6 +293,7 @@ namespace Rsbc.Dmf.CaseManagement
         public int? DocumentOrigin { get; set; }
         public int? DmerStatus { get; set; }
         public int? SubmittalStatus { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 
     public class CreateCaseRequest
@@ -6062,9 +6063,8 @@ namespace Rsbc.Dmf.CaseManagement
 
             var newDocument = new bcgov_documenturl
             {
-                dfp_issuedate = DateTimeOffset.Now,
-                dfp_uploadeddate = DateTimeOffset.Now,
-                dfp_compliancedate = GetComplienceDate()
+                overriddencreatedon = request.CreatedOn,
+                dfp_compliancedate = GetComplienceDate(),
             };
 
             dynamicsContext.AddTobcgov_documenturls(newDocument);

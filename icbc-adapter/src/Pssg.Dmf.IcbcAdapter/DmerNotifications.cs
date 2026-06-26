@@ -74,7 +74,8 @@ namespace Rsbc.Dmf.IcbcAdapter
 				DriverSurname = dmerCase.DriverSurname,
 				ProgramArea = "DMF",
 				DocumentOwner = "Team - Intake",
-				DocumentType = "DMER"
+				DocumentType = "DMER",
+				MedicalIssueDate = Timestamp.FromDateTime(dmerCase.MedicalIssueDate)
             });
 		}
 
@@ -87,7 +88,8 @@ namespace Rsbc.Dmf.IcbcAdapter
                 Owner = "Remedial",
                 TriggerType = source.MedicalType,
 				DriverDateOfBirthUtc = DateTime.SpecifyKind(DateTime.Parse(source.BirthDate), DateTimeKind.Utc),
-				DriverSurname = source.Surname
+				DriverSurname = source.Surname,
+				MedicalIssueDate = DateTime.SpecifyKind(DateTime.Parse(source.MedicalIssueDate), DateTimeKind.Utc)
 			};
 		}
 
