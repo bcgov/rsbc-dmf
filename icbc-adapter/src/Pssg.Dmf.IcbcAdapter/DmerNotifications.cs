@@ -274,12 +274,33 @@ namespace Rsbc.Dmf.IcbcAdapter
 			var files = await _documentStorageAdapterClient.DownloadFolderAsync(
 				new DownloadFolderRequest { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET", FolderName = _dmerFolder });
 
-			var fileNames = files.Files.Select(f => f.FileName).ToList();
+			var topLevelFiles = files.Files
+				.Where(file =>
+				{
+					if (file == null || string.IsNullOrWhiteSpace(file.ServerRelativeUrl))
+					{
+						return false;
+					}
+
+					var relativePath = file.ServerRelativeUrl.Trim('/');
+					var folderPrefix = _dmerFolder.Trim('/').TrimEnd('/') + "/";
+
+					if (!relativePath.StartsWith(folderPrefix, StringComparison.OrdinalIgnoreCase))
+					{
+						return false;
+					}
+
+					var remainingPath = relativePath.Substring(folderPrefix.Length);
+					return !remainingPath.Contains("/");
+				})
+				.ToList();
+
+			var fileNames = topLevelFiles.Select(f => f.FileName).ToList();
 			Log.Logger.Information("Fetching DMER notification dat file(s):" + string.Join(",", fileNames));
 
 			if (files.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
 			{
-				foreach (var fileBytes in files.Files.Where(x=> x.Data.Length > 1))
+				foreach (var fileBytes in topLevelFiles.Where(x=> x.Data.Length > 1))
 				{
 					var stream = new MemoryStream(fileBytes.Data.ToByteArray());
 					var fileName = fileBytes.ServerRelativeUrl.Split('/').Last();
