@@ -1814,11 +1814,11 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-        private DateTime GetComplienceDate()
+        private DateTime GetComplienceDate(DateTime createdOn)
         {
             var complienceDays = dynamicsContext.bcgov_configs.Where(config => config.bcgov_group == "Compliance" && config.bcgov_key == "DMER").FirstOrDefault().bcgov_value ?? "0";
 
-            return DateTime.Now.AddDays(int.Parse(complienceDays));
+            return createdOn.AddDays(int.Parse(complienceDays));
         }
 
         /// <summary>
@@ -6063,8 +6063,8 @@ namespace Rsbc.Dmf.CaseManagement
 
             var newDocument = new bcgov_documenturl
             {
-                overriddencreatedon = request.CreatedOn,
-                dfp_compliancedate = GetComplienceDate(),
+                overriddencreatedon = request.CreatedOn.AddHours(12),
+                dfp_compliancedate = GetComplienceDate(request.CreatedOn.AddHours(12)),
             };
 
             dynamicsContext.AddTobcgov_documenturls(newDocument);
