@@ -10,5 +10,6 @@ namespace Rsbc.Dmf.IcbcAdapter.ViewModels
         public string Owner { get; set; }
         public DateTime DriverDateOfBirthUtc { get; set; }
         public string DriverSurname { get; set; }
+        public DateTime MedicalIssueDate { get; set; }
     }
 }

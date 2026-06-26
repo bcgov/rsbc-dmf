@@ -546,6 +546,7 @@ message CreateDmerCaseRequest {
     string documentType = 13;
     string processor = 14;
     string documentOwner = 15;
+    google.protobuf.Timestamp MedicalIssueDate = 16;
 }
 message UpdateCaseRequest{
     string caseId = 1;
