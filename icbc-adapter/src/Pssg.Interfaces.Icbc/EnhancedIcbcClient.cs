@@ -226,7 +226,7 @@ namespace Pssg.Interfaces
                 string errorBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 _logger.LogError("ICBC API returned {StatusCode} for GetDriverHistory {ErrorBody}",
                     response.StatusCode, errorBody);
-                _logger.LogDebug("Failing on the DL GetDriverHistory (dl={DlNumber})", dlNumber);
+                _logger.LogInformation("Failing on the DL GetDriverHistory (dl={DlNumber})", dlNumber);
                 return null;
             }
 
@@ -247,7 +247,7 @@ namespace Pssg.Interfaces
                 string errorBody = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
                 _logger.LogError("ICBC API returned {StatusCode} for GetDriverHistory {ErrorBody}",
                     response.StatusCode, errorBody);
-                _logger.LogDebug("Failed For (dl={DlNumber})", dlNumber);
+                _logger.LogInformation("Failed For (dl={DlNumber})", dlNumber);
                 return null;
             }
 
@@ -266,13 +266,13 @@ namespace Pssg.Interfaces
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed to parse ICBC Full tombstone response data: {RawData}", rawData);
-                _logger.LogDebug("Failed to parse ICBC response for dl={DlNumber}.", dlNumber);
+                _logger.LogInformation("Failed to parse ICBC response for dl={DlNumber}.", dlNumber);
                 icbcClient = null;
             }
             ClientResult result = null;
             if (icbcClient != null)
             {
-                _logger.LogDebug("ProcessDriverHistoryResponse - Successfully parsed ICBC response for dl={DlNumber}. Tombstone response data: {RawData}", dlNumber, rawData);
+                _logger.LogInformation("ProcessDriverHistoryResponse - Successfully parsed ICBC response for dl={DlNumber}. Tombstone response data: {RawData}", dlNumber, rawData);
 
                 result = new ClientResult()
                 {

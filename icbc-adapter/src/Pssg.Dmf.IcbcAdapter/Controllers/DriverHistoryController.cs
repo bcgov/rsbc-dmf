@@ -105,7 +105,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 result.DriverMasterStatus = data.DR1MST.ToViewModel();
 
                 var responseJson = JsonConvert.SerializeObject(result);
-                _logger.LogDebug("GetHistoryController successful for dl={DriversLicence}. Response JSON: {ResponseJson}", driversLicence, responseJson);
+                _logger.LogInformation("GetHistoryController successful for dl={DriversLicence}. Response JSON: {ResponseJson}", driversLicence, responseJson);
 
                 return Json(result);
             }
