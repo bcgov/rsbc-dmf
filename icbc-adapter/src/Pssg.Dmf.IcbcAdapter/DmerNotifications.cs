@@ -123,7 +123,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 					
 				}
 			}
-            Log.Logger.Information($"Successfully proccessed {total} DMER cases with {errors} errors.See cms logs for more details");
+            Log.Logger.Information($"Completed File Processing. Number of DMER records successfully proccessed: {total}. Number of DMER records with errors: {errors}. See cms logs for more details");
         }
 
         public async Task RemoveFilesFromIcbcS3Bucket(IEnumerable<string> ServerRelativeUrl)
