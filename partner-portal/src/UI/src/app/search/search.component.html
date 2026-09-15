@@ -103,8 +103,8 @@
                 </mat-form-field>
               </div>
               <div class="createDriverFormActions">
-                <button type="button" mat-stroked-button class="createDriverButton createDriverActionButton" [disabled]="isCreatingDriver" (click)="createDriverRecord()">Create Record</button>
-                <button type="button" mat-stroked-button class="createDriverButton createDriverActionButton" (click)="cancelCreateDriverForm()">Cancel</button>
+                <button type="button" mat-flat-button  class="primaryButton" [disabled]="isCreatingDriver" (click)="createDriverRecord()">Create Record</button>
+                <button type="button" mat-stroked-button class="createDriverButton" (click)="cancelCreateDriverForm()">Cancel</button>
               </div>
             </div>
           }
@@ -112,7 +112,9 @@
 
           @if(createDriverMessage){
           <div class="createDriverResult">
-            {{ createDriverMessage }}
+            <div class="bc-gov-alertbanner" [ngClass]="createDriverMessageType === 'success' ? 'bc-gov-alertbanner-success' : 'bc-gov-alertbanner-error'">
+              {{createDriverMessage}}
+            </div>
           </div>
           }
 

@@ -100,7 +100,7 @@ mat-card {
   }
 
   .noResults{
-    padding-top: 12px;
+    margin-top: 20px;
     font-family: "BC Sans", sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -119,6 +119,7 @@ mat-card {
 
   .createDriverResult {
     padding-top: 12px;
+    margin-top: 10px;
     font-family: "BC Sans", sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -129,11 +130,17 @@ mat-card {
     display: flex;
     gap: 12px;
     margin-top: 4px;
+    width: 352px;
   }
 
   .mat-mdc-button-base.createDriverActionButton {
-    width: 154px;
+    width: 170px;
     height: 50px;
+    white-space: nowrap;
+  }
+  
+  .createDriverFormActions .primaryButton{
+    flex: 0 0 170px;
   }
 
   .mat-mdc-button-base.createDriverButton {

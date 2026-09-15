@@ -41,6 +41,7 @@ export class SearchComponent {
   caseSearchAttempted: boolean = false;
   searchExecuted: boolean = false;
   createDriverMessage = '';
+  createDriverMessageType: 'success' | 'error' | '' = '';
   private readonly createDriverSuccessMessage = 'Driver record created successfully. You may search for driver again';
   private readonly createDriverFailureMessage = "Driver record creation failed. Please check the Driver's Licence number.";
 
@@ -158,6 +159,7 @@ export class SearchComponent {
 
           if (isSuccess) {
             this.createDriverMessage = this.createDriverSuccessMessage;
+            this.createDriverMessageType = 'success';
             this.driverLicenceNumber = normalizedDriverLicenceNumber;
             this.showCreateDriverForm = false;
             this.noResults = false;
@@ -165,12 +167,14 @@ export class SearchComponent {
           }
 
           this.createDriverMessage = responseMessage;
+          this.createDriverMessageType = 'error';
         },
         error: (error: { error?: { success?: boolean; Success?: boolean; message?: string; Message?: string } }) => {
           const errorBody = error?.error;
           const isSuccess = errorBody?.success ?? errorBody?.Success ?? false;
           if (isSuccess) {
             this.createDriverMessage = this.createDriverSuccessMessage;
+            this.createDriverMessageType = 'success';
             this.driverLicenceNumber = normalizedDriverLicenceNumber;
             this.showCreateDriverForm = false;
             this.noResults = false;
@@ -178,6 +182,7 @@ export class SearchComponent {
           }
 
           this.createDriverMessage = errorBody?.message ?? errorBody?.Message ?? this.createDriverFailureMessage;
+          this.createDriverMessageType = 'error';
           console.error('Create driver error:', error);
         }
       });
