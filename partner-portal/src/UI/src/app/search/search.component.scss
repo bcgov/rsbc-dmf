@@ -60,7 +60,7 @@ mat-card {
     width:280px;
   }
 
-  .mat-mdc-button-base.remedialButton {
+  .mat-mdc-button-base.createDriverButton {
     border-width: 0px;
     width: 264px;
     height: 50px;
@@ -69,8 +69,9 @@ mat-card {
     font-style: normal;
     font-size: 18px;
     letter-spacing: 1px;
-    color: #f2f2f2;
-    background-color: #003366;
+    color: #003366;
+    background-color:#fff;
+    border: 2px solid #003366;
     cursor: pointer;
     --mdc-filled-button-label-text-color: #f2f2f2;
     --mdc-filled-button-container-color: #003366;
@@ -105,6 +106,38 @@ mat-card {
     font-style: normal;
     font-size: 16px;
     color: #D23C42;
+  }
+
+  .noResultsAction {
+    padding-top: 24px;
+  }
+
+  .createDriverForm {
+    padding-top: 24px;
+    width: 320px;
+  }
+
+  .createDriverResult {
+    padding-top: 12px;
+    font-family: "BC Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+  }
+
+  .createDriverFormActions {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .mat-mdc-button-base.createDriverActionButton {
+    width: 154px;
+    height: 50px;
+  }
+
+  .mat-mdc-button-base.createDriverButton {
+    width: 320px;
   }
 
   h2.large {

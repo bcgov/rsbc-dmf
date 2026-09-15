@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import {
   CallbackService,
   CasesService,
@@ -24,7 +25,8 @@ export class CaseManagementService {
     private callbackService: CallbackService,
     private commentsService: CommentsService,
     private remedialService: RemedialService,
-    private portalUserService: PortalUserService
+    private portalUserService: PortalUserService,
+    private http: HttpClient
   ) { }
 
   // Case
@@ -85,6 +87,12 @@ export class CaseManagementService {
     params: Parameters<CasesService['apiCasesSearchIdCodeSurCodeGet$Json']>[0]
   ) {
     return this.casesService.apiCasesSearchIdCodeSurCodeGet$Json(params);
+  }
+
+  public createDriverRecord(driverLicenceNumber: string) {
+    return this.http.post<{ success: boolean; message: string; driverId?: string }>('/api/Driver/CreateDriver', {
+      driverLicenceNumber
+    });
   }
 
   // Comments
