@@ -86,9 +86,39 @@
           </form>
           @if(searchExecuted && noResults){
           <div class="noResults">
-            RoadSafetyBC (RSBC) does not have any active or historical driver medical fitness or remedial cases assigned to this driver.
+           No matching Driver's Licence was found in RSBC. You can create a new driver record.
+          </div>
+          @if(!showCreateDriverForm){
+            <div class="noResultsAction">
+              <button type="button" mat-stroked-button class="createDriverButton" (click)="openCreateDriverForm()">Create a new driver record</button>
+            </div>
+          }
+
+          @if(showCreateDriverForm){
+            <div class="createDriverForm">
+              <label class="form-label">Driver's Licence Number</label>
+              <div>
+                <mat-form-field appearance="outline" class="input-width">
+                  <input matInput name="createDriverLicenseNumber" [(ngModel)]="createDriverLicenceNumber" placeholder="Driver Licence Number" />
+                </mat-form-field>
+              </div>
+              <div class="createDriverFormActions">
+                <button type="button" mat-flat-button  class="primaryButton" [disabled]="isCreatingDriver" (click)="createDriverRecord()">Create Record</button>
+                <button type="button" mat-stroked-button class="createDriverButton" (click)="cancelCreateDriverForm()">Cancel</button>
+              </div>
+            </div>
+          }
+          }
+
+          @if(createDriverMessage){
+          <div class="createDriverResult">
+            <div class="bc-gov-alertbanner" [ngClass]="createDriverMessageType === 'success' ? 'bc-gov-alertbanner-success' : 'bc-gov-alertbanner-error'">
+              {{createDriverMessage}}
+            </div>
           </div>
           }
+
+          
         </mat-card-content>
       </mat-card>
     </div>

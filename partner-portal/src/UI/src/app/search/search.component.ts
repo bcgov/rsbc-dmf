@@ -6,8 +6,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { Router } from '@angular/router';
-import { CaseSearch } from '@app/shared/api/models';
-import { DriverService } from '@app/shared/api/services';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { UserService } from '@app/shared/services/user.service';
 import { finalize } from 'rxjs';
@@ -31,14 +29,21 @@ import { finalize } from 'rxjs';
 })
 export class SearchComponent {
   driverLicenceNumber = '';
+  createDriverLicenceNumber = '';
   idCode = '';
   caseSurCode = '';
   noResults: boolean = false;
+  showCreateDriverForm: boolean = false;
   surcode = '';
   isSearching = false;
+  isCreatingDriver = false;
   driverSearchAttempted: boolean = false;
   caseSearchAttempted: boolean = false;
   searchExecuted: boolean = false;
+  createDriverMessage = '';
+  createDriverMessageType: 'success' | 'error' | '' = '';
+  private readonly createDriverSuccessMessage = 'Driver record created successfully. You may search for driver again';
+  private readonly createDriverFailureMessage = "Driver record creation failed. Please check the Driver's Licence number.";
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -68,6 +73,8 @@ export class SearchComponent {
     
     this.searchExecuted = true;
     this.noResults = false;
+    this.showCreateDriverForm = false;
+    this.createDriverMessage = '';
     this.isSearching = true;
 
     this.caseManagementService
@@ -101,6 +108,8 @@ export class SearchComponent {
 
     const effectiveCaseSurCode = this.caseSurCode.trim();
     this.noResults = false;
+    this.showCreateDriverForm = false;
+    this.createDriverMessage = '';
     this.caseManagementService.searchByCaseId({
       idCode: this.idCode,
       surCode: effectiveCaseSurCode
@@ -118,6 +127,65 @@ export class SearchComponent {
       }
   
     });
+  }
+
+  openCreateDriverForm() {
+    this.createDriverLicenceNumber = this.driverLicenceNumber?.trim() || '';
+    this.createDriverMessage = '';
+    this.showCreateDriverForm = true;
+  }
+
+  cancelCreateDriverForm() {
+    this.createDriverMessage = '';
+    this.showCreateDriverForm = false;
+  }
+
+  createDriverRecord() {
+    const normalizedDriverLicenceNumber = this.createDriverLicenceNumber?.trim();
+    if (!normalizedDriverLicenceNumber || this.isCreatingDriver) {
+      return;
+    }
+
+    this.isCreatingDriver = true;
+    this.createDriverMessage = '';
+
+    this.caseManagementService
+      .createDriverRecord(normalizedDriverLicenceNumber)
+      .pipe(finalize(() => (this.isCreatingDriver = false)))
+      .subscribe({
+        next: (response: { success?: boolean; Success?: boolean; message?: string; Message?: string }) => {
+          const isSuccess = response.success ?? response.Success ?? false;
+          const responseMessage = response.message ?? response.Message ?? this.createDriverFailureMessage;
+
+          if (isSuccess) {
+            this.createDriverMessage = this.createDriverSuccessMessage;
+            this.createDriverMessageType = 'success';
+            this.driverLicenceNumber = normalizedDriverLicenceNumber;
+            this.showCreateDriverForm = false;
+            this.noResults = false;
+            return;
+          }
+
+          this.createDriverMessage = responseMessage;
+          this.createDriverMessageType = 'error';
+        },
+        error: (error: { error?: { success?: boolean; Success?: boolean; message?: string; Message?: string } }) => {
+          const errorBody = error?.error;
+          const isSuccess = errorBody?.success ?? errorBody?.Success ?? false;
+          if (isSuccess) {
+            this.createDriverMessage = this.createDriverSuccessMessage;
+            this.createDriverMessageType = 'success';
+            this.driverLicenceNumber = normalizedDriverLicenceNumber;
+            this.showCreateDriverForm = false;
+            this.noResults = false;
+            return;
+          }
+
+          this.createDriverMessage = errorBody?.message ?? errorBody?.Message ?? this.createDriverFailureMessage;
+          this.createDriverMessageType = 'error';
+          console.error('Create driver error:', error);
+        }
+      });
   }
 }
 
