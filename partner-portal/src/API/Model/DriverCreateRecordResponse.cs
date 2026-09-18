@@ -1,4 +1,4 @@
-namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels
+namespace Rsbc.Dmf.PartnerPortal.Api.Model
 {
     public class DriverCreateRecordResponse
     {

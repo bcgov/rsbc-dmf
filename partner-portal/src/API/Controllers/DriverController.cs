@@ -9,6 +9,7 @@ using Rsbc.Dmf.PartnerPortal.Api.Services;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using Rsbc.Dmf.CaseManagement.Service;
 using Google.Protobuf.WellKnownTypes;
+using Rsbc.Dmf.PartnerPortal.Api.Model;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -119,15 +120,15 @@ public class DriverController : Controller
     }
 
     [HttpPost("CreateDriver")]
-    [ProducesResponseType(typeof(Rsbc.Dmf.PartnerPortal.Api.ViewModels.DriverCreateRecordResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(DriverCreateRecordResponse), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.BadRequest)]
     [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
     [ActionName(nameof(CreateDriver))]
-    public async Task<ActionResult<Rsbc.Dmf.PartnerPortal.Api.ViewModels.DriverCreateRecordResponse>> CreateDriver([FromBody] Rsbc.Dmf.PartnerPortal.Api.ViewModels.DriverCreateRecordRequest request)
+    public async Task<ActionResult<DriverCreateRecordResponse>> CreateDriver([FromBody] DriverCreateRecordRequest request)
     {
         if (request == null || string.IsNullOrWhiteSpace(request.DriverLicenceNumber))
         {
-            return BadRequest(new Rsbc.Dmf.PartnerPortal.Api.ViewModels.DriverCreateRecordResponse
+            return BadRequest(new DriverCreateRecordResponse
             {
                 Success = false,
                 Message = "Driver licence number is required."
@@ -165,7 +166,7 @@ public class DriverController : Controller
                 return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to Create Driver.");
             }
 
-            return Ok(new Rsbc.Dmf.PartnerPortal.Api.ViewModels.DriverCreateRecordResponse
+            return Ok(new DriverCreateRecordResponse
             {
                 Success = true,
                 Message = "Driver record created successfully. You may search for driver again",
