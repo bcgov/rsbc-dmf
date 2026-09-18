@@ -9,7 +9,7 @@ import { RequestBuilder } from '../../request-builder';
 import { Comment } from '../../models/comment';
 
 export interface ApiCommentsGetCommentsGet$Json$Params {
-  driverId: string;
+  driverId?: string;
 }
 
 export function apiCommentsGetCommentsGet$Json(http: HttpClient, rootUrl: string, params?: ApiCommentsGetCommentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Comment>>> {

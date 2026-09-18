@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { DriverCreateRecordResponse } from '@app/shared/api/models/driver-create-record-response';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { UserService } from '@app/shared/services/user.service';
 import { finalize } from 'rxjs';
@@ -150,12 +151,12 @@ export class SearchComponent {
     this.createDriverMessage = '';
 
     this.caseManagementService
-      .createDriverRecord(normalizedDriverLicenceNumber)
+      .createDriverRecord({ body: { driverLicenceNumber: normalizedDriverLicenceNumber } })
       .pipe(finalize(() => (this.isCreatingDriver = false)))
       .subscribe({
-        next: (response: { success?: boolean; Success?: boolean; message?: string; Message?: string }) => {
-          const isSuccess = response.success ?? response.Success ?? false;
-          const responseMessage = response.message ?? response.Message ?? this.createDriverFailureMessage;
+        next: (response: DriverCreateRecordResponse) => {
+          const isSuccess = response.success ?? false;
+          const responseMessage = response.message ?? this.createDriverFailureMessage;
 
           if (isSuccess) {
             this.createDriverMessage = this.createDriverSuccessMessage;

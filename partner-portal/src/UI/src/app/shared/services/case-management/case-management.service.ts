@@ -89,10 +89,11 @@ export class CaseManagementService {
     return this.casesService.apiCasesSearchIdCodeSurCodeGet$Json(params);
   }
 
-  public createDriverRecord(driverLicenceNumber: string) {
-    return this.http.post<{ success: boolean; message: string; driverId?: string }>('/api/Driver/CreateDriver', {
-      driverLicenceNumber
-    });
+  public createDriverRecord(
+    params: Parameters<DriverService['apiDriverCreateDriverPost$Json']>[0]
+  ) {
+    return this.driverService.apiDriverCreateDriverPost$Json(params);
+    // return this.http.post<{ success: boolean; message: string; driverId?: string }>('/api/Driver/CreateDriver', params);
   }
 
   // Comments
