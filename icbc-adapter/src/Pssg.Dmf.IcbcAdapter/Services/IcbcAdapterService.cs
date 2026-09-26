@@ -146,8 +146,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
         {
             var result = new ResultStatusReply();
 
-            var icbcNotifactionsUtils = new IcbcNotifactionsUtils(_configuration, _caseManagerClient, _documentStorageAdapterClient);
-            icbcNotifactionsUtils.GetIcbcNotificationsAndUpdateCase().GetAwaiter().GetResult();
+            var icbcNotifactionsUtils = new RehabNotifactionsUtils(_configuration, _caseManagerClient, _documentStorageAdapterClient);
+            icbcNotifactionsUtils.GetRehabNotificationsAndUpdateCase().GetAwaiter().GetResult();
 
             return Task.FromResult(result);
         }
@@ -158,7 +158,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
             var result = new ResultStatusReply();
 
             var dmerNotifications = new DmerNotifications(_configuration, _caseManagerClient, _documentStorageAdapterClient);
-            dmerNotifications.GetIcbcNotificationsAndUpdateCase().GetAwaiter().GetResult();
+            dmerNotifications.GetDMERNotificationsAndUpdateCase().GetAwaiter().GetResult();
 
             return Task.FromResult(result);
         }

@@ -38,18 +38,18 @@ namespace Rsbc.Dmf.IcbcAdapter
 			_configuration = configuration;
 			_caseManagerClient = caseManagerClient;
 			_documentStorageAdapterClient = documentStorageAdapterClient;
-			_processedFolder = _configuration["DMER_PROCESSED_FOLDER"] ?? "dmer/proccessed";
+			_processedFolder = _configuration["DMER_PROCESSED_FOLDER"] ?? "dmer/processed";
 			_dmerFolder = _configuration["DMER_FOlDER"]?? "dmer";
 		}
 
-		public async Task GetIcbcNotificationsAndUpdateCase()
+		public async Task GetDMERNotificationsAndUpdateCase()
 		{
-			var notifactions = await GetIcbcNotifications();
+			var notifactions = await GetDMERNotifications();
 			if (notifactions?.NotificationFiles?.Count > 0)
 			{
 				foreach (var notification in notifactions.NotificationFiles.Values)
 				{
-					var notifications = await ParseIcbcNotication(notification);
+					var notifications = await ParseDMERNotication(notification);
 					if (notifications != null)
 					{
 						await CreateOrUpdateCases(notifications.Records, notifications.Errors);
@@ -123,27 +123,11 @@ namespace Rsbc.Dmf.IcbcAdapter
 					
 				}
 			}
-            Log.Logger.Information($"Completed File Processing. Number of DMER records successfully proccessed: {total}. Number of DMER records with errors: {errors}. See cms logs for more details");
+            Log.Logger.Information($"Completed File Processing. Number of DMER records successfully processed: {total}. Number of DMER records with errors: {errors}. See cms logs for more details");
         }
 
-        public async Task RemoveFilesFromIcbcS3Bucket(IEnumerable<string> ServerRelativeUrl)
-		{
-			if (_documentStorageAdapterClient == null)
-			{
-				throw new InvalidOperationException("Document storage adapter client is not configured.");
-			}
 
-			Log.Logger.Information("Removing DMER files from icbc S3 bucket");
-			var request = new DeleteFilesInFolderRequest { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET" };
-			request.ServerRelativeUrl.AddRange(ServerRelativeUrl);
-			var result = await _documentStorageAdapterClient.DeleteFilesInFolderAsync(request);
-			if (result.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
-			{
-				Log.Logger.Information("Successfully removed DMER files from icbc S3 bucket");
-			}
-		}
-
-		private async Task MoveProcessedFilesToProcessedFolder(IcbcNotificationsFileResult notifactions)
+		private async Task MoveProcessedFilesToProcessedFolder(RehabNotificationsFileResult notifactions)
 		{
 			if (_documentStorageAdapterClient == null)
 			{
@@ -174,7 +158,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 		}
 
 
-		public async Task<DMERParseResult> ParseIcbcNotication(IFormFile file)
+		public async Task<DMERParseResult> ParseDMERNotication(IFormFile file)
 		{
 			var result = new DMERParseResult();
 
@@ -264,14 +248,14 @@ namespace Rsbc.Dmf.IcbcAdapter
 			return string.IsNullOrEmpty(errors) ? null : errors;
 		}
 
-		private async Task<IcbcNotificationsFileResult> GetIcbcNotifications()
+		private async Task<RehabNotificationsFileResult> GetDMERNotifications()
 		{
 			if (_documentStorageAdapterClient == null)
 			{
 				throw new InvalidOperationException("Document storage adapter client is not configured.");
 			}
 
-			var result = new IcbcNotificationsFileResult
+			var result = new RehabNotificationsFileResult
 			{
 				NotificationFiles = new Dictionary<string, IFormFile>()
 			};

@@ -38,7 +38,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
         public async Task SendMedicalUpdates()
         {
-            Log.Logger.Error("Starting SendMedicalUpdates");
+            Log.Logger.Information("Starting SendMedicalUpdates");
 
             // Get Unsent Medical for manual and clean pass
 

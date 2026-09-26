@@ -21,7 +21,7 @@ using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
-    public class IcbcNotifactionsUtils
+    public class RehabNotifactionsUtils
     {
 
         private IConfiguration _configuration;
@@ -29,33 +29,33 @@ namespace Rsbc.Dmf.IcbcAdapter
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient? _documentStorageAdapterClient;
 
 
-        public IcbcNotifactionsUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, DocumentStorageAdapter.DocumentStorageAdapterClient? documentStorageAdapterClient)
+        public RehabNotifactionsUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, DocumentStorageAdapter.DocumentStorageAdapterClient? documentStorageAdapterClient)
         {
             _configuration = configuration;
             _caseManagerClient = caseManagerClient;
             _documentStorageAdapterClient = documentStorageAdapterClient;
         }
 
-        public async Task GetIcbcNotificationsAndUpdateCase()
+        public async Task GetRehabNotificationsAndUpdateCase()
         {
-            var notifactions = await GetIcbcNotifications();
+            var notifactions = await GetRehabNotifications();
             if (notifactions.NotificationFiles?.Count > 0)
             {
                 foreach (var notification in notifactions.NotificationFiles.Values)
                 {
 
-                    var parseResult = await ParseIcbcNotication(notification);
+                    var parseResult = await ParseRehabNotication(notification);
                     if (parseResult != null)
                     {
-                        await CreateOrUpdateCases(parseResult.Records, parseResult.Errors);
+                        await CreateOrUpdateCases(parseResult.Records, parseResult.Errors, notification.FileName);
                     }
                 }
-                await RemoveFilesFromIcbcS3Bucket(notifactions.NotificationFiles.Keys);
+                await RemoveFilesFromRehabFolder(notifactions.NotificationFiles.Keys);
             }
 
         }
 
-        internal async Task CreateOrUpdateCases(List<DRVILS> cases, int errors)
+        internal async Task CreateOrUpdateCases(List<DRVILS> cases, int errors, string fileName)
         {
             var total = 0;
             foreach (DRVILS dmf_case in cases)
@@ -78,30 +78,30 @@ namespace Rsbc.Dmf.IcbcAdapter
                 catch (Exception ex)
                 {
                     errors++;
-                    Log.Logger.Error("Error processing record in file: " + ex.Message);
+                    Log.Logger.Error("Error processing record in file " + fileName +": " + ex.Message);
                     
                 }
             }
-            Log.Logger.Information($"Successfully proccessed {total} cases with {errors} errors. See cms logs for more details");
+            Log.Logger.Information($"Successfully processed {total} cases with {errors} errors. See cms logs for more details");
         }
 
-        public async Task RemoveFilesFromIcbcS3Bucket(IEnumerable<string> ServerRelativeUrl)
+        public async Task RemoveFilesFromRehabFolder(IEnumerable<string> ServerRelativeUrl)
         {
-            Log.Logger.Information("Removing files from icbc S3 bucket");
+            Log.Logger.Information("Removing files from Rehab folder");
             var request = new DeleteFilesInFolderRequest { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET" };
             request.ServerRelativeUrl.AddRange(ServerRelativeUrl);
             var result = await _documentStorageAdapterClient.DeleteFilesInFolderAsync(request);
             if (result.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
-                Log.Logger.Information("Successfully Removed files from icbc S3 bucket");
+                Log.Logger.Information("Successfully Removed files from Rehab folder");
             }
         }
 
-        public async Task<ParseResult> ParseIcbcNotication(IFormFile file)
+        public async Task<ParseResult> ParseRehabNotication(IFormFile file)
         {
             var result = new ParseResult();
 
-            Log.Logger.Information("Parsing ICBC Notification dat file " + file.FileName);
+            Log.Logger.Information("Parsing Rehab Notification dat file " + file.FileName);
             if (file == null || file.Length == 0) { 
                 Log.Logger.Information("File is empty or null.");
                 return null;
@@ -140,7 +140,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                         if (!line.Contains("RUN DATE"))
                         {
                             result.Errors++;
-                            Log.Logger.Warning($"Record was not added: " + record.ToString() + "\n Invalid values: " + validationErrors);
+                            Log.Logger.Warning($"Failed to Parse File" + file.FileName + " Record was not added " + "\n Invalid values: " + validationErrors);
                         }
                     }
 
@@ -166,27 +166,32 @@ namespace Rsbc.Dmf.IcbcAdapter
             return errors;
         }
 
-        private async Task<IcbcNotificationsFileResult> GetIcbcNotifications()
+        private async Task<RehabNotificationsFileResult> GetRehabNotifications()
         {
-            var result = new IcbcNotificationsFileResult();
+            var result = new RehabNotificationsFileResult();
             result.NotificationFiles = new Dictionary<string, IFormFile>();
+
             var files = await _documentStorageAdapterClient.DownloadFolderAsync(
-            new DownloadFolderRequest { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET" });
-            var fileNames = files.Files.Select(f => f.FileName).ToList();
-            Log.Logger.Information("Fetching ICBC Notifications dat file(s):" + string.Join(",", fileNames));
+                new DownloadFolderRequest { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET" });
+
+            var topLevelFiles = files.Files.Where(f => !f.ServerRelativeUrl.Contains("/"));
+
+            var fileNames = topLevelFiles.Select(f => f.ServerRelativeUrl).ToList();
+
+            Log.Logger.Information("Fetching Rehab Notifications dat file(s):" + string.Join(",", fileNames));
             if (files.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
-                foreach (var fileBytes in files.Files)
+                foreach (var fileBytes in topLevelFiles)
                 {
                     var stream = new MemoryStream(fileBytes.Data.ToByteArray());
 
-                    result.NotificationFiles[fileBytes.ServerRelativeUrl] = new FormFile(stream, 0, stream.Length, "file", "ICBC_Notifactions")
+                    result.NotificationFiles[fileBytes.ServerRelativeUrl] = new FormFile(stream, 0, stream.Length, "file", fileBytes.ServerRelativeUrl)
                     {
                         Headers = new HeaderDictionary(),
                         ContentType = "application/octet-stream"
                     };
                 }
-                Log.Logger.Information($"Successfully Fetched {result.NotificationFiles.Count} files from icbc S3 bucket");
+                Log.Logger.Information($"Successfully Fetched {result.NotificationFiles.Count} files from Rehab folder");
                 return result;
             }
             else
