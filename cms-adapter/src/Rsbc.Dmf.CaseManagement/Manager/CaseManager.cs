@@ -1199,6 +1199,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 { "DMF", 100000000 },
                 { "Remedial", 100000001 },
+                { "REM", 100000001 },
                 { "DIP", 100000002 },
             };
 

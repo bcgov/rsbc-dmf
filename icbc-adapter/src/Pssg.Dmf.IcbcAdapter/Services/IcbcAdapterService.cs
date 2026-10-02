@@ -53,6 +53,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
             var result = new DriverInfoReply();
             
             var reply = _icbcClient.GetDriverHistory(request.DriverLicence);
+            //if (result.LicenceNumber == request.DriverLicence)
             if (reply != null)
             {
                 result.AddressLine1 = reply.ToAddressLine1();
