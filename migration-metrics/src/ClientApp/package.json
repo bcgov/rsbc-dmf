@@ -27,7 +27,7 @@
     "bootstrap": "^5.2.3",
     "chart.js": "^4.3.0",
     "cookies": "^0.7.2",
-    "express": "^4.21.1",
+    "express": "^4.21.2",
     "jquery": "^3.6.3",
     "oidc-client": "^1.11.5",
     "popper.js": "^1.16.0",
