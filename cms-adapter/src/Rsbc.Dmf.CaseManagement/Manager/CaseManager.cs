@@ -1193,7 +1193,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="programArea"></param>
         /// <returns></returns>
-        private int TranslateProgramArea(string? programArea)
+        private int TranslateProgramArea(string programArea)
         {
             var statusMap = new Dictionary<string, int>()
             {
@@ -3779,7 +3779,10 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 programArea = TranslateProgramArea("Remedial");
             }
-            programArea = TranslateProgramArea(request.ProgramArea);
+            else
+            {
+                programArea = TranslateProgramArea(request.ProgramArea);
+            }
             incident newIncident = new incident()
             {
                 // Check the 
