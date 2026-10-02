@@ -286,7 +286,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 				.ToList();
 
 			var relativeUrls = topLevelFiles.Select(f => f.ServerRelativeUrl).ToList();
-			var fileNames = relativeUrls.Select(f => f.Replace(_dmerFolder + "/", ""));
+			var fileNames = relativeUrls.Select(f => f.Replace(_dmerFolder + "/", "")).Where(fn=> fn.Contains(".dat"));
 			Log.Logger.Information("Fetching DMER notification dat file(s):" + string.Join(",", fileNames));
 
 			if (files.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
