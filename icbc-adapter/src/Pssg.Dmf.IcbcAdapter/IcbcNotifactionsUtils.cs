@@ -82,7 +82,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     
                 }
             }
-            Log.Logger.Information($"Completed File Processing. Number of Rehab records successfully processed: {total}. Number of Rehab records with errors: {errors}. See cms logs for more details");
+            Log.Logger.Information($"Completed File Processing. Number of Rehab records successfully processed: {total}. Number of Rehab records with errors: {errors}. See cms logs for more details"); 
 
         }
 
