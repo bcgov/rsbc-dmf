@@ -12,6 +12,7 @@ using Pssg.Interfaces.Icbc.ViewModels;
 using Pssg.Interfaces.ViewModelExtensions;
 using System;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -110,7 +111,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
                 var responseJson = JsonConvert.SerializeObject(result);
                 if (_env.IsProduction())
-                    _logger.LogInformation("GetHistoryController successful for dl={DriversLicence}.", driversLicence);
+                    _logger.LogInformation("GetHistoryController successful for dl=xxxx{DriversLicence}.", driversLicence.Substring(driversLicence.Length - 4));
                 else
                     _logger.LogInformation("GetHistoryController successful for dl={DriversLicence}. Response JSON: {ResponseJson}", driversLicence, responseJson);
 
