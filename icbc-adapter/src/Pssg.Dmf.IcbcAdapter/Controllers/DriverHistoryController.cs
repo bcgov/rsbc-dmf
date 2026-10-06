@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pssg.Interfaces;
@@ -26,17 +24,15 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<DriverHistoryController> _logger;
         private readonly IIcbcClient _icbcClient;
-        private readonly IWebHostEnvironment _env;
         private readonly EnhancedIcbcApiUtils _enhancedIcbcUtils;
 
 
-        public DriverHistoryController(ILogger<DriverHistoryController> logger, IConfiguration configuration, IIcbcClient icbcClient, CaseManagerClient caseManagerClient, IMemoryCache memoryCache, IWebHostEnvironment env)
+        public DriverHistoryController(ILogger<DriverHistoryController> logger, IConfiguration configuration, IIcbcClient icbcClient, CaseManagerClient caseManagerClient, IMemoryCache memoryCache)
         {
             _cache = memoryCache;
             _configuration = configuration;
             _logger = logger;
             _icbcClient = icbcClient;
-            _env = env;
             _enhancedIcbcUtils = new EnhancedIcbcApiUtils(configuration, caseManagerClient, icbcClient);
         }
 
