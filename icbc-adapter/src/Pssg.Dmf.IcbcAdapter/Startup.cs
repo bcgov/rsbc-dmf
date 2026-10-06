@@ -482,6 +482,10 @@ namespace Rsbc.Dmf.IcbcAdapter
                 };
             });
 
+            var logLevel = Configuration["Logging_Level"] == "true"
+                ? LogEventLevel.Debug
+                : LogEventLevel.Information;
+
             // enable Splunk logger using Serilog
             if (!string.IsNullOrEmpty(Configuration["SPLUNK_COLLECTOR_URL"]) &&
                 !string.IsNullOrEmpty(Configuration["SPLUNK_TOKEN"])
@@ -495,6 +499,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 // Fix for bad SSL issues 
 
                 Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Is(logLevel)
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
                     .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
@@ -516,6 +521,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             else
             {
                 Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Is(logLevel)
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
                     .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
