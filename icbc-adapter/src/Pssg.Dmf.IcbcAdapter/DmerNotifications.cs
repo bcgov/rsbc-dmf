@@ -143,8 +143,9 @@ namespace Rsbc.Dmf.IcbcAdapter
 				try
 				{
 					await _documentStorageAdapterClient.MoveFileAsync(new MoveFileRequest() { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET", SourcePath = _dmerFolder, Destinationpath = _processedFolder, FileName = fileName });
+					movedCount++;
 
-				}
+                }
 				catch (Exception ex)
 				{
 					Log.Logger.Error($"Unable to move DMER file {_dmerFolder} to {_processedFolder}: {ex.Message}");
@@ -284,7 +285,8 @@ namespace Rsbc.Dmf.IcbcAdapter
 				})
 				.ToList();
 
-			var fileNames = topLevelFiles.Select(f => f.FileName).ToList();
+			var relativeUrls = topLevelFiles.Select(f => f.ServerRelativeUrl).ToList();
+			var fileNames = relativeUrls.Select(f => f.Replace(_dmerFolder + "/", "")).Where(fn=> fn.Contains(".dat"));
 			Log.Logger.Information("Fetching DMER notification dat file(s):" + string.Join(",", fileNames));
 
 			if (files.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)

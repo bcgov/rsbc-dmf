@@ -82,7 +82,8 @@ namespace Rsbc.Dmf.IcbcAdapter
                     
                 }
             }
-            Log.Logger.Information($"Successfully processed {total} cases with {errors} errors. See cms logs for more details");
+            Log.Logger.Information($"Completed File Processing. Number of Rehab records successfully processed: {total}. Number of Rehab records with errors: {errors}. See cms logs for more details"); 
+
         }
 
         public async Task RemoveFilesFromRehabFolder(IEnumerable<string> ServerRelativeUrl)
@@ -94,6 +95,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             if (result.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
                 Log.Logger.Information("Successfully Removed files from Rehab folder");
+                Log.Logger.Information($"Removed {request.ServerRelativeUrl.Count} Rehab files from ICBC S3 bucket");
             }
         }
 

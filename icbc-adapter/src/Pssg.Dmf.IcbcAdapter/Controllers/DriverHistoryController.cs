@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pssg.Interfaces;
@@ -10,6 +12,7 @@ using Pssg.Interfaces.Icbc.ViewModels;
 using Pssg.Interfaces.ViewModelExtensions;
 using System;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -23,15 +26,17 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<DriverHistoryController> _logger;
         private readonly IIcbcClient _icbcClient;
+        private readonly IWebHostEnvironment _env;
         private readonly EnhancedIcbcApiUtils _enhancedIcbcUtils;
 
 
-        public DriverHistoryController(ILogger<DriverHistoryController> logger, IConfiguration configuration, IIcbcClient icbcClient, CaseManagerClient caseManagerClient, IMemoryCache memoryCache)
+        public DriverHistoryController(ILogger<DriverHistoryController> logger, IConfiguration configuration, IIcbcClient icbcClient, CaseManagerClient caseManagerClient, IMemoryCache memoryCache, IWebHostEnvironment env)
         {
             _cache = memoryCache;
             _configuration = configuration;
             _logger = logger;
             _icbcClient = icbcClient;
+            _env = env;
             _enhancedIcbcUtils = new EnhancedIcbcApiUtils(configuration, caseManagerClient, icbcClient);
         }
 
@@ -51,7 +56,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 {
                     data.DR1MST.LNUM = driversLicence;
                 }
-                
+
                 // Key not in cache, so get data.
                 //cacheEntry = DateTime.Now;
                 if (data != null)
@@ -105,7 +110,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 result.DriverMasterStatus = data.DR1MST.ToViewModel();
 
                 var responseJson = JsonConvert.SerializeObject(result);
-                _logger.LogInformation("GetHistoryController successful for dl={DriversLicence}. Response JSON: {ResponseJson}", driversLicence, responseJson);
+                if (_env.IsProduction())
+                    _logger.LogInformation("GetHistoryController successful for dl=xxxx{DriversLicence}.", driversLicence.Substring(driversLicence.Length - 4));
+                else
+                    _logger.LogInformation("GetHistoryController successful for dl={DriversLicence}. Response JSON: {ResponseJson}", driversLicence, responseJson);
 
                 return Json(result);
             }
