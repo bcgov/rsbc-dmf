@@ -43,7 +43,6 @@ namespace Rsbc.Dmf.CaseManagement.Tools
             });
             services.AddDynamics(Configuration);
         }
-
-
+    }
 }
 
