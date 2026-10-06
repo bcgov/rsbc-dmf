@@ -482,7 +482,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 };
             });
 
-            var logLevel = Configuration["Logging_Level"] == "true"
+            var logLevel = Configuration["LOGGING_LEVEL"] == "true"
                 ? LogEventLevel.Debug
                 : LogEventLevel.Information;
 
