@@ -266,13 +266,14 @@ namespace Pssg.Interfaces
             catch (Exception e)
             {
                 _logger.LogError(e, "Failed to parse ICBC Full tombstone response data: {RawData}", rawData);
-                _logger.LogInformation("Failed to parse ICBC response for dl={DlNumber}.", dlNumber);
+                _logger.LogInformation("Failed to parse ICBC response for dl=xxxx{DlNumber}.", dlNumber.Substring(dlNumber.Length - 4));
                 icbcClient = null;
             }
             ClientResult result = null;
             if (icbcClient != null)
             {
-                _logger.LogInformation("ProcessDriverHistoryResponse - Successfully parsed ICBC response for dl={DlNumber}. Tombstone response data: {RawData}", dlNumber, rawData);
+                _logger.LogInformation("ProcessDriverHistoryResponse - Successfully parsed ICBC response for dl=xxxx{DlNumber}.", dlNumber.Substring(dlNumber.Length - 4));
+                _logger.LogDebug("ProcessDriverHistoryResponse - Successfully parsed ICBC response for dl={DlNumber}. Tombstone response data: {RawData}", dlNumber, rawData);
 
                 result = new ClientResult()
                 {

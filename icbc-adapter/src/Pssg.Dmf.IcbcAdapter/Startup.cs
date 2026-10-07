@@ -495,6 +495,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 // Fix for bad SSL issues 
 
                 Log.Logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(Configuration)
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
                     .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
@@ -516,6 +517,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             else
             {
                 Log.Logger = new LoggerConfiguration()
+                    .ReadFrom.Configuration(Configuration)
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
                     .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
