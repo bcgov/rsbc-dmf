@@ -3182,6 +3182,7 @@ namespace Rsbc.Dmf.CaseManagement
                 casetypecode = 2, // DMER
                 // set progress status to in queue, ready for review
                 dfp_progressstatus = 100000000,
+                dfp_programarea = TranslateProgramArea("DMF")
             };
 
             if (medicalType != null)
