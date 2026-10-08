@@ -113,7 +113,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             }
             else
             {
-                _logger.LogError("GetHistory failed for dl={DriversLicence}. No response received from ICBC - Network Error", driversLicence);
+                _logger.LogError("GetHistory failed for dl=xxxx{DriversLicence}. No response received from ICBC - Network Error", driversLicence.Substring(driversLicence.Length - 4));
+                _logger.LogDebug("GetHistory failed for dl={DriversLicence}. No response received from ICBC - Network Error", driversLicence);
                 return Json(null);
 
                 //
