@@ -13,6 +13,10 @@ import { apiDriverAllDocumentsGet$Json } from '../fn/driver/api-driver-all-docum
 import { ApiDriverAllDocumentsGet$Json$Params } from '../fn/driver/api-driver-all-documents-get-json';
 import { apiDriverAllDocumentsGet$Plain } from '../fn/driver/api-driver-all-documents-get-plain';
 import { ApiDriverAllDocumentsGet$Plain$Params } from '../fn/driver/api-driver-all-documents-get-plain';
+import { apiDriverCreateDriverPost$Json } from '../fn/driver/api-driver-create-driver-post-json';
+import { ApiDriverCreateDriverPost$Json$Params } from '../fn/driver/api-driver-create-driver-post-json';
+import { apiDriverCreateDriverPost$Plain } from '../fn/driver/api-driver-create-driver-post-plain';
+import { ApiDriverCreateDriverPost$Plain$Params } from '../fn/driver/api-driver-create-driver-post-plain';
 import { apiDriverDriverSessionGet$Json } from '../fn/driver/api-driver-driver-session-get-json';
 import { ApiDriverDriverSessionGet$Json$Params } from '../fn/driver/api-driver-driver-session-get-json';
 import { apiDriverDriverSessionGet$Plain } from '../fn/driver/api-driver-driver-session-get-plain';
@@ -23,6 +27,7 @@ import { apiDriverInfoDriverLicenceNumberSurCodeGet$Plain } from '../fn/driver/a
 import { ApiDriverInfoDriverLicenceNumberSurCodeGet$Plain$Params } from '../fn/driver/api-driver-info-driver-licence-number-sur-code-get-plain';
 import { Document } from '../models/document';
 import { Driver } from '../models/driver';
+import { DriverCreateRecordResponse } from '../models/driver-create-record-response';
 import { UserContext } from '../models/user-context';
 
 @Injectable({ providedIn: 'root' })
@@ -169,6 +174,53 @@ export class DriverService extends BaseService {
   apiDriverDriverSessionGet$Json(params?: ApiDriverDriverSessionGet$Json$Params, context?: HttpContext): Observable<UserContext> {
     return this.apiDriverDriverSessionGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<UserContext>): UserContext => r.body)
+    );
+  }
+
+  /** Path part for operation `apiDriverCreateDriverPost()` */
+  static readonly ApiDriverCreateDriverPostPath = '/api/Driver/CreateDriver';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiDriverCreateDriverPost$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiDriverCreateDriverPost$Plain$Response(params?: ApiDriverCreateDriverPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<DriverCreateRecordResponse>> {
+    return apiDriverCreateDriverPost$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiDriverCreateDriverPost$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiDriverCreateDriverPost$Plain(params?: ApiDriverCreateDriverPost$Plain$Params, context?: HttpContext): Observable<DriverCreateRecordResponse> {
+    return this.apiDriverCreateDriverPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<DriverCreateRecordResponse>): DriverCreateRecordResponse => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiDriverCreateDriverPost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiDriverCreateDriverPost$Json$Response(params?: ApiDriverCreateDriverPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<DriverCreateRecordResponse>> {
+    return apiDriverCreateDriverPost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiDriverCreateDriverPost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiDriverCreateDriverPost$Json(params?: ApiDriverCreateDriverPost$Json$Params, context?: HttpContext): Observable<DriverCreateRecordResponse> {
+    return this.apiDriverCreateDriverPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<DriverCreateRecordResponse>): DriverCreateRecordResponse => r.body)
     );
   }
 

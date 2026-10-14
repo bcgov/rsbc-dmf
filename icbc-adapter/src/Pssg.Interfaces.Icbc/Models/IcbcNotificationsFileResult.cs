@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pssg.Interfaces.Models
 {
-    public class IcbcNotificationsFileResult
+    public class RehabNotificationsFileResult
     {
         public Dictionary<string, IFormFile> NotificationFiles { get; set; }
     }

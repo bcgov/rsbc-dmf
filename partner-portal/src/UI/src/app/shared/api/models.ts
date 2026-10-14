@@ -15,6 +15,8 @@ export { CurrentLoginDetails } from './models/current-login-details';
 export { Document } from './models/document';
 export { DocumentSubType } from './models/document-sub-type';
 export { Driver } from './models/driver';
+export { DriverCreateRecordRequest } from './models/driver-create-record-request';
+export { DriverCreateRecordResponse } from './models/driver-create-record-response';
 export { DriverMedicals } from './models/driver-medicals';
 export { DriverStatus } from './models/driver-status';
 export { IgnitionInterlock } from './models/ignition-interlock';

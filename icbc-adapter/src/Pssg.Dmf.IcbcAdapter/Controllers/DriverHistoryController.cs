@@ -10,6 +10,7 @@ using Pssg.Interfaces.Icbc.ViewModels;
 using Pssg.Interfaces.ViewModelExtensions;
 using System;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -51,7 +52,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 {
                     data.DR1MST.LNUM = driversLicence;
                 }
-                
+
                 // Key not in cache, so get data.
                 //cacheEntry = DateTime.Now;
                 if (data != null)
@@ -105,7 +106,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 result.DriverMasterStatus = data.DR1MST.ToViewModel();
 
                 var responseJson = JsonConvert.SerializeObject(result);
-                _logger.LogInformation("GetHistoryController successful for dl={DriversLicence}. Response JSON: {ResponseJson}", driversLicence, responseJson);
+                    _logger.LogInformation("GetHistoryController successful for dl=xxxx{DriversLicence}.", driversLicence.Substring(driversLicence.Length - 4));
+                    _logger.LogDebug("GetHistoryController successful for dl={DriversLicence}. Response JSON: {ResponseJson}", driversLicence, responseJson);
 
                 return Json(result);
             }

@@ -1193,12 +1193,13 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="programArea"></param>
         /// <returns></returns>
-        private int TranslateProgramArea(string? programArea)
+        private int TranslateProgramArea(string programArea)
         {
             var statusMap = new Dictionary<string, int>()
             {
                 { "DMF", 100000000 },
                 { "Remedial", 100000001 },
+                { "REM", 100000001 },
                 { "DIP", 100000002 },
             };
 
@@ -3181,6 +3182,7 @@ namespace Rsbc.Dmf.CaseManagement
                 casetypecode = 2, // DMER
                 // set progress status to in queue, ready for review
                 dfp_progressstatus = 100000000,
+                dfp_programarea = TranslateProgramArea("DMF")
             };
 
             if (medicalType != null)
@@ -3778,7 +3780,10 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 programArea = TranslateProgramArea("Remedial");
             }
-            programArea = TranslateProgramArea(request.ProgramArea);
+            else
+            {
+                programArea = TranslateProgramArea(request.ProgramArea);
+            }
             incident newIncident = new incident()
             {
                 // Check the 

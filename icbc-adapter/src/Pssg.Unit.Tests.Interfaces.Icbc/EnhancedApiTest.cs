@@ -33,7 +33,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         DocumentStorageAdapter.DocumentStorageAdapterClient DocumentStorageAdapterClient { get; set; }
 
         EnhancedIcbcApiUtils enhancedIcbcApiUtils;
-        IcbcNotifactionsUtils icbcNotifactionsUtils;
+        RehabNotifactionsUtils icbcNotifactionsUtils;
         private const string FileBase64 = "MDEyMzQ1NjcwMTIzNDU2NzJTTUlUSEVORSAgICAgICAgICAgICAgICAgICAgICAgICAgIE1DQ0MgIDE5OTYtMDItMjYgICAgICAgICAgMjAxNy0wNS0wMzIwMTctMDUtMDMxNTAwMjAyNS0wNi0xMQ0KOTg3NjU0MzI5ODc2NTQzMjNHUkFZICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEZDQ0MgIDE5NjYtMDEtMDQgICAgICAgICAgMjAxMy0wNy0xOTIwMjUtMDMtMjAxNTAwMjAyNS0wNi0xMQ0KMTkyODM3NDYxOTI4Mzc0NjFBUkNISUJBTERFTlkgICAgICAgICAgICAgICAgICAgICAgIE1BRE1JTjE5OTktMDQtMjAyMDI5LTA0LTIwMjAyNC0wOC0yODIwMTktMDUtMTkxMzYwMjAyNS0wNi0xMQ0KNTY0NzM4Mjk1NjQ3MzgyOTJST0JCICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1BRE1JTjE5OTktMDctMDEyMDI2LTA3LTAxMjAyMS0wOS0wOTIwMjQtMDEtMTYxNTAwMjAyNS0wNi0xMQ0KMTEyMjMzNDQxMTIyMzM0NDJNT09SRVNZICAgICAgICAgICAgICAgICAgICAgICAgICAgIE1BRE1JTjIwMDQtMDctMTUgICAgICAgICAgMjAyMi0wNS0yNTIwMjAtMTItMDUxMDAwMjAyNS0wNi0xMQ0K";
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             flatFileUtils = new FlatFileUtils(Configuration, CaseManagerClient);
 
             enhancedIcbcApiUtils = new EnhancedIcbcApiUtils(Configuration, CaseManagerClient, IcbcClient);
-            icbcNotifactionsUtils = new IcbcNotifactionsUtils(Configuration, CaseManagerClient, DocumentStorageAdapterClient);
+            icbcNotifactionsUtils = new RehabNotifactionsUtils(Configuration, CaseManagerClient, DocumentStorageAdapterClient);
         }
 
         /// <summary>
@@ -350,7 +350,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public async Task ParseNotifacationFailPassAsync()
         {
-            var testRecords = await icbcNotifactionsUtils.ParseIcbcNotication(CreateTestFile());
+            var testRecords = await icbcNotifactionsUtils.ParseRehabNotication(CreateTestFile());
 
             Assert.Equal("01234567", testRecords.Records[0].LNUM);
             Assert.Equal("012345672", testRecords.Records[0].CLNO);
