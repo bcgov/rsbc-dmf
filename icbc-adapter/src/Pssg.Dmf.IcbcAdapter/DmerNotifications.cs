@@ -25,6 +25,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 		private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
 		private readonly string _processedFolder;
         private readonly string _dmerFolder;
+		private readonly string _dmerDocumentTypeCode = "001";
 
         // Fixed-width mapping based on DMETEXT record layout.
         private const int DmeRecordLength = 118;
@@ -40,11 +41,11 @@ namespace Rsbc.Dmf.IcbcAdapter
 			_documentStorageAdapterClient = documentStorageAdapterClient;
 			_processedFolder = _configuration["DMER_PROCESSED_FOLDER"] ?? "dmer/processed";
 			_dmerFolder = _configuration["DMER_FOlDER"]?? "dmer";
-		}
+        }
 
 		public async Task GetDMERNotificationsAndUpdateCase()
 		{
-			var notifactions = await GetDMERNotifications();
+            var notifactions = await GetDMERNotifications();
 			if (notifactions?.NotificationFiles?.Count > 0)
 			{
 				foreach (var notification in notifactions.NotificationFiles.Values)
@@ -75,7 +76,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 				DriverSurname = dmerCase.DriverSurname,
 				ProgramArea = "DMF",
 				DocumentOwner = "Team - Intake",
-				DocumentType = "DMER",
+				DocumentType = _dmerDocumentTypeCode,
 				MedicalIssueDate = Timestamp.FromDateTime(dmerCase.MedicalIssueDate)
             }, errors);
 		}
