@@ -163,7 +163,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                                 ClientNumber = string.Empty,
                                 BirthDate = Timestamp.FromDateTimeOffset(item.BirthDate ?? DateTimeOffset.MinValue),
                                 EffectiveDate = Timestamp.FromDateTimeOffset(item.EffectiveDate ?? DateTimeOffset.MinValue),
-                                MedicalType = medicalType
+                                MedicalType = medicalType,
+                                ProgramArea = "DMF"
                             };
 
                             var candidateCreation = caseManagerClient.ProcessLegacyCandidate(lcr);

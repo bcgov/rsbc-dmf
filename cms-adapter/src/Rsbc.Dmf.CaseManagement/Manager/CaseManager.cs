@@ -2962,7 +2962,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string MedicalType)
         {
-            await LegacyCandidateCreate(request, birthDate, effectiveDate, "Unknown", MedicalType);
+            await LegacyCandidateCreate(request, birthDate, effectiveDate, "Unknown", MedicalType, null);
         }
 
         /// <summary>
@@ -2972,7 +2972,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="birthDate"></param>
         /// <param name="effectiveDate"></param>
         /// <returns></returns>
-        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source, string medicalType)
+        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source, string medicalType, string programArea )
         {
             dfp_driver driver = null;
             contact driverContact;
@@ -3183,8 +3183,12 @@ namespace Rsbc.Dmf.CaseManagement
                 casetypecode = 2, // DMER
                 // set progress status to in queue, ready for review
                 dfp_progressstatus = 100000000,
-                dfp_programarea = TranslateProgramArea("DMF")
             };
+            if (!String.IsNullOrEmpty(programArea))
+            {
+                newIncident.dfp_programarea = TranslateProgramArea(programArea);
+            }
+
 
             if (medicalType != null)
             {
