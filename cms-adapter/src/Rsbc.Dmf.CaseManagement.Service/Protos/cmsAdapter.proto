@@ -586,6 +586,7 @@ message LegacyCandidateRequest{
 	google.protobuf.Timestamp birthDate = 4;
 	google.protobuf.Timestamp effectiveDate = 5;
 	string medicalType = 10;
+    string programArea = 11;
 }
 
 message LegacyCandidateReply{

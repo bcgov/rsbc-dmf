@@ -59,7 +59,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<Guid?> GetNewestCaseIdForDriver(LegacyCandidateSearchRequest request);
         Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string medicalType);
 
-        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source, string medicalType);
+        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source, string medicalType, string programArea);
 
         Task<ResultStatusReply> LinkLoginToDriver(Guid loginId, Guid driverId);
 
