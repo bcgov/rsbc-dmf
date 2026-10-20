@@ -124,7 +124,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 					
 				}
 			}
-			var logString = $"Completed processing DMER file '{sourceFile.FileName}'. \n >> {total} records processed successfully
+			var logString = $"Completed processing DMER file '{sourceFile.FileName}'. \n >> {total} records processed successfully";
 			if (errors > 0) {
 				logString += $"\n >> {errors} records with errors - See cms logs for more details";
 			}
