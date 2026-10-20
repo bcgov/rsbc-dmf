@@ -2,7 +2,7 @@
   "profiles": {
     "Rsbc.Dmf.CaseManagement.Service": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
+      "dotnetRunMessages": true,
       "launchBrowser": false,
       "applicationUrl": "https://localhost:4020",
       "environmentVariables": {
