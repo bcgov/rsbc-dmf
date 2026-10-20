@@ -120,11 +120,11 @@ namespace Rsbc.Dmf.IcbcAdapter
 				catch (Exception ex)
 				{
                     errors++;
-                    Log.Logger.Error($"Error processing DMER record in {sourceFile.FileName}: " + ex.Message);
+                    Log.Logger.Error($"Error processing DMER record in '{sourceFile.FileName}': " + ex.Message);
 					
 				}
 			}
-            Log.Logger.Information($"Completed Processing {sourceFile.FileName}. \n >> {total} records processed. \n >> {errors} records with errors - See cms logs for more details");
+            Log.Logger.Information($"Completed Processing '{sourceFile.FileName}'. \n >> {total} records processed. \n >> {errors} records with errors - See cms logs for more details");
         }
 
 
@@ -140,11 +140,11 @@ namespace Rsbc.Dmf.IcbcAdapter
 			try
 			{
 				await _documentStorageAdapterClient.MoveFileAsync(new MoveFileRequest() { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET", SourcePath = _dmerFolder, Destinationpath = _processedFolder, FileName = fileName });
-				Log.Logger.Information($"Moved DMER file{fileName} to {_processedFolder}");
+				Log.Logger.Information($"Moved DMER file '{fileName}' to '{_processedFolder}'");
 			}
 			catch (Exception ex)
 			{
-				Log.Logger.Error($"Unable to move DMER file {fileName} to {_processedFolder}: {ex.Message}");
+				Log.Logger.Error($"Unable to move DMER file '{fileName}' to '{_processedFolder}': {ex.Message}");
 			}
 		}
 
@@ -153,7 +153,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 		{
 			var result = new DMERParseResult();
 
-            Log.Logger.Information("Parsing DMER notification dat file " + file.FileName);
+            Log.Logger.Information($"Parsing DMER file '{file.FileName}'...");
 
             if (file == null || file.Length == 0)
 			{
@@ -202,7 +202,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 						{
 							result.Errors++;
 
-							Log.Logger.Warning("Error parsing DMER Line Number: " + lineNumber + "\n Record: " + record + "\n Invalid values: " + validationErrors);
+							Log.Logger.Warning($"Error parsing DMER File '{file.FileName}' >> Line Number: " + lineNumber + "\n >>> Record: " + record + "\n >>>> Invalid values: " + validationErrors);
 						}
 					}
 					else
