@@ -124,7 +124,11 @@ namespace Rsbc.Dmf.IcbcAdapter
 					
 				}
 			}
-            Log.Logger.Information($"Completed Processing '{sourceFile.FileName}'. \n >> {total} records processed. \n >> {errors} records with errors - See cms logs for more details");
+			var logString = $"Completed processing DMER file '{sourceFile.FileName}'. \n >> {total} records processed successfully
+			if (errors > 0) {
+				logString += $"\n >> {errors} records with errors - See cms logs for more details";
+			}
+            Log.Logger.Information(logString);
         }
 
 
@@ -233,7 +237,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
 			if (string.IsNullOrWhiteSpace(record.MedicalType))
 			{
-				errors += "\nMedical Type: " + record.MedicalType;
+				errors += $"\n >>>>> Medical Type: '{record.MedicalType}'";
 			}
 
 			return string.IsNullOrEmpty(errors) ? null : errors;
