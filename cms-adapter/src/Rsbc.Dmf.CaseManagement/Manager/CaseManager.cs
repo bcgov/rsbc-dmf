@@ -376,6 +376,7 @@ namespace Rsbc.Dmf.CaseManagement
         private readonly IMapperAsync<incident, CaseDetail> _caseMapper;
         private readonly Dictionary<string, Guid> OutcomeStatusTypes;
         private readonly Dictionary<Guid, Dictionary<string, Guid>> OutcomeSubStatusTypes;
+        private readonly string DMERDocumentTypeCode = "001";
 
         public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger, IMapper mapper, IMapperAsync<incident, CaseDetail> caseMapper)
         {
@@ -3182,6 +3183,7 @@ namespace Rsbc.Dmf.CaseManagement
                 casetypecode = 2, // DMER
                 // set progress status to in queue, ready for review
                 dfp_progressstatus = 100000000,
+                dfp_programarea = TranslateProgramArea("DMF")
             };
 
             if (medicalType != null)
@@ -6038,8 +6040,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             var dmerEntity = dynamicsContext.incidents
                 .ByKey(parsedCaseId)
-                .Expand(x => x.bcgov_incident_bcgov_documenturl)
-                .GetValue();
+                .Expand("bcgov_incident_bcgov_documenturl($expand=dfp_DocumentTypeID)").GetValue();
 
             if (dmerEntity == null)
             {
@@ -6047,6 +6048,12 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             var documentTypeId = GetDocumentType(null, request.DocumentType, null);
+            if (dmerEntity.bcgov_incident_bcgov_documenturl.Any(x => x.dfp_submittalstatus == (int)submittalStatusOptionSet.OpenRequired && x.dfp_DocumentTypeID?.dfp_code == DMERDocumentTypeCode))
+            {
+                Log.Information($"Case {request.CaseId} with document type DMER and document status Open Required already exists. The document is not added.");
+                return;
+            }
+            
 
             var driver = dynamicsContext.dfp_drivers
                     .Where(x => x.dfp_licensenumber == request.DriverLicenseNumber && x.statecode == 0)
