@@ -458,7 +458,9 @@ namespace Rsbc.Dmf.Scheduler
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
-                    .Filter.ByExcluding(Matching.FromSource("Microsoft.AspNetCore.Cors"))
+                    .Filter.ByExcluding(logEvent =>
+                            Matching.FromSource("Microsoft.AspNetCore.Cors")(logEvent) &&
+                            logEvent.MessageTemplate.Text == "CORS policy execution successful.")
                     .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
                     .WriteTo.EventCollector(Configuration["SPLUNK_COLLECTOR_URL"],
                         sourceType: "scheduler-service", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
@@ -480,7 +482,9 @@ namespace Rsbc.Dmf.Scheduler
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
-                    .Filter.ByExcluding(Matching.FromSource("Microsoft.AspNetCore.Cors"))
+                    .Filter.ByExcluding(logEvent =>
+                            Matching.FromSource("Microsoft.AspNetCore.Cors")(logEvent) &&
+                            logEvent.MessageTemplate.Text == "CORS policy execution successful.")
                     .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
                     .CreateLogger();
             }
@@ -639,4 +643,4 @@ namespace Rsbc.Dmf.Scheduler
 
 
 
-    }
+}
