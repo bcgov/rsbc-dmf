@@ -20,6 +20,7 @@ using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Exceptions;
+using Serilog.Filters;
 using Serilog.Sinks.Splunk;
 using System;
 using System.Net;
@@ -457,7 +458,8 @@ namespace Rsbc.Dmf.Scheduler
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
-                    .WriteTo.Console()
+                    .Filter.ByExcluding(Matching.FromSource("Microsoft.AspNetCore.Cors"))
+                    .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
                     .WriteTo.EventCollector(Configuration["SPLUNK_COLLECTOR_URL"],
                         sourceType: "scheduler-service", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
                         restrictedToMinimumLevel: LogEventLevel.Information,
@@ -478,7 +480,8 @@ namespace Rsbc.Dmf.Scheduler
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
-                    .WriteTo.Console()
+                    .Filter.ByExcluding(Matching.FromSource("Microsoft.AspNetCore.Cors"))
+                    .WriteTo.Console(outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
                     .CreateLogger();
             }
             Log.Logger.Information("Scheduler Container Started");
