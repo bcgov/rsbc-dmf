@@ -458,6 +458,10 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
+        public Task<DmerRecords> GetDmerRecords(DmerRecordsRequest request)
+        {
+            throw new NotImplementedException();
+        }
 
     }
 

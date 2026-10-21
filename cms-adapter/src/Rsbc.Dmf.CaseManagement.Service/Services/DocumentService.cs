@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using Rsbc.Dmf.CaseManagement.Dynamics.Mapper;
+using System.Configuration;
+using System.Runtime.CompilerServices;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -102,10 +104,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
-        public async override Task<GetDmerReply> GetDmer(CaseIdRequest request, ServerCallContext context) 
+        public async override Task<GetDmerReply> GetDmer(CaseIdRequest request, ServerCallContext context)
         {
             var result = new GetDmerReply();
-            
+
             try {
                 var caseId = Guid.Parse(request.CaseId);
                 var dmerCase = _documentManager.GetDmer(caseId);
@@ -120,7 +122,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                 result.Item = mappedDocument;
                 result.ResultStatus = ResultStatus.Success;
-   
+
             }
             catch (Exception ex)
             {
@@ -172,7 +174,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
- 
+
         public async override Task<UpdateClaimReply> UpdateUnClaimDmer(UpdateClaimRequest request, ServerCallContext context)
         {
             var result = new UpdateClaimReply();
@@ -220,5 +222,19 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return reply;
         }
+
+
+        public async override Task<GetDmerRecordsReply> GetDmerRecords(GetDmerRecordsRequest request, ServerCallContext context)
+        {
+            var  reply = new GetDmerRecordsReply();
+            var result = await _documentManager.GetDmerRecords(new DmerRecordsRequest
+            {
+                Queue = request.Queue,
+                PageSize = request.PageSize,
+                Cursor = request.Cursor
+            });
+            return reply;
+        }
+
     } 
 }

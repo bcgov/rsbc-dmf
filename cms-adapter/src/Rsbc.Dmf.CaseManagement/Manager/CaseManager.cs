@@ -90,6 +90,17 @@ namespace Rsbc.Dmf.CaseManagement
         public bool showOnPortals { get; set; }
     }
 
+    public class DmerRecordsRequest
+    {
+        public string Queue { get; set; }
+        public int PageSize { get; set; }
+        public int Cursor { get; set; }
+    }
+
+    public class DmerRecords
+    {
+    }
+
     public class CreateStatusReply
     {
         public string Id;
