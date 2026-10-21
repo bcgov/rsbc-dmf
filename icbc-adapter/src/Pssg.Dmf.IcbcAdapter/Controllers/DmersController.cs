@@ -27,15 +27,15 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class DmerController : Controller
+    public class DmersController : Controller
     {
         private readonly IConfiguration _configuration;
-        private readonly ILogger<DmerController> _logger;
+        private readonly ILogger<DmersController> _logger;
 
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
 
-        public DmerController(IConfiguration configuration, ILogger<DmerController> logger, IServiceScopeFactory serviceScopeFactory)
+        public DmersController(IConfiguration configuration, ILogger<DmersController> logger, IServiceScopeFactory serviceScopeFactory)
         {
            _configuration = configuration;
            _logger = logger;
@@ -46,12 +46,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
 
     /// <summary>
-    /// GET: /Dmer/batch?queueType=QueueA&pageSize=50&cursor=0
+    /// GET: /dmers?queueType=QueueA&pageSize=50&cursor=0
     /// </summary>
     /// <param name="queue">Queue to pull uploaded DMER files from</param>
     /// <param name="pageSize">Maximum number of records to return</param>
     /// <param name="cursor">Zero-based offset of the first record in the page</param>
-    [HttpGet("batch")]
+    [HttpGet("")]
     [Produces("application/json")]
     public ActionResult GetDmerBatch(
         [FromQuery, BindRequired] DmerQueueType queue, 
@@ -62,8 +62,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
             using var scope = _serviceScopeFactory.CreateScope();
             var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
-            var dmerRecordsRequest = new DmerRecordsRequest(queue, pageSize, cursor); // defined in .proto of cms adapter
-            var dmerRecordsResults = caseManagerClient.GetDmerRecords(dmerRecordsRequest); //calls method of other app directly with gRPC, defined in .proto of cms adapter. 
+            // var dmerRecordsRequest = new DmerRecordsRequest(queue, pageSize, cursor); // defined in .proto of cms adapter
+            // var dmerRecordsResults = caseManagerClient.GetDmerRecords(dmerRecordsRequest); //calls method of other app directly with gRPC, defined in .proto of cms adapter. 
                 
             return Ok();
         }
