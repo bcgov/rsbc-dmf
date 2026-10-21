@@ -38,7 +38,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         public DmerController(IConfiguration configuration, ILogger<DmerController> logger, IServiceScopeFactory serviceScopeFactory)
         {
            _configuration = configuration;
-           _logger = logger
+           _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
 
         }
