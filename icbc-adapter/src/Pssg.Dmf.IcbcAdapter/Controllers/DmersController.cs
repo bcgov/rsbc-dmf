@@ -40,9 +40,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
            _configuration = configuration;
            _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
-
         }
-
 
 
     /// <summary>
