@@ -25,6 +25,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         UNKNOWN_DLS
     }
 
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class DmersController : Controller
