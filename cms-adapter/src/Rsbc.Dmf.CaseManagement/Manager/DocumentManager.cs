@@ -293,7 +293,7 @@ namespace Rsbc.Dmf.CaseManagement
                     .Expand(doc => doc.bcgov_CaseId)
                     .Expand(doc => doc.bcgov_CaseId.customerid_contact)
                     .Expand(doc => doc.dfp_LoginId)
-                    .Where(doc => 
+                    .Where(doc =>
                         doc.dfp_DocumentTypeID.dfp_code == documentTypeCode
                         && doc.dfp_LoginId.dfp_loginid == loginId
                     ));
@@ -304,13 +304,13 @@ namespace Rsbc.Dmf.CaseManagement
 
         public Document GetDmer(Guid caseId)
         {
-           
+
 
             var dmerdocumentsList = dynamicsContext.bcgov_documenturls
                 .Expand(doc => doc.bcgov_CaseId)
                 .Expand(doc => doc.dfp_DocumentTypeID)
                 .Expand(doc => doc.dfp_LoginId)
-                .Where(doc => doc.bcgov_CaseId.incidentid == caseId && doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] 
+                .Where(doc => doc.bcgov_CaseId.incidentid == caseId && doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"]
                  && (doc.dfp_submittalstatus == (int)submittalStatusOptionSet.OpenRequired || doc.dfp_submittalstatus == (int)submittalStatusOptionSet.NonComply)) // Verify the documents have Open required or Non Comply Documents
                 .FirstOrDefault();
 
@@ -329,7 +329,7 @@ namespace Rsbc.Dmf.CaseManagement
             if (request.SubmittalStatus != default)
             {
                 document.dfp_submittalstatus = request.SubmittalStatus;
-               
+
             }
 
             document.dfp_dpspriority = TranslatePriorityCode(request.DpsPriority);
@@ -354,7 +354,7 @@ namespace Rsbc.Dmf.CaseManagement
             };
 
             var loggedinUser = dynamicsContext.dfp_logins
-                .Where(login => login.dfp_loginid ==  loginId)
+                .Where(login => login.dfp_loginid == loginId)
                 .FirstOrDefault();
 
             var querydocument = dynamicsContext.bcgov_documenturls
@@ -375,7 +375,7 @@ namespace Rsbc.Dmf.CaseManagement
             return _mapper.Map<Document>(querydocument);
         }
 
-   
+
         public Document UpdateUnClaimDmer(Guid loginId, Guid documentId)
         {
             ResultStatusReply result = new ResultStatusReply()
@@ -395,7 +395,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                 dynamicsContext.SetLink(querydocument, nameof(bcgov_documenturl.dfp_LoginId), null);
 
-               
+
             }
 
             //dynamicsContext.UpdateObject(querydocument);
@@ -419,7 +419,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(d => d.dfp_DocumentTypeID)
                 .Expand(sd => sd.dfp_DocumentSubType)
                 .Expand(d => d.bcgov_CaseId)
-                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)EntityState.Active && d.dfp_showonportals !=  false )
+                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)EntityState.Active && d.dfp_showonportals != false)
             .ToList();
 
             return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
@@ -439,21 +439,15 @@ namespace Rsbc.Dmf.CaseManagement
                     .GroupBy(d => d._dfp_driverid_value)
                     .Select(g => g.FirstOrDefault()).ToList();
 
-                var dmerRecords = _mapper.Map<List<DmerRecords>>(driverDocuments);
+            var dmerRecords = _mapper.Map<List<DmerRecords>>(driverDocuments);
 
 
-                foreach (var document in dmerRecords)
-                {
-                    document.Driver.Documents = await GetDriverDocumentsForDriver(document.Driver.DriverId);
-                }
-
-                return dmerRecords;
-            } catch(Exception ex)
+            foreach (var document in dmerRecords)
             {
-                Console.WriteLine(ex);
-                return null;
+                document.Driver.Documents = await GetDriverDocumentsForDriver(document.Driver.DriverId);
             }
 
+            return dmerRecords;
 
         }
 

@@ -92,7 +92,6 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class DmerRecordsRequest
     {
-        public string Queue { get; set; }
         public int PageSize { get; set; }
         public int Cursor { get; set; }
     }
