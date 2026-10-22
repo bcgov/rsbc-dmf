@@ -128,7 +128,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string FileName { get; set; }
         public string DocumentType { get; set; }
         public string DocumentStatus { get; set; }
-        public DateTime? UploadedDate { get; set; }
+        public DateTimeOffset? UploadedDate { get; set; }
         public string DocumentUrl { get; set; }
     }
 

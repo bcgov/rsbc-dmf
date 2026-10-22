@@ -459,8 +459,9 @@ namespace Rsbc.Dmf.CaseManagement
 
         private async Task<List<DriverDocument>> GetDriverDocumentsForDriver(string driverId)
         {
+            var driverGuid = Guid.Parse(driverId);
             var driverDocuments = dynamicsContext.bcgov_documenturls
-                .Where(d => d._dfp_driverid_value.ToString() == driverId && d.statecode == (int)EntityState.Active)
+                .Where(d => d._dfp_driverid_value == driverGuid && d.statecode == (int)EntityState.Active)
                 .ToList();
             return _mapper.Map<List<DriverDocument>>(driverDocuments);
         }
@@ -523,4 +524,3 @@ namespace Rsbc.Dmf.CaseManagement
     }
 
 }
-
