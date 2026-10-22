@@ -431,13 +431,13 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 var driverDocuments = dynamicsContext.bcgov_documenturls
                     .Expand(d => d.dfp_DriverId)
+                    .Expand(d => d.dfp_DocumentTypeID)
                     .Expand(d => d.bcgov_CaseId)
                     .Where(d => d.dfp_DriverId != null)
+                    .Take(request.PageSize)
                     .ToList()
                     .GroupBy(d => d._dfp_driverid_value)
-                    .Select(g => g.FirstOrDefault())
-                    .Take(request.PageSize)
-                    .ToList();
+                    .Select(g => g.FirstOrDefault()).ToList();
 
                 var dmerRecords = _mapper.Map<List<DmerRecords>>(driverDocuments);
 

@@ -59,14 +59,14 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
 
                 CreateMap<bcgov_documenturl, DmerRecords>()
                     .ForMember(dest => dest.DocumentRecordId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
-                    .ForMember(dest => dest.Queue, opt => opt.MapFrom(src => src.dfp_queue))
+                    .ForMember(dest => dest.Queue, opt => opt.MapFrom(src => TranslateQueue(src.dfp_queue)))
+                    .ForMember(dest => dest.DocumentName, opt => opt.MapFrom(src => src.bcgov_filename))
                     .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_name))
                     .ForMember(dest => dest.DocumentStatus, opt => opt.MapFrom(src => TranslateSubmittalStatus(src.dfp_submittalstatus)))
-                    .ForMember(dest => dest.DocumentPriority, opt => opt.MapFrom(src => src.dfp_priority))
-                    //.ForMember(dest => dest.ReceivedDate, opt => opt.MapFrom(src => src.dfp_faxreceiveddate ?? src.createdon))
+                    .ForMember(dest => dest.DocumentPriority, opt => opt.MapFrom(src => TranslatePriority(src.dfp_priority)))
+                    .ForMember(dest => dest.ReceivedDate, opt => opt.MapFrom(src => src.dfp_faxreceiveddate.HasValue? src.dfp_faxreceiveddate.Value.DateTime : src.createdon.Value.DateTime))
                     .ForMember(dest => dest.DocumentTypeBusinessArea, opt => opt.MapFrom(src => ConvertBusinessAreaToString(src.dfp_DocumentTypeID.dfp_businessarea)))
-                    .ForMember(dest => dest.Queue, opt => opt.MapFrom(src => src.dfp_queue))
                     .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateDmerStatus(src.dfp_dmertype)))
                     .ForMember(dest => dest.Driver, opt => opt.MapFrom(src => src.dfp_DriverId))
                     .ForMember(dest => dest.CaseRecord, opt => opt.MapFrom(src => src.bcgov_CaseId))
@@ -139,6 +139,38 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     default:
                         return "Submitted";
                 }
+            }
+
+            private static string TranslatePriority(int? priority)
+            {
+                if (priority == null)
+                    return string.Empty;
+
+                return priority switch
+                {
+                    100000000 => "Regular",
+                    100000001 => "Urgent / Immediate",
+                    100000002 => "Expedited",
+                    100000003 => "Critical Review",
+                    _ => string.Empty
+                };
+            }
+
+            private static string TranslateQueue(int? queue)
+            {
+                if (queue == null)
+                    return string.Empty;
+
+                return queue switch
+                {
+                    100000000 => "Team - Intake",
+                    100000001 => "Team - Adjudicators",
+                    100000002 => "Team - Case Managers",
+                    100000003 => "Team - DIP Team Lead",
+                    100000004 => "Team - Remedial Intake",
+                    100000005 => "Team - DIP Adjudicators",
+                    _ => string.Empty
+                };
             }
         }
 
