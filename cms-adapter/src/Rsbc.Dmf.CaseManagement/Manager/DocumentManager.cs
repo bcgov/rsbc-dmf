@@ -415,13 +415,23 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 var driverDocuments = dynamicsContext.bcgov_documenturls
                     .Expand(d => d.dfp_DriverId)
-                    .Expand(d => d.dfp_DriverId.dfp_driver_dfp_pdfdocument)
-                    .Expand("dfp_DriverId($expand=dfp_driver_dfp_pdfdocument)")
+                    .Expand(d => d.bcgov_CaseId)
                     .Where(d => d.dfp_DriverId != null)
-
+                    .ToList()
+                    .GroupBy(d => d._dfp_driverid_value)
+                    .Select(g => g.FirstOrDefault())
                     .Take(request.PageSize)
                     .ToList();
-                return _mapper.Map<List<DmerRecords>>(driverDocuments);
+
+                var dmerRecords = _mapper.Map<List<DmerRecords>>(driverDocuments);
+
+
+                foreach (var document in dmerRecords)
+                {
+                    document.Driver.Documents = await GetDriverDocumentsForDriver(document.Driver.DriverId);
+                }
+
+                return dmerRecords;
             } catch(Exception ex)
             {
                 Console.WriteLine(ex);
@@ -429,6 +439,14 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
 
+        }
+
+        private async Task<List<DriverDocument>> GetDriverDocumentsForDriver(string driverId)
+        {
+            var driverDocuments = dynamicsContext.bcgov_documenturls
+                .Where(d => d._dfp_driverid_value.ToString() == driverId && d.statecode == (int)EntityState.Active)
+                .ToList();
+            return _mapper.Map<List<DriverDocument>>(driverDocuments);
         }
 
 
