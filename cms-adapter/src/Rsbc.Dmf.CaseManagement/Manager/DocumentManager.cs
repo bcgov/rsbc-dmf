@@ -14,6 +14,22 @@ using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
+    public class DmerDocumentFile
+    {
+        public string DocumentRecordId { get; set; }
+        public string Queue { get; set; }
+        public string DocumentName { get; set; }
+        public string DocumentUrl { get; set; }
+        public string DocumentType { get; set; }
+        public string DocumentStatus { get; set; }
+        public string DocumentPriority { get; set; }
+        public DateTimeOffset? ReceivedDate { get; set; }
+        public string DocumentTypeBusinessArea { get; set; }
+        public string DmerStatus { get; set; }
+        public DriverInfo Driver { get; set; }
+        public CaseRecord CaseRecord { get; set; }
+    }
+
     internal class DocumentManager : DocumentMapper, IDocumentManager
     {
         internal readonly DynamicsContext dynamicsContext;
@@ -415,8 +431,8 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 var driverDocuments = dynamicsContext.bcgov_documenturls
                     .Expand(d => d.dfp_DriverId)
-                    .Expand(d => d.dfp_DriverId.dfp_driver_dfp_pdfdocument)
-                    .Expand("dfp_DriverId($expand=dfp_driver_dfp_pdfdocument)")
+                    // .Expand(d => d.dfp_DriverId.dfp_driver_dfp_pdfdocument)
+                    // .Expand("dfp_DriverId($expand=dfp_driver_dfp_pdfdocument)")
                     .Where(d => d.dfp_DriverId != null)
 
                     .Take(request.PageSize)
@@ -489,5 +505,4 @@ namespace Rsbc.Dmf.CaseManagement
     }
 
 }
-
 

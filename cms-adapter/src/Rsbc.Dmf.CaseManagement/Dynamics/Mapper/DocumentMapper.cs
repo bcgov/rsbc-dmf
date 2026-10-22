@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
+
 namespace Rsbc.Dmf.CaseManagement.Dynamics
 {
     public class DocumentMapper
@@ -57,8 +58,8 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .AddTransform(NullStringConverter);
 
                 CreateMap<bcgov_documenturl, DmerRecords>()
-                    .ForMember(dest => dest.DpsId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
-                    .ForMember(dest => dest.DpsQueue, opt => opt.MapFrom(src => src.dfp_queue))
+                    .ForMember(dest => dest.DocumentRecordId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
+                    .ForMember(dest => dest.Queue, opt => opt.MapFrom(src => src.dfp_queue))
                     .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_name))
                     .ForMember(dest => dest.DocumentStatus, opt => opt.MapFrom(src => TranslateSubmittalStatus(src.dfp_submittalstatus)))
@@ -71,6 +72,9 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.CaseRecord, opt => opt.MapFrom(src => src.bcgov_CaseId))
                     .AddTransform(NullStringConverter);
 
+
+                CreateMap<DmerRecords, DmerDocumentFile>()
+                    .AddTransform(NullStringConverter);
                
 
             }
