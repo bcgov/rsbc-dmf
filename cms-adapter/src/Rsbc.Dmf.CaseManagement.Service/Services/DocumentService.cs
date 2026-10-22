@@ -229,13 +229,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var  reply = new GetDmerRecordsReply();
             var result = await _documentManager.GetDmerRecords(new DmerRecordsRequest
             {
-                Queue = request.Queue,
                 PageSize = request.PageSize,
                 Cursor = request.Cursor
             });
             var documents = _mapper.Map<IEnumerable<DmerDocumentFile>>(result);
             reply.Items.AddRange(documents);
-            reply.ResultStatus = ResultStatus.Success;
+
+            reply.ResultStatus = result == null ? ResultStatus.Success : ResultStatus.Fail;
             return reply;
         }
 

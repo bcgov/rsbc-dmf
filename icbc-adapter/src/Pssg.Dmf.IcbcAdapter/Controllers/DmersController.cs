@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -53,17 +54,21 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
     [HttpGet("")]
     [Produces("application/json")]
     public ActionResult GetDmerBatch(
-        [FromQuery, BindRequired] DmerQueueType queue, 
         [FromQuery, Range(1, 500)] int pageSize = 50,
         [FromQuery, Range(0, int.MaxValue)] int cursor = 0)
         {
-            Console.WriteLine($"GetDmerBatch parameters: queue={queue}, pageSize={pageSize}, cursor={cursor}");
+            Console.WriteLine($"GetDmerBatch parameters: , pageSize={pageSize}, cursor={cursor}");
 
             using var scope = _serviceScopeFactory.CreateScope();
             var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
-            var dmerRecordsRequest = new GetDmerRecordsRequest { Queue = queue.ToString(), PageSize = pageSize, Cursor = cursor }; 
+            var dmerRecordsRequest = new GetDmerRecordsRequest {PageSize = pageSize, Cursor = cursor }; 
             var dmerRecordsResults = documentManagerClient.GetDmerRecords(dmerRecordsRequest);
-                
+            
+            if (dmerRecordsResults.ResultStatus.Equals(ResultStatus.Fail))
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, dmerRecordsResults);
+            }
+
             return Json(dmerRecordsResults);
         }
     }
