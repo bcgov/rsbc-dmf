@@ -108,7 +108,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
         {
             var result = new GetDmerReply();
 
-            try {
+            try
+            {
                 var caseId = Guid.Parse(request.CaseId);
                 var dmerCase = _documentManager.GetDmer(caseId);
                 if (dmerCase == null)
@@ -226,18 +227,31 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
         public async override Task<GetDmerRecordsReply> GetDmerRecords(GetDmerRecordsRequest request, ServerCallContext context)
         {
-            var  reply = new GetDmerRecordsReply();
-            var result = await _documentManager.GetDmerRecords(new DmerRecordsRequest
-            {
-                PageSize = request.PageSize,
-                Cursor = request.Cursor
-            });
-            var documents = _mapper.Map<IEnumerable<DmerDocumentFile>>(result);
-            reply.Items.AddRange(documents);
+            var reply = new GetDmerRecordsReply();
 
-            reply.ResultStatus = result == null ? ResultStatus.Success : ResultStatus.Fail;
+            try
+            {
+                var result = await _documentManager.GetDmerRecords(new DmerRecordsRequest
+                {
+                    PageSize = request.PageSize,
+                    Cursor = request.Cursor
+                });
+
+                var documents = _mapper.Map<IEnumerable<DmerDocumentFile>>(result);
+                reply.Items.AddRange(documents);
+                reply.ResultStatus = ResultStatus.Success;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+
             return reply;
         }
 
-    } 
+    }
 }

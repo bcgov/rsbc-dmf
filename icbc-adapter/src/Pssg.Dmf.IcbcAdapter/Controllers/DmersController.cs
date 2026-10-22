@@ -57,7 +57,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [FromQuery, Range(1, 500)] int pageSize = 50,
         [FromQuery, Range(0, int.MaxValue)] int cursor = 0)
         {
-            Console.WriteLine($"GetDmerBatch parameters: , pageSize={pageSize}, cursor={cursor}");
 
             using var scope = _serviceScopeFactory.CreateScope();
             var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
