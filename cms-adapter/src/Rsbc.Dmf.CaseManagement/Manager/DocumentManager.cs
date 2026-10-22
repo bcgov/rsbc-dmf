@@ -23,7 +23,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string DocumentType { get; set; }
         public string DocumentStatus { get; set; }
         public string DocumentPriority { get; set; }
-        public DateTimeOffset? ReceivedDate { get; set; }
+        public string ReceivedDate { get; set; }
         public string DocumentTypeBusinessArea { get; set; }
         public string DmerStatus { get; set; }
         public DriverInfo Driver { get; set; }
@@ -427,9 +427,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task<List<DmerRecords>> GetDmerRecords(DmerRecordsRequest request)
         {
-            try
-            {
-                var driverDocuments = dynamicsContext.bcgov_documenturls
+            var driverDocuments = dynamicsContext.bcgov_documenturls
                     .Expand(d => d.dfp_DriverId)
                     .Expand(d => d.dfp_DocumentTypeID)
                     .Expand(d => d.bcgov_CaseId)
