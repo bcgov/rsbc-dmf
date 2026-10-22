@@ -763,7 +763,48 @@ message LegacyDocument {
 message GetDmerRecordsReply {
     ResultStatus resultStatus = 1;
     string errorDetail = 2;
-    repeated DmerCase items = 3;
+    repeated DmerDocumentFile items = 3;
+}
+
+message DmerDocumentFile {
+    string documentRecordId = 1;
+    string queue = 2;
+    string documentName = 3;
+    string documentUrl = 4;
+    string documentType = 5;
+    string documentStatus = 6;
+    string documentPriority = 7;
+    google.protobuf.Timestamp receivedDate = 8;
+    string documentTypeBusinessArea = 9;
+    string dmerStatus = 10;
+    DriverInfo driver = 11;
+    CaseRecordProto caseRecord = 12;
+}
+
+message CaseRecordProto {
+    string caseId = 1;
+    string caseTitle = 2;
+    string caseType = 3;
+    string casePriority = 4;
+    string caseOwner = 5;
+    string caseStatus = 6;
+}
+
+message DriverDocument {
+    string fileName = 1;
+    string documentType = 2;
+    string documentStatus = 3;
+    google.protobuf.Timestamp uploadedDate = 4;
+    string documentUrl = 5;
+}
+
+message DriverInfo {
+    string driverId = 1;
+    string firstName = 2;
+    string middleName = 3;
+    string lastName = 4;
+    string licenceNumber = 5;
+    repeated DriverDocument documents = 6;
 }
 
 message GetDmerRecordsRequest {

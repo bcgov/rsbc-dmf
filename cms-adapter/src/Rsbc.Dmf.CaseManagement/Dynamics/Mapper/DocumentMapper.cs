@@ -55,7 +55,24 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.FaxReceivedDate, opt => opt.MapFrom(src => src.dfp_faxreceiveddate.GetValueOrDefault()))
                     .ForMember(dest => dest.showOnPortals, opt => opt.MapFrom(src => src.dfp_showonportals))
                     .AddTransform(NullStringConverter);
-                    
+
+                CreateMap<bcgov_documenturl, DmerRecords>()
+                    .ForMember(dest => dest.DpsId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
+                    .ForMember(dest => dest.DpsQueue, opt => opt.MapFrom(src => src.dfp_queue))
+                    .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
+                    .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_name))
+                    .ForMember(dest => dest.DocumentStatus, opt => opt.MapFrom(src => TranslateSubmittalStatus(src.dfp_submittalstatus)))
+                    .ForMember(dest => dest.DocumentPriority, opt => opt.MapFrom(src => src.dfp_priority))
+                    //.ForMember(dest => dest.ReceivedDate, opt => opt.MapFrom(src => src.dfp_faxreceiveddate ?? src.createdon))
+                    .ForMember(dest => dest.DocumentTypeBusinessArea, opt => opt.MapFrom(src => ConvertBusinessAreaToString(src.dfp_DocumentTypeID.dfp_businessarea)))
+                    .ForMember(dest => dest.Queue, opt => opt.MapFrom(src => src.dfp_queue))
+                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateDmerStatus(src.dfp_dmertype)))
+                    .ForMember(dest => dest.Driver, opt => opt.MapFrom(src => src.dfp_DriverId))
+                    .ForMember(dest => dest.CaseRecord, opt => opt.MapFrom(src => src.bcgov_CaseId))
+                    .AddTransform(NullStringConverter);
+
+               
+
             }
 
             private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
@@ -262,5 +279,46 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             }
             return result;
         }
+
+        /// <summary>
+        /// Map bcgov_documenturl to DriverInfo
+        /// </summary>
+        //protected DriverInfo MapToDriverInfo(bcgov_documenturl src)
+        //{
+        //    if (src?.dfp_DriverId == null)
+        //        return null;
+
+        //    var driverInfo = new DriverInfo
+        //    {
+        //        DriverId = src.dfp_DriverId.dfp_driverid?.ToString() ?? string.Empty,
+        //        FirstName = src.dfp_DriverId.dfp_firstname ?? string.Empty,
+        //        LastName = src.dfp_DriverId.dfp_surname ?? string.Empty,
+        //        LicenceNumber = src.dfp_DriverId.dfp_licensenumber ?? string.Empty,
+        //        Documents = new List<DriverDocument>()
+        //    };
+
+        //    return driverInfo;
+        //}
+
+        /// <summary>
+        /// Map incident (Case) to CaseRecord
+        /// </summary>
+        //protected CaseRecord MapToCaseRecord(incident src)
+        //{
+        //    if (src == null)
+        //        return null;
+
+        //    var caseRecord = new CaseRecord
+        //    {
+        //        CaseId = src.incidentid?.ToString() ?? string.Empty,
+        //        CaseTitle = src.title ?? string.Empty,
+        //        CaseType = src.dfp_casetype ?? string.Empty,
+        //        CasePriority = src.prioritycode?.ToString() ?? string.Empty,
+        //        CaseOwner = src.ownerid?.Name ?? string.Empty,
+        //        CaseStatus = src.statuscode?.ToString() ?? string.Empty
+        //    };
+
+        //    return caseRecord;
+        //}
     }
 }

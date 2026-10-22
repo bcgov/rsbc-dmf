@@ -409,6 +409,28 @@ namespace Rsbc.Dmf.CaseManagement
             return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
         }
 
+        public async Task<List<DmerRecords>> GetDmerRecords(DmerRecordsRequest request)
+        {
+            try
+            {
+                var driverDocuments = dynamicsContext.bcgov_documenturls
+                    .Expand(d => d.dfp_DriverId)
+                    .Expand(d => d.dfp_DriverId.dfp_driver_dfp_pdfdocument)
+                    .Expand("dfp_DriverId($expand=dfp_driver_dfp_pdfdocument)")
+                    .Where(d => d.dfp_DriverId != null)
+
+                    .Take(request.PageSize)
+                    .ToList();
+                return _mapper.Map<List<DmerRecords>>(driverDocuments);
+            } catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
+
+
+        }
+
 
         /// <summary>
         /// Translate the Dynamics Priority (status reason) field to text
@@ -458,13 +480,14 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
-        public Task<DmerRecords> GetDmerRecords(DmerRecordsRequest request)
+        private bool IsValidDmerQueueCode(int? queueCode)
         {
-            throw new NotImplementedException();
+            //update with dmer queue option set when added to dynamics
+            return true;
         }
 
     }
 
-    }
+}
 
 

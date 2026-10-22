@@ -22,6 +22,14 @@ namespace Rsbc.Dmf.CaseManagement
                 .ForMember(dest => dest.LatestComplianceDate, opt => opt.MapFrom(src => src.dfp_latestcompliancedate))
                 .ForMember(dest => dest.Driver, opt => opt.MapFrom(src => src.dfp_DriverId))
                 .ForMember(dest => dest.Documents, opt => opt.MapFrom(src => src.bcgov_incident_bcgov_documenturl));
+
+            CreateMap<incident, CaseRecord>()
+                .ForMember(dest => dest.CaseId, opt => opt.MapFrom(src => src.incidentid.ToString()))
+                .ForMember(dest => dest.CaseTitle, opt => opt.MapFrom(src => src.title))
+                .ForMember(dest => dest.CaseType, opt => opt.MapFrom(src => TranslateDmerType(src.dfp_dmertype)))
+                .ForMember(dest => dest.CasePriority, opt => opt.MapFrom(src => TranslatePriority(src.prioritycode)))
+                .ForMember(dest => dest.CaseOwner, opt => opt.MapFrom(src => GetOwnerName(src.ownerid)))
+                .ForMember(dest => dest.CaseStatus, opt => opt.MapFrom(src => TranslateCaseStatus(src.statuscode)));
         }
 
         protected string TranslateDmerType(int? optionSetValue)
@@ -50,6 +58,62 @@ namespace Rsbc.Dmf.CaseManagement
                     break;
             }
             return result;
+        }
+
+        protected string TranslatePriority(int? priorityCode)
+        {
+            if (priorityCode == null)
+                return "Regular";
+
+            switch (priorityCode)
+            {
+                case 0:
+                    return "Low";
+                case 1:
+                    return "Normal";
+                case 2:
+                    return "High";
+                case 3:
+                    return "Urgent";
+                default:
+                    return "Regular";
+            }
+        }
+
+        protected string GetOwnerName(object owner)
+        {
+            if (owner == null)
+                return string.Empty;
+
+            if (owner.GetType() == typeof(systemuser))
+                return ((systemuser)owner).fullname ?? string.Empty;
+
+            if (owner.GetType() == typeof(team))
+                return ((team)owner).name ?? string.Empty;
+
+            return string.Empty;
+        }
+
+        private string TranslateCaseStatus(int? statusCode)
+        {
+            if (statusCode == null)
+                return "Unknown";
+
+            switch (statusCode)
+            {
+                case 1:
+                    return "Active";
+                case 2:
+                    return "Resolved";
+                case 3:
+                    return "Cancelled";
+                case 4:
+                    return "Merged";
+                case 5:
+                    return "Closed";
+                default:
+                    return "Unknown";
+            }
         }
     }
 
@@ -368,6 +432,6 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-
+       
     }
 }

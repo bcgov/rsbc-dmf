@@ -99,6 +99,47 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class DmerRecords
     {
+        public string DocumentRecordId { get; set; }
+        public string Queue { get; set; }
+        public string DocumentName { get; set; }
+        public string DocumentUrl { get; set; }
+        public string DocumentType { get; set; }
+        public string DocumentStatus { get; set; }
+        public string DocumentPriority { get; set; }
+        public DateTimeOffset? ReceivedDate { get; set; }
+        public string DocumentTypeBusinessArea { get; set; }
+        public string DmerStatus { get; set; }
+        public DriverInfo Driver { get; set; }
+        public CaseRecord CaseRecord { get; set; }
+    }
+
+    public class CaseRecord
+    {
+        public string CaseId { get; set; }
+        public string CaseTitle { get; set; }
+        public string CaseType { get; set; }
+        public string CasePriority { get; set; }
+        public string CaseOwner { get; set; }
+        public string CaseStatus { get; set; }
+    }
+
+    public class DriverDocument
+    {
+        public string FileName { get; set; }
+        public string DocumentType { get; set; }
+        public string DocumentStatus { get; set; }
+        public DateTime? UploadedDate { get; set; }
+        public string DocumentUrl { get; set; }
+    }
+
+    public class DriverInfo
+    {
+        public string DriverId { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string LicenceNumber { get; set; }
+        public List<DriverDocument> Documents { get; set; }
     }
 
     public class CreateStatusReply

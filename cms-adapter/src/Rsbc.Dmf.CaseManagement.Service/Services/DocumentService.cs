@@ -233,6 +233,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 PageSize = request.PageSize,
                 Cursor = request.Cursor
             });
+            var documents = _mapper.Map<IEnumerable<DmerDocumentFile>>(result);
+            reply.Items.AddRange(documents);
+            reply.ResultStatus = ResultStatus.Success;
             return reply;
         }
 
