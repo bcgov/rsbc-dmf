@@ -449,6 +449,12 @@ namespace Rsbc.Dmf.CaseManagement
 
             return dmerRecords;
 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return null;
+            }
         }
 
         private async Task<List<DriverDocument>> GetDriverDocumentsForDriver(string driverId)
