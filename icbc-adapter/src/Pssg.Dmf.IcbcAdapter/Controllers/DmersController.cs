@@ -25,6 +25,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         UNKNOWN_DLS
     }
 
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class DmersController : Controller
@@ -59,11 +60,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             Console.WriteLine($"GetDmerBatch parameters: queue={queue}, pageSize={pageSize}, cursor={cursor}");
 
             using var scope = _serviceScopeFactory.CreateScope();
-            var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
-            // var dmerRecordsRequest = new DmerRecordsRequest(queue, pageSize, cursor); // defined in .proto of cms adapter
-            // var dmerRecordsResults = caseManagerClient.GetDmerRecords(dmerRecordsRequest); //calls method of other app directly with gRPC, defined in .proto of cms adapter. 
+            var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
+            var dmerRecordsRequest = new GetDmerRecordsRequest { Queue = queue.ToString(), PageSize = pageSize, Cursor = cursor }; 
+            var dmerRecordsResults = documentManagerClient.GetDmerRecords(dmerRecordsRequest);
                 
-            return Ok();
+            return Json(dmerRecordsResults);
         }
     }
 }
