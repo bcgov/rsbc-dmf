@@ -46,6 +46,14 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.LegacyDocument, LegacyDocument>()
                 .AddTransform(NullStringConverter);
+            CreateMap<CaseManagement.DmerRecords, DmerDocumentFile>()
+                .AddTransform(NullStringConverter);
+            CreateMap<CaseManagement.DriverInfo, DriverInfo>()
+                .AddTransform(NullStringConverter);
+            CreateMap<CaseManagement.DriverDocument, DriverDocument>()
+                .AddTransform(NullStringConverter);
+            CreateMap<CaseManagement.CaseRecord, CaseRecordProto>()
+                .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.CaseDetail, CaseDetail>()
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.DocumentSubType, DocumentSubType>();

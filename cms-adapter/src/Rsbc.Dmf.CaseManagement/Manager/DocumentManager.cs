@@ -14,6 +14,22 @@ using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
+    public class DmerDocumentFile
+    {
+        public string DocumentRecordId { get; set; }
+        public string Queue { get; set; }
+        public string DocumentName { get; set; }
+        public string DocumentUrl { get; set; }
+        public string DocumentType { get; set; }
+        public string DocumentStatus { get; set; }
+        public string DocumentPriority { get; set; }
+        public DateTimeOffset? ReceivedDate { get; set; }
+        public string DocumentTypeBusinessArea { get; set; }
+        public string DmerStatus { get; set; }
+        public DriverInfo Driver { get; set; }
+        public CaseRecord CaseRecord { get; set; }
+    }
+
     internal class DocumentManager : DocumentMapper, IDocumentManager
     {
         internal readonly DynamicsContext dynamicsContext;
@@ -507,5 +523,4 @@ namespace Rsbc.Dmf.CaseManagement
     }
 
 }
-
 

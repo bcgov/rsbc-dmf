@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
+
 namespace Rsbc.Dmf.CaseManagement.Dynamics
 {
     public class DocumentMapper
@@ -80,6 +81,10 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .AddTransform(NullStringConverter);
 
 
+
+                CreateMap<DmerRecords, DmerDocumentFile>()
+                    .AddTransform(NullStringConverter);
+               
 
             }
 
