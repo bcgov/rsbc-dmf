@@ -9,6 +9,8 @@ using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 //using System.Xml.Linq;
@@ -426,12 +428,13 @@ namespace Rsbc.Dmf.CaseManagement
                         <attribute name='dfp_submittalstatus'/>
                         <attribute name='dfp_faxreceiveddate'/>
                         <attribute name='createdon'/>
-                        <attribute name='dfp_dmertype'/>
+                        <attribute name='dfp_dmerstatus'/>
                         <attribute name='dfp_driverid'/>
                         <attribute name='dfp_documenttypeid'/>
                         <attribute name='bcgov_caseid'/>
                         <filter type='and'>
                           <condition attribute='dfp_driverid' operator='not-null'/>
+                          <condition attribute='bcgov_caseid' operator='not-null'/>
                           <condition attribute='dfp_submittalstatus' operator='eq' value='100000010'/>
                         </filter>
                       </entity>
@@ -444,18 +447,31 @@ namespace Rsbc.Dmf.CaseManagement
                                                    .AddQueryOption("fetchXml", fetchXml)
                                                    .ToList();
 
-
+                
                 foreach (var document in dmerDocumenturls)
                 {
                     await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DriverId));
-                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_CaseId));
+                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_dmerstatus));
+                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
+                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_documenttypebusinessarea));
+
                     
                 }
+
+                logger.LogInformation("DMER document: {Document}", JsonSerializer.Serialize(
+                    dmerDocumenturls.FirstOrDefault(),
+                    new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
                 var dmerRecords = _mapper.Map<List<DmerDocumentRecord>>(dmerDocumenturls);
+
+               
 
                 foreach (var document in dmerRecords)
                 {
+                    logger.LogInformation("DmerDocumentRecord: {Document}", JsonSerializer.Serialize(
+                        document,new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
+
                     document.DmerDocumentDriver.Documents = await GetDocumentsForDriver(document.DmerDocumentDriver.DriverId);
+                    document.DmerDocumentCaseRecord = await GetDocumentCaseRecord(document.DmerCaseId);
                 }
 
                 return dmerRecords;
@@ -477,6 +493,20 @@ namespace Rsbc.Dmf.CaseManagement
                 .ToList();
             return _mapper.Map<List<DmerDriverDocument>>(driverDocuments);
         }
+
+        private async Task<DmerDocumentCaseRecord> GetDocumentCaseRecord(string caseId)
+        {
+            var caseGuid = Guid.Parse(caseId);
+            var caseRecord = dynamicsContext.incidents
+                .Where(d => d.incidentid == caseGuid)
+                .First();
+
+            logger.LogInformation("DmerCaseRecord: {Document}", JsonSerializer.Serialize(
+                        caseRecord,new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
+
+            return _mapper.Map<DmerDocumentCaseRecord>(caseRecord);
+        }
+
 
 
         /// <summary>

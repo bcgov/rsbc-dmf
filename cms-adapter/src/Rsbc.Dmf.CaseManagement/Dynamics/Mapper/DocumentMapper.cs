@@ -67,9 +67,9 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.DocumentPriority, opt => opt.MapFrom(src => TranslatePriority(src.dfp_priority)))
                     .ForMember(dest => dest.ReceivedDate, opt => opt.MapFrom(src => src.dfp_faxreceiveddate.HasValue? src.dfp_faxreceiveddate.Value.DateTime : src.createdon.Value.DateTime))
                     .ForMember(dest => dest.DocumentTypeBusinessArea, opt => opt.MapFrom(src => ConvertBusinessAreaToString(src.dfp_DocumentTypeID.dfp_businessarea)))
-                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateDmerStatus(src.dfp_dmertype)))
+                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateDmerStatus(src.dfp_dmerstatus)))
                     .ForMember(dest => dest.DmerDocumentDriver, opt => opt.MapFrom(src => src.dfp_DriverId))
-                    .ForMember(dest => dest.DmerDocumentCaseRecord, opt => opt.MapFrom(src => src.bcgov_CaseId))
+                    .ForMember(dest => dest.DmerCaseId, opt => opt.MapFrom(src => src._bcgov_caseid_value))
                     .AddTransform(NullStringConverter);
 
                 CreateMap<bcgov_documenturl, DmerDriverDocument>()

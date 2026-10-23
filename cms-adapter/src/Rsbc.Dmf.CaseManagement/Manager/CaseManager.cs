@@ -109,7 +109,9 @@ namespace Rsbc.Dmf.CaseManagement
         public string DocumentTypeBusinessArea { get; set; }
         public string DmerStatus { get; set; }
         public DmerDocumentDriver DmerDocumentDriver { get; set; }
+        public string DmerCaseId { get; set; }
         public DmerDocumentCaseRecord DmerDocumentCaseRecord { get; set; }
+        public string owningteam { get; set; }
     }
 
     public class DmerDocumentCaseRecord
