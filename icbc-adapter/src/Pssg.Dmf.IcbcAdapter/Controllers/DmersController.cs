@@ -67,8 +67,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, dmerRecordsResults);
             }
-
-            return Json(dmerRecordsResults);
+            var results = dmerRecordsResults.Items;
+           
+            return Json(results);
         }
     }
 }

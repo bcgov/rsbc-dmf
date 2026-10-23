@@ -774,7 +774,7 @@ message DmerDocumentFile {
     string documentType = 5;
     string documentStatus = 6;
     string documentPriority = 7;
-    google.protobuf.Timestamp receivedDate = 8;
+    string receivedDate = 8;
     string documentTypeBusinessArea = 9;
     string dmerStatus = 10;
     DmerDocumentDriver driver = 11;
@@ -794,7 +794,7 @@ message DriverDocument {
     string fileName = 1;
     string documentType = 2;
     string documentStatus = 3;
-    google.protobuf.Timestamp uploadedDate = 4;
+    string uploadedDate = 4;
     string documentUrl = 5;
 }
 
