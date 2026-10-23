@@ -23,12 +23,12 @@ namespace Rsbc.Dmf.CaseManagement
                 .ForMember(dest => dest.Driver, opt => opt.MapFrom(src => src.dfp_DriverId))
                 .ForMember(dest => dest.Documents, opt => opt.MapFrom(src => src.bcgov_incident_bcgov_documenturl));
 
-            CreateMap<incident, CaseRecord>()
+            CreateMap<incident, DmerDocumentCaseRecord>()
                 .ForMember(dest => dest.CaseId, opt => opt.MapFrom(src => src.incidentid.ToString()))
                 .ForMember(dest => dest.CaseTitle, opt => opt.MapFrom(src => src.title))
                 .ForMember(dest => dest.CaseType, opt => opt.MapFrom(src => TranslateDmerType(src.dfp_dmertype)))
                 .ForMember(dest => dest.CasePriority, opt => opt.MapFrom(src => TranslatePriority(src.prioritycode)))
-                .ForMember(dest => dest.CaseOwner, opt => opt.MapFrom(src => GetOwnerName(src.ownerid)))
+                .ForMember(dest => dest.CaseOwner, opt => opt.MapFrom(src => (src.owningteam != null ? src.owningteam.name : src.owninguser != null ? src.owninguser.fullname : null)))
                 .ForMember(dest => dest.CaseStatus, opt => opt.MapFrom(src => TranslateCaseStatus(src.statuscode)));
         }
 

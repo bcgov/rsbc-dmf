@@ -225,13 +225,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
-        public async override Task<GetDmerRecordsReply> GetDmerRecords(GetDmerRecordsRequest request, ServerCallContext context)
+        public async override Task<GetDmerRecordsPaginatedReply> GetDmerRecordsPaginated(GetDmerRecordsPaginatedRequest request, ServerCallContext context)
         {
-            var reply = new GetDmerRecordsReply();
+            var reply = new GetDmerRecordsPaginatedReply();
 
             try
             {
-                var result = await _documentManager.GetDmerRecords(new DmerRecordsRequest
+                var result = await _documentManager.GetDmerRecordsPaginated(new DmerRecordsPaginatedRequest
                 {
                     PageSize = request.PageSize,
                     Cursor = request.Cursor

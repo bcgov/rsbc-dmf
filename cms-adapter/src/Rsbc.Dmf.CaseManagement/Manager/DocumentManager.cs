@@ -26,8 +26,8 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTimeOffset? ReceivedDate { get; set; }
         public string DocumentTypeBusinessArea { get; set; }
         public string DmerStatus { get; set; }
-        public DriverInfo Driver { get; set; }
-        public CaseRecord CaseRecord { get; set; }
+        public DmerDocumentDriver Driver { get; set; }
+        public DmerDocumentCaseRecord CaseRecord { get; set; }
     }
 
     internal class DocumentManager : DocumentMapper, IDocumentManager
@@ -425,7 +425,7 @@ namespace Rsbc.Dmf.CaseManagement
             return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
         }
 
-        public async Task<List<DmerRecords>> GetDmerRecords(DmerRecordsRequest request)
+        public async Task<List<DmerDocumentRecord>> GetDmerRecordsPaginated(DmerRecordsPaginatedRequest request)
         {
             try
             {
@@ -433,18 +433,23 @@ namespace Rsbc.Dmf.CaseManagement
                     .Expand(d => d.dfp_DriverId)
                     .Expand(d => d.dfp_DocumentTypeID)
                     .Expand(d => d.bcgov_CaseId)
-                    .Where(d => d.dfp_DriverId != null)
+                    .Expand(d => d.bcgov_CaseId.owningteam)
+                    .Expand(d => d.bcgov_CaseId.owninguser)
+                    .Where(d => d.dfp_DriverId != null && d.dfp_DocumentTypeID.dfp_name == "DMER" && d.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
                     .Take(request.PageSize)
                     .ToList()
                     .GroupBy(d => d._dfp_driverid_value)
                     .Select(g => g.FirstOrDefault()).ToList();
 
-            var dmerRecords = _mapper.Map<List<DmerRecords>>(driverDocuments);
+                var x = driverDocuments.Select(d => d.bcgov_CaseId?.owningteam?.name).ToList();
+                var y = driverDocuments.Select(d => d.bcgov_CaseId?.owninguser?.fullname).ToList();
+
+                var dmerRecords = _mapper.Map<List<DmerDocumentRecord>>(driverDocuments);
 
 
             foreach (var document in dmerRecords)
             {
-                document.Driver.Documents = await GetDriverDocumentsForDriver(document.Driver.DriverId);
+                document.DmerDocumentDriver.Documents = await GetDocumentsForDriver(document.DmerDocumentDriver.DriverId);
             }
 
             return dmerRecords;
@@ -457,13 +462,13 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
-        private async Task<List<DriverDocument>> GetDriverDocumentsForDriver(string driverId)
+        private async Task<List<DmerDriverDocument>> GetDocumentsForDriver(string driverId)
         {
             var driverGuid = Guid.Parse(driverId);
             var driverDocuments = dynamicsContext.bcgov_documenturls
                 .Where(d => d._dfp_driverid_value == driverGuid && d.statecode == (int)EntityState.Active)
                 .ToList();
-            return _mapper.Map<List<DriverDocument>>(driverDocuments);
+            return _mapper.Map<List<DmerDriverDocument>>(driverDocuments);
         }
 
 

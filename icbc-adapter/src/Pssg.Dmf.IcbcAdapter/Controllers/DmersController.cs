@@ -60,8 +60,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
             using var scope = _serviceScopeFactory.CreateScope();
             var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
-            var dmerRecordsRequest = new GetDmerRecordsRequest {PageSize = pageSize, Cursor = cursor }; 
-            var dmerRecordsResults = documentManagerClient.GetDmerRecords(dmerRecordsRequest);
+            var dmerRecordsRequest = new GetDmerRecordsPaginatedRequest {PageSize = pageSize, Cursor = cursor }; 
+            var dmerRecordsResults = documentManagerClient.GetDmerRecordsPaginated(dmerRecordsRequest);
             
             if (dmerRecordsResults.ResultStatus.Equals(ResultStatus.Fail))
             {
