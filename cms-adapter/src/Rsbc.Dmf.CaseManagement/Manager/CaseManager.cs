@@ -90,13 +90,13 @@ namespace Rsbc.Dmf.CaseManagement
         public bool showOnPortals { get; set; }
     }
 
-    public class DmerRecordsRequest
+    public class DmerRecordsPaginatedRequest
     {
         public int PageSize { get; set; }
         public int Cursor { get; set; }
     }
 
-    public class DmerRecords
+    public class DmerDocumentRecord
     {
         public string DocumentRecordId { get; set; }
         public string Queue { get; set; }
@@ -108,11 +108,11 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTime? ReceivedDate { get; set; }
         public string DocumentTypeBusinessArea { get; set; }
         public string DmerStatus { get; set; }
-        public DriverInfo Driver { get; set; }
-        public CaseRecord CaseRecord { get; set; }
+        public DmerDocumentDriver DmerDocumentDriver { get; set; }
+        public DmerDocumentCaseRecord DmerDocumentCaseRecord { get; set; }
     }
 
-    public class CaseRecord
+    public class DmerDocumentCaseRecord
     {
         public string CaseId { get; set; }
         public string CaseTitle { get; set; }
@@ -122,7 +122,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string CaseStatus { get; set; }
     }
 
-    public class DriverDocument
+    public class DmerDriverDocument
     {
         public string FileName { get; set; }
         public string DocumentType { get; set; }
@@ -131,14 +131,14 @@ namespace Rsbc.Dmf.CaseManagement
         public string DocumentUrl { get; set; }
     }
 
-    public class DriverInfo
+    public class DmerDocumentDriver
     {
         public string DriverId { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string LicenceNumber { get; set; }
-        public List<DriverDocument> Documents { get; set; }
+        public List<DmerDriverDocument> Documents { get; set; }
     }
 
     public class CreateStatusReply

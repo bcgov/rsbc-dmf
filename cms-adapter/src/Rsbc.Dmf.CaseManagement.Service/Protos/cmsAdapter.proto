@@ -648,7 +648,7 @@ service DocumentManager {
 	rpc GetDriverDocumentsById (DriverIdRequest) returns (GetDocumentsReply);
 
 	// Get DMER records
-	rpc GetDmerRecords(GetDmerRecordsRequest) returns (GetDmerRecordsReply);
+	rpc GetDmerRecordsPaginated(GetDmerRecordsPaginatedRequest) returns (GetDmerRecordsPaginatedReply);
 }
 
 message UpdateDocumentRequest {
@@ -760,7 +760,7 @@ message LegacyDocument {
 
 }
 
-message GetDmerRecordsReply {
+message GetDmerRecordsPaginatedReply {
     ResultStatus resultStatus = 1;
     string errorDetail = 2;
     repeated DmerDocumentFile items = 3;
@@ -777,11 +777,11 @@ message DmerDocumentFile {
     string receivedDate = 8;
     string documentTypeBusinessArea = 9;
     string dmerStatus = 10;
-    DriverInfo driver = 11;
-    CaseRecordProto caseRecord = 12;
+    DmerDocumentDriver driver = 11;
+    DmerDocumentCaseRecord dmerDocumentCaseRecord = 12;
 }
 
-message CaseRecordProto {
+message DmerDocumentCaseRecord {
     string caseId = 1;
     string caseTitle = 2;
     string caseType = 3;
@@ -798,7 +798,7 @@ message DriverDocument {
     string documentUrl = 5;
 }
 
-message DriverInfo {
+message DmerDocumentDriver {
     string driverId = 1;
     string firstName = 2;
     string middleName = 3;
@@ -807,7 +807,7 @@ message DriverInfo {
     repeated DriverDocument documents = 6;
 }
 
-message GetDmerRecordsRequest {
+message GetDmerRecordsPaginatedRequest {
     string queue = 1;
     int32 pageSize = 2;
     int32 cursor = 3;
