@@ -11,25 +11,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+//using System.Xml.Linq;
+//using Microsoft.Xrm.Sdk;
+//using Microsoft.Xrm.Sdk.Query;
 
 namespace Rsbc.Dmf.CaseManagement
 {
-    public class DmerDocumentFile
-    {
-        public string DocumentRecordId { get; set; }
-        public string Queue { get; set; }
-        public string DocumentName { get; set; }
-        public string DocumentUrl { get; set; }
-        public string DocumentType { get; set; }
-        public string DocumentStatus { get; set; }
-        public string DocumentPriority { get; set; }
-        public string ReceivedDate { get; set; }
-        public string DocumentTypeBusinessArea { get; set; }
-        public string DmerStatus { get; set; }
-        public DmerDocumentDriver Driver { get; set; }
-        public DmerDocumentCaseRecord CaseRecord { get; set; }
-    }
-
     internal class DocumentManager : DocumentMapper, IDocumentManager
     {
         internal readonly DynamicsContext dynamicsContext;
@@ -427,30 +414,57 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task<List<DmerDocumentRecord>> GetDmerRecordsPaginated(DmerRecordsPaginatedRequest request)
         {
-            var driverDocuments = dynamicsContext.bcgov_documenturls
-                    .Expand(d => d.dfp_DriverId)
-                    .Expand(d => d.dfp_DocumentTypeID)
-                    .Expand(d => d.bcgov_CaseId)
-                    .Expand(d => d.bcgov_CaseId.owningteam)
-                    .Expand(d => d.bcgov_CaseId.owninguser)
-                    .Where(d => d.dfp_DriverId != null && d.dfp_DocumentTypeID.dfp_name == "DMER" && d.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
-                    .Take(request.PageSize)
-                    .ToList()
-                    .GroupBy(d => d._dfp_driverid_value)
-                    .Select(g => g.FirstOrDefault()).ToList();
+            int pageNumber = (request.Cursor / request.PageSize) + 1;
+            string fetchXml = $@"
+                    <fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false' page='{pageNumber}' count='{request.PageSize}'>
+                      <entity name='bcgov_documenturl'>
+                        <attribute name='bcgov_documenturlid'/>
+                        <attribute name='bcgov_filename'/>
+                        <attribute name='bcgov_url'/>
+                        <attribute name='dfp_queue'/>
+                        <attribute name='dfp_priority'/>
+                        <attribute name='dfp_submittalstatus'/>
+                        <attribute name='dfp_faxreceiveddate'/>
+                        <attribute name='createdon'/>
+                        <attribute name='dfp_dmertype'/>
+                        <attribute name='dfp_driverid'/>
+                        <attribute name='dfp_documenttypeid'/>
+                        <attribute name='bcgov_caseid'/>
+                        <filter type='and'>
+                          <condition attribute='dfp_driverid' operator='not-null'/>
+                          <condition attribute='dfp_submittalstatus' operator='eq' value='100000010'/>
+                        </filter>
+                      </entity>
+                    </fetch>";
 
-                var x = driverDocuments.Select(d => d.bcgov_CaseId?.owningteam?.name).ToList();
-                var y = driverDocuments.Select(d => d.bcgov_CaseId?.owninguser?.fullname).ToList();
 
-                var dmerRecords = _mapper.Map<List<DmerDocumentRecord>>(driverDocuments);
-
-
-            foreach (var document in dmerRecords)
+            try
             {
-                document.DmerDocumentDriver.Documents = await GetDocumentsForDriver(document.DmerDocumentDriver.DriverId);
-            }
+                var dmerDocumenturls = dynamicsContext.CreateQuery<bcgov_documenturl>("bcgov_documenturls")
+                                                   .AddQueryOption("fetchXml", fetchXml)
+                                                   .ToList();
 
-            return dmerRecords;
+
+                foreach (var document in dmerDocumenturls)
+                {
+                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DriverId));
+                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_CaseId));
+                    
+                }
+                var dmerRecords = _mapper.Map<List<DmerDocumentRecord>>(dmerDocumenturls);
+
+                foreach (var document in dmerRecords)
+                {
+                    document.DmerDocumentDriver.Documents = await GetDocumentsForDriver(document.DmerDocumentDriver.DriverId);
+                }
+
+                return dmerRecords;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error fetching DMER records with pagination");
+                throw;
+            }
 
         }
 
@@ -458,7 +472,8 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var driverGuid = Guid.Parse(driverId);
             var driverDocuments = dynamicsContext.bcgov_documenturls
-                .Where(d => d._dfp_driverid_value == driverGuid && d.statecode == (int)EntityState.Active)
+                .Expand(d=> d.dfp_DocumentTypeID)
+                .Where(d => d._dfp_driverid_value == driverGuid && d.dfp_DocumentTypeID.dfp_name == "DMER" && d.statecode == (int)EntityState.Active)
                 .ToList();
             return _mapper.Map<List<DmerDriverDocument>>(driverDocuments);
         }

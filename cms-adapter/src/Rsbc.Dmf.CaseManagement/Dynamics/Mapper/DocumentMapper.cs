@@ -78,14 +78,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.DocumentStatus, opt => opt.MapFrom(src => TranslateSubmittalStatus(src.dfp_submittalstatus)))
                     .ForMember(dest => dest.UploadedDate, opt => opt.MapFrom(src => src.createdon.ToString()))
                     .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
-                    .AddTransform(NullStringConverter);
-
-
-
-                CreateMap<DmerRecords, DmerDocumentFile>()
-                    .ForMember(dest => dest.ReceivedDate, opt => opt.MapFrom(src=> src.ReceivedDate.ToString()))
-                    .AddTransform(NullStringConverter);
-               
+                    .AddTransform(NullStringConverter);               
 
             }
 
