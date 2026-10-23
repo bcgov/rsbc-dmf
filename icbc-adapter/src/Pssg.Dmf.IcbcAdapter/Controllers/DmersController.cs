@@ -16,14 +16,25 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Serilog;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Server.HttpSys;
+using Rsbc.Dmf.IcbcAdapter.ViewModels;
+using System.Threading;
+using System.Threading.Tasks;
+using System.IO;
+using Grpc.Core;
+using Microsoft.AspNetCore.StaticFiles;
+using Swashbuckle.AspNetCore.Annotations;
+using DocumentStorageClient = Pssg.DocumentStorageAdapter.DocumentStorageAdapter.DocumentStorageAdapterClient;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
-
-    public enum DmerQueueType
+    /// <summary>Identifies a file to download from document storage.</summary>
+    public class DownloadRequestBody
     {
-        DPS_GENERAL,
-        UNKNOWN_DLS
+        /// <summary>
+        /// Storage path of the file.
+        /// </summary>
+        [Required]
+        public string FileUrl { get; init; }
     }
 
     [Authorize]
@@ -45,10 +56,60 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         }
 
 
+        /// <summary>Downloads a file using the existing document storage adapter client.</summary>
+        [HttpPost("download")]
+        [SwaggerOperation(Summary = "Download a DMER document", Description = "Returns the stored file as a download.")]
+        [Produces("application/octet-stream")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status502BadGateway)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+        [ProducesResponseType(StatusCodes.Status504GatewayTimeout)]
+        public async Task<ActionResult> Download([FromBody] DownloadRequestBody download, CancellationToken cancellationToken)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var storageClient = scope.ServiceProvider.GetRequiredService<DocumentStorageClient>();
+            Pssg.DocumentStorageAdapter.DownloadFileReply result;
+            try
+            {
+                using var call = storageClient.DownloadFileAsync(
+                    new Pssg.DocumentStorageAdapter.DownloadFileRequest { ServerRelativeUrl = download.FileUrl },
+                    cancellationToken: cancellationToken);
+                result = await call.ResponseAsync;
+            }
+            catch (RpcException exception) when (!cancellationToken.IsCancellationRequested)
+            {
+                _logger.LogError(exception, "Document storage adapter download request failed.");
+                var statusCode = exception.StatusCode switch
+                {
+                    Grpc.Core.StatusCode.Unavailable => StatusCodes.Status503ServiceUnavailable,
+                    Grpc.Core.StatusCode.DeadlineExceeded => StatusCodes.Status504GatewayTimeout,
+                    _ => StatusCodes.Status502BadGateway
+                };
+                return Problem(statusCode: statusCode, title: "Unable to download the document from storage.");
+            }
+
+            if (result.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+            {
+                _logger.LogError("Document storage adapter could not download the document.");
+                return Problem(statusCode: StatusCodes.Status500InternalServerError,
+                    title: "Unable to download the document from storage.");
+            }
+
+            var fileName = Path.GetFileName(download.FileUrl);
+            if (!new FileExtensionContentTypeProvider().TryGetContentType(fileName, out var contentType))
+            {
+                contentType = "application/octet-stream";
+            }
+
+            return File(result.Data.ToByteArray(), contentType, fileName);
+        }
+
     /// <summary>
-    /// GET: /dmers?queueType=QueueA&pageSize=50&cursor=0
+    /// GET: /dmers?pageSize=50&amp;cursor=0
     /// </summary>
-    /// <param name="queue">Queue to pull uploaded DMER files from</param>
+    /// <returns>DMER items, the requested page_size, and a nextLink for full pages.</returns>
     /// <param name="pageSize">Maximum number of records to return</param>
     /// <param name="cursor">Zero-based offset of the first record in the page</param>
     [HttpGet("")]
@@ -68,8 +129,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, dmerRecordsResults);
             }
             var results = dmerRecordsResults.Items;
-           
-            return Json(results);
+            var nextLink = results.Count == pageSize && cursor <= int.MaxValue - pageSize
+                ? Url.Action(nameof(GetDmerBatch), new { pageSize, cursor = cursor + pageSize })
+                : null;
+
+            return Json(new DmerBatchResponse(results, pageSize, nextLink));
         }
     }
 }
