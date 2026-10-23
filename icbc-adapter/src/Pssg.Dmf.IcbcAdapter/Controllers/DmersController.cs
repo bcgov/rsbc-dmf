@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Serilog;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Server.HttpSys;
+using Rsbc.Dmf.IcbcAdapter.ViewModels;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -46,9 +47,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
 
     /// <summary>
-    /// GET: /dmers?queueType=QueueA&pageSize=50&cursor=0
+    /// GET: /dmers?pageSize=50&amp;cursor=0
     /// </summary>
-    /// <param name="queue">Queue to pull uploaded DMER files from</param>
+    /// <returns>DMER items, the requested page_size, and a nextLink for full pages.</returns>
     /// <param name="pageSize">Maximum number of records to return</param>
     /// <param name="cursor">Zero-based offset of the first record in the page</param>
     [HttpGet("")]
@@ -68,8 +69,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, dmerRecordsResults);
             }
             var results = dmerRecordsResults.Items;
-           
-            return Json(results);
+            var nextLink = results.Count == pageSize && cursor <= int.MaxValue - pageSize
+                ? Url.Action(nameof(GetDmerBatch), new { pageSize, cursor = cursor + pageSize })
+                : null;
+
+            return Json(new DmerBatchResponse(results, pageSize, nextLink));
         }
     }
 }
