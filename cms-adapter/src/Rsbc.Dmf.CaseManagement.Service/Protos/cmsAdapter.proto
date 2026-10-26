@@ -795,7 +795,7 @@ message DriverDocument {
     string documentType = 2;
     string documentStatus = 3;
     string uploadedDate = 4;
-    string documentUrl = 5;
+    string documentRecordId = 5;
 }
 
 message DmerDocumentDriver {

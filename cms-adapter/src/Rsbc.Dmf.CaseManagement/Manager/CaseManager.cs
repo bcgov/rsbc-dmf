@@ -130,7 +130,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string DocumentType { get; set; }
         public string DocumentStatus { get; set; }
         public string UploadedDate { get; set; }
-        public string DocumentUrl { get; set; }
+        public string DocumentRecordId { get; set; }
     }
 
     public class DmerDocumentDriver
