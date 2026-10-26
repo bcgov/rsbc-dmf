@@ -28,9 +28,8 @@ namespace Rsbc.Dmf.CaseManagement
                 .ForMember(dest => dest.CaseTitle, opt => opt.MapFrom(src => src.title))
                 .ForMember(dest => dest.CaseType, opt => opt.MapFrom(src => TranslateDmerType(src.dfp_dmertype)))
                 .ForMember(dest => dest.CasePriority, opt => opt.MapFrom(src => TranslatePriority(src.prioritycode)))
-                .ForMember(dest => dest.CaseOwner, opt => opt.MapFrom(src => src._ownerid_value.ToString()))
+                .ForMember(dest => dest.CaseOwner, opt => opt.MapFrom(src => (src.owningteam != null ? src.owningteam.name : src.owninguser != null ? src.owninguser.fullname : null)))
                 .ForMember(dest => dest.CaseStatus, opt => opt.MapFrom(src => TranslateCaseStatus(src.statuscode)));
-
 
         }
 
