@@ -341,45 +341,6 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             return result;
         }
 
-        /// <summary>
-        /// Map bcgov_documenturl to DriverInfo
-        /// </summary>
-        //protected DriverInfo MapToDriverInfo(bcgov_documenturl src)
-        //{
-        //    if (src?.dfp_DriverId == null)
-        //        return null;
 
-        //    var driverInfo = new DriverInfo
-        //    {
-        //        DriverId = src.dfp_DriverId.dfp_driverid?.ToString() ?? string.Empty,
-        //        FirstName = src.dfp_DriverId.dfp_firstname ?? string.Empty,
-        //        LastName = src.dfp_DriverId.dfp_surname ?? string.Empty,
-        //        LicenceNumber = src.dfp_DriverId.dfp_licensenumber ?? string.Empty,
-        //        Documents = new List<DriverDocument>()
-        //    };
-
-        //    return driverInfo;
-        //}
-
-        /// <summary>
-        /// Map incident (Case) to CaseRecord
-        /// </summary>
-        //protected CaseRecord MapToCaseRecord(incident src)
-        //{
-        //    if (src == null)
-        //        return null;
-
-        //    var caseRecord = new CaseRecord
-        //    {
-        //        CaseId = src.incidentid?.ToString() ?? string.Empty,
-        //        CaseTitle = src.title ?? string.Empty,
-        //        CaseType = src.dfp_casetype ?? string.Empty,
-        //        CasePriority = src.prioritycode?.ToString() ?? string.Empty,
-        //        CaseOwner = src.ownerid?.Name ?? string.Empty,
-        //        CaseStatus = src.statuscode?.ToString() ?? string.Empty
-        //    };
-
-        //    return caseRecord;
-        //}
     }
 }
