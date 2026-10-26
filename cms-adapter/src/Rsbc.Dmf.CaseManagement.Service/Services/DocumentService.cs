@@ -244,12 +244,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                _logger.LogError(ex, "Error fetching DMER records with pagination");
                 reply.ErrorDetail = ex.Message;
                 reply.ResultStatus = ResultStatus.Fail;
             }
-
-
             return reply;
         }
 

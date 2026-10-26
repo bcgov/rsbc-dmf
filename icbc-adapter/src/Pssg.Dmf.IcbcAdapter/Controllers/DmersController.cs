@@ -75,7 +75,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             var dmerRecordsRequest = new GetDmerRecordsPaginatedRequest {PageSize = pageSize, Cursor = cursor }; 
             var dmerRecordsResults = documentManagerClient.GetDmerRecordsPaginated(dmerRecordsRequest);
             
-            if (dmerRecordsResults.ResultStatus.Equals(ResultStatus.Fail) || !dmerRecordsResults.ErrorDetail.IsNullOrEmpty())
+            if (dmerRecordsResults.ResultStatus == CaseManagement.Service.ResultStatus.Fail)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, dmerRecordsResults);
             }

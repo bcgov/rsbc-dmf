@@ -441,47 +441,27 @@ namespace Rsbc.Dmf.CaseManagement
                     </fetch>";
 
 
-            try
+            var dmerDocumenturls = dynamicsContext.CreateQuery<bcgov_documenturl>("bcgov_documenturls")
+                                                .AddQueryOption("fetchXml", fetchXml)
+                                                .ToList();
+            foreach (var document in dmerDocumenturls)
             {
-                var dmerDocumenturls = dynamicsContext.CreateQuery<bcgov_documenturl>("bcgov_documenturls")
-                                                   .AddQueryOption("fetchXml", fetchXml)
-                                                   .ToList();
+                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DriverId));
+                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_dmerstatus));
+                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
+                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_documenttypebusinessarea));
 
                 
-                foreach (var document in dmerDocumenturls)
-                {
-                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DriverId));
-                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_dmerstatus));
-                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
-                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_documenttypebusinessarea));
-
-                    
-                }
-
-                logger.LogInformation("DMER document: {Document}", JsonSerializer.Serialize(
-                    dmerDocumenturls.FirstOrDefault(),
-                    new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
-                var dmerRecords = _mapper.Map<List<DmerDocumentRecord>>(dmerDocumenturls);
-
-               
-
-                foreach (var document in dmerRecords)
-                {
-                    logger.LogInformation("DmerDocumentRecord: {Document}", JsonSerializer.Serialize(
-                        document,new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
-
-                    document.DmerDocumentDriver.Documents = await GetDocumentsForDriver(document.DmerDocumentDriver.DriverId);
-                    document.DmerDocumentCaseRecord = await GetDocumentCaseRecord(document.DmerCaseId);
-                }
-
-                return dmerRecords;
             }
-            catch (Exception ex)
+            var dmerRecords = _mapper.Map<List<DmerDocumentRecord>>(dmerDocumenturls);
+
+            foreach (var document in dmerRecords)
             {
-                logger.LogError(ex, "Error fetching DMER records with pagination");
-                throw;
+                document.DmerDocumentDriver.Documents = await GetDocumentsForDriver(document.DmerDocumentDriver.DriverId);
+                document.DmerDocumentCaseRecord = await GetDocumentCaseRecord(document.DmerCaseId);
             }
 
+            return dmerRecords;
         }
 
         private async Task<List<DmerDriverDocument>> GetDocumentsForDriver(string driverId)
@@ -502,9 +482,6 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(c => c.owningteam)
                 .Where(d => d.incidentid == caseGuid)
                 .First();
-
-            logger.LogInformation("DmerCaseRecord: {Document}", JsonSerializer.Serialize(
-                        caseRecord,new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
 
             return _mapper.Map<DmerDocumentCaseRecord>(caseRecord);
         }
