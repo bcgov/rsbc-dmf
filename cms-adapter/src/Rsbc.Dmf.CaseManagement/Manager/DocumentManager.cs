@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
@@ -453,6 +453,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                 
             }
+
             var dmerRecords = _mapper.Map<List<DmerDocumentRecord>>(dmerDocumenturls);
 
             foreach (var document in dmerRecords)
@@ -469,7 +470,10 @@ namespace Rsbc.Dmf.CaseManagement
             var driverGuid = Guid.Parse(driverId);
             var driverDocuments = dynamicsContext.bcgov_documenturls
                 .Expand(d=> d.dfp_DocumentTypeID)
-                .Where(d => d._dfp_driverid_value == driverGuid && d.bcgov_documenturlid != new Guid(documentUrlId)  && d.dfp_DocumentTypeID.dfp_name == "DMER" && d.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
+                .Where(d => d._dfp_driverid_value == driverGuid 
+                            && d.bcgov_documenturlid != new Guid(documentUrlId)  
+                            && d.dfp_DocumentTypeID.dfp_name == "DMER" 
+                            && d.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
                 .ToList();
             return _mapper.Map<List<DmerDriverDocument>>(driverDocuments);
         }
