@@ -498,6 +498,8 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var caseGuid = Guid.Parse(caseId);
             var caseRecord = dynamicsContext.incidents
+                .Expand(c => c.owninguser)
+                .Expand(c => c.owningteam)
                 .Where(d => d.incidentid == caseGuid)
                 .First();
 
