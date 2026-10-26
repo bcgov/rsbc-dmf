@@ -457,19 +457,19 @@ namespace Rsbc.Dmf.CaseManagement
 
             foreach (var document in dmerRecords)
             {
-                document.DmerDocumentDriver.Documents = await GetDocumentsForDriver(document.DmerDocumentDriver.DriverId);
+                document.DmerDocumentDriver.Documents = await GetDocumentsForDriver(document.DmerDocumentDriver.DriverId, document.DocumentRecordId);
                 document.DmerDocumentCaseRecord = await GetDocumentCaseRecord(document.DmerCaseId);
             }
 
             return dmerRecords;
         }
 
-        private async Task<List<DmerDriverDocument>> GetDocumentsForDriver(string driverId)
+        private async Task<List<DmerDriverDocument>> GetDocumentsForDriver(string driverId, string documentUrlId)
         {
             var driverGuid = Guid.Parse(driverId);
             var driverDocuments = dynamicsContext.bcgov_documenturls
                 .Expand(d=> d.dfp_DocumentTypeID)
-                .Where(d => d._dfp_driverid_value == driverGuid && d.dfp_DocumentTypeID.dfp_name == "DMER" && d.statecode == (int)EntityState.Active)
+                .Where(d => d._dfp_driverid_value == driverGuid && d.bcgov_documenturlid != new Guid(documentUrlId)  && d.dfp_DocumentTypeID.dfp_name == "DMER" && d.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
                 .ToList();
             return _mapper.Map<List<DmerDriverDocument>>(driverDocuments);
         }

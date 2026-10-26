@@ -41,7 +41,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
 
                 CreateMap<bcgov_documenturl, Document>()
                     .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => TranslateDmerType(src.dfp_dmertype)))
-                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateSubmittalStatus(src.dfp_submittalstatus)))
+                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateDmerStatus(src.dfp_dmerstatus)))
                     .ForMember(dest => dest.Case, opt => opt.MapFrom(src => src.bcgov_CaseId))
                     .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.dfp_compliancedate))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID))
@@ -126,12 +126,34 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                 {
                     case 100000000:
                         return "Open-Required";
+                    case 100000001:
+                        return "Received";
+                    case 100000002:
+                        return "Under Review";
+                    case 100000003:
+                        return "Reviewed";
+                    case 100000004:
+                        return "Rejected";
                     case 100000005:
                         return "Non-Comply";
+                    case 100000006:
+                        return "Carry Forward";
                     case 100000007:
                         return "Actioned Non-comply";
+                    case 100000008:
+                        return "Sent";
+                    case 100000009:
+                        return "Clean Pass";
+                    case 100000010:
+                        return "Uploaded";
+                    case 100000011:
+                        return "Issued";
+                    case 100000012:
+                        return "Manual Pass";
+                    case 100000013:
+                        return "Empty";
                     default:
-                        return "Submitted";
+                        return "Empty";
                 }
             }
 
