@@ -63,7 +63,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.DocumentName, opt => opt.MapFrom(src => src.bcgov_filename))
                     .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_name))
-                    .ForMember(dest => dest.DocumentStatus, opt => opt.MapFrom(src => TranslateSubmittalStatus(src.dfp_submittalstatus)))
+                    .ForMember(dest => dest.DocumentStatus, opt => opt.MapFrom(src => TranslateSubmittalStatusInt(src.dfp_submittalstatus)))
                     .ForMember(dest => dest.DocumentPriority, opt => opt.MapFrom(src => TranslatePriority(src.dfp_priority)))
                     .ForMember(dest => dest.ReceivedDate, opt => opt.MapFrom(src => src.dfp_faxreceiveddate.HasValue? src.dfp_faxreceiveddate.Value.DateTime : src.createdon.Value.DateTime))
                     .ForMember(dest => dest.DocumentTypeBusinessArea, opt => opt.MapFrom(src => ConvertBusinessAreaToString(src.dfp_DocumentTypeID.dfp_businessarea)))
@@ -75,7 +75,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                 CreateMap<bcgov_documenturl, DmerDriverDocument>()
                     .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.bcgov_filename))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_name))
-                    .ForMember(dest => dest.DocumentStatus, opt => opt.MapFrom(src => TranslateSubmittalStatus(src.dfp_submittalstatus)))
+                    .ForMember(dest => dest.DocumentStatus, opt => opt.MapFrom(src => TranslateSubmittalStatusInt(src.dfp_submittalstatus)))
                     .ForMember(dest => dest.UploadedDate, opt => opt.MapFrom(src => src.createdon.ToString()))
                     .ForMember(dest => dest.DocumentRecordId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
                     .AddTransform(NullStringConverter);               

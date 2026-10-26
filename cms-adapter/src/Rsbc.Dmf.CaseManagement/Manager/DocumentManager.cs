@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
@@ -453,11 +453,18 @@ namespace Rsbc.Dmf.CaseManagement
 
                 
             }
+
             var dmerRecords = _mapper.Map<List<DmerDocumentRecord>>(dmerDocumenturls);
 
             foreach (var document in dmerRecords)
             {
-                document.DmerDocumentDriver.Documents = await GetDocumentsForDriver(document.DmerDocumentDriver.DriverId);
+                var otherActiveDocuments = await GetDocumentsForDriver(document.DmerDocumentDriver.DriverId);
+
+                // remove root document from complete list of driver documents
+                document.DmerDocumentDriver.Documents = otherActiveDocuments
+                    .Where(d => d.DocumentRecordId != document.DocumentRecordId)
+                    .ToList();
+
                 document.DmerDocumentCaseRecord = await GetDocumentCaseRecord(document.DmerCaseId);
             }
 
@@ -469,7 +476,10 @@ namespace Rsbc.Dmf.CaseManagement
             var driverGuid = Guid.Parse(driverId);
             var driverDocuments = dynamicsContext.bcgov_documenturls
                 .Expand(d=> d.dfp_DocumentTypeID)
-                .Where(d => d._dfp_driverid_value == driverGuid && d.dfp_DocumentTypeID.dfp_name == "DMER" && d.statecode == (int)EntityState.Active)
+                .Where(d => d._dfp_driverid_value == driverGuid 
+                        && d.dfp_DocumentTypeID.dfp_name == "DMER" 
+                        && d.dfp_submittalstatus == 100000010
+                )
                 .ToList();
             return _mapper.Map<List<DmerDriverDocument>>(driverDocuments);
         }
