@@ -88,7 +88,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         }
 
   /// <summary>Downloads a file using the existing document storage adapter client.</summary>
-        [HttpPost("{documentRecordId}/download")]
+        [HttpGet("{documentRecordId}/files")]
         [SwaggerOperation(Summary = "Download a document by dmerdocumentid", Description = "Returns the stored file as a download.")]
         [Produces("application/octet-stream")]
         [ProducesResponseType(StatusCodes.Status200OK)]
