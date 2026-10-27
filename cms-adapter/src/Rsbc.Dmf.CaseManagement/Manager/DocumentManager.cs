@@ -437,6 +437,11 @@ namespace Rsbc.Dmf.CaseManagement
                           <condition attribute='bcgov_caseid' operator='not-null'/>
                           <condition attribute='dfp_submittalstatus' operator='eq' value='100000010'/>
                         </filter>
+                        <link-entity name='dfp_submittaltype' from='dfp_submittaltypeid' to='dfp_documenttypeid' link-type='inner'>
+                          <filter type='and'>
+                            <condition attribute='dfp_name' operator='eq' value='DMER'/>
+                          </filter>
+                        </link-entity>
                       </entity>
                     </fetch>";
 
