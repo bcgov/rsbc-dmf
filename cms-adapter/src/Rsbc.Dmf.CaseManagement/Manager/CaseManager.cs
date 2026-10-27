@@ -128,7 +128,7 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string FileName { get; set; }
         public string DocumentType { get; set; }
-        public string DocumentStatus { get; set; }
+        public string SubmittalStatus { get; set; }
         public string UploadedDate { get; set; }
         public string DocumentRecordId { get; set; }
     }

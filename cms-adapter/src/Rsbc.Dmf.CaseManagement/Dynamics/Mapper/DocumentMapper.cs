@@ -75,7 +75,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                 CreateMap<bcgov_documenturl, DmerDriverDocument>()
                     .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.bcgov_filename))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_name))
-                    .ForMember(dest => dest.DocumentStatus, opt => opt.MapFrom(src => TranslateSubmittalStatusInt(src.dfp_submittalstatus)))
+                    .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => TranslateSubmittalStatusInt(src.dfp_submittalstatus)))
                     .ForMember(dest => dest.UploadedDate, opt => opt.MapFrom(src => src.createdon.ToString()))
                     .ForMember(dest => dest.DocumentRecordId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
                     .AddTransform(NullStringConverter);               

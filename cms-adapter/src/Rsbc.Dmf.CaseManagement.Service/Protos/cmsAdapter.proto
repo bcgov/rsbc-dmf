@@ -793,7 +793,7 @@ message DmerDocumentCaseRecord {
 message DriverDocument {
     string fileName = 1;
     string documentType = 2;
-    string documentStatus = 3;
+    string submittalStatus = 3;
     string uploadedDate = 4;
     string documentRecordId = 5;
 }
