@@ -397,6 +397,8 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
+
+
         /// <summary>
         /// Get Driver Legacy Documents by driver id
         /// </summary>
@@ -413,6 +415,15 @@ namespace Rsbc.Dmf.CaseManagement
 
             return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
         }
+
+        public async Task<DmerDocumentDriver> GetDriverDocumentsByLicenceNumber(string driverLicenceNumber)
+        {
+            
+
+            return new DmerDocumentDriver{};
+        }
+
+
 
         private string _DMER_DOCUMENT_TYPE_CODE = "001";
 
