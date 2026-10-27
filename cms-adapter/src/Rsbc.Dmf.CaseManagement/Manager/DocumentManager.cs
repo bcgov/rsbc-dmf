@@ -446,7 +446,6 @@ namespace Rsbc.Dmf.CaseManagement
                         </filter>
                       </entity>
                     </fetch>";
-            //            <condition attribute='dfp_code' operator='eq' value='001'/>  = "DMER"
 
             var dmerDocumenturls = dynamicsContext.CreateQuery<bcgov_documenturl>("bcgov_documenturls")
                                                 .AddQueryOption("fetchXml", fetchXml)
