@@ -60,14 +60,14 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
 
                 CreateMap<bcgov_documenturl, DmerDocumentRecord>()
                     .ForMember(dest => dest.DocumentRecordId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
-                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateDmerStatus(src.dfp_dmerstatus)))
+                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateDmerStatus(src.dfp_dmerstatus))) // perserve older mapper's unknown behaviour, use this for new one
                     .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => TranslateSubmittalStatusInt(src.dfp_submittalstatus)))
                     .ForMember(dest => dest.Queue, opt => opt.MapFrom(src => TranslateQueue(src.dfp_queue)))
                     .ForMember(dest => dest.DocumentName, opt => opt.MapFrom(src => src.bcgov_filename))
                     .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_name))
                     .ForMember(dest => dest.DocumentPriority, opt => opt.MapFrom(src => TranslatePriority(src.dfp_priority)))
-                    .ForMember(dest => dest.ReceivedDate, opt => opt.MapFrom(src => src.dfp_faxreceiveddate.HasValue 
+                    .ForMember(dest => dest.ReceivedDate, opt => opt.MapFrom(src => src.dfp_faxreceiveddate.HasValue //force to ISO 8601 string
                                                                      ? src.dfp_faxreceiveddate.Value.UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture) 
                                                                      : src.createdon.Value.UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture)))
                     .ForMember(dest => dest.DocumentTypeBusinessArea, opt => opt.MapFrom(src => ConvertBusinessAreaToString(src.dfp_DocumentTypeID.dfp_businessarea)))
@@ -79,7 +79,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.FileName, opt => opt.MapFrom(src => src.bcgov_filename))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_name))
                     .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => TranslateSubmittalStatusInt(src.dfp_submittalstatus)))
-                    .ForMember(dest => dest.UploadedDate, opt => opt.MapFrom(src => src.createdon.Value.UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture)))
+                    .ForMember(dest => dest.UploadedDate, opt => opt.MapFrom(src => src.createdon.Value.UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture))) //force to ISO 8601 string
                     .ForMember(dest => dest.DocumentRecordId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
                     .AddTransform(NullStringConverter);               
 
