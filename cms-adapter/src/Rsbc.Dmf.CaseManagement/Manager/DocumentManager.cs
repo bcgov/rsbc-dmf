@@ -434,7 +434,7 @@ namespace Rsbc.Dmf.CaseManagement
                         <attribute name='bcgov_caseid'/>
                         <link-entity name='dfp_submittaltype' from='dfp_submittaltypeid' to='dfp_documenttypeid' link-type='inner'>
                           <filter type='and'>
-                            <condition attribute='dfp_name' operator='eq' value='DMER'/>
+                            <condition attribute='dfp_code' operator='eq' value='001'/>
                           </filter>
                         </link-entity> 
                         <filter type='and'>
@@ -477,7 +477,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(d=> d.dfp_DocumentTypeID)
                 .Where(d => d._dfp_driverid_value == driverGuid 
                             && d.bcgov_documenturlid != new Guid(documentUrlId)  
-                            && d.dfp_DocumentTypeID.dfp_name == "DMER" 
+                            && d.dfp_DocumentTypeID.dfp_code == "DMER" 
                             && d.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
                 .ToList();
             return _mapper.Map<List<DmerDriverDocument>>(driverDocuments);
