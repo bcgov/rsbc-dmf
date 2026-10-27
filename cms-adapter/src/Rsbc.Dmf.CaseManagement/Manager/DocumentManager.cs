@@ -414,6 +414,8 @@ namespace Rsbc.Dmf.CaseManagement
             return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
         }
 
+        private string _DMER_DOCUMENT_TYPE_CODE = "001";
+
         public async Task<List<DmerDocumentRecord>> GetDmerRecordsPaginated(DmerRecordsPaginatedRequest request)
         {
             int pageNumber = (request.Cursor / request.PageSize) + 1;
@@ -434,7 +436,7 @@ namespace Rsbc.Dmf.CaseManagement
                         <attribute name='bcgov_caseid'/>
                         <link-entity name='dfp_submittaltype' from='dfp_submittaltypeid' to='dfp_documenttypeid' link-type='inner'>
                           <filter type='and'>
-                            <condition attribute='dfp_code' operator='eq' value='001'/>
+                            <condition attribute='dfp_code' operator='eq' value='{_DMER_DOCUMENT_TYPE_CODE}'/> 
                           </filter>
                         </link-entity> 
                         <filter type='and'>
@@ -444,7 +446,7 @@ namespace Rsbc.Dmf.CaseManagement
                         </filter>
                       </entity>
                     </fetch>";
-
+            //            <condition attribute='dfp_code' operator='eq' value='001'/>  = "DMER"
 
             var dmerDocumenturls = dynamicsContext.CreateQuery<bcgov_documenturl>("bcgov_documenturls")
                                                 .AddQueryOption("fetchXml", fetchXml)
@@ -477,7 +479,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(d=> d.dfp_DocumentTypeID)
                 .Where(d => d._dfp_driverid_value == driverGuid 
                             && d.bcgov_documenturlid != new Guid(documentUrlId)  
-                            && d.dfp_DocumentTypeID.dfp_code == "DMER" 
+                            && d.dfp_DocumentTypeID.dfp_code == _DMER_DOCUMENT_TYPE_CODE
                             && d.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
                 .ToList();
             return _mapper.Map<List<DmerDriverDocument>>(driverDocuments);
