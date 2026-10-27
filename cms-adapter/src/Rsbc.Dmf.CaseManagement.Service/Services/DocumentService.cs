@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using Rsbc.Dmf.CaseManagement.Dynamics.Mapper;
+using System.Configuration;
+using System.Runtime.CompilerServices;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -102,11 +104,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
-        public async override Task<GetDmerReply> GetDmer(CaseIdRequest request, ServerCallContext context) 
+        public async override Task<GetDmerReply> GetDmer(CaseIdRequest request, ServerCallContext context)
         {
             var result = new GetDmerReply();
-            
-            try {
+
+            try
+            {
                 var caseId = Guid.Parse(request.CaseId);
                 var dmerCase = _documentManager.GetDmer(caseId);
                 if (dmerCase == null)
@@ -120,7 +123,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                 result.Item = mappedDocument;
                 result.ResultStatus = ResultStatus.Success;
-   
+
             }
             catch (Exception ex)
             {
@@ -172,7 +175,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
- 
+
         public async override Task<UpdateClaimReply> UpdateUnClaimDmer(UpdateClaimRequest request, ServerCallContext context)
         {
             var result = new UpdateClaimReply();
@@ -220,5 +223,33 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return reply;
         }
-    } 
+
+
+        public async override Task<GetDmerRecordsPaginatedReply> GetDmerRecordsPaginated(GetDmerRecordsPaginatedRequest request, ServerCallContext context)
+        {
+            var reply = new GetDmerRecordsPaginatedReply();
+
+            try
+            {
+                var result = await _documentManager.GetDmerRecordsPaginated(new DmerRecordsPaginatedRequest
+                {
+                    PageSize = request.PageSize,
+                    Cursor = request.Cursor
+                });
+
+                var documents = _mapper.Map<IEnumerable<DmerDocumentFile>>(result);
+                reply.Items.AddRange(documents);
+                reply.ResultStatus = ResultStatus.Success;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching DMER records with pagination");
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+    }
 }

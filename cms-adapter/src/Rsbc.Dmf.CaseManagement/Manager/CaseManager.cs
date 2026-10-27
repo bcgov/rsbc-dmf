@@ -90,6 +90,59 @@ namespace Rsbc.Dmf.CaseManagement
         public bool showOnPortals { get; set; }
     }
 
+    public class DmerRecordsPaginatedRequest
+    {
+        public int PageSize { get; set; }
+        public int Cursor { get; set; }
+    }
+
+    public class DmerDocumentRecord
+    {
+        public string DocumentRecordId { get; set; }
+        public string Queue { get; set; }
+        public string DocumentName { get; set; }
+        public string DocumentUrl { get; set; }
+        public string DocumentType { get; set; }
+        public string SubmittalStatus { get; set; }
+        public string DocumentPriority { get; set; }
+        public DateTime? ReceivedDate { get; set; }
+        public string DocumentTypeBusinessArea { get; set; }
+        public string DmerStatus { get; set; }
+        public DmerDocumentDriver DmerDocumentDriver { get; set; }
+        public string DmerCaseId { get; set; }
+        public DmerDocumentCaseRecord DmerDocumentCaseRecord { get; set; }
+        public string owningteam { get; set; }
+    }
+
+    public class DmerDocumentCaseRecord
+    {
+        public string CaseId { get; set; }
+        public string CaseTitle { get; set; }
+        public string CaseType { get; set; }
+        public string CasePriority { get; set; }
+        public string CaseOwner { get; set; }
+        public string CaseStatus { get; set; }
+    }
+
+    public class DmerDriverDocument
+    {
+        public string FileName { get; set; }
+        public string DocumentType { get; set; }
+        public string SubmittalStatus { get; set; }
+        public string UploadedDate { get; set; }
+        public string DocumentRecordId { get; set; }
+    }
+
+    public class DmerDocumentDriver
+    {
+        public string DriverId { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string LicenceNumber { get; set; }
+        public List<DmerDriverDocument> Documents { get; set; }
+    }
+
     public class CreateStatusReply
     {
         public string Id;
