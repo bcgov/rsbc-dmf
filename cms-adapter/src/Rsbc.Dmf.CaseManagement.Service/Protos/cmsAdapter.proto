@@ -772,7 +772,7 @@ message DmerDocumentFile {
     string documentName = 3;
     string documentUrl = 4;
     string documentType = 5;
-    string documentStatus = 6;
+    string submittalStatus = 6;
     string documentPriority = 7;
     string receivedDate = 8;
     string documentTypeBusinessArea = 9;

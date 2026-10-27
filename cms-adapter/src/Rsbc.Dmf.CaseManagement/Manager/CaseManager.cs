@@ -103,7 +103,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string DocumentName { get; set; }
         public string DocumentUrl { get; set; }
         public string DocumentType { get; set; }
-        public string DocumentStatus { get; set; }
+        public string SubmittalStatus { get; set; }
         public string DocumentPriority { get; set; }
         public DateTime? ReceivedDate { get; set; }
         public string DocumentTypeBusinessArea { get; set; }
