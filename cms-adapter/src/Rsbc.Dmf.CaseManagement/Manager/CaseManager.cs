@@ -105,7 +105,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string DocumentType { get; set; }
         public string SubmittalStatus { get; set; }
         public string DocumentPriority { get; set; }
-        public DateTime? ReceivedDate { get; set; }
+        public string ReceivedDate { get; set; }
         public string DocumentTypeBusinessArea { get; set; }
         public string DmerStatus { get; set; }
         public DmerDocumentDriver DmerDocumentDriver { get; set; }
