@@ -18,6 +18,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
     {
         public string driverLicenceNumber { get; set; }
     }
+
     public class DriverAndDocumentsResponse //for Agentic DMER processing
     {
         public string driver_id { get; set; }
@@ -54,12 +55,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         /// </summary>
         /// <returns>Driver metadata and documents. The active case is omitted when none exists.</returns>
         /// <param name="driver_licence_number">Driver licence number to look up.</param>
-        [HttpPost("/lookup")]
+        [HttpPost("lookup")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(DriverAndDocumentsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult GetDriverMetaandDocuments([FromRoute] DriverLicenseNumber requestBody)
+        public ActionResult GetDriverMetaandDocuments([FromBody] DriverLicenseNumber requestBody)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
