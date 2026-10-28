@@ -464,14 +464,14 @@ namespace Rsbc.Dmf.CaseManagement
 
             foreach (var document in dmerRecords)
             {
-                document.DmerDocumentDriver.Documents = await GetDocumentsForDriver(document.DmerDocumentDriver.DriverId, document.DocumentRecordId);
+                document.DmerDocumentDriver.Documents = await GetDmerDocumentsForDriver(document.DmerDocumentDriver.DriverId, document.DocumentRecordId);
                 document.DmerDocumentCaseRecord = await GetDocumentCaseRecord(document.DmerCaseId);
             }
 
             return dmerRecords;
         }
 
-        private async Task<List<DmerDriverDocument>> GetDocumentsForDriver(string driverId, string documentUrlId)
+        private async Task<List<DmerDriverDocument>> GetDmerDocumentsForDriver(string driverId, string documentUrlId)
         {
             var driverGuid = Guid.Parse(driverId);
             var driverDocuments = dynamicsContext.bcgov_documenturls

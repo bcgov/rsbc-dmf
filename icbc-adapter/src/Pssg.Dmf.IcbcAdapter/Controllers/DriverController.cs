@@ -65,7 +65,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
             var driverRequest = new DriverLicenseRequest { DriverLicenseNumber = requestBody.driver_licence_number };
             var driverDocumentsReply = caseManagerClient.GetDriverDocuments(driverRequest);
-
+            
 
             if (driverDocumentsReply.ResultStatus != CmsResultStatus.Success)
             {
@@ -100,7 +100,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             var driverActiveCase = driverActiveCaseReply.Items.FirstOrDefault();
 
 
-            var documents = driverDocumentsReply.Items.Select(document => new DriverDocument
+            var documents = driverDocumentsReply.Items
+                .Where(document => document.DocumentType == "DMER" && document.SubmittalStatus == "Uploaded")
+                .Select(document => new DriverDocument
             {
                 FileName = document.DocumentUrl,
                 DocumentType = document.DocumentType,
