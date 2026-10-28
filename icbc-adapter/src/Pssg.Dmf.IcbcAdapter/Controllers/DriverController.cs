@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
 using CmsResultStatus = Rsbc.Dmf.CaseManagement.Service.ResultStatus;
+using System;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -100,7 +101,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
             var driverActiveCase = driverActiveCaseReply.Items.FirstOrDefault();
 
-
             var documents = driverDocumentsReply.Items
                 .Where(document => document.DocumentType == "DMER" && document.SubmittalStatus == "Uploaded")
                 .Select(document => new DriverDocument
@@ -108,8 +108,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 FileName = document.DocumentUrl,
                 DocumentType = document.DocumentType,
                 SubmittalStatus = document.SubmittalStatus,
-                UploadedDate = document.CreateDate.ToDateTime()
-                    .ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture) ?? string.Empty,
+                UploadedDate = document.CreateDate == null 
+                    ? document.FaxReceivedDate.ToDateTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture)
+                    : document.CreateDate.ToDateTime().ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture) ,
                 DocumentRecordId = document.DocumentId
             }).ToList();
 
@@ -126,8 +127,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             var response = new DriverAndDocumentsResponse
             {
                 driver_id = driverPerson.Id,
-                first_name = driverPerson.GivenName,
-                middle_name = driverPerson.Middlename,
+                first_name = driverActiveCase != null ? driverActiveCase.FirstName : String.Empty,   // get driver cannot return first name
+                middle_name = driverActiveCase != null ? driverActiveCase.Middlename: String.Empty,  // get driver cannot return middle name
                 last_name = driverPerson.Surname,
                 licence_number = driverPerson.DriverLicenseNumber,
                 documents = documents,
