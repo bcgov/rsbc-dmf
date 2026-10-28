@@ -127,7 +127,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             var response = new DriverAndDocumentsResponse
             {
                 driver_id = driverPerson.Id,
-                first_name = driverActiveCase != null ? driverActiveCase.FirstName : String.Empty,   // get driver cannot return first name
+                first_name = driverPerson.GivenName,
                 middle_name = driverActiveCase != null ? driverActiveCase.Middlename: String.Empty,  // get driver cannot return middle name
                 last_name = driverPerson.Surname,
                 licence_number = driverPerson.DriverLicenseNumber,
