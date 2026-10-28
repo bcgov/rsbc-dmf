@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-
 using Microsoft.IdentityModel.Tokens;
 using Rsbc.Dmf.CaseManagement.Service;
 using System;
@@ -24,9 +23,32 @@ using Grpc.Core;
 using Microsoft.AspNetCore.StaticFiles;
 using Swashbuckle.AspNetCore.Annotations;
 using DocumentStorageClient = Pssg.DocumentStorageAdapter.DocumentStorageAdapter.DocumentStorageAdapterClient;
+using System.Collections.Generic;
+using Google.Protobuf.WellKnownTypes;
+using System.Linq;
+using Org.BouncyCastle.Crypto;
+using System.Globalization;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
+
+
+
+
+    public class DriverAndDocumentsResponse //for Agentic DMER processing
+    {
+        public string driver_id {get;set;}
+        public string first_name {get;set;}
+        public string middle_name {get;set;}
+        public string last_name {get;set;}
+        public string licence_number {get;set;}
+        public List<DriverDocument> documents {get;set;}
+        public DmerDocumentCaseRecord activeCase {get;set;}
+    }
+
+    
+
+
     [Authorize]
     [ApiController]
     [Route("[controller]")]
@@ -60,10 +82,47 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             using var scope = _serviceScopeFactory.CreateScope();
             var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
             var driverRequest = new DriverLicenseRequest {DriverLicenseNumber = driver_licence_number};
-            var driver = caseManagerClient.GetDriverDocuments(driverRequest);
+            var driverDocuments = caseManagerClient.GetDriverDocuments(driverRequest);
+            var driverPersonReply = caseManagerClient.GetDriverPerson(driverRequest);
+            var driverActiveCaseReply = caseManagerClient.GetActiveCases(driverRequest);
 
-            Console.WriteLine(driver);
-            return Json(driver);
+            Console.WriteLine(driverDocuments.Items);
+            Console.WriteLine(driverPersonReply);
+            // add checks for person and document GET
+
+            var driverPerson = caseManagerClient.GetDriverPerson(driverRequest).Items[0];
+            var driverActiveCase = driverActiveCaseReply.Items[0];
+
+            var documents = driverDocuments.Items.Select(document => new DriverDocument
+            {
+                FileName = document.DocumentUrl,
+                DocumentType = document.DocumentType,
+                SubmittalStatus = document.SubmittalStatus,
+                UploadedDate = document.FaxReceivedDate?.ToDateTime()
+                    .ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture) ?? string.Empty,
+                DocumentRecordId = document.DocumentId
+            }).ToList();
+
+            var driver_case = new DmerDocumentCaseRecord {
+                CaseId =  driverActiveCase.CaseId,
+                CaseTitle = driverActiveCase.Title,
+                CaseType = driverActiveCase.CaseType,
+                CasePriority = driverActiveCase.Priority,
+                CaseOwner = driverActiveCase.AssigneeTitle,
+                CaseStatus = driverActiveCase.Status
+            };
+
+            var response = new DriverAndDocumentsResponse {
+                driver_id = driverPerson.Id,
+                first_name = driverPerson.GivenName,
+                middle_name = driverPerson.Middlename,
+                last_name = driverPerson.Surname,
+                licence_number = driverPerson.DriverLicenseNumber,
+                documents = documents,
+                activeCase = driver_case
+            };
+
+            return Json(response);
         }
     }
 }
