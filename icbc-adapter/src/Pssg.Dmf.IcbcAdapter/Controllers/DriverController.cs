@@ -13,15 +13,20 @@ using CmsResultStatus = Rsbc.Dmf.CaseManagement.Service.ResultStatus;
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
 
+
+    public class DriverLicenseNumber
+    {
+        public string driver_licence_number { get; set; }
+    }
     public class DriverAndDocumentsResponse //for Agentic DMER processing
     {
-        public string driver_id {get;set;}
-        public string first_name {get;set;}
-        public string middle_name {get;set;}
-        public string last_name {get;set;}
-        public string licence_number {get;set;}
-        public List<DriverDocument> documents {get;set;}
-        public DmerDocumentCaseRecord activeCase {get;set;}
+        public string driver_id { get; set; }
+        public string first_name { get; set; }
+        public string middle_name { get; set; }
+        public string last_name { get; set; }
+        public string licence_number { get; set; }
+        public List<DriverDocument> documents { get; set; }
+        public DmerDocumentCaseRecord activeCase { get; set; }
     }
 
 
@@ -38,27 +43,27 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
         public DriverController(IConfiguration configuration, ILogger<DmersController> logger, IServiceScopeFactory serviceScopeFactory)
         {
-           _configuration = configuration;
-           _logger = logger;
+            _configuration = configuration;
+            _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
         }
 
-      
-    /// <summary>
-    /// Gets a driver, their documents, and their first active case, if any.
-    /// </summary>
-    /// <returns>Driver metadata and documents. The active case is omitted when none exists.</returns>
-    /// <param name="driver_licence_number">Driver licence number to look up.</param>
-    [HttpGet("{driver_licence_number}")]
-    [Produces("application/json")]
-    [ProducesResponseType(typeof(DriverAndDocumentsResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public ActionResult GetDriverMetaandDocuments([FromRoute] string driver_licence_number)
+
+        /// <summary>
+        /// Gets a driver, their documents, and their first active case, if any.
+        /// </summary>
+        /// <returns>Driver metadata and documents. The active case is omitted when none exists.</returns>
+        /// <param name="driver_licence_number">Driver licence number to look up.</param>
+        [HttpPost("/lookup")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(DriverAndDocumentsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public ActionResult GetDriverMetaandDocuments([FromRoute] DriverLicenseNumber requestBody)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
-            var driverRequest = new DriverLicenseRequest {DriverLicenseNumber = driver_licence_number};
+            var driverRequest = new DriverLicenseRequest { DriverLicenseNumber = requestBody.driver_licence_number };
             var driverDocumentsReply = caseManagerClient.GetDriverDocuments(driverRequest);
 
 
@@ -105,8 +110,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 DocumentRecordId = document.DocumentId
             }).ToList();
 
-            var driver_case = driverActiveCase == null ? null : new DmerDocumentCaseRecord {
-                CaseId =  driverActiveCase.CaseId,
+            var driver_case = driverActiveCase == null ? null : new DmerDocumentCaseRecord
+            {
+                CaseId = driverActiveCase.CaseId,
                 CaseTitle = driverActiveCase.Title,
                 CaseType = driverActiveCase.CaseType,
                 CasePriority = driverActiveCase.Priority,
@@ -114,7 +120,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 CaseStatus = driverActiveCase.Status
             };
 
-            var response = new DriverAndDocumentsResponse {
+            var response = new DriverAndDocumentsResponse
+            {
                 driver_id = driverPerson.Id,
                 first_name = driverPerson.GivenName,
                 middle_name = driverPerson.Middlename,
