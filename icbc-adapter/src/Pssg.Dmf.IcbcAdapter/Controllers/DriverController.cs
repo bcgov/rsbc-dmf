@@ -28,6 +28,7 @@ using Google.Protobuf.WellKnownTypes;
 using System.Linq;
 using Org.BouncyCastle.Crypto;
 using System.Globalization;
+using CmsResultStatus = Rsbc.Dmf.CaseManagement.Service.ResultStatus;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -64,26 +65,55 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
       
     /// <summary>
-    /// GET: /dmers?pageSize=50&amp;cursor=0
+    /// Gets a driver, their documents, and their first active case, if any.
     /// </summary>
-    /// <returns>DMER items, the requested page_size, and a nextLink for full pages.</returns>
-    /// <param name="pageSize">Maximum number of records to return</param>
-    /// <param name="cursor">Zero-based offset of the first record in the page</param>
+    /// <returns>Driver metadata and documents. The active case is omitted when none exists.</returns>
+    /// <param name="driver_licence_number">Driver licence number to look up.</param>
     [HttpGet("{driver_licence_number}")]
     [Produces("application/json")]
+    [ProducesResponseType(typeof(DriverAndDocumentsResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     public ActionResult GetDriverMetaandDocuments([FromRoute] string driver_licence_number)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
             var driverRequest = new DriverLicenseRequest {DriverLicenseNumber = driver_licence_number};
             var driverDocumentsReply = caseManagerClient.GetDriverDocuments(driverRequest);
+
+
+            if (driverDocumentsReply.ResultStatus != CmsResultStatus.Success)
+            {
+                _logger.LogError("CMS adapter driver documents lookup failed: {ErrorDetail}", driverDocumentsReply.ErrorDetail);
+                return Problem(statusCode: StatusCodes.Status500InternalServerError,
+                    title: "Unable to get the driver's documents.");
+            }
+
             var driverPersonReply = caseManagerClient.GetDriverPerson(driverRequest);
+            if (driverPersonReply.ResultStatus != CmsResultStatus.Success)
+            {
+                _logger.LogError("CMS adapter driver lookup failed: {ErrorDetail}", driverPersonReply.ErrorDetail);
+                return Problem(statusCode: StatusCodes.Status500InternalServerError,
+                    title: "Unable to get the driver.");
+            }
+
+            var driverPerson = driverPersonReply.Items.FirstOrDefault();
+            if (driverPerson == null)
+            {
+                return Problem(statusCode: StatusCodes.Status404NotFound,
+                    title: "Driver not found.");
+            }
+
             var driverActiveCaseReply = caseManagerClient.GetActiveCases(driverRequest);
+            if (driverActiveCaseReply.ResultStatus != CmsResultStatus.Success)
+            {
+                _logger.LogError("CMS adapter active cases lookup failed: {ErrorDetail}", driverActiveCaseReply.ErrorDetail);
+                return Problem(statusCode: StatusCodes.Status500InternalServerError,
+                    title: "Unable to get the driver's active cases.");
+            }
 
+            var driverActiveCase = driverActiveCaseReply.Items.FirstOrDefault();
 
-
-            var driverPerson = caseManagerClient.GetDriverPerson(driverRequest).Items[0];
-            var driverActiveCase = driverActiveCaseReply.Items[0];
 
             var documents = driverDocumentsReply.Items.Select(document => new DriverDocument
             {
@@ -95,7 +125,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 DocumentRecordId = document.DocumentId
             }).ToList();
 
-            var driver_case = new DmerDocumentCaseRecord {
+            var driver_case = driverActiveCase == null ? null : new DmerDocumentCaseRecord {
                 CaseId =  driverActiveCase.CaseId,
                 CaseTitle = driverActiveCase.Title,
                 CaseType = driverActiveCase.CaseType,
