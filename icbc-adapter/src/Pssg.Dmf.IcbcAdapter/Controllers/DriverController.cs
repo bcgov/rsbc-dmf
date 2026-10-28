@@ -76,18 +76,16 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             using var scope = _serviceScopeFactory.CreateScope();
             var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
             var driverRequest = new DriverLicenseRequest {DriverLicenseNumber = driver_licence_number};
-            var driverDocuments = caseManagerClient.GetDriverDocuments(driverRequest);
+            var driverDocumentsReply = caseManagerClient.GetDriverDocuments(driverRequest);
             var driverPersonReply = caseManagerClient.GetDriverPerson(driverRequest);
             var driverActiveCaseReply = caseManagerClient.GetActiveCases(driverRequest);
 
-            Console.WriteLine(driverDocuments.Items);
-            Console.WriteLine(driverPersonReply);
-            // add checks for person and document GET
+
 
             var driverPerson = caseManagerClient.GetDriverPerson(driverRequest).Items[0];
             var driverActiveCase = driverActiveCaseReply.Items[0];
 
-            var documents = driverDocuments.Items.Select(document => new DriverDocument
+            var documents = driverDocumentsReply.Items.Select(document => new DriverDocument
             {
                 FileName = document.DocumentUrl,
                 DocumentType = document.DocumentType,
