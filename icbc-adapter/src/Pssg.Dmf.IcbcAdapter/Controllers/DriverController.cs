@@ -108,7 +108,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 FileName = document.DocumentUrl,
                 DocumentType = document.DocumentType,
                 SubmittalStatus = document.SubmittalStatus,
-                UploadedDate = document.FaxReceivedDate?.ToDateTime()
+                UploadedDate = document.CreateDate.ToDateTime()
                     .ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture) ?? string.Empty,
                 DocumentRecordId = document.DocumentId
             }).ToList();
