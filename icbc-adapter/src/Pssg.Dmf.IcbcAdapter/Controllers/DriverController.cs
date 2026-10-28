@@ -63,7 +63,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
-            var driverRequest = new DriverLicenseRequest { DriverLicenseNumber = requestBody.driver_licence_number };
+            var driverRequest = new DriverLicenseRequest { DriverLicenseNumber = requestBody.driverLicenceNumber };
             var driverDocumentsReply = caseManagerClient.GetDriverDocuments(driverRequest);
             
 
