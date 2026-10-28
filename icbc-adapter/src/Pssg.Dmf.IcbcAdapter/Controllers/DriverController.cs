@@ -16,7 +16,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
     public class DriverLicenseNumber
     {
-        public string driver_licence_number { get; set; }
+        public string driverLicenceNumber { get; set; }
     }
     public class DriverAndDocumentsResponse //for Agentic DMER processing
     {
