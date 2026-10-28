@@ -397,8 +397,6 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-
-
         /// <summary>
         /// Get Driver Legacy Documents by driver id
         /// </summary>
