@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
+using Microsoft.Xrm.Sdk;
 using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.CaseManagement.Dynamics.Mapper;
@@ -408,7 +409,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(d => d.dfp_DocumentTypeID)
                 .Expand(sd => sd.dfp_DocumentSubType)
                 .Expand(d => d.bcgov_CaseId)
-                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)EntityState.Active && d.dfp_showonportals != false)
+                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)Dynamics.EntityState.Active && d.dfp_showonportals != false)
             .ToList();
 
             return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
@@ -469,6 +470,30 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return dmerRecords;
+        }
+
+        /// <summary>
+        /// Get Driver Legacy Documents by driver id
+        /// </summary>
+        /// <param name="driverId"></param>
+        /// <returns></returns>
+        public async Task<ResultStatusReply> SetDmerAIProccessedStatus(SetDmerAIProccessedStatus request)
+        {
+            var result = new ResultStatusReply();
+            try
+            {
+                var dmerDoc = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == new Guid(request.documenturlId)).FirstOrDefault();
+                dmerDoc.dfp_aiprocessedstatus = request.dmerAiStatus;
+                dynamicsContext.UpdateObject(dmerDoc);
+                await dynamicsContext.SaveChangesAsync();
+                result.Success = true;
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
+
+            }
+            return result;
         }
 
         private async Task<List<DmerDriverDocument>> GetDocumentsForDriver(string driverId, string documentUrlId)
