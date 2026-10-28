@@ -32,9 +32,6 @@ using System.Globalization;
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
 
-
-
-
     public class DriverAndDocumentsResponse //for Agentic DMER processing
     {
         public string driver_id {get;set;}
@@ -45,8 +42,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         public List<DriverDocument> documents {get;set;}
         public DmerDocumentCaseRecord activeCase {get;set;}
     }
-
-    
 
 
     [Authorize]
@@ -66,7 +61,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
            _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
         }
-
 
       
     /// <summary>
