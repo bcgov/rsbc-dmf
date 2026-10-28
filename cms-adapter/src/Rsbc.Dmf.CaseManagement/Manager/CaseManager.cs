@@ -418,6 +418,12 @@ namespace Rsbc.Dmf.CaseManagement
         public bool Success { get; set; }
     }
 
+    public class SetDmerAIProccessedStatus
+        {
+    public  int dmerAiStatus { get; set; }
+    public string documenturlId { get; set; }
+    }
+
     #endregion Model
 
     internal partial class CaseManager : ICaseManager

@@ -649,6 +649,7 @@ service DocumentManager {
 
 	// Get DMER records
 	rpc GetDmerRecordsPaginated(GetDmerRecordsPaginatedRequest) returns (GetDmerRecordsPaginatedReply);
+	rpc SetDmerAIProccessedStatus(SetDmerAIProccessedStatusRequest) returns (SetDmerAIProccessedStatusReply);
 }
 
 message UpdateDocumentRequest {
@@ -818,6 +819,16 @@ message DocumentIdRequest {
 
 message DocumentTypeRequest {
 	string documentTypeCode = 1;
+}
+
+message SetDmerAIProccessedStatusRequest {
+    int32 dmerAiStatus = 1;
+    string documenturlId = 2;
+}
+
+message SetDmerAIProccessedStatusReply {
+    ResultStatus resultStatus = 1;
+    string errorMessage = 2;
 }
 
 message DocumentSubType {

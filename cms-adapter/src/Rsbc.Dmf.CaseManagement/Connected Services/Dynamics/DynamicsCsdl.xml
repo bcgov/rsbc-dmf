@@ -2441,6 +2441,9 @@
         <NavigationProperty Name="regardingobjectid_dfp_judicialreview" Type="mscrm.dfp_judicialreview" Nullable="false" Partner="dfp_judicialreview_AsyncOperations">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_judicialreviewid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_rehabactivities" Type="mscrm.dfp_rehabactivities" Nullable="false" Partner="dfp_rehabactivities_AsyncOperations">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_rehabactivitiesid" />
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="attachment" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -2735,6 +2738,7 @@
         <Property Name="_dfp_useruploaded_value" Type="Edm.Guid" />
         <Property Name="dfp_isoldestdocument" Type="Edm.Boolean" />
         <Property Name="bcgov_filename" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_aiprocessedstatus" Type="Edm.Int32" />
         <Property Name="dfp_dmertype" Type="Edm.Int32" />
         <Property Name="dfp_extensiondays" Type="Edm.Int32" />
         <Property Name="_bcgov_caseid_value" Type="Edm.Guid" />
@@ -5486,6 +5490,9 @@
         <NavigationProperty Name="regardingobjectid_dfp_judicialreview" Type="mscrm.dfp_judicialreview" Nullable="false" Partner="dfp_judicialreview_BulkDeleteFailures">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_judicialreviewid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_rehabactivities" Type="mscrm.dfp_rehabactivities" Nullable="false" Partner="dfp_rehabactivities_BulkDeleteFailures">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_rehabactivitiesid" />
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="bulkdeleteoperation" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -6005,6 +6012,7 @@
         <NavigationProperty Name="business_unit_bcgov_schedulejobconfiguration" Type="Collection(mscrm.bcgov_schedulejobconfiguration)" Partner="owningbusinessunit" />
         <NavigationProperty Name="business_unit_dfp_additionaldetails" Type="Collection(mscrm.dfp_additionaldetails)" Partner="owningbusinessunit" />
         <NavigationProperty Name="business_unit_dfp_judicialreview" Type="Collection(mscrm.dfp_judicialreview)" Partner="owningbusinessunit" />
+        <NavigationProperty Name="business_unit_dfp_rehabactivities" Type="Collection(mscrm.dfp_rehabactivities)" Partner="owningbusinessunit" />
       </EntityType>
       <EntityType Name="calendarrule" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -10404,6 +10412,7 @@
         <NavigationProperty Name="dfp_driver_dfp_rehabtrigger_DriverId" Type="Collection(mscrm.dfp_rehabtrigger)" Partner="dfp_DriverId" />
         <NavigationProperty Name="dfp_driver_dfp_additionaldetails_DriverId" Type="Collection(mscrm.dfp_additionaldetails)" Partner="dfp_DriverId" />
         <NavigationProperty Name="dfp_dfp_driver_dfp_judicialreview_DRIVER" Type="Collection(mscrm.dfp_judicialreview)" Partner="dfp_DRIVER" />
+        <NavigationProperty Name="dfp_dfp_driver_dfp_rehabactivities_Driver" Type="Collection(mscrm.dfp_rehabactivities)" Partner="dfp_Driver" />
       </EntityType>
       <EntityType Name="dfp_flag" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -10566,6 +10575,7 @@
           <ReferentialConstraint Property="_dfp_parentiip_value" ReferencedProperty="dfp_ignitioninterlockid" />
         </NavigationProperty>
         <NavigationProperty Name="dfp_ignitioninterlock_dfp_ignitioninterlock_ParentIIP" Type="Collection(mscrm.dfp_ignitioninterlock)" Partner="dfp_ParentIIP" />
+        <NavigationProperty Name="dfp_dfp_ignitioninterlock_dfp_rehabactivities_IgnitionInterlock" Type="Collection(mscrm.dfp_rehabactivities)" Partner="dfp_IgnitionInterlock" />
       </EntityType>
       <EntityType Name="dfp_judicialreview" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -11498,6 +11508,82 @@
         </NavigationProperty>
         <NavigationProperty Name="dfp_programrecord_dfp_comment" Type="Collection(mscrm.dfp_comment)" Partner="dfp_ProgramRecordId" />
       </EntityType>
+      <EntityType Name="dfp_rehabactivities" BaseType="mscrm.crmbaseentity">
+        <Key>
+          <PropertyRef Name="dfp_rehabactivitiesid" />
+        </Key>
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="_dfp_ignitioninterlock_value" Type="Edm.Guid" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="_ownerid_value" Type="Edm.Guid" />
+        <Property Name="_dfp_rehabtrigger_value" Type="Edm.Guid" />
+        <Property Name="_owninguser_value" Type="Edm.Guid" />
+        <Property Name="dfp_activitydate" Type="Edm.DateTimeOffset" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="_dfp_case_value" Type="Edm.Guid" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="dfp_rehabactivitiesid" Type="Edm.Guid" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="dfp_activity" Type="Edm.Int32" />
+        <Property Name="dfp_oracleuserid" Type="Edm.String" Unicode="false" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_oracleid" Type="Edm.String" Unicode="false" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="dfp_name" Type="Edm.String" Unicode="false" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_dfp_driver_value" Type="Edm.Guid" />
+        <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_rehabactivities_createdby">
+          <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="createdonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_rehabactivities_createdonbehalfby">
+          <ReferentialConstraint Property="_createdonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_rehabactivities_modifiedby">
+          <ReferentialConstraint Property="_modifiedby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_rehabactivities_modifiedonbehalfby">
+          <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owninguser" Type="mscrm.systemuser" Nullable="false" Partner="user_dfp_rehabactivities">
+          <ReferentialConstraint Property="_owninguser_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningteam" Type="mscrm.team" Nullable="false" Partner="team_dfp_rehabactivities">
+          <ReferentialConstraint Property="_owningteam_value" ReferencedProperty="teamid" />
+        </NavigationProperty>
+        <NavigationProperty Name="ownerid" Type="mscrm.principal" Nullable="false" Partner="owner_dfp_rehabactivities">
+          <ReferentialConstraint Property="_ownerid_value" ReferencedProperty="ownerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningbusinessunit" Type="mscrm.businessunit" Nullable="false" Partner="business_unit_dfp_rehabactivities">
+          <ReferentialConstraint Property="_owningbusinessunit_value" ReferencedProperty="businessunitid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_rehabactivities_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_dfp_rehabactivities" />
+        <NavigationProperty Name="dfp_rehabactivities_DuplicateMatchingRecord" Type="Collection(mscrm.duplicaterecord)" Partner="duplicaterecordid_dfp_rehabactivities" />
+        <NavigationProperty Name="dfp_rehabactivities_DuplicateBaseRecord" Type="Collection(mscrm.duplicaterecord)" Partner="baserecordid_dfp_rehabactivities" />
+        <NavigationProperty Name="dfp_rehabactivities_AsyncOperations" Type="Collection(mscrm.asyncoperation)" Partner="regardingobjectid_dfp_rehabactivities" />
+        <NavigationProperty Name="dfp_rehabactivities_MailboxTrackingFolders" Type="Collection(mscrm.mailboxtrackingfolder)" Partner="regardingobjectid_dfp_rehabactivities" />
+        <NavigationProperty Name="dfp_rehabactivities_ProcessSession" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_dfp_rehabactivities" />
+        <NavigationProperty Name="dfp_rehabactivities_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_dfp_rehabactivities" />
+        <NavigationProperty Name="dfp_rehabactivities_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_dfp_rehabactivities" />
+        <NavigationProperty Name="dfp_Driver" Type="mscrm.dfp_driver" Nullable="false" Partner="dfp_dfp_driver_dfp_rehabactivities_Driver">
+          <ReferentialConstraint Property="_dfp_driver_value" ReferencedProperty="dfp_driverid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_RehabTrigger" Type="mscrm.dfp_rehabtrigger" Nullable="false" Partner="dfp_dfp_rehabtrigger_dfp_rehabactivities_RehabTrigger">
+          <ReferentialConstraint Property="_dfp_rehabtrigger_value" ReferencedProperty="dfp_rehabtriggerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_IgnitionInterlock" Type="mscrm.dfp_ignitioninterlock" Nullable="false" Partner="dfp_dfp_ignitioninterlock_dfp_rehabactivities_IgnitionInterlock">
+          <ReferentialConstraint Property="_dfp_ignitioninterlock_value" ReferencedProperty="dfp_ignitioninterlockid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_Case" Type="mscrm.incident" Nullable="false" Partner="dfp_incident_dfp_rehabactivities_Case">
+          <ReferentialConstraint Property="_dfp_case_value" ReferencedProperty="incidentid" />
+        </NavigationProperty>
+      </EntityType>
       <EntityType Name="dfp_rehabtrigger" BaseType="mscrm.crmbaseentity">
         <Key>
           <PropertyRef Name="dfp_rehabtriggerid" />
@@ -11578,6 +11664,7 @@
         <NavigationProperty Name="dfp_CaseId" Type="mscrm.incident" Nullable="false" Partner="dfp_incident_dfp_rehabtrigger_CaseId">
           <ReferentialConstraint Property="_dfp_caseid_value" ReferencedProperty="incidentid" />
         </NavigationProperty>
+        <NavigationProperty Name="dfp_dfp_rehabtrigger_dfp_rehabactivities_RehabTrigger" Type="Collection(mscrm.dfp_rehabactivities)" Partner="dfp_RehabTrigger" />
       </EntityType>
       <EntityType Name="dfp_remedialcasebusinessprocessflow" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -11770,20 +11857,6 @@
         <NavigationProperty Name="dfp_submittaltype_incident_OldestDocumentReceivedTypeId" Type="Collection(mscrm.incident)" Partner="dfp_OldestDocumentReceivedTypeId" />
         <NavigationProperty Name="dfp_submittaltype_incident_DocumentTypeID" Type="Collection(mscrm.incident)" Partner="dfp_DocumentTypeID" />
         <NavigationProperty Name="dfp_submittaltype_dfp_pdfdocument_DocumentTypeID" Type="Collection(mscrm.dfp_pdfdocument)" Partner="dfp_DocumentTypeID" />
-        <Annotation Term="OData.Community.Keys.V1.AlternateKeys">
-          <Collection>
-            <Record Type="OData.Community.Keys.V1.AlternateKey">
-              <PropertyValue Property="Key">
-                <Collection>
-                  <Record Type="OData.Community.Keys.V1.PropertyRef">
-                    <PropertyValue Property="Alias" String="dfp_code" />
-                    <PropertyValue Property="Name" PropertyPath="dfp_code" />
-                  </Record>
-                </Collection>
-              </PropertyValue>
-            </Record>
-          </Collection>
-        </Annotation>
       </EntityType>
       <EntityType Name="dfp_xsstatuscode" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -12815,6 +12888,12 @@
         </NavigationProperty>
         <NavigationProperty Name="baserecordid_dfp_judicialreview" Type="mscrm.dfp_judicialreview" Nullable="false" Partner="dfp_judicialreview_DuplicateBaseRecord">
           <ReferentialConstraint Property="_baserecordid_value" ReferencedProperty="dfp_judicialreviewid" />
+        </NavigationProperty>
+        <NavigationProperty Name="duplicaterecordid_dfp_rehabactivities" Type="mscrm.dfp_rehabactivities" Nullable="false" Partner="dfp_rehabactivities_DuplicateMatchingRecord">
+          <ReferentialConstraint Property="_duplicaterecordid_value" ReferencedProperty="dfp_rehabactivitiesid" />
+        </NavigationProperty>
+        <NavigationProperty Name="baserecordid_dfp_rehabactivities" Type="mscrm.dfp_rehabactivities" Nullable="false" Partner="dfp_rehabactivities_DuplicateBaseRecord">
+          <ReferentialConstraint Property="_baserecordid_value" ReferencedProperty="dfp_rehabactivitiesid" />
         </NavigationProperty>
       </EntityType>
       <EntityType Name="duplicaterulecondition" BaseType="mscrm.crmbaseentity">
@@ -15636,6 +15715,7 @@
         <Property Name="_dfp_policeagency_value" Type="Edm.Guid" />
         <Property Name="dfp_applicationdate" Type="Edm.DateTimeOffset" />
         <Property Name="_ownerid_value" Type="Edm.Guid" />
+        <Property Name="dfp_reprocesscasetitles" Type="Edm.String" Unicode="false" />
         <Property Name="dfp_datesenttoicbc" Type="Edm.DateTimeOffset" />
         <Property Name="dfp_oracleid" Type="Edm.String" Unicode="false" />
         <Property Name="dfp_decisionmadedate" Type="Edm.DateTimeOffset" />
@@ -15719,6 +15799,7 @@
         <Property Name="activitiescomplete" Type="Edm.Boolean" />
         <Property Name="dfp_comment" Type="Edm.Boolean" />
         <Property Name="dfp_rehabnotes" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_dpteam" Type="Edm.Int32" />
         <Property Name="processid" Type="Edm.Guid" />
         <Property Name="firstresponseslastatus" Type="Edm.Int32" />
         <Property Name="_contactid_value" Type="Edm.Guid" />
@@ -15888,6 +15969,7 @@
         </NavigationProperty>
         <NavigationProperty Name="dfp_incident_dfp_additionaldetails_CaseId" Type="Collection(mscrm.dfp_additionaldetails)" Partner="dfp_CaseId" />
         <NavigationProperty Name="dfp_incident_dfp_judicialreview_Case" Type="Collection(mscrm.dfp_judicialreview)" Partner="dfp_Case" />
+        <NavigationProperty Name="dfp_incident_dfp_rehabactivities_Case" Type="Collection(mscrm.dfp_rehabactivities)" Partner="dfp_Case" />
       </EntityType>
       <EntityType Name="interactionforemail" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -18456,6 +18538,9 @@
         </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_dfp_judicialreview" Type="mscrm.dfp_judicialreview" Nullable="false" Partner="dfp_judicialreview_MailboxTrackingFolders">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_judicialreviewid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_rehabactivities" Type="mscrm.dfp_rehabactivities" Nullable="false" Partner="dfp_rehabactivities_MailboxTrackingFolders">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_rehabactivitiesid" />
         </NavigationProperty>
       </EntityType>
       <EntityType Name="mailmergetemplate" BaseType="mscrm.crmbaseentity">
@@ -24200,6 +24285,7 @@
         <NavigationProperty Name="owner_bcgov_schedulejobconfiguration" Type="Collection(mscrm.bcgov_schedulejobconfiguration)" Partner="ownerid" />
         <NavigationProperty Name="owner_dfp_additionaldetails" Type="Collection(mscrm.dfp_additionaldetails)" Partner="ownerid" />
         <NavigationProperty Name="owner_dfp_judicialreview" Type="Collection(mscrm.dfp_judicialreview)" Partner="ownerid" />
+        <NavigationProperty Name="owner_dfp_rehabactivities" Type="Collection(mscrm.dfp_rehabactivities)" Partner="ownerid" />
       </EntityType>
       <EntityType Name="package_solution" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -25816,6 +25902,9 @@
         <NavigationProperty Name="objectid_dfp_judicialreview" Type="mscrm.dfp_judicialreview" Nullable="false" Partner="dfp_judicialreview_PrincipalObjectAttributeAccesses">
           <ReferentialConstraint Property="_objectid_value" ReferencedProperty="dfp_judicialreviewid" />
         </NavigationProperty>
+        <NavigationProperty Name="objectid_dfp_rehabactivities" Type="mscrm.dfp_rehabactivities" Nullable="false" Partner="dfp_rehabactivities_PrincipalObjectAttributeAccesses">
+          <ReferentialConstraint Property="_objectid_value" ReferencedProperty="dfp_rehabactivitiesid" />
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="privilege" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -26633,6 +26722,9 @@
         </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_dfp_judicialreview" Type="mscrm.dfp_judicialreview" Nullable="false" Partner="dfp_judicialreview_ProcessSession">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_judicialreviewid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_rehabactivities" Type="mscrm.dfp_rehabactivities" Nullable="false" Partner="dfp_rehabactivities_ProcessSession">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_rehabactivitiesid" />
         </NavigationProperty>
       </EntityType>
       <EntityType Name="processstageparameter" BaseType="mscrm.crmbaseentity">
@@ -32157,6 +32249,9 @@
         <NavigationProperty Name="regardingobjectid_dfp_judicialreview" Type="mscrm.dfp_judicialreview" Nullable="false" Partner="dfp_judicialreview_SyncErrors">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_judicialreviewid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_rehabactivities" Type="mscrm.dfp_rehabactivities" Nullable="false" Partner="dfp_rehabactivities_SyncErrors">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_rehabactivitiesid" />
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="systemform" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -32268,6 +32363,7 @@
         <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
         <Property Name="address1_addressid" Type="Edm.Guid" />
         <Property Name="address1_composite" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_dpteam" Type="Edm.Int32" />
         <Property Name="address1_city" Type="Edm.String" Unicode="false" />
         <Property Name="address2_county" Type="Edm.String" Unicode="false" />
         <Property Name="setupuser" Type="Edm.Boolean" />
@@ -34018,6 +34114,11 @@
         <NavigationProperty Name="lk_dfp_judicialreview_modifiedby" Type="Collection(mscrm.dfp_judicialreview)" Partner="modifiedby" />
         <NavigationProperty Name="lk_dfp_judicialreview_modifiedonbehalfby" Type="Collection(mscrm.dfp_judicialreview)" Partner="modifiedonbehalfby" />
         <NavigationProperty Name="user_dfp_judicialreview" Type="Collection(mscrm.dfp_judicialreview)" Partner="owninguser" />
+        <NavigationProperty Name="lk_dfp_rehabactivities_createdby" Type="Collection(mscrm.dfp_rehabactivities)" Partner="createdby" />
+        <NavigationProperty Name="lk_dfp_rehabactivities_createdonbehalfby" Type="Collection(mscrm.dfp_rehabactivities)" Partner="createdonbehalfby" />
+        <NavigationProperty Name="lk_dfp_rehabactivities_modifiedby" Type="Collection(mscrm.dfp_rehabactivities)" Partner="modifiedby" />
+        <NavigationProperty Name="lk_dfp_rehabactivities_modifiedonbehalfby" Type="Collection(mscrm.dfp_rehabactivities)" Partner="modifiedonbehalfby" />
+        <NavigationProperty Name="user_dfp_rehabactivities" Type="Collection(mscrm.dfp_rehabactivities)" Partner="owninguser" />
       </EntityType>
       <EntityType Name="systemusersyncmappingprofiles" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -34398,6 +34499,7 @@
         <NavigationProperty Name="team_bcgov_schedulejobconfiguration" Type="Collection(mscrm.bcgov_schedulejobconfiguration)" Partner="owningteam" />
         <NavigationProperty Name="team_dfp_additionaldetails" Type="Collection(mscrm.dfp_additionaldetails)" Partner="owningteam" />
         <NavigationProperty Name="team_dfp_judicialreview" Type="Collection(mscrm.dfp_judicialreview)" Partner="owningteam" />
+        <NavigationProperty Name="team_dfp_rehabactivities" Type="Collection(mscrm.dfp_rehabactivities)" Partner="owningteam" />
         <Annotation Term="OData.Community.Keys.V1.AlternateKeys">
           <Collection>
             <Record Type="OData.Community.Keys.V1.AlternateKey">
@@ -43507,6 +43609,7 @@
           <NavigationPropertyBinding Path="regardingobjectid_dfp_policeagency" Target="dfp_policeagencies" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_privacy" Target="dfp_privacies" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_rehabactivities" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_rehabtrigger" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_remedialcasebusinessprocessflow" Target="dfp_remedialcasebusinessprocessflows" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_role" Target="dfp_roles" />
@@ -44450,6 +44553,7 @@
           <NavigationPropertyBinding Path="regardingobjectid_dfp_policeagency" Target="dfp_policeagencies" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_privacy" Target="dfp_privacies" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_rehabactivities" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_rehabtrigger" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_remedialcasebusinessprocessflow" Target="dfp_remedialcasebusinessprocessflows" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_role" Target="dfp_roles" />
@@ -44786,6 +44890,7 @@
           <NavigationPropertyBinding Path="business_unit_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
           <NavigationPropertyBinding Path="business_unit_dfp_pdfdocument" Target="dfp_pdfdocuments" />
           <NavigationPropertyBinding Path="business_unit_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="business_unit_dfp_rehabactivities" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="business_unit_dfp_rehabtrigger" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="business_unit_dfp_role" Target="dfp_roles" />
           <NavigationPropertyBinding Path="business_unit_dfp_submittaltype" Target="dfp_submittaltypes" />
@@ -46105,6 +46210,7 @@
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
           <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
           <NavigationPropertyBinding Path="dfp_dfp_driver_dfp_judicialreview_DRIVER" Target="dfp_judicialreviews" />
+          <NavigationPropertyBinding Path="dfp_dfp_driver_dfp_rehabactivities_Driver" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="dfp_driver_AsyncOperations" Target="asyncoperations" />
           <NavigationPropertyBinding Path="dfp_driver_bcgov_documenturl" Target="bcgov_documenturls" />
           <NavigationPropertyBinding Path="dfp_driver_BulkDeleteFailures" Target="bulkdeletefailures" />
@@ -46151,6 +46257,7 @@
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
           <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
           <NavigationPropertyBinding Path="dfp_CaseId" Target="incidents" />
+          <NavigationPropertyBinding Path="dfp_dfp_ignitioninterlock_dfp_rehabactivities_IgnitionInterlock" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="dfp_DriverId" Target="dfp_drivers" />
           <NavigationPropertyBinding Path="dfp_ignitioninterlock_AsyncOperations" Target="asyncoperations" />
           <NavigationPropertyBinding Path="dfp_ignitioninterlock_BulkDeleteFailures" Target="bulkdeletefailures" />
@@ -46456,10 +46563,33 @@
           <NavigationPropertyBinding Path="owningteam" Target="teams" />
           <NavigationPropertyBinding Path="owninguser" Target="systemusers" />
         </EntitySet>
+        <EntitySet Name="dfp_rehabactivitieses" EntityType="Microsoft.Dynamics.CRM.dfp_rehabactivities">
+          <NavigationPropertyBinding Path="createdby" Target="systemusers" />
+          <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="dfp_Case" Target="incidents" />
+          <NavigationPropertyBinding Path="dfp_Driver" Target="dfp_drivers" />
+          <NavigationPropertyBinding Path="dfp_IgnitionInterlock" Target="dfp_ignitioninterlocks" />
+          <NavigationPropertyBinding Path="dfp_rehabactivities_AsyncOperations" Target="asyncoperations" />
+          <NavigationPropertyBinding Path="dfp_rehabactivities_BulkDeleteFailures" Target="bulkdeletefailures" />
+          <NavigationPropertyBinding Path="dfp_rehabactivities_DuplicateBaseRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_rehabactivities_DuplicateMatchingRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_rehabactivities_MailboxTrackingFolders" Target="mailboxtrackingfolders" />
+          <NavigationPropertyBinding Path="dfp_rehabactivities_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
+          <NavigationPropertyBinding Path="dfp_rehabactivities_ProcessSession" Target="processsessions" />
+          <NavigationPropertyBinding Path="dfp_rehabactivities_SyncErrors" Target="syncerrors" />
+          <NavigationPropertyBinding Path="dfp_RehabTrigger" Target="dfp_rehabtriggers" />
+          <NavigationPropertyBinding Path="modifiedby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="ownerid" Target="owners" />
+          <NavigationPropertyBinding Path="owningbusinessunit" Target="businessunits" />
+          <NavigationPropertyBinding Path="owningteam" Target="teams" />
+          <NavigationPropertyBinding Path="owninguser" Target="systemusers" />
+        </EntitySet>
         <EntitySet Name="dfp_rehabtriggers" EntityType="Microsoft.Dynamics.CRM.dfp_rehabtrigger">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
           <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
           <NavigationPropertyBinding Path="dfp_CaseId" Target="incidents" />
+          <NavigationPropertyBinding Path="dfp_dfp_rehabtrigger_dfp_rehabactivities_RehabTrigger" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="dfp_DriverId" Target="dfp_drivers" />
           <NavigationPropertyBinding Path="dfp_rehabtrigger_AsyncOperations" Target="asyncoperations" />
           <NavigationPropertyBinding Path="dfp_rehabtrigger_BulkDeleteFailures" Target="bulkdeletefailures" />
@@ -46653,6 +46783,7 @@
           <NavigationPropertyBinding Path="baserecordid_dfp_policeagency" Target="dfp_policeagencies" />
           <NavigationPropertyBinding Path="baserecordid_dfp_privacy" Target="dfp_privacies" />
           <NavigationPropertyBinding Path="baserecordid_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="baserecordid_dfp_rehabactivities" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="baserecordid_dfp_rehabtrigger" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="baserecordid_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="baserecordid_dfp_xsstatuscode" Target="dfp_xsstatuscodes" />
@@ -46790,6 +46921,7 @@
           <NavigationPropertyBinding Path="duplicaterecordid_dfp_policeagency" Target="dfp_policeagencies" />
           <NavigationPropertyBinding Path="duplicaterecordid_dfp_privacy" Target="dfp_privacies" />
           <NavigationPropertyBinding Path="duplicaterecordid_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="duplicaterecordid_dfp_rehabactivities" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="duplicaterecordid_dfp_rehabtrigger" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="duplicaterecordid_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="duplicaterecordid_dfp_xsstatuscode" Target="dfp_xsstatuscodes" />
@@ -47712,6 +47844,7 @@
           <NavigationPropertyBinding Path="dfp_incident_dfp_participant" Target="dfp_participants" />
           <NavigationPropertyBinding Path="dfp_incident_dfp_pdfdocument" Target="dfp_pdfdocuments" />
           <NavigationPropertyBinding Path="dfp_incident_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="dfp_incident_dfp_rehabactivities_Case" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="dfp_incident_dfp_rehabtrigger_CaseId" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="dfp_MedicalPractitionerId" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="dfp_OldestDocumentReceivedTypeId" Target="dfp_submittaltypes" />
@@ -48418,6 +48551,7 @@
           <NavigationPropertyBinding Path="regardingobjectid_dfp_policeagency" Target="dfp_policeagencies" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_privacy" Target="dfp_privacies" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_rehabactivities" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_rehabtrigger" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_remedialcasebusinessprocessflow" Target="dfp_remedialcasebusinessprocessflows" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_role" Target="dfp_roles" />
@@ -50450,6 +50584,7 @@
           <NavigationPropertyBinding Path="objectid_dfp_policeagency" Target="dfp_policeagencies" />
           <NavigationPropertyBinding Path="objectid_dfp_privacy" Target="dfp_privacies" />
           <NavigationPropertyBinding Path="objectid_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="objectid_dfp_rehabactivities" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="objectid_dfp_rehabtrigger" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="objectid_dfp_remedialcasebusinessprocessflow" Target="dfp_remedialcasebusinessprocessflows" />
           <NavigationPropertyBinding Path="objectid_dfp_role" Target="dfp_roles" />
@@ -50741,6 +50876,7 @@
           <NavigationPropertyBinding Path="regardingobjectid_dfp_policeagency" Target="dfp_policeagencies" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_privacy" Target="dfp_privacies" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_rehabactivities" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_rehabtrigger" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_remedialcasebusinessprocessflow" Target="dfp_remedialcasebusinessprocessflows" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_role" Target="dfp_roles" />
@@ -52339,6 +52475,7 @@
           <NavigationPropertyBinding Path="regardingobjectid_dfp_policeagency" Target="dfp_policeagencies" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_privacy" Target="dfp_privacies" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_rehabactivities" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_rehabtrigger" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_remedialcasebusinessprocessflow" Target="dfp_remedialcasebusinessprocessflows" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_role" Target="dfp_roles" />
@@ -52999,6 +53136,10 @@
           <NavigationPropertyBinding Path="lk_dfp_programrecord_createdonbehalfby" Target="dfp_programrecords" />
           <NavigationPropertyBinding Path="lk_dfp_programrecord_modifiedby" Target="dfp_programrecords" />
           <NavigationPropertyBinding Path="lk_dfp_programrecord_modifiedonbehalfby" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="lk_dfp_rehabactivities_createdby" Target="dfp_rehabactivitieses" />
+          <NavigationPropertyBinding Path="lk_dfp_rehabactivities_createdonbehalfby" Target="dfp_rehabactivitieses" />
+          <NavigationPropertyBinding Path="lk_dfp_rehabactivities_modifiedby" Target="dfp_rehabactivitieses" />
+          <NavigationPropertyBinding Path="lk_dfp_rehabactivities_modifiedonbehalfby" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="lk_dfp_rehabtrigger_createdby" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="lk_dfp_rehabtrigger_createdonbehalfby" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="lk_dfp_rehabtrigger_modifiedby" Target="dfp_rehabtriggers" />
@@ -54070,6 +54211,7 @@
           <NavigationPropertyBinding Path="user_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
           <NavigationPropertyBinding Path="user_dfp_pdfdocument" Target="dfp_pdfdocuments" />
           <NavigationPropertyBinding Path="user_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="user_dfp_rehabactivities" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="user_dfp_rehabtrigger" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="user_dfp_role" Target="dfp_roles" />
           <NavigationPropertyBinding Path="user_dfp_submittaltype" Target="dfp_submittaltypes" />
@@ -54311,6 +54453,7 @@
           <NavigationPropertyBinding Path="team_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
           <NavigationPropertyBinding Path="team_dfp_pdfdocument" Target="dfp_pdfdocuments" />
           <NavigationPropertyBinding Path="team_dfp_programrecord" Target="dfp_programrecords" />
+          <NavigationPropertyBinding Path="team_dfp_rehabactivities" Target="dfp_rehabactivitieses" />
           <NavigationPropertyBinding Path="team_dfp_rehabtrigger" Target="dfp_rehabtriggers" />
           <NavigationPropertyBinding Path="team_dfp_role" Target="dfp_roles" />
           <NavigationPropertyBinding Path="team_dfp_submittaltype" Target="dfp_submittaltypes" />

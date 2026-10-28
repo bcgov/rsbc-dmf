@@ -1,6 +1,6 @@
 ﻿{
   "ProviderId": "Microsoft.OData.ConnectedService",
-  "Version": "1.0.1.0",
+  "Version": "1.1.1.0",
   "GettingStartedDocument": {
     "Uri": "http://odata.github.io/odata.net/"
   },
@@ -10,6 +10,7 @@
     "IncludeT4File": false,
     "ExcludedOperationImports": [],
     "ExcludedBoundOperations": [],
+    "OmitVersioningInfo": false,
     "ServiceName": "Dynamics",
     "Endpoint": "https://rsbc-dfp.dev.jag.gov.bc.ca/api/data/v9.0/$metadata",
     "EdmxVersion": {

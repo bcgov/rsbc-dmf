@@ -20,5 +20,6 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyDocument>> GetDriverDocumentsById(Guid driverId);
         Task<List<DmerDocumentRecord>> GetDmerRecordsPaginated(DmerRecordsPaginatedRequest request);
+        Task<ResultStatusReply> SetDmerAIProccessedStatus(SetDmerAIProccessedStatus request);
     }
 }

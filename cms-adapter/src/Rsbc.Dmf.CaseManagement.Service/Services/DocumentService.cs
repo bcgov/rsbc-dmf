@@ -9,6 +9,7 @@ using System.Linq;
 using Rsbc.Dmf.CaseManagement.Dynamics.Mapper;
 using System.Configuration;
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Builder;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -251,5 +252,27 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        public async override Task<SetDmerAIProccessedStatusReply> SetDmerAIProccessedStatus(SetDmerAIProccessedStatusRequest request, ServerCallContext context)
+        {
+            var reply = new SetDmerAIProccessedStatusReply();
+            try
+            {
+                var result = await _documentManager.SetDmerAIProccessedStatus(new SetDmerAIProccessedStatus
+                {
+                    documenturlId = request.DocumenturlId,
+                    dmerAiStatus = request.DmerAiStatus
+                });
+                reply.ResultStatus = ResultStatus.Success;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error setting DMER AI processed status");
+                reply.ErrorMessage = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+            return reply;
+        }
     }
 }
