@@ -57,8 +57,10 @@ AWS S3
 
 ### How to install shared libraries
  Refer to https://angular.dev/tools/libraries/creating-libraries for angular libraries.
-1. Build the shared libraries first before we run any any portal 
-    - npm run watch
-2. To install shared library in the portal
-    - npm install "C:\Users\ShruthiR.QSL\Documents\Development\rsbc-dmf\shared-portal-ui\dist\core-ui" (this is your dist folder of shared-portal-uI/dist shared libraries- copy your local path)
-3. Update the CI pipleine to build the shared libraries first and then the portals(Refer to  any portal-UI CI pipleline)
+1. In `shared-portal-ui`, run `npm run build:core-ui` before installing or starting the portal. The portal's `@shared/core-ui` dependency points to the generated `shared-portal-ui/dist/core-ui` package.
+2. In `partner-portal/src/UI`, run `npm install` for initial setup, then `npm start`.
+3. For shared-library development, run `npm run watch` in `shared-portal-ui` in a separate terminal. Wait for its initial build to finish before starting the portal, because that build recreates the library output.
+
+The portal excludes `@shared/core-ui` from Vite prebundling so rebuilt local library code is bundled with the application instead of served from a stale dependency cache. After changing this setting, restart the portal dev server and reload the browser. If a previous run cached inconsistent Angular dependency versions, stop the portal dev server and run `npm run ng -- cache clean` in `partner-portal/src/UI` before restarting it.
+
+CI pipelines must also build the shared libraries before the portals.
