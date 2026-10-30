@@ -336,7 +336,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class CreateCaseDocumentUrlRequest
     {
-        public string CaseId { get; set; } 
+        public string CaseId { get; set; }
         public string DocumentType { get; set; }
         public string Processor { get; set; }
         public string DriverLicenseNumber { get; set; }
@@ -423,6 +423,7 @@ namespace Rsbc.Dmf.CaseManagement
     internal partial class CaseManager : ICaseManager
     {
         internal readonly DynamicsContext dynamicsContext;
+        private readonly ISecurityTokenProvider securityTokenProvider;
         private readonly ILogger<CaseManager> logger;
         private readonly IMapper _mapper;
         private readonly IMapperAsync<incident, CaseDetail> _caseMapper;
@@ -430,9 +431,10 @@ namespace Rsbc.Dmf.CaseManagement
         private readonly Dictionary<Guid, Dictionary<string, Guid>> OutcomeSubStatusTypes;
         private readonly string DMERDocumentTypeCode = "001";
 
-        public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger, IMapper mapper, IMapperAsync<incident, CaseDetail> caseMapper)
+        public CaseManager(DynamicsContext dynamicsContext, ISecurityTokenProvider securityTokenProvider, ILogger<CaseManager> logger, IMapper mapper, IMapperAsync<incident, CaseDetail> caseMapper)
         {
             this.dynamicsContext = dynamicsContext;
+            this.securityTokenProvider = securityTokenProvider;
             this.logger = logger;
             _mapper = mapper;
             _caseMapper = caseMapper;
@@ -1325,7 +1327,7 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="driverId"></param>
         /// <returns></returns>
@@ -1356,7 +1358,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// <summary>
         /// Get Legacy Document
         /// </summary>
-        /// <param name="commentId"></param>    
+        /// <param name="commentId"></param>
         /// <returns></returns>
         public async Task<LegacyComment> GetComment(string commentId)
         {
@@ -1876,7 +1878,7 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -1922,7 +1924,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
 
                     Log.Information("Case Creation method: CreateUnsolicitedCaseDocument");
-                    // create the case                   
+                    // create the case
                     await CreateCase(newCase);
 
                 }
@@ -1984,7 +1986,7 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -2082,7 +2084,7 @@ namespace Rsbc.Dmf.CaseManagement
                 principal newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
 
 
-                // Create the document 
+                // Create the document
 
                 if (bcgovDocumentUrl == null)
                 {
@@ -2296,7 +2298,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (searchcase != null && searchDriver != null)
             {
-                // Create the case document 
+                // Create the case document
 
 
                 bcgov_documenturl bcgovDocumentUrl = null;
@@ -2307,7 +2309,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                 var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
 
-                // Create the document 
+                // Create the document
 
                 if (bcgovDocumentUrl == null)
                 {
@@ -2486,7 +2488,7 @@ namespace Rsbc.Dmf.CaseManagement
                     var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
                     if (secondCandidateCreate)
                     {
-                        // create it.                    
+                        // create it.
                         await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseDocument-2");
 
                     }
@@ -2701,7 +2703,7 @@ namespace Rsbc.Dmf.CaseManagement
             if (comment != null)
             {
                 dynamicsContext.DeactivateObject(comment, 2);
-                // set to inactive.                
+                // set to inactive.
                 await dynamicsContext.SaveChangesAsync();
                 dynamicsContext.DetachAll();
                 result = true;
@@ -2727,7 +2729,7 @@ namespace Rsbc.Dmf.CaseManagement
             if (document != null)
             {
                 dynamicsContext.DeactivateObject(document, 2);
-                // set to inactive.                
+                // set to inactive.
                 await dynamicsContext.SaveChangesAsync();
                 result = true;
             }
@@ -2749,7 +2751,7 @@ namespace Rsbc.Dmf.CaseManagement
                 if (document != null)
                 {
                     dynamicsContext.DeleteObject(document);
-                    // set to inactive.                
+                    // set to inactive.
                     await dynamicsContext.SaveChangesAsync();
                     result = true;
                 }
@@ -3037,7 +3039,7 @@ namespace Rsbc.Dmf.CaseManagement
             // attempt to get the driver by guid.
 
 
-            if (driver == null) // get by DL 
+            if (driver == null) // get by DL
             {
                 var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statecode == 0); // active
                 var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
@@ -3240,7 +3242,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (medicalType != null)
             {
-                /* 
+                /*
                    1             Class
                    2             Age
                    3             Industrial Road Endorsement
@@ -3292,13 +3294,13 @@ namespace Rsbc.Dmf.CaseManagement
                 sequenceNumber = 1;
             }
 
-            // Check sequence number on case 
+            // Check sequence number on case
 
 
             /*
             newIncident.incidentid = CreateIncidentGuid(request.DriverLicenseNumber, sequenceNumber.Value);
 
-            // Check sequence number on case 
+            // Check sequence number on case
 
 
 
@@ -3412,7 +3414,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             //try
-            //{                
+            //{
             if (request.OutcomeText != null)  // only create if there was a decision.
             {
 
@@ -3519,7 +3521,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     newDecision = new dfp_decision
                     {
-                        //createdon = statusDateTime,                        
+                        //createdon = statusDateTime,
                         statecode = 0,
                         statuscode = 1, //100000000, //Final
                         dfp_decisiontype = 100000000, // Original
@@ -3597,7 +3599,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                         HttpClient httpClient = new HttpClient();
 
-                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {dynamicsContext._tokenFactory().GetAwaiter().GetResult()}");
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {securityTokenProvider.AcquireToken().GetAwaiter().GetResult()}");
 
                         var response = httpClient.SendAsync(closeRequest).GetAwaiter().GetResult();
                     }
@@ -3628,7 +3630,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                // step 1 : Create driver contact 
+                // step 1 : Create driver contact
                 string contactIdString = string.Format("FCBCE0AC-82EF-411D-BD95-DB84D5E3D927");
                 string contactSubId = contactIdString.Substring(0, contactIdString.Length - request.DriverLicenseNumber.Length);
                 var contactId = new Guid(contactSubId + request.DriverLicenseNumber);
@@ -3839,7 +3841,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             incident newIncident = new incident()
             {
-                // Check the 
+                // Check the
 
                 customerid_contact = driverQuery.dfp_PersonId,
                 // set status to Open Pending for Submission
@@ -3852,7 +3854,7 @@ namespace Rsbc.Dmf.CaseManagement
                 dfp_programarea = programArea
             };
 
-            // Check sequence number on case 
+            // Check sequence number on case
 
 
             newIncident.incidentid = CreateIncidentGuid(request.DriverLicenseNumber, sequenceNumber);
@@ -4147,7 +4149,7 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="priorityCode"></param>
         /// <returns></returns>
@@ -4234,7 +4236,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             else
             {
-                // default value is OTHER 
+                // default value is OTHER
                 return statusMap["OTHR"];
             }
         }
@@ -4620,7 +4622,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                                 else
                                 {
-                                    // condition 3 : Check for 
+                                    // condition 3 : Check for
                                     // 1. Document type is DMER
                                     // 2. Submital status is Uploaded
 
@@ -4629,7 +4631,7 @@ namespace Rsbc.Dmf.CaseManagement
                                           && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
                                           )
                                     {
-                                        // This is an empty case for now and will be implemented in future for DMER when the document is uploaded state it should add the J flag 
+                                        // This is an empty case for now and will be implemented in future for DMER when the document is uploaded state it should add the J flag
                                         //outputArray.Add(item);
                                     }
 
@@ -4683,10 +4685,10 @@ namespace Rsbc.Dmf.CaseManagement
             // 1. Check DocumentStatus = Uplaoded 100,000,010
             // 2. Check DPS class is 9-General
             // 3. Document Business are not equal to remedial
-            // 4. Order By oldest uploaded date from the result of the filter 
+            // 4. Order By oldest uploaded date from the result of the filter
             // DFTDP # 977 Change made on 05/02/2024
             // 5. Exclude  "ERA Result" and "Road Test - ICBC Re-exams" they should have the current Date 06/04/2024
-            // Get the guid for the 
+            // Get the guid for the
 
             Guid? eraResultsGuid = null;
 
@@ -4713,7 +4715,7 @@ namespace Rsbc.Dmf.CaseManagement
                 && x.dfp_DocumentTypeID.dfp_businessarea != 100000001 // Does not contain remedial
                 && x._dfp_documenttypeid_value != eraResultsGuid
                 && x._dfp_documenttypeid_value != reExamResultsGuid)// Exclude ERA Results and Road Test - ICBC Re-exam docuemnt types
-                .OrderBy(i => i.dfp_uploadeddate) // order by oldest uploaded date 
+                .OrderBy(i => i.dfp_uploadeddate) // order by oldest uploaded date
                 .Take(1)
                 .FirstOrDefault();
 
@@ -4745,7 +4747,7 @@ namespace Rsbc.Dmf.CaseManagement
             //Path 1 : This is for all the documents except ERA results and Road Test
             var querydocuments = from bcgov_documenturl
                         in dynamicsContext.bcgov_documenturls
-                                 where bcgov_documenturl.dfp_submittalstatus == 100000000// Open Required                                                  
+                                 where bcgov_documenturl.dfp_submittalstatus == 100000000// Open Required
                                  && bcgov_documenturl.dfp_compliancedate < dpsUploadedDate
 
                                  select bcgov_documenturl;
@@ -4822,7 +4824,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
 
             // 04/25/2024 Removing the check for dfp_bpfstage is FET as this field is inconsistant and this check is being done on mercury end
-            // 11/04/2024 Updated query logic 
+            // 11/04/2024 Updated query logic
             var currentDate = DateTimeOffset.UtcNow;
 
 
@@ -5286,7 +5288,7 @@ namespace Rsbc.Dmf.CaseManagement
                     // status to SEND or Failed TO Send
                     pdfDocument.statuscode = (int)pdfDocumentRequest.StatusCode;
 
-                    // 
+                    //
 
                     dynamicsContext.UpdateObject(pdfDocument);
                     await dynamicsContext.SaveChangesAsync();
@@ -5329,7 +5331,7 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public async Task<ResultStatusReply> UpdateBirthDate(UpdateDriverRequest driverRequest)
@@ -5377,7 +5379,7 @@ namespace Rsbc.Dmf.CaseManagement
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
         public async Task<ResultStatusReply> UpdateDriver(Driver driver)
@@ -6159,7 +6161,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 throw (ex);
             }
-           
+
         }
     }
 
