@@ -114,15 +114,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 DocumentRecordId = document.DocumentId
             }).ToList();
 
-            var driver_case = driverActiveCase == null ? null : new DmerDocumentCaseRecord
-            {
-                CaseId = driverActiveCase.CaseId,
-                CaseTitle = driverActiveCase.Title,
-                CaseType = driverActiveCase.CaseType,
-                CasePriority = driverActiveCase.Priority,
-                CaseOwner = driverActiveCase.AssigneeTitle,
-                CaseStatus = driverActiveCase.Status
-            };
 
             var response = new DriverAndDocumentsResponse
             {
@@ -132,7 +123,15 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 last_name = driverPerson.Surname,
                 licence_number = driverPerson.DriverLicenseNumber,
                 documents = documents,
-                activeCase = driver_case
+                activeCase = driverActiveCase == null ? null : new DmerDocumentCaseRecord
+                {
+                    CaseId = driverActiveCase.CaseId,
+                    CaseTitle = driverActiveCase.Title,
+                    CaseType = driverActiveCase.CaseType,
+                    CasePriority = driverActiveCase.Priority,
+                    CaseOwner = driverActiveCase.AssigneeTitle,
+                    CaseStatus = driverActiveCase.Status
+                }
             };
 
             return Json(response);
