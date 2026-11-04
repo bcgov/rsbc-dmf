@@ -84,22 +84,33 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     title: "Unable to get the driver.");
             }
 
-            var driverPerson = driverPersonReply.Items.FirstOrDefault();
+            var driverPerson = driverPersonReply.Items.
+            FirstOrDefault();
             if (driverPerson == null)
             {
                 return Problem(statusCode: StatusCodes.Status404NotFound,
                     title: "Driver not found.");
             }
 
-            var driverActiveCaseReply = caseManagerClient.GetActiveCases(driverRequest);
-            if (driverActiveCaseReply.ResultStatus != CmsResultStatus.Success)
+            var driverCaseRequest = new CaseStatusRequest {
+
+                DriverId = driverPerson.Id,
+                Status = EntityState.Active,
+                CaseFilter = new CaseFilterRequest
+                {
+                    ProgramArea = "DMF",
+                }
+
+            };
+            var driverActiveDMFCaseReply = caseManagerClient.GetCases(driverCaseRequest);
+            if (driverActiveDMFCaseReply.ResultStatus != CmsResultStatus.Success)
             {
-                _logger.LogError("CMS adapter active cases lookup failed: {ErrorDetail}", driverActiveCaseReply.ErrorDetail);
+                _logger.LogError("CMS adapter active cases lookup failed: {ErrorDetail}", driverActiveDMFCaseReply.ErrorDetail);
                 return Problem(statusCode: StatusCodes.Status500InternalServerError,
                     title: "Unable to get the driver's active cases.");
             }
 
-            var driverActiveCase = driverActiveCaseReply.Items.FirstOrDefault();
+            var driverActiveCase = driverActiveDMFCaseReply.Items.FirstOrDefault();
 
             var documents = driverDocumentsReply.Items
                 .Where(document => document.DocumentType == "DMER" && document.SubmittalStatus == "Uploaded")
@@ -114,15 +125,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 DocumentRecordId = document.DocumentId
             }).ToList();
 
-            var driver_case = driverActiveCase == null ? null : new DmerDocumentCaseRecord
-            {
-                CaseId = driverActiveCase.CaseId,
-                CaseTitle = driverActiveCase.Title,
-                CaseType = driverActiveCase.CaseType,
-                CasePriority = driverActiveCase.Priority,
-                CaseOwner = driverActiveCase.AssigneeTitle,
-                CaseStatus = driverActiveCase.Status
-            };
 
             var response = new DriverAndDocumentsResponse
             {
@@ -132,7 +134,15 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 last_name = driverPerson.Surname,
                 licence_number = driverPerson.DriverLicenseNumber,
                 documents = documents,
-                activeCase = driver_case
+                activeCase = driverActiveCase == null ? null : new DmerDocumentCaseRecord
+                {
+                    CaseId = driverActiveCase.CaseId,
+                    CaseTitle = driverActiveCase.Title,
+                    CaseType = driverActiveCase.CaseType,
+                    CasePriority = driverActiveCase.Priority,
+                    CaseOwner = driverActiveCase.AssigneeTitle,
+                    CaseStatus = driverActiveCase.Status
+                }
             };
 
             return Json(response);
