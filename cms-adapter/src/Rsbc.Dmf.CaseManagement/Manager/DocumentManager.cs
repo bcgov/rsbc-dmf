@@ -488,17 +488,17 @@ namespace Rsbc.Dmf.CaseManagement
                     return result;
                 }
 
-                if(TranslateDmerAiProccessedStatus(request.AIProccessedStatus) == (int)AIProccessedStatus.Error)
+                if(request.AIProccessedStatus == (int)AIProccessedStatus.Error)
                 {
                     await ProccessDocumentError(dmerDoc, request);
                     result.Success = true;
                     return result;
                 }
            
-                dmerDoc.dfp_aiprocessedstatus = TranslateDmerAiProccessedStatus(request.AIProccessedStatus);
-                dmerDoc.dfp_aidpspriority = request.AIPriority != null ? TranslatePriorityCode(request.AIPriority) : dmerDoc.dfp_priority;
-                dmerDoc.dfp_queue = request.Queue != null ? TranslateQueueCode(request.Queue): dmerDoc.dfp_queue;
-                dmerDoc.dfp_aidmerstatus = request.DmerStatus != null ? TranslateDmerStatus(request.DmerStatus): dmerDoc.dfp_dmerstatus;
+                dmerDoc.dfp_aiprocessedstatus = request.AIProccessedStatus;
+                dmerDoc.dfp_aidpspriority = request.AIPriority != null ? request.AIPriority : dmerDoc.dfp_priority;
+                dmerDoc.dfp_queue = request.Queue != null ? request.Queue : dmerDoc.dfp_queue;
+                dmerDoc.dfp_aidmerstatus = request.DmerStatus != null ? request.DmerStatus : dmerDoc.dfp_dmerstatus;
                 dmerDoc.dfp_notes = request.Notes ?? dmerDoc.dfp_notes;
                 dynamicsContext.UpdateObject(dmerDoc);
                 await dynamicsContext.SaveChangesAsync();
@@ -585,22 +585,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
-        private int TranslateDmerAiProccessedStatus(string status)
-        {
-            switch (status.ToLower())
-            {
-                case ("error"):
-                    return (int)AIProccessedStatus.Error;
-                case ("inprogress"):
-                    return (int)AIProccessedStatus.InProgress;
-                case ("proccessed"):
-                    return (int)AIProccessedStatus.Proccessed;
-                default:
-                    return (int)AIProccessedStatus.NA;
-            }
-
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -624,30 +608,6 @@ namespace Rsbc.Dmf.CaseManagement
                 return 100000000;
             }
         }
-
-        private int TranslateDmerStatus(string dmerstatus)
-        {
-            switch (dmerstatus.ToLower())
-            {
-                case ("adjudicate"):
-                    return (int)DMERStatusOptionSet.Adjudicate;
-                case ("cleanpass"):
-                    return (int)DMERStatusOptionSet.CleanPass;
-                case ("manualpass"):
-                    return (int)DMERStatusOptionSet.ManualPass;
-                case ("reject"):
-                    return (int)DMERStatusOptionSet.Reject;
-                default:
-                    return (int)DMERStatusOptionSet.Reject;
-            }
-        }
-
-        private bool IsValidDmerQueueCode(int? queueCode)
-        {
-            //update with dmer queue option set when added to dynamics
-            return true;
-        }
-
         private async Task RejectDocument(bcgov_documenturl doc)
         {
             doc.dfp_dmerstatus = (int)DMERStatusOptionSet.Reject;
@@ -660,7 +620,7 @@ namespace Rsbc.Dmf.CaseManagement
         private async Task ProccessDocumentError(bcgov_documenturl dmerDoc, SetDmerAIProccessedStatus request)
         {
             dmerDoc.dfp_notes = request.Notes;
-            dmerDoc.dfp_aiprocessedstatus = TranslateDmerStatus(request.AIProccessedStatus);
+            dmerDoc.dfp_aiprocessedstatus = request.AIProccessedStatus;
             dynamicsContext.UpdateObject(dmerDoc);
             await dynamicsContext.SaveChangesAsync();
         }

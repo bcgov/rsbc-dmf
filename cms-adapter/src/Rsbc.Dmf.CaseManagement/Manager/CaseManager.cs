@@ -451,10 +451,10 @@ namespace Rsbc.Dmf.CaseManagement
         public string DocumenturlId { get; set; }
 
         [Required]
-        public string AIProccessedStatus { get; set; }
-        public string AIPriority { get; set; }
-        public string Queue { get; set; }
-        public string DmerStatus { get; set; }
+        public int AIProccessedStatus { get; set; }
+        public int? AIPriority { get; set; }
+        public int? Queue { get; set; }
+        public int? DmerStatus { get; set; }
         public bool IsRejected { get; set; }
         public string Notes { get; set; }
     }

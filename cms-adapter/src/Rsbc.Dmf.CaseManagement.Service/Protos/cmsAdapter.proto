@@ -833,12 +833,12 @@ message BatchSetDmerAIProccessedStatusInProgressReply {
 }
 
 message SetDmerAIProccessedStatusRequest {
-    string dmerAiStatus = 1;
+    int32 dmerAiStatus = 1;
     string documenturlId = 2;
-    string AIPriority = 3;
-    string Queue = 4;
-    string DmerStatus = 5;
-    int32 IsRejected = 6;
+    optional int32 AIPriority = 3;
+    optional int32 Queue = 4;
+    optional int32 DmerStatus = 5;
+    optional int32 IsRejected = 6;
     string Notes = 7;
 }
 
