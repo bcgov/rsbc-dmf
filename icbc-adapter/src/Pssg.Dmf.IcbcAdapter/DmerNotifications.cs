@@ -25,6 +25,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 		private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
 		private readonly string _processedFolder;
         private readonly string _dmerFolder;
+		private readonly string _dmerDocumentTypeCode = "001";
 
         // Fixed-width mapping based on DMETEXT record layout.
         private const int DmeRecordLength = 118;
@@ -40,31 +41,31 @@ namespace Rsbc.Dmf.IcbcAdapter
 			_documentStorageAdapterClient = documentStorageAdapterClient;
 			_processedFolder = _configuration["DMER_PROCESSED_FOLDER"] ?? "dmer/processed";
 			_dmerFolder = _configuration["DMER_FOlDER"]?? "dmer";
-		}
+        }
 
 		public async Task GetDMERNotificationsAndUpdateCase()
 		{
-			var notifactions = await GetDMERNotifications();
-			if (notifactions?.NotificationFiles?.Count > 0)
+            var getDMERFiles = await GetDMERNotifications();
+			if (getDMERFiles?.NotificationFiles?.Count > 0)
 			{
-				foreach (var notification in notifactions.NotificationFiles.Values)
+
+				foreach (var notificationFile in getDMERFiles.NotificationFiles.Values)
 				{
-					var notifications = await ParseDMERNotication(notification);
+					var notifications = await ParseDMERNotication(notificationFile);
 					if (notifications != null)
 					{
-						await CreateOrUpdateCases(notifications.Records, notifications.Errors);
+						await CreateOrUpdateCases(notificationFile, notifications.Records, notifications.Errors);
 					}
+					await MoveProcessedFileToProcessedFolder(notificationFile);
 				}
-
-				await MoveProcessedFilesToProcessedFolder(notifactions);
 			}
 		}
 
-		internal async Task CreateOrUpdateCases(List<DmerNotificationRecord> notifications, int errors)
+		internal async Task CreateOrUpdateCases(IFormFile sourceFile, List<DmerNotificationRecord> notifications, int errors)
 		{
 			var dmerCases = notifications.Select(MapToDmerCase).ToList();
 
-			await CreateOrUpdateCases(dmerCases, dmerCase => new CreateDmerCaseRequest
+			await CreateOrUpdateCases(sourceFile, dmerCases, dmerCase => new CreateDmerCaseRequest
 			{
 				DriverLicenseNumber = dmerCase.DriverLicenseNumber,
 				CaseTypeCode = dmerCase.CaseTypeCode,
@@ -75,7 +76,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 				DriverSurname = dmerCase.DriverSurname,
 				ProgramArea = "DMF",
 				DocumentOwner = "Team - Intake",
-				DocumentType = "DMER",
+				DocumentType = _dmerDocumentTypeCode,
 				MedicalIssueDate = Timestamp.FromDateTime(dmerCase.MedicalIssueDate)
             }, errors);
 		}
@@ -94,7 +95,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 			};
 		}
 
-		internal async Task CreateOrUpdateCases(List<DmerCaseRecord> cases, Func<DmerCaseRecord, CreateDmerCaseRequest> caseMapper, int errors)
+		internal async Task CreateOrUpdateCases(IFormFile sourceFile, List<DmerCaseRecord> cases, Func<DmerCaseRecord, CreateDmerCaseRequest> caseMapper, int errors)
 		{
 			var total = 0;
 			foreach (var item in cases)
@@ -119,42 +120,35 @@ namespace Rsbc.Dmf.IcbcAdapter
 				catch (Exception ex)
 				{
                     errors++;
-                    Log.Logger.Error("Error processing DMER record in file: " + ex.Message);
+                    Log.Logger.Error($"Error processing DMER record in '{sourceFile.FileName}': " + ex.Message);
 					
 				}
 			}
-            Log.Logger.Information($"Completed File Processing. Number of DMER records successfully processed: {total}. Number of DMER records with errors: {errors}. See cms logs for more details");
+			var logString = $"Completed processing DMER file '{sourceFile.FileName}'. \n >> {total} records processed successfully";
+			if (errors > 0) {
+				logString += $"\n >> {errors} records with errors - See cms logs for more details";
+			}
+            Log.Logger.Information(logString);
         }
 
 
-		private async Task MoveProcessedFilesToProcessedFolder(RehabNotificationsFileResult notifactions)
+		private async Task MoveProcessedFileToProcessedFolder(IFormFile notificationFile)
 		{
 			if (_documentStorageAdapterClient == null)
 			{
 				throw new InvalidOperationException("Document storage adapter client is not configured.");
 			}
 
-			var fileNames = notifactions.NotificationFiles?.Keys.ToList() ?? new List<string>();
-			var movedCount = 0;
+			var fileName = notificationFile.FileName; 
 
-
-			foreach (var fileName in fileNames)
+			try
 			{
-				try
-				{
-					await _documentStorageAdapterClient.MoveFileAsync(new MoveFileRequest() { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET", SourcePath = _dmerFolder, Destinationpath = _processedFolder, FileName = fileName });
-					movedCount++;
-
-                }
-				catch (Exception ex)
-				{
-					Log.Logger.Error($"Unable to move DMER file {_dmerFolder} to {_processedFolder}: {ex.Message}");
-				}
+				await _documentStorageAdapterClient.MoveFileAsync(new MoveFileRequest() { BucketConfigName = "ICBC_NOTIFICATIONS_BUCKET", SourcePath = _dmerFolder, Destinationpath = _processedFolder, FileName = fileName });
+				Log.Logger.Information($"Moved DMER file '{fileName}' to '{_processedFolder}'");
 			}
-
-			if (movedCount > 0)
+			catch (Exception ex)
 			{
-				Log.Logger.Information($"Moved {movedCount} DMER files to {_processedFolder}");
+				Log.Logger.Error($"Unable to move DMER file '{fileName}' to '{_processedFolder}': {ex.Message}");
 			}
 		}
 
@@ -163,7 +157,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 		{
 			var result = new DMERParseResult();
 
-            Log.Logger.Information("Parsing DMER notification dat file " + file.FileName);
+            Log.Logger.Information($"Parsing DMER file '{file.FileName}'...");
 
             if (file == null || file.Length == 0)
 			{
@@ -212,7 +206,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 						{
 							result.Errors++;
 
-							Log.Logger.Warning("Error parsing DMER Line Number: " + lineNumber + "\n Record: " + record + "\n Invalid values: " + validationErrors);
+							Log.Logger.Warning($"Error parsing DMER File '{file.FileName}' >> Line Number: " + lineNumber + "\n >>> Record: " + record + "\n >>>> Invalid values: " + validationErrors);
 						}
 					}
 					else
@@ -243,7 +237,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
 			if (string.IsNullOrWhiteSpace(record.MedicalType))
 			{
-				errors += "\nMedical Type: " + record.MedicalType;
+				errors += $"\n >>>>> Medical Type: '{record.MedicalType}'";
 			}
 
 			return string.IsNullOrEmpty(errors) ? null : errors;

@@ -24,6 +24,11 @@ oc process -f .\Scheduler.template.yml --param-file .\scheduler-service.yml.<app
 
 **Note: executing `oc apply` WILL trigger deployment, to test the changes add `--dry-run` at the end of the command**
 
+## Logging
 
-
+Console log headers include the date and time in `yyyy-MM-dd HH:mm:ss` format.
+Logs from the `Microsoft.AspNetCore.Cors` category (including its subcategories)
+are excluded from both console and Splunk output. This does not change CORS
+policy enforcement or suppress errors from other categories. Splunk events
+retain their structured timestamps.
 

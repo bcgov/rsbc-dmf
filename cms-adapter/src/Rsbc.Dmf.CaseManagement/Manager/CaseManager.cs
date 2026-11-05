@@ -90,6 +90,58 @@ namespace Rsbc.Dmf.CaseManagement
         public bool showOnPortals { get; set; }
     }
 
+    public class DmerRecordsPaginatedRequest
+    {
+        public int PageSize { get; set; }
+        public int Cursor { get; set; }
+    }
+
+    public class DmerDocumentRecord
+    {
+        public string DocumentRecordId { get; set; }
+        public string Queue { get; set; }
+        public string DocumentName { get; set; }
+        public string DocumentUrl { get; set; }
+        public string DocumentType { get; set; }
+        public string SubmittalStatus { get; set; }
+        public string DocumentPriority { get; set; }
+        public string ReceivedDate { get; set; }
+        public string DocumentTypeBusinessArea { get; set; }
+        public string DmerStatus { get; set; }
+        public DmerDocumentDriver DmerDocumentDriver { get; set; }
+        public string DmerCaseId { get; set; }
+        public DmerDocumentCaseRecord DmerDocumentCaseRecord { get; set; }
+    }
+
+    public class DmerDocumentCaseRecord
+    {
+        public string CaseId { get; set; }
+        public string CaseTitle { get; set; }
+        public string CaseType { get; set; }
+        public string CasePriority { get; set; }
+        public string CaseOwner { get; set; }
+        public string CaseStatus { get; set; }
+    }
+
+    public class DmerDriverDocument
+    {
+        public string FileName { get; set; }
+        public string DocumentType { get; set; }
+        public string SubmittalStatus { get; set; }
+        public string UploadedDate { get; set; }
+        public string DocumentRecordId { get; set; }
+    }
+
+    public class DmerDocumentDriver
+    {
+        public string DriverId { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string LicenceNumber { get; set; }
+        public List<DmerDriverDocument> Documents { get; set; }
+    }
+
     public class CreateStatusReply
     {
         public string Id;
@@ -377,6 +429,7 @@ namespace Rsbc.Dmf.CaseManagement
         private readonly IMapperAsync<incident, CaseDetail> _caseMapper;
         private readonly Dictionary<string, Guid> OutcomeStatusTypes;
         private readonly Dictionary<Guid, Dictionary<string, Guid>> OutcomeSubStatusTypes;
+        private readonly string DMERDocumentTypeCode = "001";
 
         public CaseManager(DynamicsContext dynamicsContext, ISecurityTokenProvider securityTokenProvider, ILogger<CaseManager> logger, IMapper mapper, IMapperAsync<incident, CaseDetail> caseMapper)
         {
@@ -6041,8 +6094,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             var dmerEntity = dynamicsContext.incidents
                 .ByKey(parsedCaseId)
-                .Expand(x => x.bcgov_incident_bcgov_documenturl)
-                .GetValue();
+                .Expand("bcgov_incident_bcgov_documenturl($expand=dfp_DocumentTypeID)").GetValue();
 
             if (dmerEntity == null)
             {
@@ -6050,6 +6102,12 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             var documentTypeId = GetDocumentType(null, request.DocumentType, null);
+            if (dmerEntity.bcgov_incident_bcgov_documenturl.Any(x => x.dfp_submittalstatus == (int)submittalStatusOptionSet.OpenRequired && x.dfp_DocumentTypeID?.dfp_code == DMERDocumentTypeCode))
+            {
+                Log.Information($"Case {request.CaseId} with document type DMER and document status Open Required already exists. The document is not added.");
+                return;
+            }
+            
 
             var driver = dynamicsContext.dfp_drivers
                     .Where(x => x.dfp_licensenumber == request.DriverLicenseNumber && x.statecode == 0)
