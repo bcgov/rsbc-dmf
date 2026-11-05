@@ -22,6 +22,27 @@ using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
+    public enum DPSStatusOptionSet
+    {
+        Accept = 100000000,
+        Reject = 100000001
+    }
+
+    public enum DpsPriorityOptionSet
+    {
+        Regular = 100000000,
+        UrgentImmediate = 100000001,
+        Expedited = 100000002,
+        CriticalReview = 100000003
+    }
+
+    public enum AIProccessedStatus
+    {
+        NA = 100000000,
+        InProgress = 100000001,
+        Proccessed = 100000002,
+        Error = 100000003
+    }
     internal class DocumentManager : DocumentMapper, IDocumentManager
     {
         internal readonly DynamicsContext dynamicsContext;

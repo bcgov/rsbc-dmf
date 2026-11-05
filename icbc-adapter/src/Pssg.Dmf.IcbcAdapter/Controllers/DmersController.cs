@@ -253,20 +253,5 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             }
             return Ok();
         }
-
-        private int TranslateDmerStatus(string status)
-        {
-            switch (status.ToLower())
-            {
-                case ("error"):
-                    return (int)DmerAIProccessedStatus.Error;
-                case ("inprogress"):
-                    return (int)DmerAIProccessedStatus.InProgress;
-                case ("proccessed"):
-                    return (int)DmerAIProccessedStatus.Proccessed;
-                default:
-                    return (int)DmerAIProccessedStatus.NA;
-            }    
-        }
     }
 }
