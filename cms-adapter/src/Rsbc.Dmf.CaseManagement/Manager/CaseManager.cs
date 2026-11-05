@@ -8,6 +8,7 @@ using Serilog;
 using Serilog.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -289,7 +290,27 @@ namespace Rsbc.Dmf.CaseManagement
         ManualPass = 100000003,
     }
 
+    public enum DPSStatusOptionSet
+    {
+        Accept = 100000000,
+        Reject = 100000001
+    }
 
+    public enum DpsPriorityOptionSet
+    {
+        Regular = 100000000,
+        UrgentImmediate = 100000001,
+        Expedited = 100000002,
+        CriticalReview = 100000003
+    }
+
+    public enum AIProccessedStatus
+    {
+        NA = 100000000,
+        InProgress = 100000001,
+        Proccessed = 100000002,
+        Error = 100000003
+    }
     // TODO move to CallbackModel.cs
     public enum CallbackPriority
     {
@@ -418,10 +439,24 @@ namespace Rsbc.Dmf.CaseManagement
         public bool Success { get; set; }
     }
 
+    public class BatchSetDmerAIProccessedStatusInProgress 
+    {
+        public  int DmerAiStatus { get; set; }
+        public List<string> DocumenturlIds { get; set; }
+    }
+
     public class SetDmerAIProccessedStatus
-        {
-    public  int dmerAiStatus { get; set; }
-    public string documenturlId { get; set; }
+    {
+        [Required]
+        public string DocumenturlId { get; set; }
+
+        [Required]
+        public string AIProccessedStatus { get; set; }
+        public string AIPriority { get; set; }
+        public string Queue { get; set; }
+        public string DmerStatus { get; set; }
+        public bool IsRejected { get; set; }
+        public string Notes { get; set; }
     }
 
     #endregion Model

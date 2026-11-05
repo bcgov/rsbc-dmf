@@ -259,8 +259,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 var result = await _documentManager.SetDmerAIProccessedStatus(new SetDmerAIProccessedStatus
                 {
-                    documenturlId = request.DocumenturlId,
-                    dmerAiStatus = request.DmerAiStatus
+                    DocumenturlId = request.DocumenturlId,
+                    AIProccessedStatus = request.DmerAiStatus,
+                    AIPriority = request.AIPriority,
+                    Queue = request.Queue,
+                    DmerStatus = request.DmerStatus,
+                    IsRejected = request.IsRejected == 1,
+                    Notes = request.Notes
                 });
                 reply.ResultStatus = ResultStatus.Success;
 
@@ -272,6 +277,27 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.ResultStatus = ResultStatus.Fail;
             }
 
+            return reply;
+        }
+
+        public async override Task<BatchSetDmerAIProccessedStatusInProgressReply> BatchSetDmerAIProccessedStatusInProgress(BatchSetDmerAIProccessedStatusInProgressRequest request, ServerCallContext context)
+        {
+            var reply = new BatchSetDmerAIProccessedStatusInProgressReply();
+            try
+            {
+                var result = await _documentManager.BatchSetDmerAIProccessedStatusInProgress(new BatchSetDmerAIProccessedStatusInProgress
+                {
+                    DmerAiStatus = request.DmerAiStatus,
+                    DocumenturlIds = request.DocumenturlId.ToList()
+                });
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error setting DMER AI processed status");
+                reply.ErrorMessage = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
             return reply;
         }
     }

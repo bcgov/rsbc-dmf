@@ -10,6 +10,7 @@ using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -472,26 +473,62 @@ namespace Rsbc.Dmf.CaseManagement
             return dmerRecords;
         }
 
-        /// <summary>
-        /// Get Driver Legacy Documents by driver id
-        /// </summary>
-        /// <param name="driverId"></param>
-        /// <returns></returns>
         public async Task<ResultStatusReply> SetDmerAIProccessedStatus(SetDmerAIProccessedStatus request)
         {
             var result = new ResultStatusReply();
             try
             {
-                var dmerDoc = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == new Guid(request.documenturlId)).FirstOrDefault();
-                dmerDoc.dfp_aiprocessedstatus = request.dmerAiStatus;
+                var dmerDoc = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == new Guid(request.DocumenturlId)).FirstOrDefault();
+
+                if (request.IsRejected)
+                {
+                    await RejectDocument(dmerDoc);
+                    result.Success = true;
+                    return result;
+                }
+
+                if(TranslateDmerStatus(request.AIProccessedStatus) == (int)AIProccessedStatus.Error)
+                {
+                    await ProccessDocumentError(dmerDoc, request);
+                    result.Success = true;
+                    return result;
+                }
+           
+                dmerDoc.dfp_aiprocessedstatus = TranslateDmerStatus(request.AIProccessedStatus);
+                dmerDoc.dfp_priority = request.AIPriority != null ? TranslatePriorityCode(request.AIPriority) : dmerDoc.dfp_priority;
+                dmerDoc.dfp_queue = request.Queue != null ? TranslateQueueCode(request.Queue): dmerDoc.dfp_queue;
+                dmerDoc.dfp_dmerstatus = request.DmerStatus != null ? TranslateDmerStatus(request.DmerStatus): dmerDoc.dfp_dmerstatus;
+                dmerDoc.dfp_notes = request.Notes ?? dmerDoc.dfp_notes;
                 dynamicsContext.UpdateObject(dmerDoc);
                 await dynamicsContext.SaveChangesAsync();
+
                 result.Success = true;
             }
             catch(Exception ex)
             {
                 throw (ex);
 
+            }
+            return result;
+        }
+
+        public async Task<ResultStatusReply> BatchSetDmerAIProccessedStatusInProgress(BatchSetDmerAIProccessedStatusInProgress request)
+        {
+            var result = new ResultStatusReply();
+            try
+            {
+                foreach (var documenturlId in request.DocumenturlIds)
+                {
+                    var dmerDoc = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == new Guid(documenturlId)).FirstOrDefault();
+                    dmerDoc.dfp_aiprocessedstatus = request.DmerAiStatus;
+                    dynamicsContext.UpdateObject(dmerDoc);
+                }
+                await dynamicsContext.SaveChangesAsync();
+                result.Success = true;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
             }
             return result;
         }
@@ -547,6 +584,22 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
+        private int TranslateDmerStatus(string status)
+        {
+            switch (status.ToLower())
+            {
+                case ("error"):
+                    return (int)AIProccessedStatus.Error;
+                case ("inprogress"):
+                    return (int)AIProccessedStatus.InProgress;
+                case ("proccessed"):
+                    return (int)AIProccessedStatus.Proccessed;
+                default:
+                    return (int)AIProccessedStatus.NA;
+            }
+
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -577,6 +630,23 @@ namespace Rsbc.Dmf.CaseManagement
             return true;
         }
 
+        private async Task RejectDocument(bcgov_documenturl doc)
+        {
+            doc.dfp_dmerstatus = (int)DMERStatusOptionSet.Reject;
+            doc.dfp_dpsstatus = (int)DPSStatusOptionSet.Reject;
+            doc.dfp_dpspriority = (int)DpsPriorityOptionSet.Regular;
+            dynamicsContext.UpdateObject(doc);
+            await dynamicsContext.SaveChangesAsync();
+        }
+
+        private async Task ProccessDocumentError(bcgov_documenturl dmerDoc, SetDmerAIProccessedStatus request)
+        {
+            dmerDoc.dfp_notes = request.Notes;
+            dmerDoc.dfp_aiprocessedstatus = TranslateDmerStatus(request.AIProccessedStatus);
+            dynamicsContext.UpdateObject(dmerDoc);
+            await dynamicsContext.SaveChangesAsync();
+        }
+        
     }
 
 }

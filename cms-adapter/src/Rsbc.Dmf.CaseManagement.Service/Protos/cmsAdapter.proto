@@ -650,6 +650,7 @@ service DocumentManager {
 	// Get DMER records
 	rpc GetDmerRecordsPaginated(GetDmerRecordsPaginatedRequest) returns (GetDmerRecordsPaginatedReply);
 	rpc SetDmerAIProccessedStatus(SetDmerAIProccessedStatusRequest) returns (SetDmerAIProccessedStatusReply);
+	rpc BatchSetDmerAIProccessedStatusInProgress(BatchSetDmerAIProccessedStatusInProgressRequest) returns (BatchSetDmerAIProccessedStatusInProgressReply);
 }
 
 message UpdateDocumentRequest {
@@ -821,9 +822,24 @@ message DocumentTypeRequest {
 	string documentTypeCode = 1;
 }
 
-message SetDmerAIProccessedStatusRequest {
+message BatchSetDmerAIProccessedStatusInProgressRequest {
     int32 dmerAiStatus = 1;
+    repeated string documenturlId = 2;
+}
+
+message BatchSetDmerAIProccessedStatusInProgressReply {
+    ResultStatus resultStatus = 1;
+    string errorMessage = 2;
+}
+
+message SetDmerAIProccessedStatusRequest {
+    string dmerAiStatus = 1;
     string documenturlId = 2;
+    string AIPriority = 3;
+    string Queue = 4;
+    string DmerStatus = 5;
+    int32 IsRejected = 6;
+    string Notes = 7;
 }
 
 message SetDmerAIProccessedStatusReply {

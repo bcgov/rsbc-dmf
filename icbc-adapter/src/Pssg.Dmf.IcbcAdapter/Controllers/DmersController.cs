@@ -1,3 +1,4 @@
+using Castle.Components.DictionaryAdapter;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -30,16 +31,21 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
     public class SetDmerAiStatusRequestBody
     {
-        /// <summary>
-        /// The DMER ID.
-        /// </summary>
         [Required]
-        public string DmerId { get; init; }
-        /// <summary>
-        /// The new status to set.
-        /// </summary>
+        public string DmerId { get; set; }
+
         [Required]
-        public int NewStatus { get; init; }
+        public string AiProcessedStatus { get; set; }
+        public string AiDpsPriority { get; set; }
+        public string AiQueue { get; set; }
+        public string AiDmerStatus { get; set; }
+        public string IsRejected { get; set; }
+        public string Notes { get; set; }
+    }
+
+    public class BatchSetDmerAiStatusRequestBody
+    {
+        public string[] DmerIds { get; set; }
     }
 
     public enum DmerAIProccessedStatus
@@ -199,21 +205,65 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [HttpPost("SetDmerAIProccessedStatus")]
         public ActionResult SetDmerAIProccessedStatus([FromBody] SetDmerAiStatusRequestBody request)
         {
-            if (System.Enum.IsDefined(typeof(DmerAIProccessedStatus), request.NewStatus))
-            {
-                return StatusCode(StatusCodes.Status400BadRequest, "Bad Data: Invalid Ai Proccessed Status code.");
-            }
             using var scope = _serviceScopeFactory.CreateScope();
             var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
-            var setDmerAIProccessedStatusRequest = new SetDmerAIProccessedStatusRequest { DmerAiStatus = request.NewStatus, DocumenturlId = request.DmerId };
+            var setDmerAIProccessedStatusRequest = new SetDmerAIProccessedStatusRequest { 
+                DmerAiStatus = request.AiProcessedStatus, 
+                DocumenturlId = request.DmerId,
+                DmerStatus = request.AiDmerStatus,
+                Notes = request.Notes
+            };
             var setDmerAIProccessedStatusResult = documentManagerClient.SetDmerAIProccessedStatus(setDmerAIProccessedStatusRequest);
 
             if(setDmerAIProccessedStatusResult.ResultStatus == CaseManagement.Service.ResultStatus.Fail)
             {
+                _logger.LogError("Set Dmer AI Proccessed Status Error: " + setDmerAIProccessedStatusResult.ErrorMessage);
                 return StatusCode(StatusCodes.Status500InternalServerError, setDmerAIProccessedStatusResult.ErrorMessage);
             }
             return Ok();
         }
 
+        /// <summary>
+        /// POST: /Icbc/BatchSetDmerAIProccessedStatus
+        /// </summary>
+        /// <param name="BatchSetDmerAiStatusRequestBody">The processed status to be set for DMER records</param>
+        /// <returns></returns>
+        [HttpPost("BatchSetDmerAIProccessedStatus")]
+        public ActionResult BatchSetDmerAIProccessedStatus([FromBody] BatchSetDmerAiStatusRequestBody request)
+        {
+
+            using var scope = _serviceScopeFactory.CreateScope();
+            var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
+
+            var setDmerAIProccessedStatusRequest = new BatchSetDmerAIProccessedStatusInProgressRequest
+            {
+                DmerAiStatus = (int)DmerAIProccessedStatus.InProgress
+            };
+            setDmerAIProccessedStatusRequest.DocumenturlId.Add(request.DmerIds);
+
+            var setDmerAIProccessedStatusResult = documentManagerClient.BatchSetDmerAIProccessedStatusInProgress(setDmerAIProccessedStatusRequest);
+
+            if (setDmerAIProccessedStatusResult.ResultStatus == CaseManagement.Service.ResultStatus.Fail)
+            {
+                _logger.LogError("Batch Set Dmer AI Proccessed Status Error: " + setDmerAIProccessedStatusResult.ErrorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, setDmerAIProccessedStatusResult.ErrorMessage);
+            }
+            return Ok();
+        }
+
+        private int TranslateDmerStatus(string status)
+        {
+            switch (status.ToLower())
+            {
+                case ("error"):
+                    return (int)DmerAIProccessedStatus.Error;
+                case ("inprogress"):
+                    return (int)DmerAIProccessedStatus.InProgress;
+                case ("proccessed"):
+                    return (int)DmerAIProccessedStatus.Proccessed;
+                default:
+                    return (int)DmerAIProccessedStatus.NA;
+            }    
+        }
     }
 }
