@@ -10,6 +10,7 @@ using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -487,17 +488,17 @@ namespace Rsbc.Dmf.CaseManagement
                     return result;
                 }
 
-                if(TranslateDmerStatus(request.AIProccessedStatus) == (int)AIProccessedStatus.Error)
+                if(TranslateDmerAiProccessedStatus(request.AIProccessedStatus) == (int)AIProccessedStatus.Error)
                 {
                     await ProccessDocumentError(dmerDoc, request);
                     result.Success = true;
                     return result;
                 }
            
-                dmerDoc.dfp_aiprocessedstatus = TranslateDmerStatus(request.AIProccessedStatus);
-                dmerDoc.dfp_priority = request.AIPriority != null ? TranslatePriorityCode(request.AIPriority) : dmerDoc.dfp_priority;
+                dmerDoc.dfp_aiprocessedstatus = TranslateDmerAiProccessedStatus(request.AIProccessedStatus);
+                dmerDoc.dfp_aidpspriority = request.AIPriority != null ? TranslatePriorityCode(request.AIPriority) : dmerDoc.dfp_priority;
                 dmerDoc.dfp_queue = request.Queue != null ? TranslateQueueCode(request.Queue): dmerDoc.dfp_queue;
-                dmerDoc.dfp_dmerstatus = request.DmerStatus != null ? TranslateDmerStatus(request.DmerStatus): dmerDoc.dfp_dmerstatus;
+                dmerDoc.dfp_aidmerstatus = request.DmerStatus != null ? TranslateDmerStatus(request.DmerStatus): dmerDoc.dfp_dmerstatus;
                 dmerDoc.dfp_notes = request.Notes ?? dmerDoc.dfp_notes;
                 dynamicsContext.UpdateObject(dmerDoc);
                 await dynamicsContext.SaveChangesAsync();
@@ -584,7 +585,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
-        private int TranslateDmerStatus(string status)
+        private int TranslateDmerAiProccessedStatus(string status)
         {
             switch (status.ToLower())
             {
@@ -621,6 +622,23 @@ namespace Rsbc.Dmf.CaseManagement
             else
             {
                 return 100000000;
+            }
+        }
+
+        private int TranslateDmerStatus(string dmerstatus)
+        {
+            switch (dmerstatus.ToLower())
+            {
+                case ("adjudicate"):
+                    return (int)DMERStatusOptionSet.Adjudicate;
+                case ("cleanpass"):
+                    return (int)DMERStatusOptionSet.CleanPass;
+                case ("manualpass"):
+                    return (int)DMERStatusOptionSet.ManualPass;
+                case ("reject"):
+                    return (int)DMERStatusOptionSet.Reject;
+                default:
+                    return (int)DMERStatusOptionSet.Reject;
             }
         }
 
