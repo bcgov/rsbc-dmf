@@ -82,6 +82,10 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task CreateCaseDocumentUrl(CreateCaseDocumentUrlRequest request);
 
+        Task<DocumentUrlLinkInfo> GetDocumentUrlLinkInfo(Guid documentUrlId);
+
+        Task LinkDocumentUrlToCase(Guid documentUrlId, Guid caseId);
+
         DateTimeOffset GetDpsProcessingDate();
 
         Task UpdateNonComplyDocuments();
