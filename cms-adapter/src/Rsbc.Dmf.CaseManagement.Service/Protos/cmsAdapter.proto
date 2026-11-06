@@ -809,8 +809,7 @@ message DmerDocumentDriver {
 
 message GetDmerRecordsPaginatedRequest {
     string queue = 1;
-    int32 pageSize = 2;
-    int32 cursor = 3;
+    int32 count = 2;
 }
 message DocumentIdRequest {
 	int32 id = 1;

@@ -92,8 +92,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class DmerRecordsPaginatedRequest
     {
-        public int PageSize { get; set; }
-        public int Cursor { get; set; }
+        public int Count { get; set; }
     }
 
     public class DmerDocumentRecord
