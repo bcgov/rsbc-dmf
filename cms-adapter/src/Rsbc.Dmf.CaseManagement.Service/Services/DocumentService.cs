@@ -234,8 +234,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 var result = await _documentManager.GetDmerRecordsPaginated(new DmerRecordsPaginatedRequest
                 {
-                    PageSize = request.PageSize,
-                    Cursor = request.Cursor
+                    Count = request.Count
                 });
 
                 var documents = _mapper.Map<IEnumerable<DmerDocumentFile>>(result);

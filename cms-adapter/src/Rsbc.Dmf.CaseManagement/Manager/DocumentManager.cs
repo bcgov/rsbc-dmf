@@ -442,9 +442,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task<List<DmerDocumentRecord>> GetDmerRecordsPaginated(DmerRecordsPaginatedRequest request)
         {
-            int pageNumber = (request.Cursor / request.PageSize) + 1;
             string fetchXml = $@"
-                    <fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false' page='{pageNumber}' count='{request.PageSize}'>
+                    <fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='false'  count='{request.Count}'>
                       <entity name='bcgov_documenturl'>
                         <attribute name='bcgov_documenturlid'/>
                         <attribute name='bcgov_filename'/>
@@ -467,6 +466,7 @@ namespace Rsbc.Dmf.CaseManagement
                           <condition attribute='dfp_driverid' operator='not-null'/>
                           <condition attribute='bcgov_caseid' operator='not-null'/>
                           <condition attribute='dfp_submittalstatus' operator='eq' value='100000010'/>
+                          <condition attribute='dfp_aiprocessedstatus' operator='eq' value='100000000'/>
                         </filter>
                       </entity>
                     </fetch>";

@@ -75,23 +75,22 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         }
 
 
-      
-    /// <summary>
-    /// GET: /dmers?pageSize=50&amp;cursor=0
-    /// </summary>
-    /// <returns>DMER items, the requested page_size, and a nextLink for full pages.</returns>
-    /// <param name="pageSize">Maximum number of records to return</param>
-    /// <param name="cursor">Zero-based offset of the first record in the page</param>
-    [HttpGet("")]
-    [Produces("application/json")]
-    public ActionResult GetDmerBatch(
-        [FromQuery, Range(1, 500)] int pageSize = 50,
-        [FromQuery, Range(0, int.MaxValue)] int cursor = 0)
+
+        /// <summary>
+        /// GET: /dmers?pageSize=50&amp;cursor=0
+        /// </summary>
+        /// <returns>DMER items, the requested page_size, and a nextLink for full pages.</returns>
+        /// <param name="pageSize">Maximum number of records to return</param>
+        /// <param name="cursor">Zero-based offset of the first record in the page</param>
+        [HttpGet("")]
+        [Produces("application/json")]
+        public ActionResult GetDmerBatch(
+            [FromQuery, Range(1, 500)] int count = 50)
         {
 
             using var scope = _serviceScopeFactory.CreateScope();
             var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
-            var dmerRecordsRequest = new GetDmerRecordsPaginatedRequest {PageSize = pageSize, Cursor = cursor }; 
+            var dmerRecordsRequest = new GetDmerRecordsPaginatedRequest { Count = count }; 
             var dmerRecordsResults = documentManagerClient.GetDmerRecordsPaginated(dmerRecordsRequest);
             
             if (dmerRecordsResults.ResultStatus == CaseManagement.Service.ResultStatus.Fail)
@@ -99,11 +98,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, dmerRecordsResults);
             }
             var results = dmerRecordsResults.Items;
-            var nextLink = results.Count == pageSize && cursor <= int.MaxValue - pageSize
-                ? Url.Action(nameof(GetDmerBatch), new { pageSize, cursor = cursor + pageSize })
+            var nextLink = results.Count == count && count <= int.MaxValue - count
+                ? Url.Action(nameof(GetDmerBatch), new { count = count  })
                 : null;
 
-            return Json(new DmerBatchResponse(results, pageSize, nextLink));
+            return Json(new DmerBatchResponse(results, count, nextLink));
         }
 
   /// <summary>Downloads a file using the existing document storage adapter client.</summary>
