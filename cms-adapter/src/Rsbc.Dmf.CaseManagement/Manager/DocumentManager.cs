@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
+using Microsoft.Xrm.Sdk;
 using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.CaseManagement.Dynamics.Mapper;
@@ -9,6 +10,8 @@ using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -19,6 +22,27 @@ using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
+    public enum DPSStatusOptionSet
+    {
+        Accept = 100000000,
+        Reject = 100000001
+    }
+
+    public enum DpsPriorityOptionSet
+    {
+        Regular = 100000000,
+        UrgentImmediate = 100000001,
+        Expedited = 100000002,
+        CriticalReview = 100000003
+    }
+
+    public enum AIProccessedStatus
+    {
+        NA = 100000000,
+        InProgress = 100000001,
+        Proccessed = 100000002,
+        Error = 100000003
+    }
     internal class DocumentManager : DocumentMapper, IDocumentManager
     {
         internal readonly DynamicsContext dynamicsContext;
@@ -408,7 +432,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(d => d.dfp_DocumentTypeID)
                 .Expand(sd => sd.dfp_DocumentSubType)
                 .Expand(d => d.bcgov_CaseId)
-                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)EntityState.Active && d.dfp_showonportals != false)
+                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)Dynamics.EntityState.Active && d.dfp_showonportals != false)
             .ToList();
 
             return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
@@ -469,6 +493,66 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return dmerRecords;
+        }
+
+        public async Task<ResultStatusReply> SetDmerAIProccessedStatus(SetDmerAIProccessedStatus request)
+        {
+            var result = new ResultStatusReply();
+            try
+            {
+                var dmerDoc = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == new Guid(request.DocumenturlId)).FirstOrDefault();
+
+                if (request.IsRejected)
+                {
+                    await RejectDocument(dmerDoc);
+                    result.Success = true;
+                    return result;
+                }
+
+                if(request.AIProccessedStatus == (int)AIProccessedStatus.Error)
+                {
+                    await ProccessDocumentError(dmerDoc, request);
+                    result.Success = true;
+                    return result;
+                }
+           
+                dmerDoc.dfp_aiprocessedstatus = request.AIProccessedStatus;
+                dmerDoc.dfp_aidpspriority = request.AIPriority != null ? request.AIPriority : dmerDoc.dfp_priority;
+                dmerDoc.dfp_queue = request.Queue != null ? request.Queue : dmerDoc.dfp_queue;
+                dmerDoc.dfp_aidmerstatus = request.DmerStatus != null ? request.DmerStatus : dmerDoc.dfp_dmerstatus;
+                dmerDoc.dfp_notes = request.Notes ?? dmerDoc.dfp_notes;
+                dynamicsContext.UpdateObject(dmerDoc);
+                await dynamicsContext.SaveChangesAsync();
+
+                result.Success = true;
+            }
+            catch(Exception ex)
+            {
+                throw (ex);
+
+            }
+            return result;
+        }
+
+        public async Task<ResultStatusReply> BatchSetDmerAIProccessedStatusInProgress(BatchSetDmerAIProccessedStatusInProgress request)
+        {
+            var result = new ResultStatusReply();
+            try
+            {
+                foreach (var documenturlId in request.DocumenturlIds)
+                {
+                    var dmerDoc = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == new Guid(documenturlId)).FirstOrDefault();
+                    dmerDoc.dfp_aiprocessedstatus = request.DmerAiStatus;
+                    dynamicsContext.UpdateObject(dmerDoc);
+                }
+                await dynamicsContext.SaveChangesAsync();
+                result.Success = true;
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+            return result;
         }
 
         private async Task<List<DmerDriverDocument>> GetDmerDocumentsForDriver(string driverId, string documentUrlId)
@@ -545,13 +629,23 @@ namespace Rsbc.Dmf.CaseManagement
                 return 100000000;
             }
         }
-
-        private bool IsValidDmerQueueCode(int? queueCode)
+        private async Task RejectDocument(bcgov_documenturl doc)
         {
-            //update with dmer queue option set when added to dynamics
-            return true;
+            doc.dfp_dmerstatus = (int)DMERStatusOptionSet.Reject;
+            doc.dfp_dpsstatus = (int)DPSStatusOptionSet.Reject;
+            doc.dfp_dpspriority = (int)DpsPriorityOptionSet.Regular;
+            dynamicsContext.UpdateObject(doc);
+            await dynamicsContext.SaveChangesAsync();
         }
 
+        private async Task ProccessDocumentError(bcgov_documenturl dmerDoc, SetDmerAIProccessedStatus request)
+        {
+            dmerDoc.dfp_notes = request.Notes;
+            dmerDoc.dfp_aiprocessedstatus = request.AIProccessedStatus;
+            dynamicsContext.UpdateObject(dmerDoc);
+            await dynamicsContext.SaveChangesAsync();
+        }
+        
     }
 
 }
