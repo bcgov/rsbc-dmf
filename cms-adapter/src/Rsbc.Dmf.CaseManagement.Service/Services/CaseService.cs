@@ -1971,8 +1971,26 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 }
 
                 await _caseManager.LinkDocumentUrlToCase(documentId, caseId);
-
                 reply.CaseId = caseId.ToString();
+
+                if (!string.IsNullOrWhiteSpace(request.Comments))
+                {
+                    var commentResult = await _caseManager.CreateLegacyCaseComment(new CaseManagement.LegacyComment
+                    {
+                        CaseId = reply.CaseId,
+                        CommentText = request.Comments,
+                        CommentTypeCode = "C",
+                        CommentDate = DateTimeOffset.Now,
+                        Driver = new CaseManagement.Driver { DriverLicenseNumber = request.DriverLicenseNumber }
+                    });
+                    if (!commentResult.Success)
+                    {
+                        reply.ResultStatus = CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.Fail;
+                        reply.ErrorDetail = $"Case {reply.CaseId} was created but the comment could not be added. {commentResult.ErrorDetail}";
+                        return reply;
+                    }
+                }
+
                 reply.ResultStatus = CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.Success;
             }
             catch (Exception e)

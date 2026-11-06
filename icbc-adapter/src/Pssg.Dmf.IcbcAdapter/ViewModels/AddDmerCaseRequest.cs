@@ -22,7 +22,7 @@ namespace Rsbc.Dmf.IcbcAdapter.ViewModels
         [JsonProperty("document_type")]
         public string DocumentType { get; init; }
 
-        /// <summary>Currently ignored.</summary>
+        /// <summary>Optional; saved as a file comment on the new case and driver.</summary>
         [JsonProperty("comments")]
         public string Comments { get; init; }
     }

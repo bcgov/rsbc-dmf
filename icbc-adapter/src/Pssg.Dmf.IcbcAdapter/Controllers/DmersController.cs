@@ -216,7 +216,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     new CreateCaseForDmerDocumentRequest
                     {
                         DocumentId = dmerId.ToString(),
-                        DriverLicenseNumber = request.Driver.DriverId.Trim()
+                        DriverLicenseNumber = request.Driver.DriverId.Trim(),
+                        Comments = request.Comments ?? string.Empty
                     },
                     cancellationToken: cancellationToken);
                 reply = await call.ResponseAsync;

@@ -1129,6 +1129,7 @@ message DmerStatusReply{
 message CreateCaseForDmerDocumentRequest {
     string documentId = 1;
     string driverLicenseNumber = 2;
+    string comments = 3;
 }
 
 message CreateCaseForDmerDocumentReply {
