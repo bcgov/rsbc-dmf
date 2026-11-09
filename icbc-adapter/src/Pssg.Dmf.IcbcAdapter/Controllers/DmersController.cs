@@ -1,28 +1,20 @@
+using Castle.Components.DictionaryAdapter;
+using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-
-using Microsoft.IdentityModel.Tokens;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.IcbcAdapter.ViewModels;
+using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Serilog;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Server.HttpSys;
-using Rsbc.Dmf.IcbcAdapter.ViewModels;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using System.IO;
-using Grpc.Core;
-using Microsoft.AspNetCore.StaticFiles;
-using Swashbuckle.AspNetCore.Annotations;
 using DocumentStorageClient = Pssg.DocumentStorageAdapter.DocumentStorageAdapter.DocumentStorageAdapterClient;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
@@ -35,6 +27,33 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         /// </summary>
         [Required]
         public string FileUrl { get; init; }
+    }
+
+    public class SetDmerAiStatusRequestBody
+    {
+        [Required]
+        public string DmerId { get; set; }
+
+        [Required]
+        public int AiProcessedStatus { get; set; }
+        public int AiDpsPriority { get; set; }
+        public int AiQueue { get; set; }
+        public int AiDmerStatus { get; set; }
+        public bool IsRejected { get; set; }
+        public string Notes { get; set; }
+    }
+
+    public class BatchSetDmerAiStatusRequestBody
+    {
+        public string[] DmerIds { get; set; }
+    }
+
+    public enum DmerAIProccessedStatus
+    {
+        NA = 100000000,
+        InProgress = 100000001,
+        Proccessed = 100000002,
+        Error = 100000003
     }
 
     [Authorize]
@@ -56,23 +75,22 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         }
 
 
-      
-    /// <summary>
-    /// GET: /dmers?pageSize=50&amp;cursor=0
-    /// </summary>
-    /// <returns>DMER items, the requested page_size, and a nextLink for full pages.</returns>
-    /// <param name="pageSize">Maximum number of records to return</param>
-    /// <param name="cursor">Zero-based offset of the first record in the page</param>
-    [HttpGet("")]
-    [Produces("application/json")]
-    public ActionResult GetDmerBatch(
-        [FromQuery, Range(1, 500)] int pageSize = 50,
-        [FromQuery, Range(0, int.MaxValue)] int cursor = 0)
+
+        /// <summary>
+        /// GET: /dmers?pageSize=50&amp;cursor=0
+        /// </summary>
+        /// <returns>DMER items, the requested page_size, and a nextLink for full pages.</returns>
+        /// <param name="pageSize">Maximum number of records to return</param>
+        /// <param name="cursor">Zero-based offset of the first record in the page</param>
+        [HttpGet("")]
+        [Produces("application/json")]
+        public ActionResult GetDmerBatch(
+            [FromQuery, Range(1, 500)] int count = 50)
         {
 
             using var scope = _serviceScopeFactory.CreateScope();
             var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
-            var dmerRecordsRequest = new GetDmerRecordsPaginatedRequest {PageSize = pageSize, Cursor = cursor }; 
+            var dmerRecordsRequest = new GetDmerRecordsPaginatedRequest { Count = count }; 
             var dmerRecordsResults = documentManagerClient.GetDmerRecordsPaginated(dmerRecordsRequest);
             
             if (dmerRecordsResults.ResultStatus == CaseManagement.Service.ResultStatus.Fail)
@@ -80,11 +98,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, dmerRecordsResults);
             }
             var results = dmerRecordsResults.Items;
-            var nextLink = results.Count == pageSize && cursor <= int.MaxValue - pageSize
-                ? Url.Action(nameof(GetDmerBatch), new { pageSize, cursor = cursor + pageSize })
+            var nextLink = results.Count == count && count <= int.MaxValue - count
+                ? Url.Action(nameof(GetDmerBatch), new { count = count  })
                 : null;
 
-            return Json(new DmerBatchResponse(results, pageSize, nextLink));
+            return Json(new DmerBatchResponse(results, count, nextLink));
         }
 
   /// <summary>Downloads a file using the existing document storage adapter client.</summary>
@@ -261,6 +279,62 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             }
         }
 
+        /// <summary>
+        /// POST: /Icbc/SetDmerAIProccessedStatus
+        /// </summary>
+        /// <param name="SetDmerAiStatusRequestBody">The processed status to be set for DMER records</param>
+        /// <returns></returns>
+        [HttpPost("SetDmerAIProccessedStatus")]
+        public ActionResult SetDmerAIProccessedStatus([FromBody] SetDmerAiStatusRequestBody request)
+        {
+            using var scope = _serviceScopeFactory.CreateScope();
+            var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
+            var setDmerAIProccessedStatusRequest = new SetDmerAIProccessedStatusRequest { 
+                DmerAiStatus = request.AiProcessedStatus, 
+                DocumenturlId = request.DmerId,
+                DmerStatus = request.AiDmerStatus,
+                Queue = request.AiQueue,
+                AIPriority = request.AiDpsPriority,
+                IsRejected = request.IsRejected ? 1 : 0,
+                Notes = request.Notes
+            };
+            var setDmerAIProccessedStatusResult = documentManagerClient.SetDmerAIProccessedStatus(setDmerAIProccessedStatusRequest);
+
+            if(setDmerAIProccessedStatusResult.ResultStatus == CaseManagement.Service.ResultStatus.Fail)
+            {
+                _logger.LogError("Set Dmer AI Proccessed Status Error: " + setDmerAIProccessedStatusResult.ErrorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, setDmerAIProccessedStatusResult.ErrorMessage);
+            }
+            return Ok();
+        }
+
+        /// <summary>
+        /// POST: /Icbc/BatchSetDmerAIProccessedStatus
+        /// </summary>
+        /// <param name="BatchSetDmerAiStatusRequestBody">The processed status to be set for DMER records</param>
+        /// <returns></returns>
+        [HttpPost("BatchSetDmerAIProccessedStatus")]
+        public ActionResult BatchSetDmerAIProccessedStatus([FromBody] BatchSetDmerAiStatusRequestBody request)
+        {
+
+            using var scope = _serviceScopeFactory.CreateScope();
+            var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
+
+            var setDmerAIProccessedStatusRequest = new BatchSetDmerAIProccessedStatusInProgressRequest
+            {
+                DmerAiStatus = (int)DmerAIProccessedStatus.InProgress
+            };
+            setDmerAIProccessedStatusRequest.DocumenturlId.Add(request.DmerIds);
+
+            var setDmerAIProccessedStatusResult = documentManagerClient.BatchSetDmerAIProccessedStatusInProgress(setDmerAIProccessedStatusRequest);
+
+            if (setDmerAIProccessedStatusResult.ResultStatus == CaseManagement.Service.ResultStatus.Fail)
+            {
+                _logger.LogError("Batch Set Dmer AI Proccessed Status Error: " + setDmerAIProccessedStatusResult.ErrorMessage);
+                return StatusCode(StatusCodes.Status500InternalServerError, setDmerAIProccessedStatusResult.ErrorMessage);
+            }
+            return Ok();
+        }
     }
 
 

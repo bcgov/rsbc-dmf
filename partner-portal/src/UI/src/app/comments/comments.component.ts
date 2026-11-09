@@ -59,7 +59,7 @@ export class CommentsComponent implements OnInit {
   _allcommentRequest: Comment[] = [];
   currentDriverId: string | null = null;
   commentsForm = this.fb.group({
-    commentText: ['', Validators.compose([Validators.required, Validators.maxLength(2000)])],
+    commentText: ['', Validators.compose([Validators.required, Validators.maxLength(1900)])],
   });
  
    constructor(

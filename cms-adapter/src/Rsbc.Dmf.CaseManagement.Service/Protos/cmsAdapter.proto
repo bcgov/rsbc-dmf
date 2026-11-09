@@ -652,6 +652,8 @@ service DocumentManager {
 
 	// Get DMER records
 	rpc GetDmerRecordsPaginated(GetDmerRecordsPaginatedRequest) returns (GetDmerRecordsPaginatedReply);
+	rpc SetDmerAIProccessedStatus(SetDmerAIProccessedStatusRequest) returns (SetDmerAIProccessedStatusReply);
+	rpc BatchSetDmerAIProccessedStatusInProgress(BatchSetDmerAIProccessedStatusInProgressRequest) returns (BatchSetDmerAIProccessedStatusInProgressReply);
 }
 
 message UpdateDocumentRequest {
@@ -812,8 +814,7 @@ message DmerDocumentDriver {
 
 message GetDmerRecordsPaginatedRequest {
     string queue = 1;
-    int32 pageSize = 2;
-    int32 cursor = 3;
+    int32 count = 2;
 }
 message DocumentIdRequest {
 	int32 id = 1;
@@ -821,6 +822,31 @@ message DocumentIdRequest {
 
 message DocumentTypeRequest {
 	string documentTypeCode = 1;
+}
+
+message BatchSetDmerAIProccessedStatusInProgressRequest {
+    int32 dmerAiStatus = 1;
+    repeated string documenturlId = 2;
+}
+
+message BatchSetDmerAIProccessedStatusInProgressReply {
+    ResultStatus resultStatus = 1;
+    string errorMessage = 2;
+}
+
+message SetDmerAIProccessedStatusRequest {
+    int32 dmerAiStatus = 1;
+    string documenturlId = 2;
+    optional int32 AIPriority = 3;
+    optional int32 Queue = 4;
+    optional int32 DmerStatus = 5;
+    optional int32 IsRejected = 6;
+    string Notes = 7;
+}
+
+message SetDmerAIProccessedStatusReply {
+    ResultStatus resultStatus = 1;
+    string errorMessage = 2;
 }
 
 message DocumentSubType {

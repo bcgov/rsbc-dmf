@@ -28,7 +28,7 @@ export class AddCommentsComponent {
   ) { }
 
   commentsForm = this.fb.group({
-    commentText : ['', Validators.compose([Validators.required, Validators.maxLength(2000)])]
+    commentText : ['', Validators.compose([Validators.required, Validators.maxLength(1900)])]
   })
 
   AddComment(){   

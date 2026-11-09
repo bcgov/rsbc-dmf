@@ -8,6 +8,7 @@ using Serilog;
 using Serilog.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -92,8 +93,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class DmerRecordsPaginatedRequest
     {
-        public int PageSize { get; set; }
-        public int Cursor { get; set; }
+        public int Count { get; set; }
     }
 
     public class DmerDocumentRecord
@@ -289,7 +289,6 @@ namespace Rsbc.Dmf.CaseManagement
         ManualPass = 100000003,
     }
 
-
     // TODO move to CallbackModel.cs
     public enum CallbackPriority
     {
@@ -424,6 +423,26 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public PdfDocument Document { get; set; }
         public bool Success { get; set; }
+    }
+
+    public class BatchSetDmerAIProccessedStatusInProgress 
+    {
+        public  int DmerAiStatus { get; set; }
+        public List<string> DocumenturlIds { get; set; }
+    }
+
+    public class SetDmerAIProccessedStatus
+    {
+        [Required]
+        public string DocumenturlId { get; set; }
+
+        [Required]
+        public int AIProccessedStatus { get; set; }
+        public int? AIPriority { get; set; }
+        public int? Queue { get; set; }
+        public int? DmerStatus { get; set; }
+        public bool IsRejected { get; set; }
+        public string Notes { get; set; }
     }
 
     #endregion Model
