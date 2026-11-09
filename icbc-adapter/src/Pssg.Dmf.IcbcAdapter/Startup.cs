@@ -306,6 +306,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                 services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
+                services.AddTransient(_ => new DocumentManager.DocumentManagerClient(channel));
             }
 
         }

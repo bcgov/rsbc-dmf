@@ -8,6 +8,7 @@ using Serilog;
 using Serilog.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -88,6 +89,57 @@ namespace Rsbc.Dmf.CaseManagement
         public string DocumentSubTypeId { get; set; }
 
         public bool showOnPortals { get; set; }
+    }
+
+    public class DmerRecordsPaginatedRequest
+    {
+        public int Count { get; set; }
+    }
+
+    public class DmerDocumentRecord
+    {
+        public string DocumentRecordId { get; set; }
+        public string Queue { get; set; }
+        public string DocumentName { get; set; }
+        public string DocumentUrl { get; set; }
+        public string DocumentType { get; set; }
+        public string SubmittalStatus { get; set; }
+        public string DocumentPriority { get; set; }
+        public string ReceivedDate { get; set; }
+        public string DocumentTypeBusinessArea { get; set; }
+        public string DmerStatus { get; set; }
+        public DmerDocumentDriver DmerDocumentDriver { get; set; }
+        public string DmerCaseId { get; set; }
+        public DmerDocumentCaseRecord DmerDocumentCaseRecord { get; set; }
+    }
+
+    public class DmerDocumentCaseRecord
+    {
+        public string CaseId { get; set; }
+        public string CaseTitle { get; set; }
+        public string CaseType { get; set; }
+        public string CasePriority { get; set; }
+        public string CaseOwner { get; set; }
+        public string CaseStatus { get; set; }
+    }
+
+    public class DmerDriverDocument
+    {
+        public string FileName { get; set; }
+        public string DocumentType { get; set; }
+        public string SubmittalStatus { get; set; }
+        public string UploadedDate { get; set; }
+        public string DocumentRecordId { get; set; }
+    }
+
+    public class DmerDocumentDriver
+    {
+        public string DriverId { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string LicenceNumber { get; set; }
+        public List<DmerDriverDocument> Documents { get; set; }
     }
 
     public class CreateStatusReply
@@ -237,7 +289,6 @@ namespace Rsbc.Dmf.CaseManagement
         ManualPass = 100000003,
     }
 
-
     // TODO move to CallbackModel.cs
     public enum CallbackPriority
     {
@@ -364,6 +415,26 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public PdfDocument Document { get; set; }
         public bool Success { get; set; }
+    }
+
+    public class BatchSetDmerAIProccessedStatusInProgress 
+    {
+        public  int DmerAiStatus { get; set; }
+        public List<string> DocumenturlIds { get; set; }
+    }
+
+    public class SetDmerAIProccessedStatus
+    {
+        [Required]
+        public string DocumenturlId { get; set; }
+
+        [Required]
+        public int AIProccessedStatus { get; set; }
+        public int? AIPriority { get; set; }
+        public int? Queue { get; set; }
+        public int? DmerStatus { get; set; }
+        public bool IsRejected { get; set; }
+        public string Notes { get; set; }
     }
 
     #endregion Model

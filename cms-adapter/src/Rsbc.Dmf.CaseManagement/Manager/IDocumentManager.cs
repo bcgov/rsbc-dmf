@@ -19,6 +19,8 @@ namespace Rsbc.Dmf.CaseManagement
         Document UpdateUnClaimDmer(Guid loginIds, Guid documentId);
 
         Task<IEnumerable<LegacyDocument>> GetDriverDocumentsById(Guid driverId);
-
+        Task<List<DmerDocumentRecord>> GetDmerRecordsPaginated(DmerRecordsPaginatedRequest request);
+        Task<ResultStatusReply> SetDmerAIProccessedStatus(SetDmerAIProccessedStatus request);
+        Task<ResultStatusReply> BatchSetDmerAIProccessedStatusInProgress(BatchSetDmerAIProccessedStatusInProgress request);
     }
 }
