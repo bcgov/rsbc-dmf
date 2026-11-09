@@ -1940,8 +1940,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     return reply;
                 }
 
-                var drivers = await _caseManager.GetDriverByLicenseNumber(request.DriverLicenseNumber);
-                if (drivers == null || !drivers.Any())
+                var driver = (await _caseManager.GetDriverByLicenseNumber(request.DriverLicenseNumber))?.FirstOrDefault();
+                if (driver == null || !Guid.TryParse(driver.Id, out var driverId))
                 {
                     reply.ResultStatus = CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.DriverNotFound;
                     return reply;
@@ -1969,8 +1969,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     reply.ErrorDetail = createResult.ErrorDetail ?? "Unable to create case.";
                     return reply;
                 }
-
                 await _caseManager.LinkDocumentUrlToCase(documentId, caseId);
+                if (string.IsNullOrEmpty(document.DriverLicenseNumber))
+                {
+                    await _caseManager.LinkDocumentUrlToDriver(documentId, driverId);
+                }
                 reply.CaseId = caseId.ToString();
 
                 if (!string.IsNullOrWhiteSpace(request.Comments))

@@ -6211,6 +6211,23 @@ namespace Rsbc.Dmf.CaseManagement
                 dynamicsContext.Detach(theCase);
             }
         }
+
+        public async Task LinkDocumentUrlToDriver(Guid documentUrlId, Guid driverId)
+        {
+            var document = await dynamicsContext.bcgov_documenturls.ByKey(documentUrlId).GetValueAsync();
+            var driver = await dynamicsContext.dfp_drivers.ByKey(driverId).GetValueAsync();
+
+            try
+            {
+                dynamicsContext.SetLink(document, nameof(bcgov_documenturl.dfp_DriverId), driver);
+                await dynamicsContext.SaveChangesAsync();
+            }
+            finally
+            {
+                dynamicsContext.Detach(document);
+                dynamicsContext.Detach(driver);
+            }
+        }
     }
 
     /// <summary>

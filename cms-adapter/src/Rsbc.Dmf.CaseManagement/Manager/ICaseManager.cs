@@ -86,6 +86,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task LinkDocumentUrlToCase(Guid documentUrlId, Guid caseId);
 
+        Task LinkDocumentUrlToDriver(Guid documentUrlId, Guid driverId);
+
         DateTimeOffset GetDpsProcessingDate();
 
         Task UpdateNonComplyDocuments();
