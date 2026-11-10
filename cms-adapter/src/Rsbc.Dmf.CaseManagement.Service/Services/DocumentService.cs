@@ -1,15 +1,16 @@
-﻿using Grpc.Core;
-using System.Threading.Tasks;
-using System;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
-using System.Collections.Generic;
+﻿using AutoMapper;
+using Grpc.Core;
 using Microsoft.Extensions.Configuration;
-using System.Linq;
+using Microsoft.Extensions.Logging;
+using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Dynamics.Mapper;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Builder;
+using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -299,5 +300,34 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
             return reply;
         }
+        public async override Task<AddDriverToAiDmerDocumentReply> AddDriverToAiDmerDocument(AddDriverToAiDmerDocumentRequest request, ServerCallContext context)
+        {
+            var reply = new AddDriverToAiDmerDocumentReply();
+            try
+            {
+                var command = _mapper.Map<DmerDriverRequest>(request);
+                var result = await _documentManager.AddDriverToAiDmerDocument(command);
+                reply.DriverOpenCase = _mapper.Map<DmerDriverCase>(result.DriverOpenCase);
+                if (result.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                    reply.ResultMessage = result.ReplyMessage;
+                }
+                else
+                {
+                    reply.ResultStatus =  ResultStatus.Fail;
+                    reply.ResultMessage = result.ReplyMessage;
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding driver to AI DMER document");
+                reply.ResultMessage = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
     }
 }

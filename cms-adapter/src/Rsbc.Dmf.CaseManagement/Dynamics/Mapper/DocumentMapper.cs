@@ -81,8 +81,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => TranslateSubmittalStatusInt(src.dfp_submittalstatus)))
                     .ForMember(dest => dest.UploadedDate, opt => opt.MapFrom(src => src.createdon.Value.UtcDateTime.ToString("yyyy-MM-dd'T'HH:mm:ss'Z'", CultureInfo.InvariantCulture))) //force to ISO 8601 string
                     .ForMember(dest => dest.DocumentRecordId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
-                    .AddTransform(NullStringConverter);               
-
+                    .AddTransform(NullStringConverter);      
             }
 
             private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
