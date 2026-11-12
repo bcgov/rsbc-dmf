@@ -304,7 +304,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, addDriverResults.ResultMessage);
                 }
-                return Json(new AddDmerDriverResponse { Result_Message = addDriverResults.ResultMessage, Driver_Open_Case = addDriverResults.DriverOpenCase ?? new object() });
+                return Json(new AddDmerDriverResponse { Result_Message = addDriverResults.ResultMessage, Driver_Open_Case = addDriverResults.DriverOpenCase ?? new DmerDriverCase() });
 
             }
             catch(Exception ex)
