@@ -652,6 +652,9 @@ service DocumentManager {
 
 	// Get DMER records
 	rpc GetDmerRecordsPaginated(GetDmerRecordsPaginatedRequest) returns (GetDmerRecordsPaginatedReply);
+
+    // Add driver to AI DMER document
+    rpc AddDriverToAiDmerDocument(AddDriverToAiDmerDocumentRequest) returns (AddDriverToAiDmerDocumentReply);
 	rpc SetDmerAIProccessedStatus(SetDmerAIProccessedStatusRequest) returns (SetDmerAIProccessedStatusReply);
 	rpc BatchSetDmerAIProccessedStatusInProgress(BatchSetDmerAIProccessedStatusInProgressRequest) returns (BatchSetDmerAIProccessedStatusInProgressReply);
 }
@@ -1175,6 +1178,28 @@ message CreateCaseForDmerDocumentReply {
     string caseId = 3;
 }
 
+message AddDriverToAiDmerDocumentRequest {
+    string driverLicenceNumber = 1;
+    string firstName = 2;
+    string surname = 3;
+    google.protobuf.Timestamp dateOfBirth = 4;
+    string comments = 5;
+    string dmerId = 6;
+}
+
+message AddDriverToAiDmerDocumentReply {
+    ResultStatus resultStatus = 1;
+    string resultMessage = 2;
+    DmerDriverCase driverOpenCase = 3;
+}
+
+message DmerDriverCase {
+    string caseId = 1;
+    string caseTitle = 2;
+    string caseType = 3;
+    string dmerStatus = 4;
+    google.protobuf.Timestamp complianceDate = 5;
+}
 
 // END UserManager
 ////////////////////////

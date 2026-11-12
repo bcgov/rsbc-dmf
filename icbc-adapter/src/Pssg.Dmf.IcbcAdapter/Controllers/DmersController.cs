@@ -1,4 +1,4 @@
-using Castle.Components.DictionaryAdapter;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,6 +19,17 @@ using DocumentStorageClient = Pssg.DocumentStorageAdapter.DocumentStorageAdapter
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
+    public class DmerDriver
+    {
+        [Required]
+        public string DriverLicenceNumber { get; set; }
+        [Required]
+        public string FirstName { get; set; }
+        [Required]
+        public string Surname { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string Comments { get; set; }
+    }
     /// <summary>Identifies a file to download from document storage.</summary>
     public class DownloadRequestBody
     {
@@ -56,6 +67,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         Error = 100000003
     }
 
+    public class AddDmerDriverResponse
+    {
+      public string Result_Message { get; set; }
+      public DmerDriverCase Driver_Open_Case { get; set; }
+
+    }
+
     [Authorize]
     [ApiController]
     [Route("[controller]")]
@@ -69,19 +87,18 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
         public DmersController(IConfiguration configuration, ILogger<DmersController> logger, IServiceScopeFactory serviceScopeFactory)
         {
-           _configuration = configuration;
-           _logger = logger;
+            _configuration = configuration;
+            _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
         }
 
 
 
         /// <summary>
-        /// GET: /dmers?pageSize=50&amp;cursor=0
+        /// GET: /dmers?count=0
         /// </summary>
         /// <returns>DMER items, the requested page_size, and a nextLink for full pages.</returns>
-        /// <param name="pageSize">Maximum number of records to return</param>
-        /// <param name="cursor">Zero-based offset of the first record in the page</param>
+        /// <param name="count">Maximum number of records to return</param>
         [HttpGet("")]
         [Produces("application/json")]
         public ActionResult GetDmerBatch(
@@ -90,22 +107,22 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
             using var scope = _serviceScopeFactory.CreateScope();
             var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
-            var dmerRecordsRequest = new GetDmerRecordsPaginatedRequest { Count = count }; 
+            var dmerRecordsRequest = new GetDmerRecordsPaginatedRequest { Count = count };
             var dmerRecordsResults = documentManagerClient.GetDmerRecordsPaginated(dmerRecordsRequest);
-            
+
             if (dmerRecordsResults.ResultStatus == CaseManagement.Service.ResultStatus.Fail)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, dmerRecordsResults);
             }
             var results = dmerRecordsResults.Items;
             var nextLink = results.Count == count && count <= int.MaxValue - count
-                ? Url.Action(nameof(GetDmerBatch), new { count = count  })
+                ? Url.Action(nameof(GetDmerBatch), new { count = count })
                 : null;
 
             return Json(new DmerBatchResponse(results, count, nextLink));
         }
 
-  /// <summary>Downloads a file using the existing document storage adapter client.</summary>
+        /// <summary>Downloads a file using the existing document storage adapter client.</summary>
         [HttpGet("{documentRecordId}/files")]
         [SwaggerOperation(Summary = "Download a document by dmerdocumentid", Description = "Returns the stored file as a download.")]
         [Produces("application/octet-stream")]
@@ -335,11 +352,49 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             }
             return Ok();
         }
+
+        /// <summary>
+        /// POST: /dmers/{documentUrlId}/add_driver
+        /// Adds a driver to an AI DMER document.
+        /// </summary>
+        /// <param name="documentUrlId">The ID of the DMER document</param>
+        /// <param name="dmerDriver">The driver information to add</param>
+        /// <returns>The result message and any associated open case for the driver</returns>
+        [HttpPost("{documentUrlId}/add_driver")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(AddDmerDriverResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public ActionResult AddDmerDriver([FromRoute] string documentUrlId, [FromBody] DmerDriver dmerDriver)
+        {
+            try
+            {
+                using var scope = _serviceScopeFactory.CreateScope();
+                var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
+                var addDriverRequest = new AddDriverToAiDmerDocumentRequest
+                {
+                    Comments = dmerDriver.Comments?? string.Empty,
+                    DateOfBirth = dmerDriver.DateOfBirth != null ? Timestamp.FromDateTime((DateTime)dmerDriver.DateOfBirth): null,
+                    Surname = dmerDriver.Surname,
+                    FirstName = dmerDriver.FirstName,
+                    DriverLicenceNumber = dmerDriver.DriverLicenceNumber,
+                    DmerId = documentUrlId
+                };
+                var addDriverResults = documentManagerClient.AddDriverToAiDmerDocument(addDriverRequest);
+                
+                if (addDriverResults.ResultStatus == CaseManagement.Service.ResultStatus.Fail)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, addDriverResults.ResultMessage);
+                }
+                return Json(new AddDmerDriverResponse { Result_Message = addDriverResults.ResultMessage, Driver_Open_Case = addDriverResults.DriverOpenCase ?? new DmerDriverCase() });
+
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred connecting to the Case Management Service.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred connecting to the Case Management Service. Please try again later");
+            }
+        }
     }
-
-
-
-
-
-
-}
+ }

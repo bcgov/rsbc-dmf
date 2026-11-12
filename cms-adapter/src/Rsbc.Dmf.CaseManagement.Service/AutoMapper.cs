@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
+using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Dynamics.Mapper;
 using Rsbc.Dmf.CaseManagement.Model;
 using System;
@@ -55,6 +56,21 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.DmerDocumentCaseRecord, DmerDocumentCaseRecord>()
                 .AddTransform(NullStringConverter);
+            CreateMap<Dto.DriverOpenCase, DmerDriverCase>()
+                .ForMember(dest => dest.CaseId, opt => opt.MapFrom(src => src.CaseId))
+                .ForMember(dest => dest.CaseTitle, opt => opt.MapFrom(src => src.CaseTitle))
+                .ForMember(dest => dest.CaseType, opt => opt.MapFrom(src => src.CaseType))
+                .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.CaseStatus))
+                .AddTransform(NullStringConverter);
+            CreateMap<CaseManagement.DmerDocumentCaseRecord, AddDriverToAiDmerDocumentReply>()
+                .AddTransform(NullStringConverter);
+            CreateMap<Dto.DmerDriverRequest, AddDriverToAiDmerDocumentRequest>()
+                .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => src.DateOfBirth.HasValue ? Timestamp.FromDateTime(src.DateOfBirth.Value.ToUniversalTime()) : null))
+                .AddTransform(NullStringConverter);
+            CreateMap<AddDriverToAiDmerDocumentRequest, Dto.DmerDriverRequest>()
+                .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => src.DateOfBirth != null ? src.DateOfBirth.ToDateTime() : (DateTime?)null))
+                .AddTransform(NullStringConverter);
+
             CreateMap<CaseManagement.CaseDetail, CaseDetail>()
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.DocumentSubType, DocumentSubType>();

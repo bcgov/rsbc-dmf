@@ -645,7 +645,212 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.UpdateObject(dmerDoc);
             await dynamicsContext.SaveChangesAsync();
         }
-        
+
+        /// <summary>
+        /// Add driver to AI DMER document
+        /// Checks if driver exists; if not, creates one. Links driver to document.
+        /// Returns any open case linked to the driver.
+        /// </summary>
+        /// <param name="request">DmerDriverRequest with driver details and document ID</param>
+        /// <returns>AddDriverToAiDmerDocumentReply with error status, message, and case ID if found</returns>
+        public async Task<AddDriverToAiDmerDocumentReply> AddDriverToAiDmerDocument(DmerDriverRequest request)
+        {
+            var reply = ValidateAddDriverRequest(request);
+            if(!reply.Success)
+            {
+                return reply;
+            }
+
+            try
+            {
+                Guid driverId = Guid.Empty;
+                dfp_driver driver = null;
+
+                driver = dynamicsContext.dfp_drivers
+                    .Where(d => d.dfp_licensenumber == request.DriverLicenceNumber && d.statecode == 0)
+                    .FirstOrDefault();
+
+                if (driver == null)
+                {
+                    driver = await CreateDriver(request);
+                }
+                else
+                {
+                    driverId = driver.dfp_driverid.Value;
+                }
+
+                await LinkDriverWithDocument(request, driver);
+
+                try
+                {
+                    var dmerCaseTypeCode = 2;
+                    var openCase = dynamicsContext.incidents
+                        .Where(c => c._dfp_driverid_value == driverId && c.statecode == 0 && c.casetypecode == dmerCaseTypeCode)
+                        .FirstOrDefault();
+
+                    if (openCase != null)
+                    {
+                        reply.DriverOpenCase = _mapper.Map<DriverOpenCase>(openCase);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    reply.Success = true;
+                    reply.ReplyMessage = $"Unexpected retrieving drivers open case: {ex.Message}";
+                    return reply;
+                }
+                
+                reply.Success = true;
+                reply.ReplyMessage = "Driver successfully linked to document";
+                return reply;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Unexpected error in AddDriverToAiDmerDocument: {ex.Message}");
+                reply.Success = false;
+                reply.ReplyMessage = $"Unexpected error Adding driver to Dmer document: {ex.Message}";
+                return reply;
+            }
+        }
+
+
+        private AddDriverToAiDmerDocumentReply ValidateAddDriverRequest(DmerDriverRequest request)
+        {
+            var reply = new AddDriverToAiDmerDocumentReply
+            {
+                Success = true,
+            };
+            // Validate input
+            if (string.IsNullOrWhiteSpace(request?.DriverLicenceNumber))
+            {
+                reply.Success = false;
+                reply.ReplyMessage = "Driver license number is required";
+                return reply;
+            }
+
+            if (request.DriverLicenceNumber.Length > 8)
+            {
+                reply.Success = false;
+                reply.ReplyMessage = "Driver license number cannot exceed 8 characters";
+                return reply;
+            }
+
+            if (!request.DriverLicenceNumber.All(char.IsDigit))
+            {
+                reply.Success = false;
+                reply.ReplyMessage = "Driver license number must contain only numeric digits";
+                return reply;
+            }
+
+            if (string.IsNullOrWhiteSpace(request.DmerId))
+            {
+                reply.Success = false;
+                reply.ReplyMessage = "Document ID is required";
+                return reply;
+            }
+            return reply;
+        }
+
+        private async Task LinkDriverWithDocument(DmerDriverRequest request, dfp_driver driver)
+        {
+            try
+            {
+                var document = dynamicsContext.bcgov_documenturls
+                    .Where(d => d.bcgov_documenturlid == Guid.Parse(request.DmerId))
+                    .FirstOrDefault();
+
+                if (document == null)
+                {
+                    throw(new Exception("Document not found"));
+                }
+
+                document._dfp_driverid_value = driver.dfp_driverid;
+                dynamicsContext.SetLink(document, nameof(bcgov_documenturl.dfp_DriverId), driver);
+                await dynamicsContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error linking driver to document: {ex.Message}");
+                throw(new Exception($"Failed to link driver to document: {ex.Message}"));
+
+            }
+        }
+
+        private async Task<dfp_driver> CreateDriver(DmerDriverRequest request)
+        {
+            try
+            {
+                // Create driver using existing pattern
+                string randomDriverId = string.Format("e27d7c69-3913-4116-a360-f5e99972b7e8");
+                string driverSubId = randomDriverId.Substring(0, randomDriverId.Length - request.DriverLicenceNumber.Length);
+                var driverId = Guid.Parse(driverSubId + request.DriverLicenceNumber);
+
+                // Create driver contact
+                string contactIdString = "FCBCE0AC-82EF-411D-BD95-DB84D5E3D927";
+                string contactSubId = contactIdString.Substring(0, contactIdString.Length - request.DriverLicenceNumber.Length);
+                var contactId = new Guid(contactSubId + request.DriverLicenceNumber);
+
+                contact driverContact = null;
+
+                try
+                {
+                    driverContact = dynamicsContext.contacts
+                        .Where(x => x.contactid == contactId)
+                        .FirstOrDefault();
+                }
+                catch
+                {
+                    driverContact = null;
+                }
+
+
+                if (driverContact == null)
+                {
+                    driverContact = new contact()
+                    {
+                        contactid = contactId,
+                        lastname = request.Surname ?? string.Empty,
+                        firstname = request.FirstName ?? string.Empty,
+                    };
+
+                    if (request.DateOfBirth.HasValue && request.DateOfBirth > new DateTime(1900, 1, 1))
+                    {
+                        driverContact.birthdate = new Microsoft.OData.Edm.Date(
+                            request.DateOfBirth.Value.Year,
+                            request.DateOfBirth.Value.Month,
+                            request.DateOfBirth.Value.Day);
+                    }
+
+                    dynamicsContext.AddTocontacts(driverContact);
+                    await dynamicsContext.SaveChangesAsync();
+                }
+
+                // Create the driver entity
+                var driver = new dfp_driver()
+                {
+                    dfp_driverid = driverId,
+                    dfp_licensenumber = request.DriverLicenceNumber,
+                    statuscode = 1,
+                };
+
+                if (request.DateOfBirth.HasValue && request.DateOfBirth > new DateTime(1900, 1, 1))
+                {
+                    driver.dfp_dob = request.DateOfBirth.Value;
+                }
+
+                dynamicsContext.AddTodfp_drivers(driver);
+                dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+
+                await dynamicsContext.SaveChangesAsync();
+                return driver;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"\nTrace: DocumentDriver.CreateDriver \nError creating driver: {ex.Message}");
+                throw(new Exception($"{ex.Message}"));
+            }
+        }
+
     }
 
 }
