@@ -67,6 +67,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         Error = 100000003
     }
 
+    public class AddDmerDriverResponse
+    {
+      public string Result_Message { get; set; }
+      public DmerDriverCase Driver_Open_Case { get; set; }
+
+    }
+
     [Authorize]
     [ApiController]
     [Route("[controller]")]
@@ -269,10 +276,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         /// </summary>
         /// <param name="documentUrlId">The ID of the DMER document</param>
         /// <param name="dmerDriver">The driver information to add</param>
-        /// <returns>The DMER case details with the newly added driver</returns>
+        /// <returns>The result message and any associated open case for the driver</returns>
         [HttpPost("{documentUrlId}/add_driver")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(DriverAndDocumentsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(AddDmerDriverResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public ActionResult AddDmerDriver([FromRoute] string documentUrlId, [FromBody] DmerDriver dmerDriver)
@@ -283,7 +291,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
                 var addDriverRequest = new AddDriverToAiDmerDocumentRequest
                 {
-                    Comments = dmerDriver.Comments,
+                    Comments = dmerDriver.Comments?? string.Empty,
                     DateOfBirth = dmerDriver.DateOfBirth != null ? Timestamp.FromDateTime((DateTime)dmerDriver.DateOfBirth): null,
                     Surname = dmerDriver.Surname,
                     FirstName = dmerDriver.FirstName,
@@ -296,7 +304,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, addDriverResults.ResultMessage);
                 }
-                return Json(new { Result_Message = addDriverResults.ResultMessage, Driver_Open_Case = addDriverResults.DriverOpenCase ?? new object() });
+                return Json(new AddDmerDriverResponse { Result_Message = addDriverResults.ResultMessage, Driver_Open_Case = addDriverResults.DriverOpenCase ?? new object() });
 
             }
             catch(Exception ex)
