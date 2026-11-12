@@ -6153,7 +6153,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             var newDocument = new bcgov_documenturl
             {
-                overriddencreatedon = request.CreatedOn.AddHours(12),
+                dfp_issuedate = request.CreatedOn.AddHours(12),
                 dfp_compliancedate = GetComplienceDate(request.CreatedOn.AddHours(12)),
             };
 
