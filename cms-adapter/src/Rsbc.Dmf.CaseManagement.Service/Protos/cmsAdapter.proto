@@ -98,6 +98,9 @@ service CaseManager {
  //Create Dmer Case
   rpc CreateDmerCase(CreateDmerCaseRequest) returns (DmerStatusReply);
 
+  // Create a DMER case for an existing DMER document url and link the document to it
+  rpc CreateCaseForDmerDocument(CreateCaseForDmerDocumentRequest) returns (CreateCaseForDmerDocumentReply);
+
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
 
@@ -1150,6 +1153,29 @@ message DmerStatusReply{
     }
     DmerResultStatus resultStatus = 1;
     string errorDetail = 2;
+}
+
+message CreateCaseForDmerDocumentRequest {
+    string documentId = 1;
+    string driverLicenseNumber = 2;
+    string comments = 3;
+}
+
+message CreateCaseForDmerDocumentReply {
+    enum CreateCaseForDmerDocumentStatus {
+        FAIL = 0;
+        SUCCESS = 1;
+        DOCUMENT_NOT_FOUND = 2;
+        INVALID_DOCUMENT_TYPE = 3;
+        INVALID_SUBMITTAL_STATUS = 4;
+        ALREADY_LINKED = 5;
+        DRIVER_NOT_FOUND = 6;
+        DRIVER_MISMATCH = 7;
+        ACTIVE_CASE_EXISTS = 8;
+    }
+    CreateCaseForDmerDocumentStatus resultStatus = 1;
+    string errorDetail = 2;
+    string caseId = 3;
 }
 
 message AddDriverToAiDmerDocumentRequest {

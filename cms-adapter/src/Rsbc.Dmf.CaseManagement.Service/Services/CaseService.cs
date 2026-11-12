@@ -1910,6 +1910,104 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        public override async Task<CreateCaseForDmerDocumentReply> CreateCaseForDmerDocument(CreateCaseForDmerDocumentRequest request, ServerCallContext context)
+        {
+            var reply = new CreateCaseForDmerDocumentReply();
+
+            try
+            {
+                if (!Guid.TryParse(request.DocumentId, out var documentId))
+                {
+                    reply.ResultStatus = CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.DocumentNotFound;
+                    return reply;
+                }
+
+                var document = await _caseManager.GetDocumentUrlLinkInfo(documentId);
+                var status = document switch
+                {
+                    null => CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.DocumentNotFound,
+                    _ when document.DocumentTypeCode != DmerDocumentTypeCode => CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.InvalidDocumentType,
+                    _ when document.SubmittalStatus != (int)CaseManagement.submittalStatusOptionSet.Uploaded => CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.InvalidSubmittalStatus,
+                    _ when document.CaseId != null => CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.AlreadyLinked,
+                    _ when !string.IsNullOrEmpty(document.DriverLicenseNumber)
+                        && !string.Equals(document.DriverLicenseNumber, request.DriverLicenseNumber, StringComparison.OrdinalIgnoreCase)
+                        => CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.DriverMismatch,
+                    _ => CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.Success
+                };
+                if (status != CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.Success)
+                {
+                    reply.ResultStatus = status;
+                    return reply;
+                }
+
+                var driver = (await _caseManager.GetDriverByLicenseNumber(request.DriverLicenseNumber))?.FirstOrDefault();
+                if (driver == null || !Guid.TryParse(driver.Id, out var driverId))
+                {
+                    reply.ResultStatus = CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.DriverNotFound;
+                    return reply;
+                }
+
+                var activeCase = await GetActiveCases(request.DriverLicenseNumber, "DMF");
+                if (activeCase != null)
+                {
+                    reply.ResultStatus = CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.ActiveCaseExists;
+                    reply.CaseId = activeCase.CaseId;
+                    return reply;
+                }
+
+                var createResult = await _caseManager.CreateCase(new CaseManagement.CreateCaseRequest
+                {
+                    DriverLicenseNumber = request.DriverLicenseNumber,
+                    CaseTypeCode = "DMER",
+                    TriggerType = "DMER",
+                    Owner = "Remedial",
+                    ProgramArea = "DMF"
+                });
+                if (!createResult.Success || !Guid.TryParse(createResult.Id, out var caseId))
+                {
+                    reply.ResultStatus = CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.Fail;
+                    reply.ErrorDetail = createResult.ErrorDetail ?? "Unable to create case.";
+                    return reply;
+                }
+                await _caseManager.LinkDocumentUrlToCase(documentId, caseId);
+                if (string.IsNullOrEmpty(document.DriverLicenseNumber))
+                {
+                    await _caseManager.LinkDocumentUrlToDriver(documentId, driverId);
+                }
+                reply.CaseId = caseId.ToString();
+
+                if (!string.IsNullOrWhiteSpace(request.Comments))
+                {
+                    var commentResult = await _caseManager.CreateLegacyCaseComment(new CaseManagement.LegacyComment
+                    {
+                        CaseId = reply.CaseId,
+                        CommentText = request.Comments,
+                        CommentTypeCode = "C",
+                        CommentDate = DateTimeOffset.Now,
+                        Driver = new CaseManagement.Driver { DriverLicenseNumber = request.DriverLicenseNumber }
+                    });
+                    if (!commentResult.Success)
+                    {
+                        reply.ResultStatus = CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.Fail;
+                        reply.ErrorDetail = $"Case {reply.CaseId} was created but the comment could not be added. {commentResult.ErrorDetail}";
+                        return reply;
+                    }
+                }
+
+                reply.ResultStatus = CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.Success;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error occurred while creating a case for DMER document {DocumentId}.", request.DocumentId);
+                reply.ErrorDetail = e.Message;
+                reply.ResultStatus = CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.Fail;
+            }
+
+            return reply;
+        }
+
+        private const string DmerDocumentTypeCode = "001";
+
         private async Task<Rsbc.Dmf.CaseManagement.CaseDetail> GetActiveCases(string driverLicenseNumber, string programArea)
         {
             var drivers = await _caseManager.GetDriverByLicenseNumber(driverLicenseNumber);

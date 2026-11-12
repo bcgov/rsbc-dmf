@@ -213,6 +213,89 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             return File(result.Data.ToByteArray(), contentType, fileName);
         }
 
+        /// <summary>Creates a DMER case for an existing DMER document and links the document to it.</summary>
+        [HttpPost("{dmerId}/add_case")]
+        [SwaggerOperation(Summary = "Create a case for an existing DMER document")]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(AddDmerCaseResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status502BadGateway)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
+        [ProducesResponseType(StatusCodes.Status504GatewayTimeout)]
+        public async Task<ActionResult> AddCase([FromRoute] Guid dmerId, [FromBody] AddDmerCaseRequest request, CancellationToken cancellationToken)
+        {
+            if (!string.Equals(request.CaseType, "DMER", StringComparison.OrdinalIgnoreCase))
+            {
+                return Problem(statusCode: StatusCodes.Status400BadRequest, title: "case_type must be DMER.");
+            }
+            if (!string.Equals(request.DocumentType, "DMER", StringComparison.OrdinalIgnoreCase))
+            {
+                return Problem(statusCode: StatusCodes.Status400BadRequest, title: "document_type must be DMER.");
+            }
+            if (string.IsNullOrWhiteSpace(request.Driver?.DriverId))
+            {
+                return Problem(statusCode: StatusCodes.Status400BadRequest, title: "driver.driver_id is required.");
+            }
+
+            using var scope = _serviceScopeFactory.CreateScope();
+            var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
+            CreateCaseForDmerDocumentReply reply;
+
+            try
+            {
+                using var call = caseManagerClient.CreateCaseForDmerDocumentAsync(
+                    new CreateCaseForDmerDocumentRequest
+                    {
+                        DocumentId = dmerId.ToString(),
+                        DriverLicenseNumber = request.Driver.DriverId.Trim(),
+                        Comments = request.Comments ?? string.Empty
+                    },
+                    cancellationToken: cancellationToken);
+                reply = await call.ResponseAsync;
+            }
+            catch (RpcException exception) when (!cancellationToken.IsCancellationRequested)
+            {
+                _logger.LogError(exception, "CMS adapter create case for DMER request failed.");
+                var statusCode = exception.StatusCode switch
+                {
+                    Grpc.Core.StatusCode.Unavailable => StatusCodes.Status503ServiceUnavailable,
+                    Grpc.Core.StatusCode.DeadlineExceeded => StatusCodes.Status504GatewayTimeout,
+                    _ => StatusCodes.Status502BadGateway
+                };
+                return Problem(statusCode: statusCode, title: "Unable to create the case.");
+            }
+
+            switch (reply.ResultStatus)
+            {
+                case CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.Success:
+                    return StatusCode(StatusCodes.Status201Created,
+                        new AddDmerCaseResponse(reply.CaseId, dmerId.ToString(), "Created"));
+                case CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.DocumentNotFound:
+                    return Problem(statusCode: StatusCodes.Status404NotFound, title: "The DMER document was not found.");
+                case CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.DriverNotFound:
+                    return Problem(statusCode: StatusCodes.Status404NotFound, title: "The driver was not found.");
+                    /// just go create driver is not found?
+                case CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.InvalidDocumentType:
+                    return Problem(statusCode: StatusCodes.Status409Conflict, title: "The document is not a DMER.");
+                case CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.InvalidSubmittalStatus:
+                    return Problem(statusCode: StatusCodes.Status409Conflict, title: "The document is not in Uploaded status.");
+                case CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.AlreadyLinked:
+                    return Problem(statusCode: StatusCodes.Status409Conflict, title: "The document is already linked to a case.");
+                case CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.DriverMismatch:
+                    return Problem(statusCode: StatusCodes.Status409Conflict, title: "The document belongs to a different driver.");
+                case CreateCaseForDmerDocumentReply.Types.CreateCaseForDmerDocumentStatus.ActiveCaseExists:
+                    return Problem(statusCode: StatusCodes.Status409Conflict, title: "The driver already has an active DMF case.",
+                        detail: $"Active case: {reply.CaseId}");
+                default:
+                    _logger.LogError("CMS adapter could not create a case for DMER {DmerId}: {ErrorDetail}", dmerId, reply.ErrorDetail);
+                    return Problem(statusCode: StatusCodes.Status500InternalServerError, title: "Unable to create the case.");
+            }
+        }
+
         /// <summary>
         /// POST: /Icbc/SetDmerAIProccessedStatus
         /// </summary>

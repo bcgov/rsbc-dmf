@@ -333,6 +333,14 @@ namespace Rsbc.Dmf.CaseManagement
         public string ProgramArea { get; set; }
     }
 
+    public class DocumentUrlLinkInfo
+    {
+        public string DocumentTypeCode { get; set; }
+        public int? SubmittalStatus { get; set; }
+        public Guid? CaseId { get; set; }
+        public string DriverLicenseNumber { get; set; }
+    }
+
     public class CreateCaseDocumentUrlRequest
     {
         public string CaseId { get; set; } 
@@ -6179,6 +6187,65 @@ namespace Rsbc.Dmf.CaseManagement
                 throw (ex);
             }
            
+        }
+
+        public Task<DocumentUrlLinkInfo> GetDocumentUrlLinkInfo(Guid documentUrlId)
+        {
+            var document = dynamicsContext.bcgov_documenturls
+                .Expand(d => d.dfp_DocumentTypeID)
+                .Expand(d => d.dfp_DriverId)
+                .Where(d => d.bcgov_documenturlid == documentUrlId)
+                .FirstOrDefault();
+
+            if (document == null)
+            {
+                return Task.FromResult<DocumentUrlLinkInfo>(null);
+            }
+
+            var info = new DocumentUrlLinkInfo
+            {
+                DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_code,
+                SubmittalStatus = document.dfp_submittalstatus,
+                CaseId = document._bcgov_caseid_value,
+                DriverLicenseNumber = document.dfp_DriverId?.dfp_licensenumber
+            };
+            dynamicsContext.Detach(document);
+
+            return Task.FromResult(info);
+        }
+
+        public async Task LinkDocumentUrlToCase(Guid documentUrlId, Guid caseId)
+        {
+            var document = await dynamicsContext.bcgov_documenturls.ByKey(documentUrlId).GetValueAsync();
+            var theCase = await dynamicsContext.incidents.ByKey(caseId).GetValueAsync();
+
+            try
+            {
+                dynamicsContext.SetLink(document, nameof(bcgov_documenturl.bcgov_CaseId), theCase);
+                await dynamicsContext.SaveChangesAsync();
+            }
+            finally
+            {
+                dynamicsContext.Detach(document);
+                dynamicsContext.Detach(theCase);
+            }
+        }
+
+        public async Task LinkDocumentUrlToDriver(Guid documentUrlId, Guid driverId)
+        {
+            var document = await dynamicsContext.bcgov_documenturls.ByKey(documentUrlId).GetValueAsync();
+            var driver = await dynamicsContext.dfp_drivers.ByKey(driverId).GetValueAsync();
+
+            try
+            {
+                dynamicsContext.SetLink(document, nameof(bcgov_documenturl.dfp_DriverId), driver);
+                await dynamicsContext.SaveChangesAsync();
+            }
+            finally
+            {
+                dynamicsContext.Detach(document);
+                dynamicsContext.Detach(driver);
+            }
         }
     }
 
