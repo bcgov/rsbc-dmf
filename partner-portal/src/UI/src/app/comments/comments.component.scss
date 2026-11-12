@@ -63,6 +63,11 @@
     //justify-content: space-around;
   }
 
+  .commentContent {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   .largeIcon{
    transform: scale(1.5); 
   }
