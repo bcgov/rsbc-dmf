@@ -104,7 +104,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         public ActionResult GetDmerBatch(
             [FromQuery, Range(1, 500)] int count = 50)
         {
-
+            if (count > 100)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, "count must be 100 or less");
+            }
+                
             using var scope = _serviceScopeFactory.CreateScope();
             var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
             var dmerRecordsRequest = new GetDmerRecordsPaginatedRequest { Count = count };
