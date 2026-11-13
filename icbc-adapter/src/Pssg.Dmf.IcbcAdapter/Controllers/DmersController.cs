@@ -297,14 +297,14 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         /// </summary>
         /// <param name="SetDmerAiStatusRequestBody">The processed status to be set for DMER records</param>
         /// <returns></returns>
-        [HttpPost("SetDmerAIProccessedStatus")]
-        public ActionResult SetDmerAIProccessedStatus([FromBody] SetDmerAiStatusRequestBody request)
+        [HttpPost("{dmerId}/setDmerAIProccessedStatus")]
+        public ActionResult SetDmerAIProccessedStatus([FromRoute] Guid dmerId, [FromBody] SetDmerAiStatusRequestBody request)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
             var setDmerAIProccessedStatusRequest = new SetDmerAIProccessedStatusRequest { 
                 DmerAiStatus = request.AiProcessedStatus, 
-                DocumenturlId = request.DmerId,
+                DocumenturlId = dmerId.ToString(),
                 DmerStatus = request.AiDmerStatus,
                 Queue = request.AiQueue,
                 AIPriority = request.AiDpsPriority,
