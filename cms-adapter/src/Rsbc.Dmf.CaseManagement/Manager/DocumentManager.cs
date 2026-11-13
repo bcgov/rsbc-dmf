@@ -466,10 +466,7 @@ namespace Rsbc.Dmf.CaseManagement
                           <condition attribute='dfp_driverid' operator='not-null'/>
                           <condition attribute='bcgov_caseid' operator='not-null'/>
                           <condition attribute='dfp_submittalstatus' operator='eq' value='100000010'/>
-                          <filter type='or'>
-                              <condition attribute='dfp_aiprocessedstatus' operator='eq' value='100000000'/>
-                              <condition attribute='dfp_aiprocessedstatus' operator='null'/>
-                          </filter>
+                          <condition attribute='dfp_aiprocessedstatus' operator='eq' value='100000000'/>
                         </filter>
                       </entity>
                     </fetch>";
