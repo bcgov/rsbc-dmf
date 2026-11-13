@@ -119,11 +119,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, dmerRecordsResults);
             }
             var results = dmerRecordsResults.Items;
-            var nextLink = results.Count == count && count <= int.MaxValue - count
-                ? Url.Action(nameof(GetDmerBatch), new { count = count })
-                : null;
 
-            return Json(new DmerBatchResponse(results, count, nextLink));
+            return Json(new DmerBatchResponse(results, count));
         }
 
         /// <summary>Downloads a file using the existing document storage adapter client.</summary>
