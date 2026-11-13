@@ -43,9 +43,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
     public class SetDmerAiStatusRequestBody
     {
         [Required]
-        public string DmerId { get; set; }
-
-        [Required]
         public int AiProcessedStatus { get; set; }
         public int AiDpsPriority { get; set; }
         public int AiQueue { get; set; }
