@@ -61,7 +61,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [ProducesResponseType(typeof(DriverAndDocumentsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult GetDriverMetaandDocuments([FromBody] DriverLicenseNumber requestBody)
+        public ActionResult GetDriverMetaAndDocuments([FromBody] DriverLicenseNumber requestBody)
         {
             using var scope = _serviceScopeFactory.CreateScope();
             var caseManagerClient = scope.ServiceProvider.GetRequiredService<CaseManager.CaseManagerClient>();
