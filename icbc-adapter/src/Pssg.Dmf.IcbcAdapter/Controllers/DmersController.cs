@@ -69,8 +69,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
     public class AddDmerDriverResponse
     {
-      public string Result_Message { get; set; }
-      public DmerDriverCase Driver_Open_Case { get; set; }
+      public string ResultMessage { get; set; }
+      public DmerDriverCase DriverOpenCase { get; set; }
 
     }
 
@@ -104,11 +104,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         public ActionResult GetDmerBatch(
             [FromQuery, Range(1, 500)] int count = 50)
         {
-            if (count > 100)
-            {
-                return StatusCode(StatusCodes.Status400BadRequest, "count must be 100 or less");
-            }
-                
             using var scope = _serviceScopeFactory.CreateScope();
             var documentManagerClient = scope.ServiceProvider.GetRequiredService<DocumentManager.DocumentManagerClient>();
             var dmerRecordsRequest = new GetDmerRecordsPaginatedRequest { Count = count };
@@ -355,19 +350,19 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         }
 
         /// <summary>
-        /// POST: /dmers/{documentUrlId}/add_driver
+        /// POST: /dmers/{documentRecordId}/add_driver
         /// Adds a driver to an AI DMER document.
         /// </summary>
-        /// <param name="documentUrlId">The ID of the DMER document</param>
+        /// <param name="documentRecordId">The ID of the DMER document</param>
         /// <param name="dmerDriver">The driver information to add</param>
         /// <returns>The result message and any associated open case for the driver</returns>
-        [HttpPost("{documentUrlId}/add_driver")]
+        [HttpPost("{documentRecordId}/add_driver")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(AddDmerDriverResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult AddDmerDriver([FromRoute] string documentUrlId, [FromBody] DmerDriver dmerDriver)
+        public ActionResult AddDmerDriver([FromRoute] string documentRecordId, [FromBody] DmerDriver dmerDriver)
         {
             try
             {
@@ -380,7 +375,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     Surname = dmerDriver.Surname,
                     FirstName = dmerDriver.FirstName,
                     DriverLicenceNumber = dmerDriver.DriverLicenceNumber,
-                    DmerId = documentUrlId
+                    DmerId = documentRecordId
                 };
                 var addDriverResults = documentManagerClient.AddDriverToAiDmerDocument(addDriverRequest);
                 
@@ -388,7 +383,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, addDriverResults.ResultMessage);
                 }
-                return Json(new AddDmerDriverResponse { Result_Message = addDriverResults.ResultMessage, Driver_Open_Case = addDriverResults.DriverOpenCase ?? new DmerDriverCase() });
+                return Json(new AddDmerDriverResponse { ResultMessage = addDriverResults.ResultMessage, DriverOpenCase = addDriverResults.DriverOpenCase ?? new DmerDriverCase() });
 
             }
             catch(Exception ex)
