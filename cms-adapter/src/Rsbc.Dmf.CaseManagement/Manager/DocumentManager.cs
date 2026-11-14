@@ -463,8 +463,6 @@ namespace Rsbc.Dmf.CaseManagement
                           </filter>
                         </link-entity> 
                         <filter type='and'>
-                          <condition attribute='dfp_driverid' operator='not-null'/>
-                          <condition attribute='bcgov_caseid' operator='not-null'/>
                           <condition attribute='dfp_submittalstatus' operator='eq' value='100000010'/>
                           <condition attribute='dfp_aiprocessedstatus' operator='eq' value='100000000'/>
                         </filter>
@@ -557,6 +555,10 @@ namespace Rsbc.Dmf.CaseManagement
 
         private async Task<List<DmerDriverDocument>> GetDmerDocumentsForDriver(string driverId, string documentUrlId)
         {
+            if (string.IsNullOrEmpty(driverId))
+            {
+                return null;
+            }
             var driverGuid = Guid.Parse(driverId);
             var driverDocuments = dynamicsContext.bcgov_documenturls
                 .Expand(d=> d.dfp_DocumentTypeID)
@@ -570,6 +572,10 @@ namespace Rsbc.Dmf.CaseManagement
 
         private async Task<DmerDocumentCaseRecord> GetDocumentCaseRecord(string caseId)
         {
+            if (string.IsNullOrEmpty(caseId))
+            {
+                return null;
+            }
             var caseGuid = Guid.Parse(caseId);
             var caseRecord = dynamicsContext.incidents
                 .Expand(c => c.owninguser)
