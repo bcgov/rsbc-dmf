@@ -475,15 +475,15 @@ namespace Rsbc.Dmf.CaseManagement
             foreach (var document in dmerDocumenturls)
             {
                 await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DriverId));
+                await dynamicsContext.LoadPropertyAsync(document.dfp_DriverId, nameof(dfp_driver.dfp_PersonId));
                 await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_dmerstatus));
                 await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
                 await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_documenttypebusinessarea));
-
+               
                 
             }
 
             var dmerRecords = _mapper.Map<List<DmerDocumentRecord>>(dmerDocumenturls);
-
             foreach (var document in dmerRecords)
             {
                 document.DmerDocumentDriver.Documents = await GetDmerDocumentsForDriver(document.DmerDocumentDriver.DriverId, document.DocumentRecordId);
@@ -504,7 +504,6 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     await RejectDocument(dmerDoc);
                     result.Success = true;
-                    return result;
                 }
 
                 if(request.AIProccessedStatus == (int)AIProccessedStatus.Error)
