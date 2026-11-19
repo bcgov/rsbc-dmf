@@ -35,7 +35,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
     [Authorize]
     [ApiController]
     [Route("[controller]")]
-    public class DriverController : Controller
+    public class DriversController : Controller
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<DmersController> _logger;
@@ -43,7 +43,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
 
-        public DriverController(IConfiguration configuration, ILogger<DmersController> logger, IServiceScopeFactory serviceScopeFactory)
+        public DriversController(IConfiguration configuration, ILogger<DmersController> logger, IServiceScopeFactory serviceScopeFactory)
         {
             _configuration = configuration;
             _logger = logger;
