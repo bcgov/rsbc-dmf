@@ -441,7 +441,7 @@ namespace Rsbc.Dmf.CaseManagement
         public int? AIPriority { get; set; }
         public int? Queue { get; set; }
         public int? DmerStatus { get; set; }
-        public bool IsRejected { get; set; }
+        public bool AiIsDuplicate { get; set; }
         public string Notes { get; set; }
     }
 
