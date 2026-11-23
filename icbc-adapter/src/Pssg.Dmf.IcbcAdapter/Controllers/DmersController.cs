@@ -47,7 +47,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         public int AiDpsPriority { get; set; }
         public int AiQueue { get; set; }
         public int AiDmerStatus { get; set; }
-        public bool IsRejected { get; set; }
+        public bool AiIsDuplicate { get; set; }
         public string Notes { get; set; }
     }
 
@@ -305,7 +305,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 DmerStatus = request.AiDmerStatus,
                 Queue = request.AiQueue,
                 AIPriority = request.AiDpsPriority,
-                IsRejected = request.IsRejected ? 1 : 0,
+                AiIsDuplicate = request.AiIsDuplicate ? 1 : 0,
                 Notes = request.Notes
             };
             var setDmerAIProccessedStatusResult = documentManagerClient.SetDmerAIProccessedStatus(setDmerAIProccessedStatusRequest);

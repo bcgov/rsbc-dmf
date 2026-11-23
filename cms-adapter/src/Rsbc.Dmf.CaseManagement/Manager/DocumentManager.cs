@@ -506,12 +506,6 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 var dmerDoc = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == new Guid(request.DocumenturlId)).FirstOrDefault();
 
-                if (request.IsRejected)
-                {
-                    await RejectDocument(dmerDoc);
-                    result.Success = true;
-                }
-
                 if(request.AIProccessedStatus == (int)AIProccessedStatus.Error)
                 {
                     await ProccessDocumentError(dmerDoc, request);
@@ -524,6 +518,7 @@ namespace Rsbc.Dmf.CaseManagement
                 dmerDoc.dfp_queue = request.Queue != null ? request.Queue : dmerDoc.dfp_queue;
                 dmerDoc.dfp_aidmerstatus = request.DmerStatus != null ? request.DmerStatus : dmerDoc.dfp_dmerstatus;
                 dmerDoc.dfp_notes = request.Notes ?? dmerDoc.dfp_notes;
+                dmerDoc.dfp_aiisduplicate = request.AiIsDuplicate;
                 dynamicsContext.UpdateObject(dmerDoc);
                 await dynamicsContext.SaveChangesAsync();
 

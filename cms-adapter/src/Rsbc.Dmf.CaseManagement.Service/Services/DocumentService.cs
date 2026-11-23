@@ -264,7 +264,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     AIPriority = request.AIPriority,
                     Queue = request.Queue,
                     DmerStatus = request.DmerStatus,
-                    IsRejected = request.IsRejected == 1,
+                    AiIsDuplicate = request.AiIsDuplicate == 1,
                     Notes = request.Notes
                 });
                 reply.ResultStatus = ResultStatus.Success;

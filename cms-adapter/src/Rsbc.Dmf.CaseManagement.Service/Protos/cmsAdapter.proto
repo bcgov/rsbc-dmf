@@ -843,7 +843,7 @@ message SetDmerAIProccessedStatusRequest {
     optional int32 AIPriority = 3;
     optional int32 Queue = 4;
     optional int32 DmerStatus = 5;
-    optional int32 IsRejected = 6;
+    optional int32 AiIsDuplicate = 6;
     string Notes = 7;
 }
 
