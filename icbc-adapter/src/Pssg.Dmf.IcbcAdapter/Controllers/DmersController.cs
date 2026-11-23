@@ -359,7 +359,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public ActionResult AddDmerDriver([FromRoute] string documentRecordId, [FromBody] DmerDriver dmerDriver)
+        public ActionResult AddDmerDriver([FromRoute] Guid documentRecordId, [FromBody] DmerDriver dmerDriver)
         {
             try
             {
@@ -372,7 +372,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     Surname = dmerDriver.Surname,
                     FirstName = dmerDriver.FirstName,
                     DriverLicenceNumber = dmerDriver.DriverLicenceNumber,
-                    DmerId = documentRecordId
+                    DmerId = documentRecordId.ToString()
                 };
                 var addDriverResults = documentManagerClient.AddDriverToAiDmerDocument(addDriverRequest);
                 
