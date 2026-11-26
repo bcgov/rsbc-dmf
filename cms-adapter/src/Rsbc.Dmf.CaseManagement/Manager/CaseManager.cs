@@ -950,6 +950,7 @@ namespace Rsbc.Dmf.CaseManagement
                     Id = item.dfp_driverid.ToString(),
                     DriverLicenseNumber = item.dfp_licensenumber,
                     Surname = item.dfp_PersonId?.lastname,
+                    GivenName = item.dfp_PersonId?.firstname,
                     BirthDate = item.dfp_PersonId?.birthdate ?? default(DateTime),
                 };
                 result.Add(d);
