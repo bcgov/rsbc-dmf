@@ -464,7 +464,10 @@ namespace Rsbc.Dmf.CaseManagement
                         </link-entity> 
                         <filter type='and'>
                           <condition attribute='dfp_submittalstatus' operator='eq' value='100000010'/>
-                          <condition attribute='dfp_aiprocessedstatus' operator='eq' value='100000000'/>
+                          <filter type='or'>
+                            <condition attribute='dfp_aiprocessedstatus' operator='eq' value='100000000'/>
+                            <condition attribute='dfp_aiprocessedstatus' operator='null'/>
+                          </filter>
                         </filter>
                       </entity>
                     </fetch>";
