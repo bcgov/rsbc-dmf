@@ -457,7 +457,7 @@ namespace Rsbc.Dmf.CaseManagement
                         <attribute name='dfp_driverid'/>
                         <attribute name='dfp_documenttypeid'/>
                         <attribute name='bcgov_caseid'/>
-                        <order attribute='dfp_faxreceiveddate' descending='true'/>
+                        <order attribute='dfp_faxreceiveddate'/>
                         <link-entity name='dfp_submittaltype' from='dfp_submittaltypeid' to='dfp_documenttypeid' link-type='inner'>
                           <filter type='and'>
                             <condition attribute='dfp_code' operator='eq' value='{_DMER_DOCUMENT_TYPE_CODE}'/> 
