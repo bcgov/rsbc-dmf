@@ -693,9 +693,9 @@ namespace Rsbc.Dmf.CaseManagement
 
                 try
                 {
-                    var dmerCaseTypeCode = 2;
+                    var dmerProgramAreaCode = 100000000;
                     var openCase = dynamicsContext.incidents
-                        .Where(c => c._dfp_driverid_value == driverId && c.statecode == 0 && c.casetypecode == dmerCaseTypeCode)
+                        .Where(c => c._dfp_driverid_value == driverId && c.statecode == 0 && c.dfp_programarea == dmerProgramAreaCode)
                         .FirstOrDefault();
 
                     if (openCase != null)
