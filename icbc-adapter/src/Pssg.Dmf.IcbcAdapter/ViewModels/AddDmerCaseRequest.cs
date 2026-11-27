@@ -7,7 +7,7 @@ namespace Rsbc.Dmf.IcbcAdapter.ViewModels
     public sealed class AddDmerCaseRequest
     {
         [Required]
-        [JsonProperty("case_type")]
+        [JsonProperty("caseType")]
         public string CaseType { get; init; }
 
         /// <summary>Currently ignored; the case is assigned to the default DMER owner.</summary>
@@ -19,7 +19,7 @@ namespace Rsbc.Dmf.IcbcAdapter.ViewModels
         public AddDmerCaseDriver Driver { get; init; }
 
         [Required]
-        [JsonProperty("document_type")]
+        [JsonProperty("documentType")]
         public string DocumentType { get; init; }
 
         /// <summary>Optional; saved as a file comment on the new case and driver.</summary>
@@ -31,7 +31,7 @@ namespace Rsbc.Dmf.IcbcAdapter.ViewModels
     {
         /// <summary>Driver licence number.</summary>
         [Required]
-        [JsonProperty("driver_id")]
+        [JsonProperty("driverId")]
         public string DriverId { get; init; }
     }
 
