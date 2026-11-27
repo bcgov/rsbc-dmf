@@ -223,15 +223,15 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         {
             if (!string.Equals(request.CaseType, "DMER", StringComparison.OrdinalIgnoreCase))
             {
-                return Problem(statusCode: StatusCodes.Status400BadRequest, title: "case_type must be DMER.");
+                return Problem(statusCode: StatusCodes.Status400BadRequest, title: "caseType must be DMER.");
             }
             if (!string.Equals(request.DocumentType, "DMER", StringComparison.OrdinalIgnoreCase))
             {
-                return Problem(statusCode: StatusCodes.Status400BadRequest, title: "document_type must be DMER.");
+                return Problem(statusCode: StatusCodes.Status400BadRequest, title: "documentType must be DMER.");
             }
             if (string.IsNullOrWhiteSpace(request.Driver?.DriverId))
             {
-                return Problem(statusCode: StatusCodes.Status400BadRequest, title: "driver.driver_id is required.");
+                return Problem(statusCode: StatusCodes.Status400BadRequest, title: "driver.driverId is required.");
             }
 
             using var scope = _serviceScopeFactory.CreateScope();
